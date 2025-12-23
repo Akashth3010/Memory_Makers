@@ -8,13 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\NewFolder\**" />
+    <Compile Remove="wwwroot\lib\images\**" />
     <Content Remove="Controllers\NewFolder\**" />
+    <Content Remove="wwwroot\lib\images\**" />
     <EmbeddedResource Remove="Controllers\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\lib\images\**" />
     <None Remove="Controllers\NewFolder\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\images\" />
+    <None Remove="wwwroot\lib\images\**" />
   </ItemGroup>
 
 </Project>

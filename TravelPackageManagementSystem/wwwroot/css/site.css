@@ -1,31 +1,97 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #f5f7fa;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.destination-section {
+    width: 90%;
+    margin: 50px auto;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.section-title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    position: relative;
 }
+
+    .section-title::after {
+        content: "";
+        width: 60px;
+        height: 3px;
+        background: #4aa3df;
+        display: block;
+        margin: 10px auto;
+    }
+
+.destination-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    position: relative;
+    height: 350px;
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+    .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+
+    .card:hover img {
+        transform: scale(1.1);
+    }
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    color: #fff;
+}
+
+    .overlay h3 {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .overlay p {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+/* WHY CHOOSE US SECTION */
+.why-choose-us {
+    background-color: #f9fbfd;
+}
+
+.why-card {
+    padding: 30px;
+}
+
+.why-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.why-card p {
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+}
+ 
