@@ -1,7 +1,193 @@
 ﻿@{
-	ViewData["Title"] = "Home Page";
+    Layout = null; // or set to your shared layout if you have one
 }
-<div class="text-center`">
-	<h1 class="display-4">Welcome</h1>
-	<p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Travel Tips — Get </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #0a131a;
+            color: #f4f6f8;
+        }
+
+        .hero {
+            min-height: 60vh;
+            position: relative;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            padding: 4rem 1rem;
+            background: url("https://img.freepik.com/premium-photo/sacred-ganges-river-varanasi-with-ancient-ghats_996201-69539.jpg%22) center/cover no-repeat;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-glow {
+            background: linear-gradient(135deg, #ff7b54, #ffd56b);
+            border: none;
+            padding: 0.85rem 1.25rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            color: #111;
+        }
+
+        .content-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        footer {
+            background: #0a131a;
+            color: #b9c2cf;
+            padding-top: 2rem;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .footer-link {
+            color: #b9c2cf;
+            text-decoration: none;
+        }
+
+            .footer-link:hover {
+                color: #fff;
+            }
+
+        .social a {
+            color: #fff;
+            margin-right: 0.5rem;
+        }
+
+        .payments i {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            color: #eaeef3;
+        }
+
+        /* ✅ Correct CSS media query */
+        <style > (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Travel Tips</h1>
+            <p>Britain is getting a divorce; Northern Ireland is being offered a trial separation.</p>
+            <a href="#inspiration" class="btn btn-glow">Get Inspired</a>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <section id="inspiration" class="container">
+        <div class="content-card">
+            <h2>Travel tips</h2>
+            <p>Northern Ireland’s is now contingent. Britain is getting a divorce Northern Ireland is being offered a trial separation for Britain there is a one.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <!-- Need Help -->
+                <div class="col-md-3">
+                    <div class="footer-title">Need Help?</div>
+                    <p>Got Questions?</p>
+                    <p>Call Us: +1 (234) 567-8901</p>
+                    <p>12345 NE 51st Ave, Miami, FL 12345</p>
+                    <div class="social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <!-- Company -->
+                <div class="col-md-2">
+                    <div class="footer-title">Company</div>
+                    <a class="footer-link" href="#">About us</a><br />
+                    <a class="footer-link" href="#">Careers</a><br />
+                    <a class="footer-link" href="#">Terms of Use</a><br />
+                    <a class="footer-link" href="#">Privacy Statement</a><br />
+                    <a class="footer-link" href="#">Feedback</a>
+                </div>
+
+                <!-- Other Services -->
+                <div class="col-md-2">
+                    <div class="footer-title">Other Services</div>
+                    <a class="footer-link" href="#">Investor Relations</a><br />
+                    <a class="footer-link" href="#">Rewards Program</a><br />
+                    <a class="footer-link" href="#">Points PLUS</a><br />
+                    <a class="footer-link" href="#">Partners</a><br />
+                    <a class="footer-link" href="#">List My Hotel</a>
+                </div>
+
+                <!-- Support -->
+                <div class="col-md-2">
+                    <div class="footer-title">Support</div>
+                    <a class="footer-link" href="#">Account</a><br />
+                    <a class="footer-link" href="#">Legal</a><br />
+                    <a class="footer-link" href="#">Contact</a><br />
+                    <a class="footer-link" href="#">Affiliate Program</a><br />
+                    <a class="footer-link" href="#">Privacy Policy</a>
+                </div>
+
+                <!-- Mailing List -->
+                <div class="col-md-3">
+                    <div class="footer-title">Mailing List</div>
+                    <p>Sign up to get latest updates and offers.</p>
+                    <form method="post">
+                        <input type="email" class="form-control mb-2" placeholder="Enter your email" />
+                        <button type="submit" class="btn btn-glow">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="payments">
+                    <i class="fab fa-cc-discover"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-visa"></i>
+                </div>
+                <small>&copy; @DateTime.Now.Year Travel Co. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
