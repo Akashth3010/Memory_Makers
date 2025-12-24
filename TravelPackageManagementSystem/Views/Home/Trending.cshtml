@@ -1,0 +1,361 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TravelPackageManagementSystem</title>
+    <script type="importmap"></script>
+
+    <!-- Font Awesome (kept; stars do not depend on this anymore) -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/trending.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TravelPackageManagementSystem.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <section class="trending" id="trending">
+        <div class="container">
+            <h2 class="section-title">Trending</h2>
+
+            <!-- Tabs -->
+            <div class="tabs" role="tablist" aria-label="Trending categories">
+                <button class="tab active" data-tab="flights" role="tab" aria-selected="true">Flights</button>
+                <button class="tab" data-tab="hotels" role="tab" aria-selected="false">Hotels</button>
+                <button class="tab" data-tab="holidays" role="tab" aria-selected="false">Holidays</button>
+            </div>
+
+            <!-- Panels -->
+            <div class="tab-panels">
+
+                <!-- Flights -->
+                <div class="panel active" id="panel-flights" role="tabpanel">
+                    <div class="card-grid">
+                        <!-- Card -->
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/download.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i> Venice, Italy</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs.35000.00</strong></div>
+                                <h3 class="card-title">Visible canals with gondolas and historic architecture.</h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.6; --max: 5" aria-label="4.6 out of 5"></span>
+                                    <span class="reviews">48 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Duplicate and modify cards as needed -->
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/download (1).jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i> Santorini, Greece</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs 50,000.00</strong></div>
+                                <h3 class="card-title">Sunset view with whitewashed buildings and blue domes.</h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.9; --max: 5" aria-label="4.9 out of 5"></span>
+                                    <span class="reviews">48 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/Taj Mahal, India.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i> Taj Mahal, Agra, India</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs.5500.00</strong></div>
+                                <h3 class="card-title">Iconic marble mausoleum with reflecting pool.</h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.4; --max: 5" aria-label="4.4 out of 5"></span>
+                                    <span class="reviews">48 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/The beautiful city of Kashmir.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Swiss Alps, Switzerland.</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs.70000.00</strong></div>
+                                <h3 class="card-title">Snow-covered mountains and alpine scenery</h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.3; --max: 5" aria-label="4.3 out of 5"></span>
+                                    <span class="reviews">62 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/Turkey.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i> Cappadocia, Turkey</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs.52000.00</strong></div>
+                                <h3 class="card-title">Hot air balloons over unique rock formations.</h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.7; --max: 5" aria-label="4.7 out of 5"></span>
+                                    <span class="reviews">72 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/25 of the Most Beautiful Villages in the World - Road Affair.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i> Hallstatt, Austria</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs 65000.00</strong></div>
+                                <h3 class="card-title">Lakeside village with mountains in the background</h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.8; --max: 5" aria-label="4.8 out of 5"></span>
+                                    <span class="reviews">90 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/Auckland, New Zealand.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta">
+                                        <i class="fa-solid fa-location-dot"></i>Dubai Marina, UAE
+                                    </span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs 78000.00</strong></div>
+                                <h3 class="card-title">Modern skyscrapers and waterfront</h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.2; --max: 5" aria-label="4.2 out of 5"></span>
+                                    <span class="reviews">89 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/cappadocia _3_3.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Dubrovnik, Croatia</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs.67000.00</strong></div>
+                                <h3 class="card-title">Historic coastal city with terracotta rooftops.</h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.5; --max: 5" aria-label="4.5 out of 5"></span>
+                                    <span class="reviews">100 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/French Polynesia, Tahiti.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Phuket, Thailand</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs 72000.00</strong></div>
+                                <h3 class="card-title">
+                                    Tropical scenery with limestone cliffs and turquoise water, typical of southern Thailand islands
+                                </h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.1; --max: 5" aria-label="4.1 out of 5"></span>
+                                    <span class="reviews">48 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/BALI - awesome waterfalls near UBUD.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Bali, Indonesia</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs.55000.00</strong></div>
+                                <h3 class="card-title">
+                                    Traditional Balinese temple (Pura Ulun Danu Bratan) with mountains in the background.
+                                </h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.6; --max: 5" aria-label="4.6 out of 5"></span>
+                                    <span class="reviews">48 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/japan.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Mount Fuji, Japan</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs 78000.00</strong></div>
+                                <h3 class="card-title">
+                                    Iconic snow-capped mountain with a red pagoda in the foreground (Chureito Pagoda).
+                                </h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.6; --max: 5" aria-label="4.6 out of 5"></span>
+                                    <span class="reviews">78 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card">
+                            <div class="card-media">
+                                <img src="~/lib/images/26 Real Places That Look Like They've Been Taken Out Of Fairy Tales.jpg"
+                                     asp-append-version="true"
+                                     alt="Istanbul flight deal"
+                                     class="img-fluid" />
+                                <div class="badges">
+                                    <span class="badge feature">Featured</span>
+                                    <span class="badge sale">25%</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta-top">
+                                    <span class="meta"><i class="fa-solid fa-location-dot"></i> Ha Long Bay, Vietnam</span>
+                                    <span class="category">Attraction Tickets</span>
+                                </div>
+                                <div class="price">From <strong>Rs 83000.00</strong></div>
+                                <h3 class="card-title">Emerald waters with limestone karsts and boats, a UNESCO World Heritage site.</h3>
+                                <div class="ratings">
+                                    <span class="stars" style="--rating: 4.4; --max: 5" aria-label="4.4 out of 5"></span>
+                                    <span class="reviews">74 Reviews</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Add more cards (6–8 like the screenshot) -->
+                    </div>
+                </div>
+
+                <!-- Hotels (future panels as needed) -->
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Your previous JS for fractional stars is no longer needed,
+         but if you keep it, it won't break anything. -->
+</body>
+</html>
