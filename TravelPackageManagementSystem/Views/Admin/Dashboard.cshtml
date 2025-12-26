@@ -1,0 +1,151 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>easy Safar | Admin Dashboard</title>
+
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/admin.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <div class="admin-wrapper">
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="admin-sidebar" id="sidebar">
+
+            <!-- BRAND / WELCOME -->
+            <div class="sidebar-header" onclick="toggleSidebar()">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <div class="brand-text">
+                    <h4>easy Safar</h4>
+                    <span>Admin Panel</span>
+                    <p>Welcome back, Admin 👋</p>
+                </div>
+            </div>
+
+            <!-- QUICK MESSAGE -->
+            <div class="sidebar-message">
+                Control packages, bookings and users from one place.
+            </div>
+
+            <!-- MENU (MANDATORY ONLY) -->
+            <ul class="sidebar-menu">
+                <li class="active">
+                    <i class="fa fa-house"></i> Dashboard
+                </li>
+
+                <li>
+                    <i class="fa fa-clock"></i> Package Approvals
+                </li>
+
+                <li>
+                    <i class="fa fa-box"></i> Packages
+                </li>
+
+                <li>
+                    <i class="fa fa-book"></i> Bookings
+                </li>
+
+                <li>
+                    <i class="fa fa-users"></i> Users
+                </li>
+
+                <li class="logout">
+                    <a asp-controller="Admin" asp-action="Logout">
+                        <i class="fa fa-right-from-bracket"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- ================= MAIN ================= -->
+        <main class="admin-main" id="main">
+
+            <!-- ================= TOPBAR ================= -->
+            <div class="admin-topbar">
+                <div class="top-left" onclick="toggleSidebar()">
+                    <i class="fa fa-bars"></i>
+                    <span>Dashboard</span>
+                </div>
+
+                <div class="top-right">
+                    <a asp-controller="Home" asp-action="Index" class="home-link">
+                        <i class="fa fa-globe"></i> Website
+                    </a>
+                    <span class="admin-name">
+                        <i class="fa fa-user-circle"></i> Admin
+                    </span>
+                </div>
+            </div>
+
+            <!-- ================= DASHBOARD ================= -->
+            <div class="dashboard-content">
+
+                <div class="dashboard-cards">
+
+                    <div class="dash-card">
+                        <i class="fa fa-box-open"></i>
+                        <div>
+                            <h4>Total Packages</h4>
+                            <p>120</p>
+                        </div>
+                    </div>
+
+                    <div class="dash-card">
+                        <i class="fa fa-book-open"></i>
+                        <div>
+                            <h4>Total Bookings</h4>
+                            <p>78</p>
+                        </div>
+                    </div>
+
+                    <div class="dash-card">
+                        <i class="fa fa-users"></i>
+                        <div>
+                            <h4>Total Users</h4>
+                            <p>96</p>
+                        </div>
+                    </div>
+
+                    <div class="dash-card">
+                        <i class="fa fa-clock"></i>
+                        <div>
+                            <h4>Pending Approvals</h4>
+                            <p>6</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="dashboard-note">
+                    <i class="fa fa-circle-info"></i>
+                    <span>
+                        Review pending package requests to keep listings updated.
+                    </span>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("collapsed");
+            document.getElementById("main").classList.toggle("collapsed");
+        }
+    </script>
+
+</body>
+</html>
