@@ -1,0 +1,292 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --primary-orange: #ff7b54;
+        --secondary-yellow: #ffd56b;
+        --glass-bg: rgba(255, 255, 255, 0.95);
+    }
+
+    body {
+        background: #f4f7f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .checkout-container {
+        padding-top: 40px;
+        padding-bottom: 80px;
+    }
+
+    /* Stepper UI */
+    .stepper {
+        display: flex;
+        justify-content: space-between;
+        max-width: 600px;
+        margin: 0 auto 40px;
+    }
+
+    .step {
+        text-align: center;
+        flex: 1;
+        position: relative;
+    }
+
+    .step-circle {
+        width: 35px;
+        height: 35px;
+        background: #e0e0e0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 10px;
+        color: white;
+        font-weight: bold;
+        z-index: 2;
+        position: relative;
+    }
+
+    .step.active .step-circle {
+        background: var(--primary-orange);
+        box-shadow: 0 0 15px rgba(255, 123, 84, 0.4);
+    }
+
+    .step.completed .step-circle {
+        background: #28a745;
+    }
+
+    /* Card Styling */
+    .payment-card {
+        background: white;
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .method-selector {
+        border: 2px solid #f0f0f0;
+        border-radius: 12px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+        .method-selector:hover {
+            border-color: var(--primary-orange);
+            background: #fff9f7;
+        }
+
+        .method-selector.selected {
+            border-color: var(--primary-orange);
+            background: #fff9f7;
+        }
+
+    /* Price Summary Floating Card */
+    .summary-box {
+        background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 30px;
+        position: sticky;
+        top: 100px;
+    }
+
+    .btn-checkout {
+        background: linear-gradient(135deg, var(--primary-orange), var(--secondary-yellow));
+        border: none;
+        padding: 15px;
+        border-radius: 12px;
+        font-weight: bold;
+        color: #000;
+        width: 100%;
+        margin-top: 20px;
+        transition: transform 0.2s;
+    }
+
+        .btn-checkout:hover {
+            transform: scale(1.02);
+        }
+
+    .secure-badge {
+        font-size: 0.8rem;
+        color: #888;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 15px;
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="container checkout-container">
+    <div class="stepper">
+        <div class="step completed">
+            <div class="step-circle"><i class="fa fa-check"></i></div>
+            <small>Details</small>
+        </div>
+        <div class="step active">
+            <div class="step-circle">2</div>
+            <small>Payment</small>
+        </div>
+        <div class="step">
+            <div class="step-circle">3</div>
+            <small>Confirm</small>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="payment-card p-4 p-md-5">
+                <h4 class="fw-bold mb-4">Choose Payment Method</h4>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="method-selector selected" onclick="switchTab('card', this)">
+                            <input type="radio" name="pay" checked class="me-3">
+                            <div>
+                                <h6 class="mb-0 fw-bold">Credit/Debit Card</h6>
+                                <small class="text-muted">Visa, Mastercard, RuPay</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="method-selector" onclick="switchTab('upi', this)">
+                            <input type="radio" name="pay" class="me-3">
+                            <div>
+                                <h6 class="mb-0 fw-bold">UPI / QR Code</h6>
+                                <small class="text-muted">PhonePe, GPay, Paytm</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="cardDetails" class="mt-4 animate-fade-in">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">CARDHOLDER NAME</label>
+                            <input type="text" class="form-control" placeholder="John Doe">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">CARD NUMBER</label>
+                            <input type="text" class="form-control" placeholder="0000 0000 0000 0000">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">EXPIRY</label>
+                            <input type="text" class="form-control" placeholder="MM/YY">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">CVV</label>
+                            <input type="password" class="form-control" placeholder="***">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="upiDetails" class="mt-4 text-center animate-fade-in" style="display: none;">
+                    <div class="p-4 border rounded-3 bg-light">
+                        <h6 class="fw-bold mb-3">Scan QR Code to Pay</h6>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=EasySafarPayment"
+                             alt="QR Code" class="img-fluid mb-3 shadow-sm p-2 bg-white">
+                        <p class="small text-muted mb-3">Or enter your UPI ID</p>
+                        <div class="input-group mb-2" style="max-width: 300px; margin: 0 auto;">
+                            <input type="text" class="form-control" placeholder="username@okaxis">
+                            <button class="btn btn-dark">Verify</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="summary-box shadow-lg">
+                <h5 class="mb-4">Booking Summary</h5>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary">Package Base Price</span>
+                    <span>₹35,000</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary">GST (18%)</span>
+                    <span>₹6,300</span>
+                </div>
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="text-secondary">Platform Fee</span>
+                    <span>₹200</span>
+                </div>
+
+                <hr style="border-top: 1px dashed #555;">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <span class="h5 mb-0">Total Amount</span>
+                    <span class="h4 mb-0 fw-bold" style="color: var(--primary-orange);">₹41,500</span>
+                </div>
+
+                <button class="btn-checkout" onclick="startLoading(this)">
+                    PAY NOW & CONFIRM
+                </button>
+
+                <div class="secure-badge">
+                    <i class="fa fa-shield-halved me-2"></i> 256-bit SSL Secure Payment
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function selectMethod(el) {
+        document.querySelectorAll('.method-selector').forEach(m => m.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+    }
+
+    function startLoading(btn) {
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+        btn.disabled = true;
+
+        // Mock success
+        setTimeout(() => {
+            alert("Payment Successful! Redirecting to your tickets...");
+            window.location.href = "/";
+        }, 2500);
+    }
+
+    function switchTab(type, element) {
+        // 1. Update visual selection state
+        document.querySelectorAll('.method-selector').forEach(m => m.classList.remove('selected'));
+        element.classList.add('selected');
+        element.querySelector('input').checked = true;
+
+        // 2. Toggle the forms
+        const cardForm = document.getElementById('cardDetails');
+        const upiForm = document.getElementById('upiDetails');
+
+        if (type === 'card') {
+            cardForm.style.display = 'block';
+            upiForm.style.display = 'none';
+        } else {
+            cardForm.style.display = 'none';
+            upiForm.style.display = 'block';
+        }
+    }
+</script>
