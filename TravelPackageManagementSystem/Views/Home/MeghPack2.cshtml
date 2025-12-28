@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "The Classic - Meghalaya";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>The Classic - 5 Days</title>
+    <link rel="stylesheet" href="~/css/pack-details.css" />
+</head>
+
+<body>
+    <section class="hero" style="background-image: url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1600')">
+        <div class="hero-content">
+            <h1>The Classic</h1>
+            <p>5 Days • Root Bridges • Mawlynnong • Cherrapunji</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="flex">
+            <div class="left-col">
+                <div class="package-header">
+                    <div class="package-title">
+                        <h2>Meghalaya: Nature & Culture Trail</h2>
+                        <div class="rating">★ 4.8 (520 reviews)</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 14px; color:#666;">Duration</div>
+                        <div style="font-weight:700; font-size:16px;">5 Days / 4 Nights</div>
+                    </div>
+                </div>
+
+                <div class="gallery">
+                    <div id="mainImage" class="main-image" style="background-image: url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1400');"></div>
+                    <div class="thumbs">
+                        <div class="thumb active" data-src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1400" style="background-image: url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=200');"></div>
+                        <div class="thumb" data-src="https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?q=80&w=1400" style="background-image: url('https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?q=80&w=200');"></div>
+                        <div class="thumb" data-src="https://images.unsplash.com/photo-1505440484611-23c171ad6e96?q=80&w=1400" style="background-image: url('https://images.unsplash.com/photo-1505440484611-23c171ad6e96?q=80&w=200');"></div>
+                    </div>
+                </div>
+
+                <div id="lightbox" class="lightbox"><img id="lightboxImg" src="" /></div>
+
+                <div style="margin-top:16px;">
+                    <h3>Overview</h3>
+                    <p>Dive deeper into the Abode of Clouds. Visit the cleanest village in Asia, boat on the crystal clear waters of Dawki, and trek to the ancient Living Root Bridges.</p>
+                </div>
+
+                <div class="itinerary">
+                    <h3 style="margin-bottom:10px;">Day-by-Day Itinerary</h3>
+                    <div class="day">
+                        <div class="day-header"><h4>Day 1-2: Shillong & Mawlynnong</h4><div class="toggle">+</div></div>
+                        <div class="day-body"><p>Arrival and visit to Asia's cleanest village. Experience local Khasi hospitality.</p></div>
+                    </div>
+                    <div class="day">
+                        <div class="day-header"><h4>Day 3-4: Cherrapunji Root Bridges</h4><div class="toggle">+</div></div>
+                        <div class="day-body"><p>Explore the wettest place on earth. Trek to the Double Decker Root Bridge and visit Mawsmai Cave.</p></div>
+                    </div>
+                    <div class="day">
+                        <div class="day-header"><h4>Day 5: Transfer back to Guwahati</h4><div class="toggle">+</div></div>
+                        <div class="day-body"><p>Morning sightseeing at Umiam Lake and departure.</p></div>
+                    </div>
+                </div>
+
+                <div class="price-card">
+                    <div class="price-row"><div>Base Price</div><div class="price-total" id="pricePerPerson">₹17,999</div></div>
+                    <div class="price-row"><div>Guests</div><div id="priceSummary">1 person</div></div>
+                    <hr style="margin:10px 0; border:none; border-top:1px solid #e6e9ef;" />
+                    <div style="font-weight:700; display:flex; justify-content:space-between;">
+                        <div>Total Payable</div><div class="price-total" id="totalPayable">₹17,999</div>
+                    </div>
+                    <div style="margin-top:12px;">
+                        <h4 style="font-size:15px; margin-bottom:6px;">What's Included</h4>
+                        <div class="list-inline">
+                            <div class="included">Deluxe Hotel Stay</div>
+                            <div class="included">Breakfast & Dinner</div>
+                            <div class="included">Sightseeing Guide</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <aside class="booking-box">
+                    <h3>Book This Package</h3>
+                    <form id="bookingForm">
+                        <label>Travel Date</label><input type="date" required />
+                        <label>Guests</label>
+                        <select id="guests">
+                            <option value="1">1 person</option>
+                            <option value="2">2 persons</option>
+                            <option value="3">3 persons</option>
+                        </select>
+                        <label>Email</label><input type="email" placeholder="you@example.com" required />
+                        <button type="submit" class="btn btn-primary">Book Now</button>
+                    </form>
+                </aside>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            const main = document.getElementById('mainImage');
+            const thumbs = document.querySelectorAll('.thumb');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            thumbs.forEach(t => {
+                t.addEventListener('click', () => {
+                    thumbs.forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                    const src = t.dataset.src;
+                    main.style.backgroundImage = `url('${src}')`;
+                    lightboxImg.src = src;
+                });
+            });
+            main.addEventListener('click', () => { lightbox.style.display = 'flex'; });
+            lightbox.addEventListener('click', () => { lightbox.style.display = 'none'; });
+            document.querySelectorAll('.day-header').forEach(h => {
+                h.addEventListener('click', () => {
+                    const body = h.nextElementSibling;
+                    const isOpen = body.style.display === 'block';
+                    document.querySelectorAll('.day-body').forEach(db => db.style.display = 'none');
+                    document.querySelectorAll('.toggle').forEach(tg => tg.textContent = '+');
+                    if (!isOpen) { body.style.display = 'block'; h.querySelector('.toggle').textContent = '−'; }
+                });
+            });
+            const guestsSelect = document.getElementById('guests');
+            const basePrice = 17999;
+            guestsSelect.addEventListener('change', () => {
+                const count = parseInt(guestsSelect.value);
+                document.getElementById('totalPayable').textContent = `₹${(basePrice * count).toLocaleString()}`;
+                document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
+            });
+        })();
+    </script>
+</body>
+</html>

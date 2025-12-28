@@ -26,6 +26,28 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }
+
+        
+           
+
+            // Add this method
+            public IActionResult GoaTD()
+            {
+                return View();
+            }
+
+            // Add this for Uttarakhand
+            public IActionResult UttarakhandTD()
+            {
+                return View();
+            }
+
+            // Add this for Meghalaya
+            public IActionResult MeghalayaTD()
+            {
+                return View();
+            }    
+        public IActionResult GoaPack1()
         
 
         public IActionResult Manali()
@@ -33,7 +55,37 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
 
+        public IActionResult GoaPack2()
         public IActionResult Gangtok()
+        {
+            return View();
+        }
+
+        public IActionResult GoaPack3()
+        {
+            return View();
+        }
+        public IActionResult MeghPack1()
+        {
+            return View();
+        }
+        public IActionResult MeghPack2()
+        {
+            return View();
+        }
+        public IActionResult MeghPack3()
+        {
+            return View();
+        }
+        public IActionResult UttaraPack1()
+        {
+            return View();
+        }
+        public IActionResult UttaraPack2()
+        {
+            return View();
+        }
+        public IActionResult UttaraPack3()
         {
             return View();
         }
@@ -70,4 +122,5 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
     }
-}
+    }
+

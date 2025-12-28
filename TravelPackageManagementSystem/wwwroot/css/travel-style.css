@@ -1,0 +1,178 @@
+﻿/* Shared Styles - White Card Theme */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+
+:root {
+    /* These act as placeholders */
+    --accent-color: #00d2ff;
+    --bg-gradient: #2c3e50;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    color: white;
+}
+
+/* --- White Card Design --- */
+.packages-section {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    padding: 40px 5%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.pkg-card {
+    flex: 1;
+    background: #ffffff; /* Forced White Card */
+    border-radius: 25px;
+    overflow: hidden;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+    .pkg-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        outline: 3px solid var(--accent-color); /* Glow matches page theme */
+    }
+
+.pkg-img {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+.pkg-body {
+    padding: 25px;
+    text-align: center;
+}
+
+    /* Text inside White Cards */
+    .pkg-body h3 {
+        color: #2c3e50;
+        margin: 0;
+        font-size: 1.4rem;
+    }
+
+    .pkg-body p {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
+
+.pkg-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-color); /* Price color matches page theme */
+    margin: 15px 0;
+}
+
+.select-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- Auto Scroll Gallery --- */
+.scroll-track {
+    display: flex;
+    width: calc(300px * 10);
+    animation: scroll 30s linear infinite;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(-310px * 5));
+    }
+}
+
+.gem-item {
+    width: 280px;
+    margin: 0 15px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+    .gem-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .gem-item span {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0,0,0,0.7);
+        text-align: center;
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+/* --- Add these specific updates to your travel-style.css --- */
+
+.auto-scroll-container {
+    overflow: hidden;
+    padding: 40px 0;
+    width: 100%;
+}
+
+.gem-item {
+    width: 280px;
+    margin: 0 15px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+
+    .gem-item:hover {
+        transform: scale(1.05);
+    }
+
+    .gem-item span {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        /* Attractive Glassmorphism effect */
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+        color: white;
+        text-align: center;
+        padding: 15px 5px;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+/* Ensure the Hot Tag for best seller is centered */
+.hot-tag {
+    background: #e74c3c;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.gallery-title span {
+    color: var(--accent-color);
+}
