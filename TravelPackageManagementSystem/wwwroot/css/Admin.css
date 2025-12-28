@@ -1,0 +1,208 @@
+﻿Body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f7fb;
+}
+
+/* ================= WRAPPER ================= */
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ================= SIDEBAR ================= */
+.admin-sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, #1f2d3d, #16222e);
+    color: white;
+    position: fixed;
+    height: 100vh;
+    transition: all 0.35s ease;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.25);
+}
+
+    .admin-sidebar.collapsed {
+        transform: translateX(-260px);
+    }
+
+/* ================= SIDEBAR HEADER ================= */
+.sidebar-header {
+    padding: 22px;
+    display: flex;
+    gap: 14px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: 0.3s;
+}
+
+    .sidebar-header:hover {
+        background: rgba(255,255,255,0.05);
+    }
+
+.brand-icon i {
+    font-size: 32px;
+    color: #3498db;
+}
+
+.brand-text h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.brand-text span {
+    font-size: 13px;
+    color: #5dade2;
+}
+
+.brand-text p {
+    margin: 6px 0 0;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* ================= MESSAGE ================= */
+.sidebar-message {
+    padding: 14px 20px;
+    font-size: 12px;
+    background: rgba(52,152,219,0.12);
+    color: #cfe8ff;
+    margin: 15px;
+    border-radius: 10px;
+}
+
+/* ================= MENU ================= */
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .sidebar-menu li {
+        padding: 14px 25px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .sidebar-menu li i {
+            width: 18px;
+        }
+
+        .sidebar-menu li:hover {
+            background: rgba(255,255,255,0.08);
+            padding-left: 32px;
+        }
+
+        .sidebar-menu li.active {
+            background: rgba(52,152,219,0.3);
+            border-left: 4px solid #3498db;
+        }
+
+        .sidebar-menu li.logout {
+            margin-top: 20px;
+        }
+
+        .sidebar-menu li a {
+            color: white;
+            text-decoration: none;
+        }
+
+/* ================= MAIN ================= */
+.admin-main {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    transition: all 0.35s ease;
+}
+
+    .admin-main.collapsed {
+        margin-left: 0;
+        width: 100%;
+    }
+
+/* ================= TOPBAR ================= */
+.admin-topbar {
+    background: white;
+    padding: 16px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.top-left {
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+    .top-left i {
+        color: #3498db;
+    }
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.home-link {
+    text-decoration: none;
+    color: #3498db;
+    font-size: 14px;
+}
+
+.admin-name {
+    font-size: 14px;
+    color: #555;
+}
+
+/* ================= CONTENT ================= */
+.dashboard-content {
+    padding: 30px;
+}
+
+/* ================= CARDS ================= */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+}
+
+.dash-card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+    transition: all 0.35s ease;
+}
+
+    .dash-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+    }
+
+    .dash-card i {
+        font-size: 36px;
+        color: #3498db;
+    }
+
+/* ================= NOTE ================= */
+.dashboard-note {
+    margin-top: 45px;
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    display: flex;
+    gap: 10px;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+    color: #555;
+}

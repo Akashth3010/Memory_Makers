@@ -8,13 +8,9 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\NewFolder\**" />
-    <Compile Remove="Views\NewFolder\**" />
     <Content Remove="Controllers\NewFolder\**" />
-    <Content Remove="Views\NewFolder\**" />
     <EmbeddedResource Remove="Controllers\NewFolder\**" />
-    <EmbeddedResource Remove="Views\NewFolder\**" />
     <None Remove="Controllers\NewFolder\**" />
-    <None Remove="Views\NewFolder\**" />
     <Compile Remove="Views\LandingPage\**" />
     <Compile Remove="wwwroot\lib\images\**" />
     <Content Remove="Controllers\NewFolder\**" />
@@ -39,6 +35,10 @@
     <Content Remove="wwwroot\lib\Image\Ladakh.jpg" />
     <Content Remove="wwwroot\lib\Image\Rameshwaram1.jpg" />
     <Content Remove="wwwroot\lib\Image\Vrindavan.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\TopDestination\" />
   </ItemGroup>
 
 </Project>

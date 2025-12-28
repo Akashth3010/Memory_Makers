@@ -49,5 +49,110 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
 
+
+        
+           
+
+            // Add this method
+            public IActionResult GoaTD()
+            {
+                return View();
+            }
+
+            // Add this for Uttarakhand
+            public IActionResult UttarakhandTD()
+            {
+                return View();
+            }
+
+            // Add this for Meghalaya
+            public IActionResult MeghalayaTD()
+            {
+                return View();
+            }    
+        public IActionResult GoaPack1()
+        {
+            return View();
+        }
+        
+
+        public IActionResult Manali()
+        {
+            return View();
+        }
+
+        public IActionResult GoaPack2()
+        {
+            return View();
+        }
+        public IActionResult Gangtok()
+        {
+            return View();
+        }
+
+        public IActionResult GoaPack3()
+        {
+            return View();
+        }
+        public IActionResult MeghPack1()
+        {
+            return View();
+        }
+        public IActionResult MeghPack2()
+        {
+            return View();
+        }
+        public IActionResult MeghPack3()
+        {
+            return View();
+        }
+        public IActionResult UttaraPack1()
+        {
+            return View();
+        }
+        public IActionResult UttaraPack2()
+        {
+            return View();
+        }
+        public IActionResult UttaraPack3()
+        {
+            return View();
+        }
+
+        public IActionResult Banaras()
+        {
+            return View();
+        }
+
+        public IActionResult TajMahal()
+        {
+            return View();
+        }
+
+        public IActionResult PaymentPage()
+        {
+            return View();
+        }
+
+        public IActionResult Host()
+        {
+            return View();
+        }
+
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        public IActionResult TravelGuide()
+        {
+            return View();
+        }
+
+        public IActionResult CustomerSupport ()
+        {
+            return View();
+        }
     }
-}
+    }
+

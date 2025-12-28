@@ -1,0 +1,220 @@
+﻿@{
+    ViewData["Title"] = "Travel Guide - India";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --primary-orange: #ff7b54;
+        --secondary-yellow: #ffd56b;
+    }
+
+    /* Hero Section with Parallax-like feel */
+    .guide-hero {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1524492717547-2249978a62d9?auto=format&fit=crop&w=1600&q=80');
+        background-size: cover;
+        background-position: center;
+        height: 50vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        border-radius: 0 0 50px 50px;
+    }
+
+    /* Search Bar Overlay */
+    .guide-search {
+        max-width: 600px;
+        margin: -30px auto 50px;
+        background: white;
+        padding: 10px;
+        border-radius: 50px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        display: flex;
+    }
+
+        .guide-search input {
+            border: none;
+            padding: 10px 25px;
+            width: 100%;
+            outline: none;
+            border-radius: 50px;
+        }
+
+        .guide-search button {
+            background: var(--primary-orange);
+            border: none;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+
+    /* Category Cards */
+    .category-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        height: 250px;
+    }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+        }
+
+    .category-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        padding: 20px;
+        color: white;
+    }
+
+    /* Tip Section */
+    .tip-box {
+        background: #fff9f7;
+        border-left: 5px solid var(--primary-orange);
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .icon-circle {
+        width: 50px;
+        height: 50px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        margin-bottom: 15px;
+        color: var(--primary-orange);
+        font-size: 1.2rem;
+    }
+</style>
+
+<section class="guide-hero">
+    <div class="container">
+        <h1 class="display-3 fw-bold">Explore the Heart of India</h1>
+        <p class="lead">Your ultimate companion for an unforgettable journey.</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="guide-search">
+        <input type="text" placeholder="Search for cities, food, or culture tips...">
+        <button>Explore</button>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row mb-5 text-center">
+        <h2 class="fw-bold">Discover by Interest</h2>
+        <p class="text-muted">Whatever your vibe, we have a guide for it.</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="category-card" style="background: url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=80') center/cover;">
+                <div class="category-overlay">
+                    <h4>Culture & Heritage</h4>
+                    <small>15 Articles</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="category-card" style="background: url('https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80') center/cover;">
+                <div class="category-overlay">
+                    <h4>Cuisine & Street Food</h4>
+                    <small>22 Articles</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="category-card" style="background: url('https://images.unsplash.com/photo-1544735745-b89b18555f67?auto=format&fit=crop&w=600&q=80') center/cover;">
+                <div class="category-overlay">
+                    <h4>Nature & Adventure</h4>
+                    <small>10 Articles</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 pt-5">
+        <div class="col-lg-6">
+            <h2 class="fw-bold mb-4">Essential Travel Tips</h2>
+
+            <div class="tip-box">
+                <div class="icon-circle"><i class="fa-solid fa-language"></i></div>
+                <h5>Language Basics</h5>
+                <p class="text-muted mb-0">While English is widely spoken, learning a few Hindi phrases like "Namaste" (Hello) and "Shukriya" (Thank you) goes a long way.</p>
+            </div>
+
+            <div class="tip-box">
+                <div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>
+                <h5>Currency & Payments</h5>
+                <p class="text-muted mb-0">Cash is king in local markets. Always keep small denominations (₹10, ₹20, ₹50) for local transport and snacks.</p>
+            </div>
+
+            <div class="tip-box">
+                <div class="icon-circle"><i class="fa-solid fa-train"></i></div>
+                <h5>Getting Around</h5>
+                <p class="text-muted mb-0">Indian Railways is an experience in itself. Book "AC 2-Tier" or "3-Tier" for a balance of comfort and budget.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-5 offset-lg-1">
+            <div class="card p-4 shadow-sm border-0 sticky-top" style="top: 100px; border-radius: 20px; background: linear-gradient(135deg, #111, #333); color: white;">
+                <h4 class="fw-bold mb-3">Weather Check</h4>
+                <p class="small opacity-75">Planning your visit? Here is the best time to go:</p>
+                <ul class="list-unstyled">
+                    <li class="mb-3 d-flex align-items-center">
+                        <span class="badge bg-light text-dark me-3 p-2">Oct - Mar</span>
+                        <span>Best time for most of India (Cooler weather)</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-center">
+                        <span class="badge bg-warning text-dark me-3 p-2">Apr - Jun</span>
+                        <span>Summer Season (Great for Himalayas)</span>
+                    </li>
+                    <li class="d-flex align-items-center">
+                        <span class="badge bg-info text-dark me-3 p-2">Jul - Sep</span>
+                        <span>Monsoon Magic (Kerala & Goa)</span>
+                    </li>
+                </ul>
+                <hr>
+                <button class="btn w-100 fw-bold" style="background: var(--primary-orange); color: white;">Download PDF Guide</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="py-5 bg-white">
+    <div class="container">
+        <h3 class="fw-bold mb-4 text-center">Must-Read Articles</h3>
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <img src="https://images.unsplash.com/photo-1548013146-72479768bbfd?auto=format&fit=crop&w=400&q=80" class="img-fluid rounded-3 mb-2" alt="Taj Mahal">
+                <h6 class="fw-bold">10 Secret Spots in Jaipur</h6>
+            </div>
+            <div class="col-md-3 mb-4">
+                <img src="https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=400&q=80" class="img-fluid rounded-3 mb-2" alt="Temple">
+                <h6 class="fw-bold">How to survive the crowds in Delhi</h6>
+            </div>
+            <div class="col-md-3 mb-4">
+                <img src="https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=400&q=80" class="img-fluid rounded-3 mb-2" alt="Tea">
+                <h6 class="fw-bold">A Guide to the Tea Estates of Munnar</h6>
+            </div>
+            <div class="col-md-3 mb-4">
+                <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=400&q=80" class="img-fluid rounded-3 mb-2" alt="Goa">
+                <h6 class="fw-bold">Beyond the Beaches: South Goa Culture</h6>
+            </div>
+        </div>
+    </div>
+</section>

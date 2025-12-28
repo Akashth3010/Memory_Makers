@@ -1,0 +1,165 @@
+﻿/* ================= PAGE WRAPPER ================= */
+.destination-page {
+    padding: 40px 0;
+}
+
+/* ================= SECTION TITLE ================= */
+.section-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+    .section-title::after {
+        content: "";
+        width: 60px;
+        height: 3px;
+        background: #1aa3ff;
+        display: block;
+        margin: 10px auto 0;
+    }
+
+/* ================= DESTINATION CARDS ================= */
+.destination-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.destination-card {
+    position: relative;
+    height: 350px;
+    overflow: hidden;
+    border-radius: 14px;
+    transition: transform 0.3s ease;
+}
+
+    .destination-card:hover {
+        transform: scale(1.03);
+    }
+
+    .destination-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/* ================= OVERLAY ================= */
+.overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    color: #fff;
+    background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+}
+
+    .overlay h5 {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .overlay p {
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+/* ================= PACKAGE DETAILS ================= */
+.package-section {
+    margin-top: 60px;
+}
+
+.package-card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    margin-bottom: 40px;
+}
+
+.package-img img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
+
+.package-details {
+    padding: 25px;
+}
+
+.package-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.package-details ul {
+    padding-left: 20px;
+}
+
+.package-details li {
+    margin-bottom: 8px;
+}
+
+.book-now-btn {
+    margin-top: 15px;
+}
+
+/* ================= WHY CHOOSE US ================= */
+.why-choose-us {
+    padding: 60px 0;
+    background: #f9fafc;
+    margin-top: 40px;
+}
+
+.why-choose-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+.why-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+}
+
+    .why-card:hover {
+        transform: translateY(-8px);
+    }
+
+    .why-card img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        margin-bottom: 15px;
+    }
+
+    .why-card h5 {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #222;
+    }
+
+    .why-card p {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+/* ================= BACK BUTTON ================= */
+.back-btn {
+    margin-bottom: 20px;
+}
+
+/* ================= RESPONSIVE FIXES ================= */
+@media (max-width: 768px) {
+    .destination-card {
+        height: 280px;
+    }
+
+    .package-img img {
+        height: 220px;
+    }
+}
