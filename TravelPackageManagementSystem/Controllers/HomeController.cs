@@ -55,7 +55,7 @@ namespace TravelPackageManagementSystem.Controllers
             ViewBag.PackageId = id;
             return View();
         }
-        public IActionResult MaldivesTD(string id)
+        public IActionResult KeralaTD(string id)
         {
             ViewBag.PackageId = id;
             return View();
