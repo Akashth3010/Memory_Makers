@@ -28,4 +28,8 @@
     <Content Remove="Views\Home\LandingPage.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\TopDestination\" />
+  </ItemGroup>
+
 </Project>
