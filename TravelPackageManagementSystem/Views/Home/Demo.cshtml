@@ -1,0 +1,1073 @@
+﻿
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Easy Safar — Travel Packages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        /* ========== CSS VARIABLES (Light & Dark) ========== */
+        :root {
+            --bg: #0f0f12;
+            --surface: #15161b;
+            --text: #eaeaf0;
+            --muted: #a9adbd;
+            --brand: #6ee7ff;
+            --brand-2: #a78bfa;
+            --accent: #22d3ee;
+            --danger: #ff6b6b;
+            --success: #34d399;
+            --card: #1c1f27;
+            --border: #303341;
+            --shadow: 0 8px 30px rgba(0,0,0,.35);
+            --radius: 14px;
+            --grad: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 45%, #22d3ee 100%);
+            --blur: saturate(180%) blur(6px);
+        }
+
+        .light {
+            --bg: #f7f9fc;
+            --surface: #ffffff;
+            --text: #111827;
+            --muted: #4b5563;
+            --card: #ffffff;
+            --border: #e5e7eb;
+            --shadow: 0 8px 18px rgba(17,24,39,.08);
+        }
+
+        /* ========== RESET & BASE ========== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background .3s ease, color .3s ease;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1200px, 92vw);
+            margin: 0 auto;
+        }
+
+        /* ========== NAVBAR ========== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: var(--blur);
+            background: color-mix(in oklab, var(--bg) 80%, transparent);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            letter-spacing: .2px;
+        }
+
+            .brand .logo {
+                width: 38px;
+                height: 38px;
+                border-radius: 12px;
+                background: var(--grad);
+                box-shadow: var(--shadow);
+            }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .nav-links a {
+                padding: 8px 12px;
+                border-radius: 10px;
+                color: var(--muted);
+            }
+
+                .nav-links a:hover {
+                    color: var(--text);
+                    background: color-mix(in oklab, var(--surface) 80%, transparent);
+                }
+
+        .nav-cta {
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform .06s ease, background .2s ease;
+        }
+
+            .btn:hover {
+                transform: translateY(-1px);
+                background: color-mix(in oklab, var(--surface) 92%, transparent);
+            }
+
+            .btn.primary {
+                border: none;
+                background: var(--grad);
+                color: white;
+            }
+
+        .icon-btn {
+            display: inline-grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+        }
+
+        .chip {
+            padding: 8px 10px;
+            border-radius: 999px;
+            border: 1px dashed var(--border);
+            font-size: .9rem;
+            color: var(--muted);
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+            background: radial-gradient(800px 400px at 80% -50%, #6ee7ff33, transparent 60%), radial-gradient(800px 400px at -10% 10%, #a78bfa33, transparent 60%);
+        }
+
+        .hero-wrap {
+            padding: 36px 0 24px;
+            display: grid;
+            gap: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            line-height: 1.2;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+        }
+
+        .searchbar {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 10px;
+            box-shadow: var(--shadow);
+        }
+
+            .searchbar input, .searchbar select {
+                width: 100%;
+                padding: 10px;
+                border-radius: 10px;
+                border: 1px solid var(--border);
+                background: var(--card);
+                color: var(--text);
+            }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 8px 10px;
+            border-radius: 999px;
+            background: color-mix(in oklab, var(--surface) 92%, transparent);
+            border: 1px solid var(--border);
+            font-size: .85rem;
+            color: var(--muted);
+        }
+
+        /* ========== FILTER BAR ========== */
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin: 16px 0 24px;
+        }
+
+        .range {
+            display: grid;
+            gap: 6px;
+        }
+
+            .range input[type="range"] {
+                width: 100%;
+            }
+
+        /* ========== GRID / CARDS ========== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+
+        .card {
+            grid-column: span 4;
+            position: relative;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--card);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform .2s ease;
+        }
+
+            .card:hover {
+                transform: translateY(-3px);
+            }
+
+        .thumb {
+            aspect-ratio: 16/10;
+            background: #222;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-weight: 700;
+            background-image: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.25)), var(--img, none);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-content {
+            padding: 12px 14px 16px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .title {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 8px;
+        }
+
+            .title h3 {
+                margin: 0;
+                font-size: 1.05rem;
+            }
+
+        .badge {
+            padding: 6px 8px;
+            border-radius: 999px;
+            font-size: .75rem;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .price {
+            font-weight: 800;
+        }
+
+        .stars {
+            display: inline-flex;
+            gap: 2px;
+            vertical-align: middle;
+        }
+
+            .stars svg {
+                width: 15px;
+                height: 15px;
+            }
+
+        .highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+            .highlights .pill {
+                padding: 6px 8px;
+                border-radius: 999px;
+                background: color-mix(in oklab, var(--surface) 92%, transparent);
+                border: 1px solid var(--border);
+                font-size: .78rem;
+                color: var(--muted);
+            }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .wishlist {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+            .wishlist .icon-btn.active {
+                background: #ffebef;
+                border-color: #ffc0cb;
+            }
+
+        .compare {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+
+        /* ========== QUICK VIEW MODAL ========== */
+        dialog {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text);
+            width: min(760px, 92vw);
+            box-shadow: var(--shadow);
+        }
+
+            dialog::backdrop {
+                backdrop-filter: blur(6px);
+                background: rgba(0,0,0,.35);
+            }
+
+        .modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding: 10px 14px;
+        }
+
+        .modal-body {
+            padding: 14px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .itinerary {
+            display: grid;
+            gap: 6px;
+        }
+
+            .itinerary li {
+                margin-left: 18px;
+            }
+
+        /* ========== COMPARE DRAWER ========== */
+        .drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 40;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+            box-shadow: 0 -10px 30px rgba(0,0,0,.2);
+        }
+
+            .drawer .wrap {
+                width: min(1200px, 92vw);
+                margin: 0 auto;
+                padding: 10px 0;
+                display: grid;
+                gap: 10px;
+            }
+
+            .drawer .head {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .drawer .items {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+
+        .mini {
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            background: var(--card);
+            display: grid;
+            gap: 6px;
+        }
+
+            .mini .thumb {
+                aspect-ratio: 16/9;
+                border-radius: 8px;
+            }
+
+            .mini .pill {
+                padding: 6px 8px;
+                border: 1px solid var(--border);
+                border-radius: 999px;
+                width: max-content;
+                color: var(--muted);
+            }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .card {
+                grid-column: span 6;
+            }
+
+            .filters {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .searchbar {
+                grid-template-columns: 1fr 1fr 1fr auto;
+            }
+        }
+        @media (max-width: 640px) {
+            .nav {
+                grid-template-columns: 1fr auto;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .card {
+                grid-column: 1 / -1;
+            }
+
+            .searchbar {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========== UTILITY ========== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 10px 0;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+    </style>
+</head>
+
+<body class="light" data-theme="light">
+    <a href="#main" class="sr-only">Skip to content</a>
+
+    <!-- =================== NAVBAR =================== -->
+    <header>
+        <div class="container nav" role="navigation" aria-label="Primary">
+            <div class="brand">
+                <div class="logo" aria-hidden="true"></div>
+                <span>Easy Safar</span>
+                <span class="chip">Travel smarter</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#packages">Packages</a>
+                <a href="#experiences">Experiences</a>
+                <a href="#destinations">Destinations</a>
+                <a href="#planner">Trip Planner</a>
+                <a href="#deals">Deals</a>
+                <a href="#blog">Blog</a>
+                <a href="#support">Support</a>
+            </nav>
+            <div class="nav-cta">
+                <button class="icon-btn" id="toggleTheme" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+                <select id="currency" class="btn" aria-label="Currency">
+                    <option value="INR" selected>₹ INR</option>
+                    <option value="USD">$ USD</option>
+                    <option value="EUR">€ EUR</option>
+                </select>
+                <select id="language" class="btn" aria-label="Language">
+                    <option value="en" selected>English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="ta">தமிழ்</option>
+                </select>
+                <button class="btn">Sign In</button>
+                <button class="btn primary">My Trips</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- =================== HERO =================== -->
+    <section class="hero" id="planner">
+        <div class="container hero-wrap">
+            <h1>Discover India’s most loved <em>travel packages</em> — curated for beach bums, culture buffs, and mountain souls.</h1>
+
+            <div class="searchbar" aria-label="Search packages">
+                <input id="searchText" type="text" placeholder="Search: Goa, Andaman, Meghalaya..." aria-label="Search by destination or package name" />
+                <select id="searchDuration" aria-label="Duration">
+                    <option value="">Any Duration</option>
+                    <option value="3">3N/4D</option>
+                    <option value="4">4N/5D</option>
+                    <option value="5">5N/6D</option>
+                    <option value="6">6N/7D+</option>
+                </select>
+                <select id="searchTheme" aria-label="Theme">
+                    <option value="">All Themes</option>
+                    <option value="Beach">Beach</option>
+                    <option value="Honeymoon">Honeymoon</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="Culture">Culture</option>
+                    <option value="Pilgrimage">Pilgrimage</option>
+                    <option value="Wildlife">Wildlife</option>
+                </select>
+                <button id="btnSearch" class="btn primary">Find Packages</button>
+            </div>
+
+            <div class="tags" aria-label="Trending tags">
+                <span class="tag">#GoaNightlife</span>
+                <span class="tag">#AndamanScuba</span>
+                <span class="tag">#KeralaBackwaters</span>
+                <span class="tag">#MeghalayaRoots</span>
+                <span class="tag">#OotyTeaTrails</span>
+                <span class="tag">#JaipurRoyal</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- =================== FILTERS =================== -->
+    <main class="container" id="main">
+        <section aria-label="Filters">
+            <div class="filters">
+                <select id="filterDestination" aria-label="Destination">
+                    <option value="">All Destinations</option>
+                    <option>Goa</option>
+                    <option>Andaman</option>
+                    <option>Kerala</option>
+                    <option>Meghalaya</option>
+                    <option>Mizoram</option>
+                    <option>Tamil Nadu</option>
+                    <option>Mumbai</option>
+                    <option>Munnar</option>
+                    <option>Darjeeling</option>
+                    <option>Gangtok</option>
+                    <option>Ooty</option>
+                    <option>Jaipur</option>
+                    <option>Varanasi</option>
+                    <option>Vrindavan</option>
+                    <option>Rameswaram</option>
+                    <option>Manali</option>
+                    <option>Agra (Taj Mahal)</option>
+                </select>
+
+                <div class="range">
+                    <label class="muted" for="budget">Budget (per person)</label>
+                    <input id="budget" type="range" min="10000" max="120000" step="5000" value="80000" />
+                    <small class="muted">Up to: <span id="budgetValue">₹80,000</span></small>
+                </div>
+
+                <select id="filterDuration" aria-label="Duration">
+                    <option value="">Any Duration</option>
+                    <option value="3">3N/4D</option>
+                    <option value="4">4N/5D</option>
+                    <option value="5">5N/6D</option>
+                    <option value="6">6N/7D+</option>
+                </select>
+
+                <select id="filterMonth" aria-label="Month">
+                    <option value="">Any Month</option>
+                    <option>Jan</option>
+                    <option>Feb</option>
+                    <option>Mar</option>
+                    <option>Apr</option>
+                    <option>May</option>
+                    <option>Jun</option>
+                    <option>Jul</option>
+                    <option>Aug</option>
+                    <option>Sep</option>
+                    <option>Oct</option>
+                    <option>Nov</option>
+                    <option>Dec</option>
+                </select>
+
+                <select id="filterTheme" aria-label="Theme">
+                    <option value="">All Themes</option>
+                    <option>Beach</option>
+                    <option>Honeymoon</option>
+                    <option>Adventure</option>
+                    <option>Culture</option>
+                    <option>Pilgrimage</option>
+                    <option>Wildlife</option>
+                </select>
+
+                <select id="sortBy" aria-label="Sort by">
+                    <option value="popular">Sort: Popular</option>
+                    <option value="priceAsc">Price: Low to High</option>
+                    <option value="priceDesc">Price: High to Low</option>
+                    <option value="durationAsc">Duration: Short to Long</option>
+                    <option value="durationDesc">Duration: Long to Short</option>
+                    <option value="rating">Rating</option>
+                </select>
+            </div>
+        </section>
+
+        <div id="packages" class="grid" aria-live="polite"></div>
+    </main>
+
+    <!-- =================== QUICK VIEW MODAL =================== -->
+    <dialog id="quickView">
+        <div class="modal-head">
+            <strong id="qvTitle">Package</strong>
+            <button class="btn" id="qvClose" aria-label="Close">Close</button>
+        </div>
+        <div class="modal-body">
+            <div class="thumb" id="qvImg" style="--img:url('')">Image</div>
+            <div class="divider"></div>
+            <div id="qvMeta" class="muted"></div>
+            <ul id="qvItinerary" class="itinerary"></ul>
+            <div class="divider"></div>
+            <div style="display:flex; gap:8px;">
+                <button class="btn primary" id="qvBook">Book Now</button>
+                <button class="btn" id="qvAddCompare">Add to Compare</button>
+                <button class="btn" id="qvWishlist">Add to Wishlist</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- =================== COMPARE DRAWER =================== -->
+    <div class="drawer" id="drawer" hidden>
+        <div class="wrap">
+            <div class="head">
+                <strong>Compare Packages</strong>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn" id="clearCompare">Clear</button>
+                    <button class="btn primary">Continue to Book</button>
+                </div>
+            </div>
+            <div class="items" id="compareItems"></div>
+        </div>
+    </div>
+
+    <!-- =================== TEMPLATE ICONS =================== -->
+    <template id="star">
+        <svg viewBox="0 0 20 20" fill="gold" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M10 1.8l2.6 5.3 5.9.9-4.2 4.2 1 5.9L10 15l-5.3 3.1 1-5.9-4.2-4.2 5.9-.9L10 1.8z" />
+        </svg>
+    </template>
+
+    <!-- =================== DATA + RENDER SCRIPT =================== -->
+    <script>
+        // ---------- SAMPLE DATA ----------
+        const DATA = [
+          {
+            id: "andaman-6d",
+            name: "Andaman Highlights: Port Blair • Havelock • Neil",
+            destination: "Andaman",
+            durationN: 5, durationD: 6,
+            monthBest: ["Oct","Nov","Dec","Jan","Feb","Mar"],
+            themes: ["Beach","Adventure","Honeymoon"],
+            priceINR: 52000,
+            rating: 4.7,
+            img: "https://images.unsplash.com/photo-1544551763-7ef076b04f85?q=80&w=1400&auto=format&fit=crop",
+            highlights: ["Radhanagar Beach","Cellular Jail L&S","Snorkeling/Scuba","Neil Island bridge"],
+            itinerary: [
+              "Day 1: Port Blair — Cellular Jail & Corbyn’s Cove",
+              "Day 2: Havelock — Radhanagar sunset",
+              "Day 3: Havelock — watersports",
+              "Day 4: Neil — natural bridge & lagoons",
+              "Day 5: Ross & North Bay Islands",
+              "Day 6: Departure"
+            ],
+            popular: true
+          },
+          {
+            id: "kerala-7d",
+            name: "Kerala Backwaters & Hills: Kochi • Munnar • Thekkady • Alleppey • Kovalam",
+            destination: "Kerala",
+            durationN: 6, durationD: 7,
+            monthBest: ["Sep","Oct","Nov","Dec","Jan","Feb","Mar"],
+            themes: ["Culture","Wildlife","Honeymoon"],
+            priceINR: 48000,
+            rating: 4.6,
+            img: "https://images.unsplash.com/photo-1562840613-e8137a0ff98f?q=80&w=1400&auto=format&fit=crop",
+            highlights: ["Tea estates","Periyar safari","Houseboat","Ayurveda"],
+            itinerary: [
+              "Day 1: Fort Kochi heritage walk",
+              "Day 2–3: Munnar tea trails & viewpoints",
+              "Day 4: Thekkady wildlife & spice farm",
+              "Day 5: Alleppey houseboat",
+              "Day 6: Kovalam beach & spa",
+              "Day 7: Depart"
+            ],
+            popular: true
+          },
+          {
+            id: "goa-5d",
+            name: "Goa Mix: North Beaches • Heritage • Dudhsagar",
+            destination: "Goa",
+            durationN: 4, durationD: 5,
+            monthBest: ["Oct","Nov","Dec","Jan","Feb"],
+            themes: ["Beach","Nightlife","Adventure"],
+            priceINR: 26000,
+            rating: 4.5,
+            img: "https://images.unsplash.com/photo-1548786811-ffa14caa1b95?q=80&w=1400&auto=format&fit=crop",
+            highlights: ["Baga/Calangute","Old Goa churches","Dudhsagar trek","Mandovi cruise"],
+            itinerary: [
+              "Day 1: North Goa beaches",
+              "Day 2: Water sports + Aguada/Chapora",
+              "Day 3: Old Goa heritage & cruise",
+              "Day 4: Dudhsagar waterfall",
+              "Day 5: Leisure & depart"
+            ],
+            popular: true
+          },
+          {
+            id: "meghalaya-6d",
+            name: "Meghalaya Nature: Shillong • Cherrapunji • Dawki • Mawlynnong",
+            destination: "Meghalaya",
+            durationN: 5, durationD: 6,
+            monthBest: ["Oct","Nov","Dec","Jan","Feb","Mar","Apr"],
+            themes: ["Adventure","Nature","Culture"],
+            priceINR: 38000, rating: 4.7,
+            img: "https://images.unsplash.com/photo-1621214529773-1dc66ad5412a?q=80&w=1400&auto=format&fit=crop",
+            highlights: ["Umiam Lake","Nohkalikai Falls","Root bridges","Dawki boating"],
+            itinerary: [
+              "Day 1: Guwahati → Shillong",
+              "Day 2: Umiam, local sights",
+              "Day 3: Cherrapunji caves & falls",
+              "Day 4: Root bridge trek",
+              "Day 5: Mawlynnong & Dawki",
+              "Day 6: Return"
+            ],
+            popular: true
+          },
+          {
+            id: "mizoram-5d",
+            name: "Mizoram Essentials: Aizawl • Vantawng • Reiek",
+            destination: "Mizoram",
+            durationN: 4, durationD: 5,
+            monthBest: ["Nov","Dec","Jan","Feb","Mar"],
+            themes: ["Culture","Nature","Adventure"],
+            priceINR: 41000, rating: 4.4,
+            img: "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1400&auto=format&fit=crop",
+            highlights: ["Solomon’s Temple","Bamboo landscapes","Vantawng Falls","Reiek trek"],
+            itinerary: [
+              "Day 1–2: Aizawl city & temples",
+              "Day 3: Vantawng Falls excursion",
+              "Day 4: Reiek trek & village",
+              "Day 5: Tam Dil or markets"
+            ]
+          },
+          {
+            id: "tamilnadu-8d",
+            name: "Tamil Nadu Circuit: Chennai • Mahabalipuram • Kanchipuram • Madurai • Rameswaram • Kanyakumari • Ooty",
+            destination: "Tamil Nadu",
+            durationN: 7, durationD: 8,
+            monthBest: ["Oct","Nov","Dec","Jan","Feb","Mar"],
+            themes: ["Culture","Pilgrimage","Hills"],
+            priceINR: 52000, rating: 4.6,
+            img: "https://images.unsplash.com/photo-1577195700171-6bc5f3df83b4?q=80&w=1400&auto=format&fit=crop",
+            highlights: ["Shore temples","Meenakshi","Ramanathaswamy","Ooty railway"],
+            itinerary: [
+              "Day 1: Chennai city",
+              "Day 2: Mahabalipuram",
+              "Day 3: Kanchipuram",
+              "Day 4: Madurai",
+              "Day 5: Rameswaram",
+              "Day 6: Kanyakumari",
+              "Day 7: Ooty",
+              "Day 8: Depart"
+            ]
+          },
+          // City & iconic add-ons the user requested:
+          { id:"mumbai-4d", name:"Mumbai City Break", destination:"Mumbai", durationN:3, durationD:4, monthBest:["Nov","Dec","Jan","Feb"], themes:["City","Culture","Food"], priceINR:18000, rating:4.3,
+            img:"https://images.unsplash.com/photo-1557641862-7ef8ea3bd1b0?q=80&w=1400&auto=format&fit=crop",
+            highlights:["Gateway of India","Marine Drive","Colaba & Bollywood"], itinerary:["Day 1: Fort & Colaba","Day 2: Bandra & film studio","Day 3: Elephanta Caves","Day 4: Depart"] },
+          { id:"munnar-3d", name:"Munnar Tea Trails", destination:"Munnar", durationN:2, durationD:3, monthBest:["Sep","Oct","Nov","Dec","Jan"], themes:["Hills","Honeymoon"], priceINR:15000, rating:4.5,
+            img:"https://images.unsplash.com/photo-1588284321651-3b4f6d0ed1e5?q=80&w=1400&auto=format&fit=crop",
+            highlights:["Tea museum","Echo Point","Top Station"], itinerary:["Day 1: Tea gardens","Day 2: Viewpoints","Day 3: Depart"] },
+          { id:"darjeeling-4d", name:"Darjeeling Himalayan Views", destination:"Darjeeling", durationN:3, durationD:4, monthBest:["Oct","Nov","Mar","Apr"], themes:["Hills","Culture"], priceINR:24000, rating:4.4,
+            img:"https://images.unsplash.com/photo-1545165307-1b433bc7f8a0?q=80&w=1400&auto=format&fit=crop",
+            highlights:["Tiger Hill","Toy Train","Tea estates"], itinerary:["Day 1: Mall & gardens","Day 2: Toy Train","Day 3: Tiger Hill sunrise","Day 4: Depart"] },
+          { id:"gangtok-4d", name:"Gangtok & Tsomgo Lake", destination:"Gangtok", durationN:3, durationD:4, monthBest:["Oct","Nov","Apr","May"], themes:["Hills","Adventure"], priceINR:26000, rating:4.5,
+            img:"https://images.unsplash.com/photo-1546324179-5c75c02afad1?q=80&w=1400&auto=format&fit=crop",
+            highlights:["MG Road","Tsomgo Lake","Rumtek"], itinerary:["Day 1: City walk","Day 2: Tsomgo excursion","Day 3: Rumtek monastery","Day 4: Depart"] },
+          { id:"ooty-4d", name:"Ooty Nilgiri Escape", destination:"Ooty", durationN:3, durationD:4, monthBest:["Oct","Nov","Dec","Jan"], themes:["Hills","Family"], priceINR:21000, rating:4.4,
+            img:"https://images.unsplash.com/photo-1610548802960-46e4c66e63a6?q=80&w=1400&auto=format&fit=crop",
+            highlights:["Botanical Garden","Ooty Lake","Coonoor rail"], itinerary:["Day 1: Gardens","Day 2: Lake & tea","Day 3: Coonoor train","Day 4: Depart"] },
+          { id:"jaipur-4d", name:"Jaipur Royal Heritage", destination:"Jaipur", durationN:3, durationD:4, monthBest:["Nov","Dec","Jan","Feb"], themes:["Culture","Heritage"], priceINR:22000, rating:4.6,
+            img:"https://images.unsplash.com/photo-1554446422-d05db23749b4?q=80&w=1400&auto=format&fit=crop",
+            highlights:["Amber Fort","City Palace","Hawa Mahal"], itinerary:["Day 1: Pink City","Day 2: Amber Fort","Day 3: Bazaars","Day 4: Depart"] },
+          { id:"varanasi-3d", name:"Banaras Spiritual Retreat", destination:"Varanasi", durationN:2, durationD:3, monthBest:["Nov","Dec","Jan"], themes:["Pilgrimage","Culture"], priceINR:17000, rating:4.7,
+            img:"https://images.unsplash.com/photo-1526991901954-6e33b093d564?q=80&w=1400&auto=format&fit=crop",
+            highlights:["Ganga Aarti","Kashi Vishwanath","Boat ride"], itinerary:["Day 1: Ghats & Aarti","Day 2: Temples & lanes","Day 3: Sunrise boat"] },
+          { id:"vrindavan-3d", name:"Vrindavan Devotional Circuit", destination:"Vrindavan", durationN:2, durationD:3, monthBest:["Oct","Nov","Mar"], themes:["Pilgrimage"], priceINR:15000, rating:4.3,
+            img:"https://images.unsplash.com/photo-1548011513-5df8ebd15a9b?q=80&w=1400&auto=format&fit=crop",
+            highlights:["Banke Bihari","ISKCON","Yamuna aarti"], itinerary:["Day 1: Temples","Day 2: Govardhan parikrama","Day 3: Depart"] },
+          { id:"rameswaram-3d", name:"Rameswaram & Pamban Bridge", destination:"Rameswaram", durationN:2, durationD:3, monthBest:["Dec","Jan","Feb"], themes:["Pilgrimage","Coastal"], priceINR:16000, rating:4.4,
+            img:"https://images.unsplash.com/photo-1603550020999-ae7a67d13777?q=80&w=1400&auto=format&fit=crop",
+            highlights:["Ramanathaswamy","Pamban Bridge","Dhanushkodi"], itinerary:["Day 1: Temple","Day 2: Dhanushkodi","Day 3: Depart"] },
+          { id:"manali-5d", name:"Manali Adventure & Solang", destination:"Manali", durationN:4, durationD:5, monthBest:["May","Jun","Sep","Oct","Dec","Jan"], themes:["Adventure","Hills"], priceINR:28000, rating:4.5,
+            img:"https://images.unsplash.com/photo-1612969308310-652cc6a3de44?q=80&w=1400&auto=format&fit=crop",
+            highlights:["Rohtang/Atal Tunnel","Solang","Old Manali"], itinerary:["Day 1: Town & cafes","Day 2: Solang valley","Day 3: Rohtang/Atal","Day 4: Naggar","Day 5: Depart"] },
+          { id:"agra-2d", name:"Agra & Taj Mahal Quick Trip", destination:"Agra (Taj Mahal)", durationN:1, durationD:2, monthBest:["Nov","Dec","Jan","Feb"], themes:["Heritage","City"], priceINR:12000, rating:4.8,
+            img:"https://images.unsplash.com/photo-1548011513-3cfb6f2d3d4c?q=80&w=1400&auto=format&fit=crop",
+            highlights:["Taj Mahal sunrise","Agra Fort","Mehtab Bagh"], itinerary:["Day 1: Fort & Mehtab","Day 2: Taj sunrise & depart"] }
+        ];
+
+        // ---------- STATE ----------
+        const elGrid = document.getElementById('packages');
+        const elBudget = document.getElementById('budget');
+        const elBudgetValue = document.getElementById('budgetValue');
+        const elQuickView = document.getElementById('quickView');
+        const currencySel = document.getElementById('currency');
+
+        const state = {
+          query: '',
+          destination: '',
+          duration: '',
+          month: '',
+          theme: '',
+          sortBy: 'popular',
+          budgetMax: parseInt(elBudget.value, 10),
+          currency: currencySel.value,
+          wishlist: new Set(JSON.parse(localStorage.getItem('wishlist') || '[]')),
+          compare: new Set()
+        };
+
+        // ---------- UTIL ----------
+        const INR_TO = { USD: 0.012, EUR: 0.011 }; // approximate offline conversion
+        const fmt = (amtINR) => {
+          if (state.currency === 'INR') return `₹${amtINR.toLocaleString('en-IN')}`;
+          const rate = INR_TO[state.currency] || 1;
+          const converted = Math.round(amtINR * rate);
+          const symbol = state.currency === 'USD' ? '$' : (state.currency === 'EUR' ? '€' : '₹');
+          return `${symbol}${converted.toLocaleString()}`;
+        };
+        const setTheme = (mode) => {
+          const body = document.body;
+          if (mode === 'dark') { body.classList.remove('light'); body.dataset.theme = 'dark'; }
+          else { body.classList.add('light'); body.dataset.theme = 'light'; }
+          localStorage.setItem('theme', body.dataset.theme);
+        };
+
+        // ---------- RENDER ----------
+        function renderCards(items) {
+          elGrid.innerHTML = '';
+          if (!items.length) {
+            elGrid.innerHTML = `<p class="muted">No packages match your filters. Try clearing filters or increasing budget.</p>`;
+            return;
+          }
+          items.forEach(p => {
+            const card = document.createElement('article');
+            card.className = 'card';
+            card.setAttribute('tabindex','0');
+            card.innerHTML = `
+              <div class="thumb" style="--img:url('${p.img}')">${p.destination}</div>
+              <div class="card-content">
+                <div class="title">
+                  <h3>${p.name}</h3>
+                  <span class="badge">${p.durationN}N/${p.durationD}D</span>
+                </div>
+                <div class="muted">
+                  <span class="price">${fmt(p.priceINR)}</span> •
+                  <span class="stars" aria-label="Rating ${p.rating}">${stars(p.rating)}</span>
+                </div>
+                <div class="highlights">
+                  ${p.highlights.slice(0,4).map(h => `<span class="pill">${h}</span>`).join('')}
+                </div>
+                <div class="card-actions">
+                  <button class="btn" data-qv="${p.id}">Quick View</button>
+                  <button class="btn" data-compare="${p.id}">Add to Compare</button>
+                  <button class="btn primary">Book</button>
+                </div>
+              </div>
+              <div class="wishlist">
+                <button class="icon-btn ${state.wishlist.has(p.id) ? 'active' : ''}" aria-label="Wishlist" data-wish="${p.id}">❤️</button>
+              </div>
+              <div class="compare">
+                <span class="badge">${p.themes.join(' • ')}</span>
+              </div>
+            `;
+            elGrid.appendChild(card);
+          });
+        }
+
+        function stars(rating) {
+          const count = Math.round(rating);
+          let s = '';
+          for (let i = 0; i < 5; i++) {
+            s += `<svg viewBox="0 0 20 20" ${i < count ? 'fill="gold"' : 'fill="#555"'} xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1.8l2.6 5.3 5.9.9-4.2 4.2 1 5.9L10 15l-5.3 3.1 1-5.9-4.2-4.2 5.9-.9L10 1.8z"/></svg>`;
+          }
+          return s;
+        }
+
+        function filterAndSort() {
+          let items = DATA.filter(p =>
+            (!state.query || p.name.toLowerCase().includes(state.query) || p.destination.toLowerCase().includes(state.query)) &&
+            (!state.destination || p.destination === state.destination) &&
+            (!state.duration || p.durationN === parseInt(state.duration,10)) &&
+            (!state.month || p.monthBest.includes(state.month)) &&
+            (!state.theme || p.themes.includes(state.theme)) &&
+            (p.priceINR <= state.budgetMax)
+          );
+          switch (state.sortBy) {
+            case 'priceAsc': items.sort((a,b)=>a.priceINR-b.priceINR); break;
+            case 'priceDesc': items.sort((a,b)=>b.priceINR-a.priceINR); break;
+            case 'durationAsc': items.sort((a,b)=>a.durationN-b.durationN); break;
+            case 'durationDesc': items.sort((a,b)=>b.durationN-a.durationN); break;
+            case 'rating': items.sort((a,b)=>b.rating-a.rating); break;
+            default: items.sort((a,b)=> (b.popular===true)-(a.popular===true) || b.rating-a.rating);
+          }
+          renderCards(items);
+        }
+
+        // ---------- EVENT HANDLERS ----------
+        document.getElementById('btnSearch').addEventListener('click', () => {
+          state.query = document.getElementById('searchText').value.trim().toLowerCase();
+          state.duration = document.getElementById('searchDuration').value;
+          state.theme = document.getElementById('searchTheme').value;
+          filterAndSort();
+        });
+
+        document.getElementById('filterDestination').addEventListener('change', e => { state.destination = e.target.value; filterAndSort(); });
+        document.getElementById('filterDuration').addEventListener('change', e => { state.duration = e.target.value; filterAndSort(); });
+        document.getElementById('filterTheme').addEventListener('change', e => { state.theme = e.target.value; filterAndSort(); });
+        document.getElementById('filterMonth').addEventListener('change', e => { state.month = e.target.value; filterAndSort(); });
+        document.getElementById('sortBy').addEventListener('change', e => { state.sortBy = e.target.value; filterAndSort(); });
+
+        elBudget.addEventListener('input', e => {
+          state.budgetMax = parseInt(e.target.value,10);
+          elBudgetValue.textContent = fmt(state.budgetMax).replace(/[^\d₹$€,]/g,'');
+          filterAndSort();
+        });
+
+        currencySel.addEventListener('change', e => {
+          state.currency = e.target.value;
+          elBudgetValue.textContent = fmt(state.budgetMax).replace(/[^\d₹$€,]/g,'');
+          filterAndSort();
+        });
+
+        // Delegate clicks for Quick View / Wishlist / Compare
+        elGrid.addEventListener('click', e => {
+          const qv = e.target.closest('[data-qv]');
+          const wish = e.target.closest('[data-wish]');
+          const cmp = e.target.closest('[data-compare]');
+          if (qv) openQuickView(qv.dataset.qv);
+          if (wish) toggleWishlist(wish.dataset.wish, wish);
+          if (cmp) addToCompare(cmp.dataset.compare);
+        });
+
+        function toggleWishlist(id, btnEl) {
+          if (state.wishlist.has(id)) state.wishlist.delete(id);
+          else state.wishlist.add(id);
+          btnEl.classList.toggle('active');
+          localStorage.setItem('wishlist', JSON.stringify([...state.wishlist]));
+        }
+
+        function openQuickView(id) {
+          const p = DATA.find(x => x.id === id);
+          if (!p) return;
+          document.getElementById('qvTitle').textContent = p.name;
+          document.getElementById('qvImg').style.setProperty('--img', `url('${p.img}')`);
+          document.getElementById('qvMeta').textContent = `${p.destination} • ${p.durationN}N/${p.durationD}D • ${fmt(p.priceINR)} • Rating ${p.rating}`;
+          const list = document.getElementById('qvItinerary');
+          list.innerHTML = p.itinerary.map(i => `<li>${i}</li>`).join('');
+          document.getElementById('qvAddCompare').onclick = () => addToCompare(id);
+          document.getElementById('qvWishlist').onclick = () => {
+            state.wishlist.add(id);
+            localStorage.setItem('wishlist', JSON.stringify([...state.wishlist]));
+            filterAndSort(); // refresh card state
+          };
+          elQuickView.showModal();
+        }
+        document.getElementById('qvClose').addEventListener('click', ()=> elQuickView.close());
+
+        // Compare drawer
+        const drawer = document.getElementById('drawer');
+        const compareItems = document.getElementById('compareItems');
+        function addToCompare(id) {
+          state.compare.add(id);
+          renderCompare();
+        }
+        function renderCompare() {
+          if (!state.compare.size) { drawer.hidden = true; compareItems.innerHTML = ''; return; }
+          drawer.hidden = false;
+          compareItems.innerHTML = '';
+          [...state.compare].slice(0,4).forEach(id => {
+            const p = DATA.find(x=>x.id===id);
+            const el = document.createElement('div');
+            el.className = 'mini';
+            el.innerHTML = `
+              <div class="thumb" style="--img:url('${p.img}')"></div>
+              <div><strong>${p.destination}</strong> <span class="muted">• ${p.durationN}N/${p.durationD}D</span></div>
+              <div class="pill">${fmt(p.priceINR)}</div>
+              <div class="muted">${p.themes.join(' • ')}</div>
+              <button class="btn" data-remove="${p.id}">Remove</button>
+            `;
+            compareItems.appendChild(el);
+          });
+        }
+        document.getElementById('clearCompare').addEventListener('click', ()=> { state.compare.clear(); renderCompare(); });
+        compareItems.addEventListener('click', e => {
+          const rm = e.target.closest('[data-remove]');
+          if (rm) { state.compare.delete(rm.dataset.remove); renderCompare(); }
+        });
+
+        // Theme
+        document.getElementById('toggleTheme').addEventListener('click', () => {
+          const next = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+          setTheme(next);
+        });
+        // Persist theme
+        setTheme(localStorage.getItem('theme') || 'light');
+
+        // Initial render
+        filterAndSort();
+
+        // Accessibility: close modal with Esc
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && elQuickView.open) elQuickView.close(); });
+    </script>
+</body>
+</html>

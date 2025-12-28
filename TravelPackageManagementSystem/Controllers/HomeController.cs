@@ -22,10 +22,32 @@ namespace TravelPackageManagementSystem.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Trending()
         public IActionResult Hero()
         {
             return View();
         }
+        
+
+        // The individual detail page
+        public IActionResult Tamilnadu()
+        {
+            return View();
+        }
+        public IActionResult TamilnaduTD(string id)
+        {
+            ViewBag.PackageId = id;
+            return View();
+        }
+        public IActionResult MaldivesTD(string id)
+        {
+            ViewBag.PackageId = id;
+            return View();
+        }
+        public IActionResult MizoramTD(string id)
+        {
+            ViewBag.PackageId = id;
+            return View();
+        }
+
     }
 }

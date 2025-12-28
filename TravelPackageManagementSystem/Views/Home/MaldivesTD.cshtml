@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Maldives | Paradise Islands";
+}
+
+<link rel="stylesheet" href="~/css/travel-style.css" />
+<style>
+    :root {
+        --accent-color: #00d2ff; /* Tropical Aqua */
+        --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* Ocean Blue Gradient */
+    }
+
+    .hero-text {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+        .hero-text h1 span {
+            color: var(--accent-color);
+        }
+</style>
+
+<div class="main-page">
+    <div class="hero-text">
+        <h1>Discover <span>Maldives</span></h1>
+        <p>Turquoise waters and endless horizons.</p>
+    </div>
+
+    <div class="packages-section">
+        <div class="pkg-card" onclick="location.href='/Home/MaldivesTD?id=mv-resort'">
+            <img src="~/lib/TopDestination/Luxury Island in Maldives.jpg" alt="Maldives Resort" />
+            <div class="pkg-body">
+                <h3>Luxury Resort Stay</h3>
+                <p>4 Days • Male & Private Island</p>
+                <div class="pkg-price">₹45,999</div>
+                <button class="select-btn">View Details</button>
+            </div>
+        </div>
+
+        <div class="pkg-card highlight" onclick="location.href='/Home/MaldivesTD?id=mv-diving'">
+            <img src="~/lib/TopDestination/Snorkeling & Diving in Maldives.jpg" alt="Scuba Diving" />
+            <div class="pkg-body">
+                <span class="hot-tag">Most Popular</span>
+                <h3>Scuba & Snorkel</h3>
+                <p>5 Days • Coral Reefs</p>
+                <div class="pkg-price">₹52,499</div>
+                <button class="select-btn">View Details</button>
+            </div>
+        </div>
+
+        <div class="pkg-card" onclick="location.href='/Home/MaldivesTD?id=mv-honeymoon'">
+            <img src="~/lib/TopDestination/water villas.jpg" alt="Honeymoon" />
+            <div class="pkg-body">
+                <h3>Romantic Escape</h3>
+                <p>6 Days • Water Villas</p>
+                <div class="pkg-price">₹65,999</div>
+                <button class="select-btn">View Details</button>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="gallery-title">Islands & Hidden Gems</h2>
+    <div class="auto-scroll-container">
+        <div class="scroll-track">
+            <div class="gem-item"><img src="~/lib/TopDestination/South Male Atoll Maldives.jpg"><span>Male</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Hulhumale.jpg"><span>Hulhumale</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Atoll.jpg" >"<span>Ari Atoll</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Baa Atoll Maldives Resort_ Coco Palm Dhuni Kolhu - KoTravellers.jpg"><span>Baa Atoll</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Vilamendhoo Island Resort and Spa.jpg"><span>Villamendhoo</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    console.log("Maldives Page Loaded");
+</script>
+
+
+
+
+
+
+
+
