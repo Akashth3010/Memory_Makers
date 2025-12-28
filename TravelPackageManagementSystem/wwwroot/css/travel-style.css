@@ -1,3 +1,12 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+
+:root {
+    --card-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --text-white: #ffffff;
+    /* Default Accent - Blue */
+    --accent-color: #00d2ff;
+    --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
 ﻿/* Shared Styles - White Card Theme */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
 
@@ -12,6 +21,39 @@ body, html {
     padding: 0;
     font-family: 'Poppins', sans-serif;
     background: var(--bg-gradient);
+    color: var(--text-white);
+    overflow-x: hidden;
+}
+
+.main-page {
+    padding-bottom: 80px;
+}
+
+/* --- Attractive Header --- */
+.hero-header {
+    text-align: center;
+    padding: 60px 20px 20px;
+}
+
+    .hero-header h1 {
+        font-size: 3rem;
+        margin: 0;
+    }
+
+        .hero-header h1 span {
+            color: var(--accent-color);
+        }
+
+    .hero-header p {
+        opacity: 0.8;
+        font-weight: 300;
+    }
+
+/* --- One-Line Package Cards --- */
+.packages-section {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
     background-attachment: fixed;
     color: white;
 }
@@ -28,6 +70,23 @@ body, html {
 
 .pkg-card {
     flex: 1;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 25px;
+    border: 1px solid var(--glass-border);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+    /* Hover Effect: Scale & Glow */
+    .pkg-card:hover {
+        transform: translateY(-15px);
+        border-color: var(--accent-color);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 210, 255, 0.2);
     background: #ffffff; /* Forced White Card */
     border-radius: 25px;
     overflow: hidden;
@@ -46,11 +105,23 @@ body, html {
     height: 200px;
     background-size: cover;
     background-position: center;
+    transition: 0.5s;
+}
+
+.pkg-card:hover .pkg-img {
+    transform: scale(1.1);
 }
 
 .pkg-body {
     padding: 25px;
     text-align: center;
+    flex-grow: 1;
+}
+
+.pkg-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-color);
 }
 
     /* Text inside White Cards */
@@ -74,12 +145,39 @@ body, html {
 
 .select-btn {
     background: var(--accent-color);
+    color: #fff;
     color: white;
     border: none;
     padding: 12px 30px;
     border-radius: 50px;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+    .select-btn:hover {
+        filter: brightness(1.2);
+        transform: scale(1.05);
+    }
+
+/* --- Auto-Scroll Hidden Gems --- */
+.gallery-title {
+    text-align: center;
+    margin-top: 60px;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+.auto-scroll-container {
+    width: 100%;
+    overflow: hidden;
+    padding: 40px 0;
+    margin-top: 20px;
+}
+
+.scroll-track {
+    display: flex;
+    /* Speed calculation: items * width */
 }
 
 /* --- Auto Scroll Gallery --- */
@@ -89,6 +187,9 @@ body, html {
     animation: scroll 30s linear infinite;
 }
 
+    .scroll-track:hover {
+        animation-play-state: paused;
+    }
 @keyframes scroll {
     0% {
         transform: translateX(0);
@@ -102,6 +203,10 @@ body, html {
 .gem-item {
     width: 280px;
     margin: 0 15px;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     border-radius: 20px;
     overflow: hidden;
     position: relative;
@@ -111,12 +216,93 @@ body, html {
         width: 100%;
         height: 200px;
         object-fit: cover;
+        display: block;
     }
 
     .gem-item span {
         position: absolute;
         bottom: 0;
         width: 100%;
+        background: linear-gradient(transparent, rgba(0,0,0,0.9));
+        text-align: center;
+        padding: 15px 0 10px;
+        font-size: 0.9rem;
+    }
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(-310px * 5));
+    }
+}
+/* --- One-Line Package Cards --- */
+.pkg-card {
+    flex: 1;
+    min-width: 300px;
+    max-width: 350px;
+    background: #ffffff; /* Clean white card */
+    border-radius: 20px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+    .pkg-card img {
+        width: 100%;
+        height: 260px; /* Enhanced image height */
+        object-fit: cover;
+        display: block;
+    }
+
+.pkg-body {
+    padding: 15px; /* Reduced padding for compact text */
+    text-align: center;
+    flex-grow: 1;
+}
+
+    .pkg-body h3 {
+        font-size: 1.2rem;
+        color: #000000; /* Strong black for headings */
+        margin: 8px 0;
+    }
+
+    .pkg-body p {
+        font-size: 0.9rem;
+        color: #555555; /* Softer grey for subtext */
+        margin: 5px 0;
+    }
+
+.pkg-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #8e1b1b; /* Heritage maroon accent */
+    margin: 10px 0;
+}
+
+.select-btn {
+    background: #8e1b1b;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .select-btn:hover {
+        background: #b22222;
+        transform: scale(1.05);
+    }
+
+
         background: rgba(0,0,0,0.7);
         text-align: center;
         padding: 10px;
