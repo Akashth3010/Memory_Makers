@@ -171,6 +171,11 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }
+
+        public IActionResult MyBookings()
+        {
+            return View();
+        }
     }
     }
 
