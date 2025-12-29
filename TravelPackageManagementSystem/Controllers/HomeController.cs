@@ -147,6 +147,7 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
 
+        public IActionResult Host() { return View(); }
         public IActionResult PaymentPage()
         {
             return View();
