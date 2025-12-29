@@ -55,7 +55,7 @@ namespace TravelPackageManagementSystem.Controllers
             ViewBag.PackageId = id;
             return View();
         }
-        public IActionResult MaldivesTD(string id)
+        public IActionResult KeralaTD(string id)
         {
             ViewBag.PackageId = id;
             return View();
@@ -91,6 +91,7 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }
+
         
 
         public IActionResult Manali()
@@ -167,6 +168,11 @@ namespace TravelPackageManagementSystem.Controllers
         }
 
         public IActionResult CustomerSupport ()
+        {
+            return View();
+        }
+
+        public IActionResult MyBookings()
         {
             return View();
         }

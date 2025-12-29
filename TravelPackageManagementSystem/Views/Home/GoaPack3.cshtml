@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/css/pack-details.css" />
 </head>
 <body>
-    <section class="hero" style="background-image: url('https://images.unsplash.com/photo-1587922546307-776227941871?q=80&w=1600');">
+    <section class="hero" style="background-image: url('/lib/Image/goa1.jpg');">
         <div class="hero-content">
             <h1>Goa Deep Explorer</h1>
             <p>7 Days • Dudhsagar Falls • Island Snorkeling • South Goa</p>
@@ -31,10 +31,13 @@
                 </div>
 
                 <div class="gallery">
-                    <div id="mainImage" class="main-image" style="background-image: url('https://images.unsplash.com/photo-1512789172734-8b090fa68bb2?q=80&w=1400');"></div>
+                    <div id="mainImage" class="main-image" style="background-image: url('/lib/Image/goa2.jpg');"></div>
                     <div class="thumbs">
-                        <div class="thumb active" data-src="https://images.unsplash.com/photo-1512789172734-8b090fa68bb2?q=80&w=1400" style="background-image: url('https://images.unsplash.com/photo-1512789172734-8b090fa68bb2?q=80&w=200');"></div>
-                        <div class="thumb" data-src="https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?q=80&w=1400" style="background-image: url('https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?q=80&w=200');"></div>
+                        <div class="thumb active" data-src="/lib/Image/goa3.jpg" style="background-image: url('/lib/Image/goa3.jpg');"></div>
+                        <div class="thumb" data-src="/lib/Image/goa7.jpg" style="background-image: url('/lib/Image/goa7.jpg');"></div>
+                        <div class="thumb" data-src="/lib/Image/goa9.jpg" style="background-image: url('/lib/Image/goa9.jpg');"></div>
+                        <div class="thumb" data-src="/lib/Image/goa5.jpg" style="background-image: url('/lib/Image/goa5.jpg');"></div>
+                        <div class="thumb" data-src="/lib/Image/goa4.jpg" style="background-image: url('/lib/Image/goa4.jpg');"></div>
                     </div>
                 </div>
 
@@ -96,7 +99,7 @@
                             <option value="2">2 persons</option>
                         </select>
                         <label>Email</label><input type="email" required />
-                        <button type="submit" class="btn btn-primary">Book Now</button>
+                        <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
                     </form>
                 </aside>
             </div>

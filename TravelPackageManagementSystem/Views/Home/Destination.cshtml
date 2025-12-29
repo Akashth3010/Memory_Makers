@@ -11,8 +11,8 @@
         <h2 class="section-title text-center mb-5">Top Destination</h2>
 
         <div class="destination-grid">
-        <a href="TamilnaduTd.cstml">
-            <div class="card">
+        @* <a href="TamilnaduTd.cstml"> *@
+                <div class="card" onclick="location.href='@Url.Action("TamilnaduTD", "Home")'" style="cursor:pointer;">
                 <img src="/lib/Image/Tamilnadu.jpg" alt="Tamilnadu">
                 <div class="overlay">
                     <h3>Tamilnadu</h3>
@@ -20,9 +20,9 @@
                     <p>48 Holidays</p>
                 </div>
             </div>
-            </a>
+        @* </a> *@
            
-            <div class="card">
+            <div class="card" onclick="location.href='@Url.Action("KeralaTD", "Home")'" style="cursor:pointer;">
                 <img src=" /lib/Image/Kerala.jpg" alt="Kerala">
                 <div class="overlay">
                     <h3>Kerala</h3>
@@ -48,8 +48,8 @@
                     <p>40 Holidays</p>
                 </div>
             </div>
-            <a href="AndamanTD.cshtml">
-            <div class="card">
+
+            <div class="card" onclick="location.href='@Url.Action("uttarakhandTD", "Home")'" style="cursor:pointer;">
                 <img src="/lib/Image/Kashmirr.jpg" alt="Uttrakhand">
                 <div class="overlay">
                     <h3>Uttarakhand</h3>
@@ -58,8 +58,8 @@
                 </div>
             </div>
             </a>
-            <a href="MizoramTD.cshtml">
-            <div class="card">
+            @* <a href="MizoramTD.cshtml"> *@
+                <div class="card" onclick="location.href='@Url.Action("MizoramTD", "Home")'" style="cursor:pointer;">
                 <img src="/lib/Image/Mizoram.jpg" alt="Mizoram">
                 <div class="overlay">
                     <h3>Mizoram</h3>
@@ -67,7 +67,7 @@
                     <p>26 Holidays</p>
                 </div>
             </div>
-            </a>
+            @* </a> *@
 
             
 

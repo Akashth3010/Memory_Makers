@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Kerala | God's Own Country";
+}
+
+<link rel="stylesheet" href="~/css/travel-style.css" />
+<style>
+    :root {
+        --accent-color: #27ae60; /* Tropical Green */
+        --bg-gradient: linear-gradient(135deg, #ff7b54, #2c5364 100%); /* Sunset to Backwaters Gradient */
+    }
+
+    .hero-text {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+        .hero-text h1 span {
+            color: var(--accent-color);
+        }
+</style>
+
+<div class="main-page">
+    <div class="hero-text">
+        <h1>Explore <span>Kerala</span></h1>
+        <p>Backwaters, beaches, and lush greenery.</p>
+    </div>
+
+    <div class="packages-section">
+        <div class="pkg-card" onclick="location.href='/Home/KeralaTD?id=kl-backwaters'">
+            <img src="~/lib/TopDestination/kumarakoram.jpg" alt="Kerala Backwaters" />
+            <div class="pkg-body">
+                <h3>Backwater Cruise</h3>
+                <p>3 Days • Alleppey & Kumarakom</p>
+                <div class="pkg-price">₹12,999</div>
+                <button class="select-btn">View Details</button>
+            </div>
+        </div>
+
+        <div class="pkg-card highlight" onclick="location.href='/Home/KeralaTD?id=kl-hills'">
+            <img src="~/lib/TopDestination/Thekkady.jpg" alt="Munnar Hills" />
+            <div class="pkg-body">
+                <span class="hot-tag">Most Popular</span>
+                <h3>Hill Station Escape</h3>
+                <p>4 Days • Munnar & Thekkady</p>
+                <div class="pkg-price">₹14,499</div>
+                <button class="select-btn">View Details</button>
+            </div>
+        </div>
+
+        <div class="pkg-card" onclick="location.href='/Home/KeralaTD?id=kl-beaches'">
+            <img src="~/lib/TopDestination/Kovalam.jpg" alt="Kovalam Beach" />
+            <div class="pkg-body">
+                <h3>Beach Retreat</h3>
+                <p>5 Days • Kovalam & Varkala</p>
+                <div class="pkg-price">₹15,999</div>
+                <button class="select-btn">View Details</button>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="gallery-title">Backwaters & Hidden Gems</h2>
+    <div class="auto-scroll-container">
+        <div class="scroll-track">
+            <div class="gem-item"><img src="~/lib/TopDestination/Kochi.jpg"><span>Kochi</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Alleppey.jpg"><span>Alleppey</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Munnar Town, Kerala, India 🇮🇳.jpg"><span>Munnar</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Thekkady2.jpg" />"<span>Thekkady</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Kovalam Beach.jpg"><span>Kovalam</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    console.log("Kerala Page Loaded");
+</script>
+
