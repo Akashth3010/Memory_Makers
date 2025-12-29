@@ -1,0 +1,219 @@
+﻿@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="admin-page users-page">
+
+    <h2 class="page-heading">User Management</h2>
+    <p class="page-subtitle">Manage customers and travel hosts on the platform</p>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-card glow">
+            <h4>Total Users</h4>
+            <p id="totalUsers">18</p>
+        </div>
+        <div class="stat-card glow">
+            <h4>Customers</h4>
+            <p>14</p>
+        </div>
+        <div class="stat-card glow">
+            <h4>Travel Hosts</h4>
+            <p>4</p>
+        </div>
+        <div class="stat-card glow danger">
+            <h4>Blocked Users</h4>
+            <p id="blockedCount">2</p>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="user-tabs">
+        <button class="tab-btn active" data-tab="customers">Customers</button>
+        <button class="tab-btn" data-tab="hosts">Travel Hosts</button>
+    </div>
+
+    <!-- FILTER -->
+    <div class="user-filter">
+        <select id="statusFilter">
+            <option value="all">All Status</option>
+        </select>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="user-table tab-content active" id="customers">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="customerBody">
+
+                @for (int i = 1; i <= 12; i++)
+                {
+                    <tr class="hover-glow" data-status="active">
+                        <td>Customer @i</td>
+                        <td>customer@i@mail.com</td>
+                        <td>98765432@i</td>
+                        <td><span class="badge active">Active</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewUser('Customer @i','customer@i@mail.com','98765432@i','Customer')">View</button>
+                            <button class="btn-block" onclick="blockCustomer(this)">Block</button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+        <div class="blocked-section">
+            <h4>Blocked Customers</h4>
+            <ul id="blockedList"></ul>
+        </div>
+    </div>
+
+    <!-- HOSTS -->
+    <div class="user-table tab-content" id="hosts">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Agency</th>
+                    <th>Email</th>
+                    <th>Packages</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr class="hover-glow" data-status="approved">
+                    <td>Goa Travels</td>
+                    <td>goa@host.com</td>
+                    <td>6</td>
+                    <td><span class="badge active">Approved</span></td>
+                    <td><button class="btn-view">View</button></td>
+                </tr>
+
+                <tr class="hover-glow" data-status="pending">
+                    <td>Himalaya Trips</td>
+                    <td>himalaya@host.com</td>
+                    <td>4</td>
+                    <td><span class="badge pending">Pending</span></td>
+                    <td><button class="btn-view">View</button></td>
+                </tr>
+
+                <tr class="hover-glow" data-status="approved">
+                    <td>Royal Rajasthan</td>
+                    <td>royal@host.com</td>
+                    <td>8</td>
+                    <td><span class="badge active">Approved</span></td>
+                    <td><button class="btn-view">View</button></td>
+                </tr>
+
+                <tr class="hover-glow" data-status="blocked">
+                    <td>Kerala Escape</td>
+                    <td>kerala@host.com</td>
+                    <td>3</td>
+                    <td><span class="badge blocked">Blocked</span></td>
+                    <td><button class="btn-view">View</button></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- USER MODAL -->
+<div class="custom-modal" id="userModal">
+    <div class="modal-box">
+        <h4 id="userName"></h4>
+        <p><b>Email:</b> <span id="userEmail"></span></p>
+        <p><b>Phone:</b> <span id="userPhone"></span></p>
+        <p><b>Role:</b> <span id="userRole"></span></p>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeUserModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let blockedCount = 2;
+
+    // TAB SWITCH
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.onclick = function () {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+            this.classList.add("active");
+            document.getElementById(this.dataset.tab).classList.add("active");
+
+            loadFilterOptions(this.dataset.tab);
+        };
+    });
+
+    // FILTER OPTIONS
+    function loadFilterOptions(tab) {
+        const filter = document.getElementById("statusFilter");
+        filter.innerHTML = `<option value="all">All Status</option>`;
+
+        if (tab === "customers") {
+            filter.innerHTML += `
+                <option value="active">Active</option>
+                <option value="blocked">Blocked</option>`;
+        } else {
+            filter.innerHTML += `
+                <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
+                <option value="blocked">Blocked</option>`;
+        }
+    }
+
+    loadFilterOptions("customers");
+
+    document.getElementById("statusFilter").onchange = function () {
+        document.querySelectorAll(".tab-content.active tbody tr").forEach(row => {
+            row.style.display =
+                this.value === "all" || row.dataset.status === this.value
+                    ? ""
+                    : "none";
+        });
+    };
+
+    // BLOCK CUSTOMER
+    function blockCustomer(btn) {
+        const row = btn.closest("tr");
+        const name = row.children[0].innerText;
+
+        row.remove();
+
+        blockedCount++;
+        document.getElementById("blockedCount").innerText = blockedCount;
+
+        const li = document.createElement("li");
+        li.innerText = name;
+        document.getElementById("blockedList").appendChild(li);
+    }
+
+    // VIEW USER
+    function viewUser(name, email, phone, role) {
+        userModal.classList.add("show");
+        userName.innerText = name;
+        userEmail.innerText = email;
+        userPhone.innerText = phone;
+        userRole.innerText = role;
+    }
+
+    function closeUserModal() {
+        userModal.classList.remove("show");
+    }
+</script>

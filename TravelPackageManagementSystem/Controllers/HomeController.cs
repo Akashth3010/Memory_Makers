@@ -101,6 +101,7 @@ namespace TravelPackageManagementSystem.Controllers
         }
         public IActionResult KeralaTD(string id)
         {
+
         
             ViewBag.PackageId = id;
             return View();
@@ -179,20 +180,38 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
 
+        public IActionResult Mumbai()
+        {
+            return View();
+        }
+
+        public IActionResult Munnar()
+        {
+            return View();
+        }
+
+        public IActionResult Ooty()
+        {
+            return View();
+        }
+        public IActionResult Goa()
+        {
+            return View();
+        }
+       
+
         public IActionResult TajMahal()
         {
             return View();
         }
 
+        public IActionResult Host() { return View(); }
         public IActionResult PaymentPage()
         {
             return View();
         }
 
-        public IActionResult Host()
-        {
-            return View();
-        }
+     
 
         public IActionResult Dashboard()
         {
@@ -205,6 +224,11 @@ namespace TravelPackageManagementSystem.Controllers
         }
 
         public IActionResult CustomerSupport ()
+        {
+            return View();
+        }
+
+        public IActionResult MyBookings()
         {
             return View();
         }
