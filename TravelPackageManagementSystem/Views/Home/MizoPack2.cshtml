@@ -1,0 +1,200 @@
+﻿@{
+    ViewBag.Title = "MizoPack2 - Local Festivals";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>MizoPack2 - Local Festivals</title>
+    <link rel="stylesheet" href="/css/PackTD.css" />
+</head>
+<body>
+
+    <!-- HERO IMAGE -->
+    <section class="hero">
+        <img class="hero-img" src="/lib/Image/m21.jpg" alt="Mizo Festival" />
+        <div class="hero-content">
+            <h1>Mizoram: Local Festivals</h1>
+            <p>4 Days • Chapchar Kut • Cultural Shows</p>
+        </div>
+    </section>
+
+    <!-- PACKAGE + BOOKING -->
+    <div class="container">
+        <div class="flex">
+
+            <!-- LEFT / DETAILS -->
+            <div class="left-col">
+
+                <div class="package-header">
+                    <div class="package-title">
+                        <h2>Discover Mizoram: Local Festivals</h2>
+                        <div class="rating">★ 4.7 (528 reviews)</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:14px;color:#666;">Duration</div>
+                        <div style="font-weight:700;font-size:16px;">4 Days / 3 Nights</div>
+                    </div>
+                </div>
+
+                <!-- IMAGE GALLERY -->
+                <div class="gallery" aria-label="Image gallery">
+                    <div id="mainImage" class="main-image" style="background-image:url('/lib/Image/festival1.jpg');"></div>
+                    <div class="thumbs">
+                        <button class="thumb active" data-src="/lib/Image/m22.jpg" style="background-image:url('/lib/Image/m22.jpg');" aria-label="Festival Parade"></button>
+                        <button class="thumb" data-src="/lib/Image/m23.jpg" style="background-image:url('/lib/Image/m23.jpg');" aria-label="Bamboo Dance"></button>
+                        <button class="thumb" data-src="/lib/Image/m24.jpg" style="background-image:url('/lib/Image/m24.jpg');" aria-label="Village Celebration"></button>
+                        <button class="thumb" data-src="/lib/Image/m25.jpg" style="background-image:url('/lib/Image/m25.jpg');" aria-label="Cultural Performance"></button>
+                    </div>
+                </div>
+
+                <!-- LIGHTBOX -->
+                <div id="lightbox" class="lightbox">
+                    <img id="lightboxImg" src="" alt="Large view" />
+                </div>
+
+                <!-- OVERVIEW -->
+                <div style="margin-top:16px;">
+                    <h3>Overview</h3>
+                    <p>
+                        Immerse yourself in Mizoram’s vibrant traditions, dances, and music during Chapchar Kut and other local festivals. Enjoy cultural performances, village visits, and authentic cuisine.
+                    </p>
+                </div>
+
+                <!-- ITINERARY -->
+                <div class="itinerary">
+                    <h3>Day-by-Day Itinerary</h3>
+                    <div class="day"><h4>Day 1 — Arrival</h4><p>Welcome dinner with cultural performance.</p></div>
+                    <div class="day"><h4>Day 2 — Chapchar Kut</h4><p>Festival parade, bamboo dance, traditional music.</p></div>
+                    <div class="day"><h4>Day 3 — Village Visit</h4><p>Handicrafts, traditional cuisine, interaction with locals.</p></div>
+                    <div class="day"><h4>Day 4 — Departure</h4><p>Morning shopping, transfer onward.</p></div>
+                </div>
+
+                <!-- PRICING -->
+                <div class="price-card">
+                    <div class="price-row"><div>Base Price (per person)</div><div class="price-total" id="pricePerPerson">₹12,499</div></div>
+                    <div class="price-row"><div>Taxes & Fees (per person)</div><div id="taxesPerPerson">₹1,250</div></div>
+                    <div class="price-row"><div>Selected Guests</div><div id="priceSummary">1 person</div></div>
+                    <hr style="margin:10px 0;border:none;border-top:1px solid #e6e9ef;" />
+                    <div style="font-weight:700;display:flex;justify-content:space-between;">
+                        <div>Total Payable</div><div class="price-total" id="totalPayable">₹13,749</div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <h4>What's Included</h4>
+                        <div class="list-inline">
+                            <div class="included">Hotel stays (3 nights)</div>
+                            <div class="included">Daily breakfast</div>
+                            <div class="included">Festival entry & guided tours</div>
+                            <div class="included">Village visit & transfers</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <h4>What's Excluded</h4>
+                        <div class="list-inline">
+                            <div class="excluded">Airfare / Train fare</div>
+                            <div class="excluded">Meals not specified</div>
+                            <div class="excluded">Personal expenses</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT / BOOKING -->
+            <div class="right-col">
+                <aside class="booking-box">
+                    <h3>Book This Package</h3>
+                    <form id="bookingForm" method="post" action="/Booking/Start">
+                        <label for="travelDate">Travel Date</label>
+                        <input id="travelDate" name="TravelDate" type="date" required />
+
+                        <label for="guests">Guests</label>
+                        <select id="guests" name="Guests" required>
+                            <option value="1" selected>1 person</option>
+                            <option value="2">2 persons</option>
+                            <option value="3">3 persons</option>
+                        </select>
+
+                        <label for="contactEmail">Contact Email</label>
+                        <input id="contactEmail" name="Email" type="email" placeholder="you@example.com" required />
+
+                        <label for="phone">Phone</label>
+                        <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" />
+
+                        <div class="booking-cta" style="margin-top:8px;">
+                            <button type="submit" class="btn btn-primary" id="bookNowBtn">Book Now</button>
+                        </div>
+
+                        <p style="font-size:13px;color:#666;margin-top:8px;">
+                            You'll be redirected to confirm availability and payment. Please respect local customs during festivals.
+                        </p>
+                    </form>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- INTERACTIONS -->
+    <script>
+        (function () {
+            // Gallery switching
+            const main = document.getElementById('mainImage');
+            const thumbs = document.querySelectorAll('.thumb');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+
+            thumbs.forEach(t => {
+                t.addEventListener('click', () => {
+                    thumbs.forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                    const src = t.dataset.src;
+                    main.style.backgroundImage = `url('${src}')`;
+                    lightboxImg.src = src;
+                });
+            });
+
+            main.addEventListener('click', () => {
+                lightbox.style.display = 'flex';
+                lightbox.setAttribute('aria-hidden', 'false');
+            });
+            lightbox.addEventListener('click', () => {
+                lightbox.style.display = 'none';
+                lightbox.setAttribute('aria-hidden', 'true');
+            });
+
+            // Itinerary accordion
+            document.querySelectorAll('.day-header').forEach(h => {
+                h.addEventListener('click', () => {
+                    const body = h.nextElementSibling;
+                    const isOpen = body.style.display === 'block';
+                    document.querySelectorAll('.day-body').forEach(db => db.style.display = 'none');
+                    document.querySelectorAll('.toggle').forEach(tg => tg.textContent = '+');
+                    if (!isOpen) {
+                        body.style.display = 'block';
+                        h.querySelector('.toggle').textContent = '−';
+                    }
+                });
+            });
+
+            // Pricing update
+            const guestsSelect = document.getElementById('guests');
+            const basePrice = 12499;
+            const taxes = 1250;
+
+            const updatePrice = () => {
+                const count = parseInt(guestsSelect.value, 10);
+                const total = (basePrice + taxes) * count;
+                document.getElementById('totalPayable').textContent = `₹${total.toLocaleString()}`;
+                document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
+                            };
+
+            guestsSelect.addEventListener('change', updatePrice);
+            updatePrice(); // initialize on load
+        })();
+    </script>
+
+</body>
+</html>

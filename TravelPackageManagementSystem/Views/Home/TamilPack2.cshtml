@@ -1,0 +1,126 @@
+﻿@{
+    ViewBag.Title = "TamilPack2 - Pondicherry & Mahabalipuram";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>TamilPack2 - Coastal Escape</title>
+    <link rel="stylesheet" href="/css/PackTD.css" />
+</head>
+<body>
+
+    <!-- HERO IMAGE -->
+    <section class="hero">
+        <img class="hero-img" src="/lib/Image/t21.jpg" alt="Pondicherry Beach" />
+        <div class="hero-content">
+            <h1>Tamil Nadu: Pondicherry & Mahabalipuram</h1>
+            <p>4 Days • French Quarter • Auroville • Shore Temple</p>
+        </div>
+    </section>
+
+    <!-- PACKAGE + BOOKING -->
+    <div class="container">
+        <div class="flex">
+
+            <!-- LEFT / DETAILS -->
+            <div class="left-col">
+
+                <div class="package-header">
+                    <div class="package-title">
+                        <h2>Discover Tamil Nadu: Pondicherry & Mahabalipuram</h2>
+                        <div class="rating">★ 4.7 (689 reviews)</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:14px;color:#666;">Duration</div>
+                        <div style="font-weight:700;font-size:16px;">4 Days / 3 Nights</div>
+                    </div>
+                </div>
+
+                <!-- IMAGE GALLERY -->
+                <div class="gallery" aria-label="Image gallery">
+                    <div id="mainImage" class="main-image" style="background-image:url('/lib/Image/pondy1.jpg');"></div>
+                    <div class="thumbs">
+                        <button class="thumb active" data-src="/lib/Image/t22.jpg" style="background-image:url('/lib/Image/t22.jpg');" aria-label="French Quarter"></button>
+                        <button class="thumb" data-src="/lib/Image/t23.jpg" style="background-image:url('/lib/Image/t23.jpg');" aria-label="Auroville"></button>
+                        <button class="thumb" data-src="/lib/Image/t24.jpg" style="background-image:url('/lib/Image/t24.jpg');" aria-label="Shore Temple"></button>
+                        <button class="thumb" data-src="/lib/Image/t25.jpg" style="background-image:url('/lib/Image/t25.jpg');" aria-label="Pancha Rathas"></button>
+                    </div>
+                </div>
+
+                <!-- LIGHTBOX -->
+                <div id="lightbox" class="lightbox">
+                    <img id="lightboxImg" src="" alt="Large view" />
+                </div>
+
+                <!-- OVERVIEW -->
+                <div style="margin-top:16px;">
+                    <h3>Overview</h3>
+                    <p>
+                        Experience the charm of Pondicherry’s French Quarter, the spiritual calm of Auroville, and the UNESCO heritage temples of Mahabalipuram. Comfortable stays, guided tours, and private transfers are included.
+                    </p>
+                </div>
+
+                <!-- ITINERARY -->
+                <div class="itinerary">
+                    <h3>Day-by-Day Itinerary</h3>
+                    <div class="day"><h4>Day 1 — Arrival & Pondicherry</h4><p>Explore French Quarter, Promenade Beach, and local cafes.</p></div>
+                    <div class="day"><h4>Day 2 — Auroville & Paradise Beach</h4><p>Visit Auroville’s Matrimandir and relax at Paradise Beach.</p></div>
+                    <div class="day"><h4>Day 3 — Mahabalipuram</h4><p>Tour Shore Temple, Pancha Rathas, and Arjuna’s Penance.</p></div>
+                    <div class="day"><h4>Day 4 — Departure</h4><p>Morning leisure, transfer for onward journey.</p></div>
+                </div>
+
+                <!-- PRICING -->
+                <div class="price-card">
+                    <div class="price-row"><div>Base Price (per person)</div><div class="price-total">₹13,499</div></div>
+                    <div class="price-row"><div>Taxes & Fees</div><div>₹1,350</div></div>
+                    <div class="price-row"><div>Selected Guests</div><div id="priceSummary">1 person</div></div>
+                    <hr style="margin:10px 0;border:none;border-top:1px solid #e6e9ef;" />
+                    <div style="font-weight:700;display:flex;justify-content:space-between;">
+                        <div>Total Payable</div><div class="price-total" id="totalPayable">₹14,849</div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <h4>What's Included</h4>
+                        <div class="list-inline">
+                            <div class="included">Hotel stays (3 nights)</div>
+                            <div class="included">Daily breakfast</div>
+                            <div class="included">Private transfers & sightseeing</div>
+                            <div class="included">Guided heritage tours</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <h4>What's Excluded</h4>
+                        <div class="list-inline">
+                            <div class="excluded">Airfare / Train fare</div>
+                            <div class="excluded">Entry fees at monuments</div>
+                            <div class="excluded">Meals not specified</div>
+                            <div class="excluded">Personal expenses</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT / BOOKING -->
+            <div class="right-col">
+                <aside class="booking-box">
+                    <h3>Book This Package</h3>
+                    <form method="post" action="/Booking/Start">
+                        <label>Travel Date</label><input type="date" required />
+                        <label>Guests</label>
+                        <select><option>1</option><option>2</option><option>3</option><option>4</option></select>
+                        <label>Email</label><input type="email" required />
+                        <label>Phone</label><input type="tel" />
+                        <button type="submit" class="btn btn-primary">Book Now</button>
+                    </form>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/TamilPack2.js"></script>
+</body>
+</html>

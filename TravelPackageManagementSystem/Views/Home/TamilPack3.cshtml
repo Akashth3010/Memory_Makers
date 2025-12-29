@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "TamilPack3 - Ooty & Coonoor";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>TamilPack3 - Hill Retreat</title>
+    <link rel="stylesheet" href="/css/PackTD.css" />
+</head>
+<body>
+
+    <!-- HERO IMAGE -->
+    <section class="hero">
+        <img class="hero-img" src="/lib/Image/t31.jpg" alt="Ooty Hills" />
+        <div class="hero-content">
+            <h1>Tamil Nadu: Ooty & Coonoor</h1>
+            <p>5 Days • Botanical Gardens • Tea Estates • Toy Train</p>
+        </div>
+    </section>
+
+    <!-- PACKAGE + BOOKING -->
+    <div class="container">
+        <div class="flex">
+
+            <!-- LEFT / DETAILS -->
+            <div class="left-col">
+
+                <div class="package-header">
+                    <div class="package-title">
+                        <h2>Discover Tamil Nadu: Ooty & Coonoor</h2>
+                        <div class="rating">★ 4.8 (912 reviews)</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:14px;color:#666;">Duration</div>
+                        <div style="font-weight:700;font-size:16px;">5 Days / 4 Nights</div>
+                    </div>
+                </div>
+
+                <!-- IMAGE GALLERY -->
+                <div class="gallery" aria-label="Image gallery">
+                    <div id="mainImage" class="main-image" style="background-image:url('/lib/Image/ooty1.jpg');"></div>
+                    <div class="thumbs">
+                        <button class="thumb active" data-src="/lib/Image/t32.jpg" style="background-image:url('/lib/Image/t32.jpg');" aria-label="Botanical Gardens"></button>
+                        <button class="thumb" data-src="/lib/Image/t33.jpg" style="background-image:url('/lib/Image/t33.jpg');" aria-label="Ooty Lake"></button>
+                        <button class="thumb" data-src="/lib/Image/t34.jpg" style="background-image:url('/lib/Image/t34.jpg');" aria-label="Coonoor Tea Estates"></button>
+                        <button class="thumb" data-src="/lib/Image/t35.jpg" style="background-image:url('/lib/Image/t35.jpg');" aria-label="Toy Train"></button>
+                    </div>
+                </div>
+
+                <!-- LIGHTBOX -->
+                <div id="lightbox" class="lightbox">
+                    <img id="lightboxImg" src="" alt="Large view" />
+                </div>
+
+                <!-- OVERVIEW -->
+                <div style="margin-top:16px;">
+                    <h3>Overview</h3>
+                    <p>
+                        Relax in the Nilgiri hills with a blend of colonial charm and natural beauty. Visit Ooty’s gardens and lake, ride the heritage toy train to Coonoor, and explore tea estates with panoramic views.
+                    </p>
+                </div>
+
+                <!-- ITINERARY -->
+                <div class="itinerary">
+                    <h3>Day-by-Day Itinerary</h3>
+                    <div class="day"><h4>Day 1 — Arrival & Ooty</h4><p>Check-in, visit Botanical Gardens and Ooty Lake.</p></div>
+                    <div class="day"><h4>Day 2 — Coonoor</h4><p>Ride the toy train, explore Sim’s Park and tea estates.</p></div>
+                    <div class="day"><h4>Day 3 — Dodabetta Peak</h4><p>Panoramic views of the Nilgiris, leisure shopping.</p></div>
+                    <div class="day"><h4>Day 4 — Leisure</h4><p>Relax at resort, optional trekking or local sightseeing.</p></div>
+                    <div class="day"><h4>Day 5 — Departure</h4><p>Breakfast, checkout, and transfer for onward journey.</p></div>
+                </div>
+
+                <!-- PRICING -->
+                <div class="price-card">
+                    <div class="price-row"><div>Base Price (per person)</div><div class="price-total">₹15,499</div></div>
+                    <div class="price-row"><div>Taxes & Fees</div><div>₹1,550</div></div>
+                    <div class="price-row"><div>Selected Guests</div><div id="priceSummary">1 person</div></div>
+                    <hr style="margin:10px 0;border:none;border-top:1px solid #e6e9ef;" />
+                    <div style="font-weight:700;display:flex;justify-content:space-between;">
+                        <div>Total Payable</div><div class="price-total" id="totalPayable">₹17,049</div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <h4>What's Included</h4>
+                        <div class="list-inline">
+                            <div class="included">Hotel stays (4 nights)</div>
+                            <div class="included">Daily breakfast</div>
+                            <div class="included">Private transfers & sightseeing</div>
+                            <div class="included">Toy train ride</div>
+                            <div class="included">Tea estate visit</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <h4>What's Excluded</h4>
+                        <div class="list-inline">
+                            <div class="excluded">Airfare / Train fare</div>
+                            <div class="excluded">Entry fees at monuments</div>
+                            <div class="excluded">Meals not specified</div>
+                            <div class="excluded">Personal expenses</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT / BOOKING -->
+            <div class="right-col">
+                <aside class="booking-box">
+                    <h3>Book This Package</h3>
+                    <form method="post" action="/Booking/Start">
+                        <label>Travel Date</label><input type="date" required />
+                        <label>Guests</label>
+                        <select><option>1</option><option>2</option><option>3</option><option>4</option></select>
+                        <label>Email</label><input type="email" required />
+                        <label>Phone</label><input type="tel" />
+                        <button type="submit" class="btn btn-primary">Book Now</button>
+                    </form>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/TamilPack3.js"></script>
+</body>
+</html>

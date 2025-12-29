@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "MizoPack1 - Aizawl & Surroundings";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>MizoPack1 - Aizawl & Surroundings</title>
+    <link rel="stylesheet" href="/css/PackTD.css" />
+</head>
+<body>
+
+    <!-- HERO IMAGE -->
+    <section class="hero">
+        <img class="hero-img" src="/lib/Image/m1.jpg" alt="Aizawl City" />
+        <div class="hero-content">
+            <h1>Mizoram: Aizawl & Surroundings</h1>
+            <p>3 Days • City Tour • Durtlang Hills</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="flex">
+
+            <!-- LEFT -->
+            <div class="left-col">
+                <div class="package-header">
+                    <div class="package-title">
+                        <h2>Discover Mizoram: Aizawl & Surroundings</h2>
+                        <div class="rating">★ 4.6 (412 reviews)</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:14px;color:#666;">Duration</div>
+                        <div style="font-weight:700;font-size:16px;">3 Days / 2 Nights</div>
+                    </div>
+                </div>
+
+                <!-- GALLERY -->
+                <div class="gallery">
+                    <div id="mainImage" class="main-image" style="background-image:url('/lib/Image/aizawl1.jpg');"></div>
+                    <div class="thumbs">
+                        <button class="thumb active" data-src="/lib/Image/m2.jpg" style="background-image:url('/lib/Image/m2.jpg');"></button>
+                        <button class="thumb" data-src="/lib/Image/m3.jpg" style="background-image:url('/lib/Image/m3.jpg');"></button>
+                        <button class="thumb" data-src="/lib/Image/m4.jpg" style="background-image:url('/lib/Image/m4.jpg');"></button>
+                        <button class="thumb" data-src="/lib/Image/m5.jpg" style="background-image:url('/lib/Image/m5.jpg');"></button>
+                    </div>
+                </div>
+
+                <!-- OVERVIEW -->
+                <div style="margin-top:16px;">
+                    <h3>Overview</h3>
+                    <p>Explore Mizoram’s capital city Aizawl, vibrant markets, Solomon’s Temple, and panoramic views from Durtlang Hills.</p>
+                </div>
+
+                <!-- ITINERARY -->
+                <div class="itinerary">
+                    <h3>Day-by-Day Itinerary</h3>
+                    <div class="day"><h4>Day 1 — Arrival & City Tour</h4><p>Visit Bara Bazar, Solomon’s Temple.</p></div>
+                    <div class="day"><h4>Day 2 — Durtlang Hills</h4><p>Scenic drive, Mizoram State Museum.</p></div>
+                    <div class="day"><h4>Day 3 — Departure</h4><p>Morning walk, transfer onward.</p></div>
+                </div>
+
+                <!-- PRICING -->
+                <div class="price-card">
+                    <div class="price-row"><div>Base Price (per person)</div><div class="price-total">₹10,999</div></div>
+                    <div class="price-row"><div>Taxes & Fees</div><div>₹1,100</div></div>
+                    <div class="price-row"><div>Total Payable</div><div class="price-total">₹12,099</div></div>
+                </div>
+            </div>
+
+            <!-- RIGHT / BOOKING -->
+            <div class="right-col">
+                <aside class="booking-box">
+                    <h3>Book This Package</h3>
+                    <form method="post" action="/Booking/Start">
+                        <label>Travel Date</label><input type="date" required />
+                        <label>Guests</label><select id="guests"><option>1</option><option>2</option></select>
+                        <label>Email</label><input type="email" required />
+                        <label>Phone</label><input type="tel" />
+                        <button type="submit" class="btn btn-primary">Book Now</button>
+                    </form>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/MizoPack1.js"></script>
+</body>
+</html>

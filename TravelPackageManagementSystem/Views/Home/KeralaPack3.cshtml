@@ -1,0 +1,193 @@
+﻿@{
+    ViewBag.Title = "Kerala Travel Package 3";
+    Layout = null;   // remove if you are using _Layout.cshtml
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Kerala Travel Package 3</title>
+
+    <link rel="stylesheet" href="/css/PackTD.css" />
+</head>
+
+<body>
+
+    <!-- HERO IMAGE -->
+    <section class="hero">
+        <img class="hero-img" src="/lib/Image/k31.jpg" alt="Kovalam Beach" />
+        <div class="hero-content">
+            <h1>Kerala: Kovalam & Varkala</h1>
+            <p>3 Days • Beaches • Cliff Views • Ayurveda</p>
+        </div>
+    </section>
+
+    <!-- PACKAGE + BOOKING -->
+    <div class="container">
+        <div class="flex">
+
+            <!-- LEFT / DETAILS -->
+            <div class="left-col">
+
+                <div class="package-header">
+                    <div class="package-title">
+                        <h2>Discover Kerala: Kovalam Beach & Varkala Cliff</h2>
+                        <div class="rating">★ 4.7 (784 reviews)</div>
+                    </div>
+
+                    <div style="text-align: right;">
+                        <div style="font-size: 14px; color:#666;">Duration</div>
+                        <div style="font-weight:700; font-size:16px;">3 Days / 2 Nights</div>
+                    </div>
+                </div>
+
+                <!-- IMAGE GALLERY -->
+                <div class="gallery" aria-label="Image gallery">
+                    <div id="mainImage" class="main-image" role="img" aria-label="Main image" style="background-image: url('/lib/Image/kovalam1.jpg');"></div>
+
+                    <div class="thumbs" role="list">
+                        <button class="thumb active" role="listitem" type="button" data-src="/lib/Image/k32.jpg" style="background-image: url('/lib/Image/k32.jpg');" aria-label="Kovalam Lighthouse Beach"></button>
+                        <button class="thumb" role="listitem" type="button" data-src="/lib/Image/k33.jpg" style="background-image: url('/lib/Image/k33.jpg');" aria-label="Ayurveda Retreat"></button>
+                        <button class="thumb" role="listitem" type="button" data-src="/lib/Image/k34.jpg" style="background-image: url('/lib/Image/k34.jpg');" aria-label="Varkala Cliff"></button>
+                        <button class="thumb" role="listitem" type="button" data-src="/lib/Image/k35.jpg" style="background-image: url('/lib/Image/k35.jpg');" aria-label="Beach Sunset"></button>
+                    </div>
+                </div>
+
+                <!-- LIGHTBOX -->
+                <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+                    <img id="lightboxImg" src="" alt="Large view" />
+                </div>
+
+                <!-- PACKAGE DESCRIPTION -->
+                <div style="margin-top:16px;">
+                    <h3>Overview</h3>
+                    <p>
+                        Relax on Kerala’s golden coast. Enjoy Kovalam’s famous beaches and lighthouse, rejuvenate with Ayurveda therapies, and explore Varkala’s dramatic cliffs overlooking the Arabian Sea. Comfortable stays, guided tours, and private transfers are included.
+                    </p>
+                </div>
+
+                <!-- ITINERARY -->
+                <div class="itinerary" aria-label="Day by day itinerary">
+                    <h3 style="margin-bottom:10px;">Day-by-Day Itinerary</h3>
+
+                    <div class="day">
+                        <div class="day-header" data-day="1">
+                            <h4>Day 1 — Arrival & Kovalam Beach</h4>
+                            <div class="toggle">+</div>
+                        </div>
+                        <div class="day-body">
+                            <p>Arrive in Kovalam. Visit Lighthouse Beach and Hawa Beach. Evening leisure with optional Ayurveda massage.</p>
+                        </div>
+                    </div>
+
+                    <div class="day">
+                        <div class="day-header" data-day="2">
+                            <h4>Day 2 — Varkala Cliff & Sunset</h4>
+                            <div class="toggle">+</div>
+                        </div>
+                        <div class="day-body">
+                            <p>Morning transfer to Varkala. Explore cliffside cafes, Janardhana Swamy Temple, and relax at Papanasam Beach. Sunset view from the cliffs.</p>
+                        </div>
+                    </div>
+
+                    <div class="day">
+                        <div class="day-header" data-day="3">
+                            <h4>Day 3 — Ayurveda & Departure</h4>
+                            <div class="toggle">+</div>
+                        </div>
+                        <div class="day-body">
+                            <p>Optional Ayurveda therapy session. Breakfast at resort, then checkout and transfer for onward journey.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRICING & INCLUSIONS -->
+                <div class="price-card" aria-label="Pricing and inclusions">
+                    <div class="price-row">
+                        <div>Base Price (per person)</div>
+                        <div class="price-total" id="pricePerPerson">₹13,500</div>
+                    </div>
+
+                    <div class="price-row">
+                        <div>Taxes & Fees</div>
+                        <div>₹1,350</div>
+                    </div>
+
+                    <div class="price-row">
+                        <div>Selected Guests</div>
+                        <div id="priceSummary">1 person</div>
+                    </div>
+
+                    <hr style="margin:10px 0; border:none; border-top:1px solid #e6e9ef;" />
+
+                    <div style="font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+                        <div>Total Payable</div>
+                        <div class="price-total" id="totalPayable">₹14,850</div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <h4 style="font-size:15px; margin-bottom:6px;">What's Included</h4>
+                        <div class="list-inline">
+                            <div class="included">Resort stay in Kovalam (1 night)</div>
+                            <div class="included">Resort stay in Varkala (1 night)</div>
+                            <div class="included">Daily breakfast</div>
+                            <div class="included">Private transfers & sightseeing</div>
+                            <div class="included">Ayurveda therapy session (optional)</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <h4 style="font-size:15px; margin-bottom:6px;">What's Excluded</h4>
+                        <div class="list-inline">
+                            <div class="excluded">Airfare / Train fare</div>
+                            <div class="excluded">Temple entry fees</div>
+                            <div class="excluded">Meals not specified</div>
+                            <div class="excluded">Personal expenses</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT / BOOKING -->
+            <div class="right-col">
+                <aside class="booking-box" aria-labelledby="bookingHeading">
+                    <h3 id="bookingHeading">Book This Package</h3>
+
+                    <form id="bookingForm" method="post" action="/Booking/Start">
+                        <label for="travelDate">Travel Date</label>
+                        <input id="travelDate" name="TravelDate" type="date" required />
+
+                        <label for="guests">Guests</label>
+                        <select id="guests" name="Guests" required>
+                            <option value="1" selected>1 person</option>
+                            <option value="2">2 persons</option>
+                            <option value="3">3 persons</option>
+                            <option value="4">4 persons</option>
+                        </select>
+
+                        <label for="contactEmail">Contact Email</label>
+                        <input id="contactEmail" name="Email" type="email" placeholder="you@example.com" required />
+
+                        <label for="phone">Phone</label>
+                        <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" />
+
+                        <div class="booking-cta" style="margin-top:8px;">
+                            <button type="submit" class="btn btn-primary" id="bookNowBtn">Book Now</button>
+                            <button type="button" class="btn btn-secondary" id="loginBtn" onclick="location.href='/Account/Login'">Login</button>
+                        </div>
+
+                        <p style="font-size:13px; color:#666; margin-top:8px;">
+                            You'll be redirected to confirm availability and payment. Please respect local customs and eco-friendly practices in Kerala.
+                        </p>
+                    </form>
+                </aside>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/js/PackTD.js"></script>
+</body>
+</html>
+
