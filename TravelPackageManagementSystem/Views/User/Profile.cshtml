@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "My Profile";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5 pt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white p-4">
+                    <h3 class="mb-0">User Profile</h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <div class="display-1 text-primary">
+                            <i class="fa-solid fa-circle-user"></i>
+                        </div>
+                        <h2 id="profileName">Loading...</h2>
+                        <span class="badge bg-info text-dark">Travel Enthusiast</span>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="text-muted small uppercase fw-bold">First Name</label>
+                            <p id="profileFirstName" class="fs-5 border-bottom pb-2">--</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small uppercase fw-bold">Last Name</label>
+                            <p id="profileLastName" class="fs-5 border-bottom pb-2">--</p>
+                        </div>
+                        <div class="col-12">
+                            <label class="text-muted small uppercase fw-bold">Email Address</label>
+                            <p id="profileEmail" class="fs-5 border-bottom pb-2 text-break">--</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h5>Travel Statistics</h5>
+                        <div class="row text-center mt-3">
+                            <div class="col-4">
+                                <div class="p-3 border rounded shadow-sm">
+                                    <div class="h4 mb-0">0</div>
+                                    <small class="text-muted">Bookings</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 border rounded shadow-sm">
+                                    <div class="h4 mb-0">0</div>
+                                    <small class="text-muted">Reviews</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 border rounded shadow-sm">
+                                    <div class="h4 mb-0">0</div>
+                                    <small class="text-muted">Wishlist</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light p-3 text-end">
+                    <button class="btn btn-outline-primary" onclick="window.history.back()">Go Back</button>
+                    <button class="btn btn-primary">Edit Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const userJson = localStorage.getItem('user');
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+        if (!userJson || isLoggedIn !== 'true') {
+            window.location.href = '/';
+            return;
+        }
+
+        try {
+            const user = JSON.parse(userJson);
+
+            // DEBUG: This will show you exactly what keys exist (e.g. lastName vs LastName)
+            console.log("LocalStorage User Object:", user);
+
+            // Mapping with fallbacks for Case-Sensitivity
+            const fName = user.firstName || user.FirstName || "N/A";
+            const lName = user.lastName || user.LastName || "--";
+            const email = user.email || user.Email || "N/A";
+
+            // Update UI elements safely
+            const elements = {
+                'profileName': (fName + " " + (lName !== "--" ? lName : "")).trim(),
+                'profileFirstName': fName,
+                'profileLastName': lName,
+                'profileEmail': email
+            };
+
+            for (const [id, value] of Object.entries(elements)) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.innerText = value;
+                } else {
+                    console.error("Could not find HTML element with ID:", id);
+                }
+            }
+
+        } catch (error) {
+            console.error("Error parsing user data:", error);
+        }
+    });
+</script>

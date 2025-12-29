@@ -260,14 +260,23 @@
         el.querySelector('input').checked = true;
     }
 
-    function startLoading(btn) {
+        function startLoading(btn) {
         btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
         btn.disabled = true;
 
-        // Mock success
+        // Mock success - simulating a payment gateway response
         setTimeout(() => {
-            alert("Payment Successful! Redirecting to your tickets...");
-            window.location.href = "/";
+            const steps = document.querySelectorAll('.step');
+        steps[1].classList.remove('active');
+        steps[1].classList.add('completed');
+        steps[1].querySelector('.step-circle').innerHTML = '<i class="fa fa-check"></i>';
+        steps[2].classList.add('active');
+            // Option 1: Using the standard URL path (e.g., /Home/MyBookings)
+            window.location.href = "/Home/MyBookings";
+
+            /* Note: If your MyBookings page is in a different controller,
+               use "/ControllerName/MyBookings".
+            */
         }, 2500);
     }
 
