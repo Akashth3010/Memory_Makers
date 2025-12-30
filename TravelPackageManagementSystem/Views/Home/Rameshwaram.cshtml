@@ -14,7 +14,7 @@
 <body>
 
     <!-- HERO IMAGE -->
-    <section class="hero" style="background-image: url('@Url.Content("~/lib/image/rameshwaram1.jpg")');">
+    <section class="hero" style="background-image: url('@Url.Content("~/lib/image/rameshwaram.jpg")');">
         <div class="hero-content">
             <h1>Rameshwaram Coastal Escape</h1>
             <p>3 Days • Temples • Pamban Bridge • Dhanushkodi</p>
@@ -42,7 +42,7 @@
 
                 <!-- IMAGE GALLERY -->
                 <div class="gallery" aria-label="Image gallery">
-                    <div id="mainImage" class="main-image" role="img" aria-label="Main image" style="background-image: url('@Url.Content("~/lib/image/rameshwaram1.jpg")');"></div>
+                    <div id="mainImage" class="main-image" role="img" aria-label="Main image" style="background-image: url('@Url.Content("~/lib/image/rameshwaram.jpg")');"></div>
 
                     <div class="thumbs" role="list">
                         <button class="thumb active" role="listitem" tabindex="0" type="button" data-src="@Url.Content("~/lib/image/rameshwaram2.jpg")" style="background-image: url('@Url.Content("~/lib/image/rameshwaram2.jpg")');" aria-label="Temple"></button>
@@ -154,7 +154,7 @@
                 <aside class="booking-box" aria-labelledby="bookingHeading">
                     <h3 id="bookingHeading">Book This Package</h3>
 
-                    <form id="bookingForm" method="post" action="/Booking/Start">
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
                         <label for="travelDate">Travel Date</label>
                         <input id="travelDate" name="TravelDate" type="date" required />
 
@@ -174,7 +174,6 @@
 
                         <div class="booking-cta" style="margin-top:8px;">
                             <button type="submit" class="btn btn-primary" id="bookNowBtn">Book Now</button>
-                            <button type="button" class="btn btn-secondary" id="loginBtn" onclick="location.href='@Url.Content("~/Account/Login")'">Login</button>
                         </div>
 
                         <p style="font-size:13px; color:#666; margin-top:8px;">

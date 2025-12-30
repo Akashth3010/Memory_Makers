@@ -1,0 +1,143 @@
+﻿@{
+    ViewData["Title"] = "Approvals";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="admin-page approvals-page">
+
+    <h2 class="page-heading">Package Approvals</h2>
+    <p class="page-subtext">
+        Review host submitted travel packages and take action
+    </p>
+
+    <!-- ================= STATUS TABS ================= -->
+    <div class="approval-tabs">
+        <div class="tab active" data-status="pending">Pending</div>
+        <div class="tab" data-status="approved">Approved</div>
+        <div class="tab" data-status="rejected">Rejected</div>
+    </div>
+
+    <!-- ================= LIST ================= -->
+    <div id="approvalList" class="approval-grid"></div>
+
+    <!-- ================= DETAILS PANEL ================= -->
+    <div id="approvalDetails" class="approval-details">
+
+        <h4>Host Package Details</h4>
+
+        <div class="details-grid">
+            <div><b>Host Name:</b> <span id="dHost"></span></div>
+            <div><b>Email:</b> <span id="dEmail"></span></div>
+            <div><b>Phone:</b> <span id="dPhone"></span></div>
+            <div><b>City:</b> <span id="dCity"></span></div>
+
+            <div><b>Package Name:</b> <span id="dPackage"></span></div>
+            <div><b>Destination:</b> <span id="dDestination"></span></div>
+            <div><b>Package Type:</b> <span id="dType"></span></div>
+            <div><b>Duration:</b> <span id="dDuration"></span></div>
+            <div><b>Price:</b> ₹<span id="dPrice"></span></div>
+        </div>
+
+        <div class="desc-box">
+            <b>Description</b>
+            <p id="dDesc"></p>
+        </div>
+
+        <div class="details-actions">
+            <button class="btn-approve">Accept</button>
+            <button class="btn-reject">Reject</button>
+            <button class="btn-close">Close</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= jQuery ================= -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Dummy data (later DB se aayega)
+    let approvals = [
+        {
+            id: 1,
+            status: "pending",
+            host: "ABC Travels",
+            email: "abc@gmail.com",
+            phone: "9876543210",
+            city: "Delhi",
+            package: "Goa Delight",
+            destination: "Goa",
+            type: "Family",
+            duration: "5 Days",
+            price: "14999",
+            desc: "Enjoy beaches, cruises and nightlife in Goa."
+        }
+    ];
+
+    let currentStatus = "pending";
+    let selectedId = null;
+
+    function renderList() {
+        $("#approvalList").html("");
+
+        let filtered = approvals.filter(a => a.status === currentStatus);
+
+        if (filtered.length === 0) {
+            $("#approvalList").html(`<p class="empty-text">No ${currentStatus} requests</p>`);
+            return;
+        }
+
+        filtered.forEach(a => {
+            $("#approvalList").append(`
+                <div class="approval-card glow-card">
+                    <h5>${a.package}</h5>
+                    <p><b>Host:</b> ${a.host}</p>
+                    <p><b>Type:</b> ${a.type}</p>
+                    <button onclick="viewDetails(${a.id})">View Details</button>
+                </div>
+            `);
+        });
+    }
+
+    function viewDetails(id) {
+        let a = approvals.find(x => x.id === id);
+        selectedId = id;
+
+        $("#dHost").text(a.host);
+        $("#dEmail").text(a.email);
+        $("#dPhone").text(a.phone);
+        $("#dCity").text(a.city);
+        $("#dPackage").text(a.package);
+        $("#dDestination").text(a.destination);
+        $("#dType").text(a.type);
+        $("#dDuration").text(a.duration);
+        $("#dPrice").text(a.price);
+        $("#dDesc").text(a.desc);
+
+        $("#approvalDetails").fadeIn();
+    }
+
+    function updateStatus(newStatus) {
+        let a = approvals.find(x => x.id === selectedId);
+        a.status = newStatus;
+        $("#approvalDetails").fadeOut();
+        renderList();
+    }
+
+    $(document).ready(function () {
+
+        renderList();
+
+        $(".tab").click(function () {
+            $(".tab").removeClass("active");
+            $(this).addClass("active");
+            currentStatus = $(this).data("status");
+            renderList();
+        });
+
+        $(".btn-approve").click(() => updateStatus("approved"));
+        $(".btn-reject").click(() => updateStatus("rejected"));
+        $(".btn-close").click(() => $("#approvalDetails").fadeOut());
+    });
+</script>
