@@ -55,11 +55,7 @@ namespace TravelPackageManagementSystem.Controllers
             ViewBag.PackageId = id;
             return View();
         }
-        public IActionResult KeralaTD(string id)
-        {
-            ViewBag.PackageId = id;
-            return View();
-        }
+       
         public IActionResult MizoramTD(string id)
         {
             ViewBag.PackageId = id;
@@ -91,8 +87,50 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }
+        public IActionResult KeralaPack1()
+        {
+            return View(); 
+        }
+        public IActionResult KeralaPack2()
+        {
+            return View();
+        }
+        public IActionResult KeralaPack3()
+        {
+            return View();
+        }
+        public IActionResult KeralaTD(string id)
+        {
 
         
+            ViewBag.PackageId = id;
+            return View();
+        }
+        public IActionResult TamilPack1()
+        {
+            return View();
+        }
+        public IActionResult TamilPack2()
+        {
+            return View();
+        }
+        public IActionResult TamilPack3()
+        {
+            return View();
+        }
+        public IActionResult MizoPack3()
+        {
+            return View();
+        }
+        public IActionResult MizoPack2()
+        {
+            return View();
+        }
+        public IActionResult MizoPack1()
+        {
+            return View();
+        }
+
 
         public IActionResult Manali()
         {
@@ -104,6 +142,11 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
         public IActionResult Gangtok()
+        {
+            return View();
+        }
+
+        public IActionResult Jaipur()
         {
             return View();
         }
@@ -142,20 +185,38 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
 
+        public IActionResult Mumbai()
+        {
+            return View();
+        }
+
+        public IActionResult Munnar()
+        {
+            return View();
+        }
+
+        public IActionResult Ooty()
+        {
+            return View();
+        }
+        public IActionResult Goa()
+        {
+            return View();
+        }
+       
+
         public IActionResult TajMahal()
         {
             return View();
         }
 
+        public IActionResult Host() { return View(); }
         public IActionResult PaymentPage()
         {
             return View();
         }
 
-        public IActionResult Host()
-        {
-            return View();
-        }
+     
 
         public IActionResult Dashboard()
         {

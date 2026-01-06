@@ -1,0 +1,126 @@
+@* No Layout, No <html>, No <body> tags needed here *@
+
+<style>
+    footer {
+        /* Updated to match your 'Why Choose Us' section background */
+        background: #f5f7fa;
+        color: #666 !important; /* Softened the text color for better readability on light gray */
+        padding-top: 5rem;
+        padding-bottom: 2rem;
+        border-top: none;
+    }
+
+    .footer-title {
+        font-weight: 600;
+        color: #111 !important; /* Slightly softer than pure black */
+        margin-bottom: 1.25rem;
+    }
+
+    .footer-link {
+        color: black !important;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+        transition: 0.3s;
+    }
+
+        .footer-link:hover {
+            color: #ff7b54 !important;
+        }
+
+    /* ? FIX 2: Rounded input and button for the Mailing List to avoid 'boxiness' */
+    .form-control {
+        border-radius: 50px;
+        padding-left: 1.5rem;
+        background: #ffffff; /* White background inside the box makes it look clean */
+        /* Added a clear border */
+        border: 1px solid #ced4da;
+        color: #333;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: #ff7b54;
+            box-shadow: 0 0 0 0.2rem rgba(255, 123, 84, 0.25);
+            outline: none;
+        }
+
+    .btn-glow {
+        background: linear-gradient(135deg, #ff7b54, #ffd56b);
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        color: #111;
+    }
+
+    .social a {
+        color: #fff;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        transition: 0.3s;
+    }
+
+        .social a:hover {
+            color: #ff7b54;
+        }
+
+    .payments i {
+        font-size: 1.5rem;
+        margin-right: 0.75rem;
+        color: black;
+    }
+</style>
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="footer-title">Need Help?</div>
+                <p>Call Us: +1 (234) 567-8901</p>
+                <p>12345 NE 51st Ave, Miami, FL 12345</p>
+                <div class="social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="footer-title">Company</div>
+                <a class="footer-link" href="#">About us</a><br />
+                <a class="footer-link" href="#">Careers</a><br />
+                <a class="footer-link" href="#">Privacy Statement</a>
+            </div>
+
+            <div class="col-md-2">
+                <div class="footer-title">Support</div>
+                <a class="footer-link" href="#">Account</a><br />
+                <a class="footer-link" href="#">Contact</a><br />
+                <a class="footer-link" href="#">Affiliate Program</a>
+            </div>
+
+            <div class="col-md-5">
+                <div class="footer-title">Mailing List</div>
+                <p>Sign up to get latest updates and offers.</p>
+                <form method="post" class="d-flex gap-2">
+                    <input type="email" class="form-control" placeholder="Enter your email" />
+                    <button type="submit" class="btn btn-glow">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        @* This line is internal to the footer and helps separate the copyright section *@
+        @* <hr class="mt-5 mb-4" style="border-color: rgba(255,255,255,0.05)"> *@
+
+        @* <div class="d-flex justify-content-between align-items-center">
+            <div class="payments">
+                <i class="fab fa-cc-discover"></i>
+                <i class="fab fa-cc-mastercard"></i>
+                <i class="fab fa-cc-paypal"></i>
+                <i class="fab fa-cc-visa"></i>
+            </div>
+            <small>&copy; @DateTime.Now.Year Travel Co. All rights reserved.</small> 
+        </div> *@
+    </div>
+</footer>
