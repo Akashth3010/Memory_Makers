@@ -94,7 +94,7 @@
     </div>
 </header>
 
-<section class="search-panel" style="width: 100%">
+@* <section class="search-panel" style="width: 100%">
     <div class="container">
         <div class="search-box shadow-lg">
             <div class="row g-3 align-items-center">
@@ -115,6 +115,43 @@
 
                 <div class="col-md-3 d-grid">
                     <button class="btn btn-primary btn-lg mt-4">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> *@
+<section class="search-panel" style="width: 100%">
+    <div class="container">
+        <div class="search-box shadow-lg">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-3">
+                    <label>Destination</label>
+                    <select id="destInput" class="form-control">
+                        <option value="">Where are you going?</option>
+                        <option value="meghalaya">Meghalaya</option>
+                        <option value="sikkim">Sikkim</option>
+                        <option value="arunachal">Arunachal Pradesh</option>
+                        <option value="assam">Assam</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label>Departure - Return</label>
+                    <input type="date" id="dateInput" class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                    <label>Travellers</label>
+                    <select id="travellerInput" class="form-control">
+                        <option value="1">1 Adult</option>
+                        <option value="2">2 Adults</option>
+                        <option value="3">2 Adults, 1 Child</option>
+                        <option value="4">Family Pack (4+)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-grid">
+                    <button class="btn btn-primary btn-lg mt-4" onclick="executeSearch()">Search Packages</button>
                 </div>
             </div>
         </div>
@@ -177,6 +214,47 @@
 </div>
 
 <script>
+           function handleFullSearch() {
+        // 1. Get values from all three columns
+        const destination = document.getElementById('destInput').value.toLowerCase().trim();
+        const travelDate = document.getElementById('dateInput').value;
+        const travellers = document.getElementById('travellerInput').value;
+
+        // 2. Validation: Ensure destination is entered
+        if (destination === "") {
+            alert("Please enter a destination to search.");
+            return;
+        }
+
+        // 3. Logic for Redirection or Filtering
+        console.log(`Searching for: ${destination}, Date: ${travelDate}, Guests: ${travellers}`);
+
+        if (destination.includes("meghalaya")) {
+            // You can also pass these values to the next page via URL parameters
+            window.location.href = `/Home/MeghalayaTD?date=${travelDate}&guests=${travellers}`;
+        } else {
+            alert("We currently only have packages available for 'Meghalaya'.");
+        }
+    }
+        // Run this as soon as the page loads
+    document.addEventListener("DOMContentLoaded", function() {
+        const dateInput = document.getElementById('dateInput');
+
+        // Get today's date in YYYY-MM-DD format
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        const yyyy = today.getFullYear();
+
+        const formattedToday = yyyy + '-' + mm + '-' + dd;
+
+        // Set the 'min' attribute to today's date
+        dateInput.min = formattedToday;
+
+        // Optional: Default the calendar to today's date
+        dateInput.value = formattedToday;
+    });
+    // Search panel end here //
         function handleAuthToggle() {
         const signupFields = document.querySelectorAll('.signup-only');
         const modalTitle = document.getElementById('modalTitle');

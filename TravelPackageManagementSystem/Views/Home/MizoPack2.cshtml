@@ -186,6 +186,11 @@
                 totalDisplay.textContent = "₹" + total.toLocaleString('en-IN');
             });
         });
+            // Get today's date in YYYY-MM-DD format
+        const today = new Date().toISOString().split('T')[0];
+
+        // Set the 'min' attribute so back dates are greyed out
+        document.getElementById('travelDate').setAttribute('min', today);
     </script>
 </body>
 </html>
