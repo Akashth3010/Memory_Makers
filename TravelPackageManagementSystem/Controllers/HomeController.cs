@@ -195,21 +195,8 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
 
-        public IActionResult Mumbai()
-        {
-            return View();
-        }
-
-        public IActionResult Munnar()
-        {
-            return View();
-        }
-
+       
         public IActionResult Ooty()
-        {
-            return View();
-        }
-        public IActionResult Goa()
         {
             return View();
         }
