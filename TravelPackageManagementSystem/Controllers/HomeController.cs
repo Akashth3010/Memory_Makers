@@ -112,6 +112,18 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }
+        public IActionResult KeralaPack1()
+        {
+            return View();
+        }
+        public IActionResult KeralaPack2()
+        {
+            return View();
+        }
+        public IActionResult KeralaPack3()
+        {
+            return View();
+        }
 
         public IActionResult GoaPack3()
         {
