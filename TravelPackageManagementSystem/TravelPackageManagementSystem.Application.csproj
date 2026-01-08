@@ -37,7 +37,6 @@
     <Content Remove="wwwroot\lib\Image\Jaipur.jpg" />
     <Content Remove="wwwroot\lib\Image\kerala2.jpg" />
     <Content Remove="wwwroot\lib\Image\Ladakh.jpg" />
-    <Content Remove="wwwroot\lib\Image\Rameshwaram1.jpg" />
     <Content Remove="wwwroot\lib\Image\Vrindavan.jpg" />
   </ItemGroup>
 

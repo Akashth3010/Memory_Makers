@@ -92,7 +92,8 @@
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
                     <form id="bookingForm">
-                        <label>Travel Date</label><input type="date" required />
+                        <label for="travelDate">Travel Date</label>
+                        <input id="travelDate" type="date" required />
                         <label>Guests</label>
                         <select id="guests">
                             <option value="1">1 person</option>
@@ -106,6 +107,11 @@
         </div>
     </div>
     <script>
+            // Get today's date in YYYY-MM-DD format
+        const today = new Date().toISOString().split('T')[0];
+
+        // Set the 'min' attribute so back dates are greyed out
+        document.getElementById('travelDate').setAttribute('min', today);
         (function () {
             const main = document.getElementById('mainImage');
             const thumbs = document.querySelectorAll('.thumb');

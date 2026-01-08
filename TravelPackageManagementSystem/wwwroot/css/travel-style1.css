@@ -1,0 +1,205 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+
+:root {
+    --accent-color: #00d2ff;
+    --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    --text-white: #ffffff;
+    --heritage-maroon: #8e1b1b;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-white);
+    overflow-x: hidden;
+}
+
+.main-page {
+    padding-bottom: 80px;
+}
+
+/* --- Hero Section --- */
+.hero-text {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+    .hero-text h1 {
+        font-size: 3.5rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 0;
+    }
+
+    .hero-text span {
+        color: var(--accent-color);
+        text-shadow: 0px 0px 20px rgba(0, 210, 255, 0.5);
+    }
+
+/* --- Package Cards --- */
+.packages-section {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    padding: 40px 5%;
+    max-width: 1300px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.pkg-card {
+    flex: 1;
+    min-width: 300px;
+    max-width: 350px;
+    background: #ffffff; /* White background makes black text visible */
+    border-radius: 25px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+    .pkg-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        outline: 3px solid var(--accent-color);
+    }
+
+/* FIXED: This targets the background-image div in your CSHTML */
+.pkg-img {
+    width: 100%;
+    height: 260px;
+    background-size: cover;
+    background-position: center;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.pkg-card:hover .pkg-img {
+    transform: scale(1.1);
+}
+
+.pkg-body {
+    padding: 20px;
+    text-align: center;
+    flex-grow: 1;
+}
+
+    .pkg-body h3 {
+        font-size: 1.4rem;
+        color: #2c3e50; /* Dark text for white card */
+        margin: 8px 0;
+    }
+
+    .pkg-body p {
+        font-size: 0.95rem;
+        color: #7f8c8d;
+        margin: 5px 0;
+    }
+
+.pkg-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--heritage-maroon);
+    margin: 15px 0;
+}
+
+.select-btn {
+    background: var(--heritage-maroon);
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .select-btn:hover {
+        background: #b22222;
+        transform: scale(1.05);
+    }
+
+/* --- Scrolling Gallery --- */
+.gallery-title {
+    text-align: center;
+    margin-top: 60px;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+    .gallery-title span {
+        color: var(--accent-color);
+    }
+
+.auto-scroll-container {
+    width: 100%;
+    overflow: hidden;
+    padding: 40px 0;
+}
+
+.scroll-track {
+    display: flex;
+    width: max-content;
+    animation: scroll 25s linear infinite;
+}
+
+    .scroll-track:hover {
+        animation-play-state: paused;
+    }
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.gem-item {
+    width: 280px;
+    margin: 0 15px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    flex-shrink: 0;
+}
+
+    .gem-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .gem-item span {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+        color: white;
+        text-align: center;
+        padding: 15px 5px;
+        font-weight: 600;
+    }
+
+.hot-tag {
+    background: #e74c3c;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 10px;
+}
