@@ -1,0 +1,223 @@
+﻿@{
+    ViewData["Title"] = "Packages";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="admin-page packages-page">
+
+    <div class="packages-header">
+        <div>
+            <h2 class="page-heading">Packages Management</h2>
+            <p class="page-subtext">Manage all travel packages across the platform</p>
+        </div>
+        <button class="btn-add" id="addPackageBtn">
+            <i class="fa-solid fa-plus"></i> Add New Package
+        </button>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="package-filters">
+        <input type="text" placeholder="Search destination / package..." id="searchBox" />
+        <select id="typeFilter">
+            <option value="">All Types</option>
+            <option value="Family">Family</option>
+            <option value="Honeymoon">Honeymoon</option>
+            <option value="Friends">Friends</option>
+            <option value="Solo">Solo</option>
+        </select>
+        <select id="statusFilter">
+            <option value="">All Status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+        </select>
+    </div>
+
+    <!-- GRID -->
+    <div class="packages-grid" id="packagesGrid"></div>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="custom-modal" id="packageModal">
+    <div class="modal-box">
+        <h4 id="modalTitle">Add Package</h4>
+
+        <input type="hidden" id="pkgId" />
+
+        <input id="pkgName" placeholder="Package Name" />
+        <input id="pkgDest" placeholder="Destination" />
+        <select id="pkgType">
+            <option value="Family">Family</option>
+            <option value="Honeymoon">Honeymoon</option>
+            <option value="Friends">Friends</option>
+            <option value="Solo">Solo</option>
+        </select>
+        <input id="pkgPrice" type="number" placeholder="Price" />
+        <input id="pkgDuration" placeholder="Duration (e.g. 5 Days)" />
+        <select id="pkgCategory">
+            <option value="Trending">Trending</option>
+            <option value="Top Destination">Top Destination</option>
+            <option value="Featured">Featured</option>
+            <option value="Normal">Normal</option>
+        </select>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closePackageModal()">Cancel</button>
+            <button class="btn-confirm" onclick="savePackage()">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="custom-modal" id="deleteModal">
+    <div class="modal-box">
+        <h4>Confirm Deletion</h4>
+        <p>Enter password to delete package</p>
+        <input id="deletePassword" placeholder="Enter password" />
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            <button class="btn-confirm" onclick="confirmDelete()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    let deleteId = null;
+
+    let packages = [
+        { id:1, name:"Goa Delight", dest:"Goa", type:"Family", price:14999, duration:"5 Days", status:"Active", category:"Trending" },
+        { id:2, name:"Manali Escape", dest:"Manali", type:"Honeymoon", price:18999, duration:"6 Days", status:"Active", category:"Top Destination" },
+        { id:3, name:"Rajasthan Royal", dest:"Jaipur", type:"Family", price:21999, duration:"7 Days", status:"Inactive", category:"Normal" },
+        { id:4, name:"Kerala Calm", dest:"Kerala", type:"Friends", price:17999, duration:"5 Days", status:"Active", category:"Featured" },
+        { id:5, name:"Ladakh Adventure", dest:"Ladakh", type:"Solo", price:25999, duration:"8 Days", status:"Active", category:"Trending" },
+        { id:6, name:"Andaman Bliss", dest:"Andaman", type:"Honeymoon", price:29999, duration:"6 Days", status:"Inactive", category:"Top Destination" }
+    ];
+
+    function renderPackages() {
+        let grid = $("#packagesGrid");
+        grid.html("");
+
+        let search = $("#searchBox").val().trim().toLowerCase();
+        let type = $("#typeFilter").val();
+        let status = $("#statusFilter").val();
+
+        let filtered = packages.filter(p =>
+            (!search || p.name.toLowerCase().includes(search) || p.dest.toLowerCase().includes(search)) &&
+            (!type || p.type === type) &&
+            (!status || p.status === status)
+        );
+
+        if (filtered.length === 0) {
+            grid.html(`<p class="empty-text">No packages found</p>`);
+            return;
+        }
+
+        filtered.forEach(p => {
+            grid.append(`
+                <div class="package-card glow-card">
+                    <div class="pkg-top">
+                        <span class="pkg-badge">${p.category}</span>
+                        <span class="pkg-status ${p.status.toLowerCase()}">${p.status}</span>
+                    </div>
+
+                    <h4>${p.name}</h4>
+                    <p class="pkg-dest">${p.dest} • ${p.type}</p>
+
+                    <div class="pkg-info">
+                        <span>${p.duration}</span>
+                        <span>₹${p.price}</span>
+                    </div>
+
+                    <div class="pkg-actions">
+                        <button class="btn-edit" onclick="editPackage(${p.id})">Edit</button>
+                        <button class="btn-toggle" onclick="toggleStatus(${p.id})">${p.status === "Active" ? "Disable" : "Enable"}</button>
+                        <button class="btn-delete" onclick="askDelete(${p.id})">Delete</button>
+                    </div>
+                </div>
+            `);
+        });
+    }
+
+    // OPEN ADD POPUP (FRESH)
+    $("#addPackageBtn").click(function () {
+        $("#modalTitle").text("Add Package");
+        $("#pkgId").val("");
+        $("#pkgName, #pkgDest, #pkgPrice, #pkgDuration").val("");
+        $("#pkgType").val("Family");
+        $("#pkgCategory").val("Trending");
+        $("#packageModal").addClass("show");
+    });
+
+    function editPackage(id) {
+        let p = packages.find(x => x.id === id);
+        $("#modalTitle").text("Edit Package");
+        $("#pkgId").val(id);
+        $("#pkgName").val(p.name);
+        $("#pkgDest").val(p.dest);
+        $("#pkgType").val(p.type);
+        $("#pkgPrice").val(p.price);
+        $("#pkgDuration").val(p.duration);
+        $("#pkgCategory").val(p.category);
+        $("#packageModal").addClass("show");
+    }
+
+    function savePackage() {
+        let id = $("#pkgId").val();
+
+        let data = {
+            id: id ? parseInt(id) : Date.now(),
+            name: $("#pkgName").val(),
+            dest: $("#pkgDest").val(),
+            type: $("#pkgType").val(),
+            price: $("#pkgPrice").val(),
+            duration: $("#pkgDuration").val(),
+            category: $("#pkgCategory").val(),
+            status: "Active"
+        };
+
+        if (id) {
+            let index = packages.findIndex(x => x.id == id);
+            packages[index] = data;
+        } else {
+            packages.push(data);
+        }
+
+        closePackageModal();
+        renderPackages();
+    }
+
+    function toggleStatus(id) {
+        let p = packages.find(x => x.id === id);
+        p.status = p.status === "Active" ? "Inactive" : "Active";
+        renderPackages();
+    }
+
+    function askDelete(id) {
+        deleteId = id;
+        $("#deletePassword").val("");
+        $("#deleteModal").addClass("show");
+    }
+
+    function confirmDelete() {
+        if ($("#deletePassword").val() !== "EasySafarDelete") {
+            alert("Wrong password!");
+            return;
+        }
+        packages = packages.filter(p => p.id !== deleteId);
+        closeDeleteModal();
+        renderPackages();
+    }
+
+    function closePackageModal() {
+        $("#packageModal").removeClass("show");
+    }
+
+    function closeDeleteModal() {
+        $("#deleteModal").removeClass("show");
+    }
+
+    $("#searchBox, #typeFilter, #statusFilter").on("input change", renderPackages);
+
+    $(document).ready(renderPackages);
+</script>

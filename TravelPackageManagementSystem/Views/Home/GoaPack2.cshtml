@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="~/css/pack-details.css" />
 </head>
 <body>
-    <section class="hero" style="background-image: url('https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?q=80&w=1600');">
+    <section class="hero" style="background-image: url('/lib/Image/goa2.jpg');">
         <div class="hero-content">
             <h1>The Goa Classic</h1>
             <p>5 Days • Old Goa Churches • Water Sports • South Goa Relaxation</p>
@@ -32,10 +32,12 @@
                 </div>
 
                 <div class="gallery">
-                    <div id="mainImage" class="main-image" style="background-image: url('https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?q=80&w=1400');"></div>
+                    <div id="mainImage" class="main-image" style="background-image: url('/lib/Image/goa3.jpg');"></div>
                     <div class="thumbs">
-                        <div class="thumb active" data-src="https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?q=80&w=1400" style="background-image: url('https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?q=80&w=200');"></div>
-                        <div class="thumb" data-src="https://images.unsplash.com/photo-1512789172734-8b090fa68bb2?q=80&w=1400" style="background-image: url('https://images.unsplash.com/photo-1512789172734-8b090fa68bb2?q=80&w=200');"></div>
+                        <div class="thumb active" data-src="/lib/Image/goa1.jpg" style="background-image: url('/lib/Image/goa1.jpg');"></div>
+                        <div class="thumb" data-src="/lib/Image/goa6.jpg" style="background-image: url('/lib/Image/goa6.jpg');"></div>
+                        <div class="thumb" data-src="/lib/Image/goa8.jpg" style="background-image: url('/lib/Image/goa8.jpg');"></div>
+                        <div class="thumb" data-src="/lib/Image/goa4.jpg" style="background-image: url('/lib/Image/goa4.jpg');"></div>
                     </div>
                 </div>
 
@@ -90,20 +92,26 @@
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
                     <form id="bookingForm">
-                        <label>Travel Date</label><input type="date" required />
+                        <label for="travelDate">Travel Date</label>
+                        <input id="travelDate" type="date" required />
                         <label>Guests</label>
                         <select id="guests">
                             <option value="1">1 person</option>
                             <option value="2">2 persons</option>
                         </select>
                         <label>Email</label><input type="email" required />
-                        <button type="submit" class="btn btn-primary">Book Now</button>
+                        <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
                     </form>
                 </aside>
             </div>
         </div>
     </div>
     <script>
+            // Get today's date in YYYY-MM-DD format
+        const today = new Date().toISOString().split('T')[0];
+
+        // Set the 'min' attribute so back dates are greyed out
+        document.getElementById('travelDate').setAttribute('min', today);
         (function () {
             const main = document.getElementById('mainImage');
             const thumbs = document.querySelectorAll('.thumb');
