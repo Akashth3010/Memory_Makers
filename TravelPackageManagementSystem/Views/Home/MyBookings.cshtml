@@ -147,6 +147,45 @@
     </div>
 </div>
 
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Booking Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <i id="modalIcon" class="fas fa-umbrella-beach fa-3x text-primary mb-3"></i>
+                    <h4 id="modalTitle" class="fw-bold"></h4>
+                    <span id="modalRef" class="badge bg-light text-muted border"></span>
+                </div>
+                <hr>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <label class="small text-muted d-block">Dates</label>
+                        <span id="modalDates" class="fw-semibold"></span>
+                    </div>
+                    <div class="col-6">
+                        <label class="small text-muted d-block">Status</label>
+                        <div id="modalStatus"></div>
+                    </div>
+                    <div class="col-6">
+                        <label class="small text-muted d-block">Guests</label>
+                        <span id="modalGuests"></span>
+                    </div>
+                    <div class="col-6">
+                        <label class="small text-muted d-block">Total Paid</label>
+                        <span id="modalAmount" class="fw-bold text-primary"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
     body {
         background-color: #f8f9fa;
