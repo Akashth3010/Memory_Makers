@@ -86,7 +86,7 @@ namespace TravelPackageManagementSystem.Controllers
             }    
         public IActionResult GoaPack1()
         {
-            return View();
+            return View("Packages/Goa/GoaPack1");
         }
 
         
