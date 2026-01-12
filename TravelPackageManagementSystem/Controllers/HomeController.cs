@@ -27,21 +27,18 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }   
 
-        public IActionResult Coorg()
-        {
-            return View();
-        }
+       
         public IActionResult Vrindavan()
         {
-            return View();
+            return View("Trending/Vrindavan");
         }
         public IActionResult Rameshwaram()
         {
-            return View();
+            return View("Trending/Rameshwaram");
         }
         public IActionResult Darjiling()
         {
-            return View();
+            return View("Trending/Darjiling");
         }
         
 
@@ -53,17 +50,17 @@ namespace TravelPackageManagementSystem.Controllers
         public IActionResult TamilnaduTD(string id)
         {
             ViewBag.PackageId = id;
-            return View();
+            return View("TopDestination/TamilnaduTD");
         }
         public IActionResult KeralaTD(string id)
         {
             ViewBag.PackageId = id;
-            return View();
+            return View("TopDestination/KeralaTD");
         }
         public IActionResult MizoramTD(string id)
         {
             ViewBag.PackageId = id;
-            return View();
+            return View("TopDestination/MizoramTD");
         }
 
 
@@ -73,19 +70,19 @@ namespace TravelPackageManagementSystem.Controllers
             // Add this method
             public IActionResult GoaTD()
             {
-                return View();
+                return View("TopDestination/GoaTD");
             }
 
             // Add this for Uttarakhand
             public IActionResult UttarakhandTD()
             {
-                return View();
+                return View("TopDestination/uttarakhandTD");
             }
 
             // Add this for Meghalaya
             public IActionResult MeghalayaTD()
             {
-                return View();
+                return View("TopDestination/MeghalayaTD");
             }    
         public IActionResult GoaPack1()
         {
@@ -96,7 +93,7 @@ namespace TravelPackageManagementSystem.Controllers
 
         public IActionResult Manali()
         {
-            return View();
+            return View("Trending/Manali");
         }
 
         public IActionResult GoaPack2()
@@ -105,12 +102,12 @@ namespace TravelPackageManagementSystem.Controllers
         }
         public IActionResult Gangtok()
         {
-            return View();
+            return View("Trending/Gangtok");
         }
 
         public IActionResult Jaipur()
         {
-            return View();
+            return View("Trending/Jaipur");
         }
         public IActionResult KeralaPack1()
         {
@@ -156,35 +153,37 @@ namespace TravelPackageManagementSystem.Controllers
 
         public IActionResult Banaras()
         {
-            return View();
+            return View("Trending/Banaras");
         }
 
         public IActionResult Mumbai()
         {
-            return View();
+            return View("Trending/Mumbai");
         }
 
         public IActionResult Munnar()
         {
-            return View();
+            return View("Trending/Munnar");
         }
 
         public IActionResult Ooty()
         {
-            return View();
+            return View("Trending/Ooty");
         }
         public IActionResult Goa()
         {
-            return View();
+            return View("Trending/Goa");
         }
        
 
         public IActionResult TajMahal()
         {
-            return View();
+            return View("Trending/TajMahal");
         }
 
-        public IActionResult Host() { return View(); }
+        public IActionResult Host() {
+            
+            return View(); }
         public IActionResult PaymentPage()
         {
             return View();
