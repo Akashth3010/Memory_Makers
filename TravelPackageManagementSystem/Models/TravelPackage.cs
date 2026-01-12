@@ -1,23 +1,41 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TravelPackageManagementSystem.Models
+namespace TravelPackageManagementSystem.Application.Models
 {
+    public enum PackageStatus
+    {
+        AVAILABLE,
+        UNAVAILABLE
+    }
     public class TravelPackage
     {
-        [Key] // This tells SQL this is the Primary Key (ID)
-        public int Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int PackageId { get; set; }
 
         [Required]
-        public string Title { get; set; } // e.g., "Himalayan Grand Explorer"
+        [StringLength(100)]
+        public string PackageName { get; set; }
 
-        public string Description { get; set; } // e.g., "7 Days Auli Skiing..."
+        [Required]
+        [StringLength(100)]
+        public string Destination { get; set; }
 
-        public double Rating { get; set; } // e.g., 4.9
+        [Required]
+        [Column(TypeName = "decimal(10,2)")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
+        public decimal Price { get; set; }
 
-        public int ReviewCount { get; set; } // e.g., 310
+        [Required]
+        [Range(1, 365)]
+        public int Duration { get; set; }
 
-        public string Duration { get; set; } // e.g., "7 Days / 6 Nights"
+        [Required]
+        public PackageStatus Status { get; set; } = PackageStatus.AVAILABLE;
 
-        public string ImagePath { get; set; } // Path to your image in wwwroot
+        public virtual ICollection<Itinerary> Itineraries { get; set; }
     }
 }

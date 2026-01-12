@@ -1,11 +1,22 @@
 using Microsoft.EntityFrameworkCore;
+using TravelPackageManagementSystem.Application.Data;
+using TravelPackageManagementSystem.Application.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // session expires after 30mins
+    options.Cookie.HttpOnly = true; // security: prevents JS Access to session cookie
+    options.Cookie.IsEssential = true; // necessary for the app to function
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
 var app = builder.Build();
 
@@ -19,6 +30,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
