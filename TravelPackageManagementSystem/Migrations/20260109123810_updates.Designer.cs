@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Application.Data;
 namespace TravelPackageManagementSystem.Application.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260109100320_Updates")]
-    partial class Updates
+    [Migration("20260109123810_updates")]
+    partial class updates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

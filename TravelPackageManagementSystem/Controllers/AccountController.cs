@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http; // Required for Session
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http; // Required for Session
-using TravelPackageManagementSystem.Application.Models;
-using TravelPackageManagementSystem.Application.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using TravelPackageManagementSystem.Application.Data;
+using TravelPackageManagementSystem.Application.Models;
 
 namespace TravelPackageManagementSystem.Application.Controllers
 {
@@ -20,30 +21,49 @@ namespace TravelPackageManagementSystem.Application.Controllers
         }
         // Update Register
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model) // Use ViewModel
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (_context.Users.Any(u => u.Email == model.Email || u.Username == model.Username))
+            // 1. Check for existing Username
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == model.Username || u.Email == model.Email);
+
+            if (existingUser != null)
             {
-                ModelState.AddModelError("Username", "User already exists.");
-                return BadRequest(ModelState);
+                if (existingUser.Username == model.Username)
+                {
+                    return BadRequest(new { Username = "This username is already taken." });
+                }
+                if (existingUser.Email == model.Email)
+                {
+                    return BadRequest(new { Email = "This email is already registered." });
+                }
             }
 
+            // 2. If no duplicate, proceed with creation
             var user = new User
             {
                 Username = model.Username,
                 Email = model.Email,
-                Role = UserRole.CUSTOMER,
-                // Password will be set below
+                Role = UserRole.CUSTOMER
             };
 
             user.Password = _hasher.HashPassword(user, model.Password);
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync(); // This is where it was crashing
+            }
+            catch (DbUpdateException)
+            {
+                return BadRequest(new { Username = "A database error occurred. Please try a different username." });
+            }
 
+            // 3. Set Session and return success
             HttpContext.Session.SetString("UserName", user.Username);
+            HttpContext.Session.SetInt32("UserId", user.UserId);
             HttpContext.Session.SetString("UserRole", user.Role.ToString());
 
             return Ok(new { success = true });
@@ -51,21 +71,26 @@ namespace TravelPackageManagementSystem.Application.Controllers
 
         // Update Login
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model) // Use ViewModel
+        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == model.Username);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            // 1. Find user by Username (since your LoginViewModel uses Username)
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username || u.Email == model.Username);
+
+            // 2. Verify user exists and password matches
             if (user == null || _hasher.VerifyHashedPassword(user, user.Password, model.Password) == PasswordVerificationResult.Failed)
             {
-                // Return a dictionary so your JS displayErrors function works
-                return BadRequest(new { Password = new[] { "Invalid Username or Password" } });
+                // Return a key that matches your "err-Password" span in the HTML
+                return BadRequest(new { Password = "Invalid Username or Password" });
             }
 
+            // 3. CRITICAL: Set the exact same Session keys as Register
             HttpContext.Session.SetString("UserName", user.Username);
             HttpContext.Session.SetInt32("UserId", user.UserId);
             HttpContext.Session.SetString("UserRole", user.Role.ToString());
 
-            return Ok(new { username = user.Username, role = user.Role.ToString() });
+            return Ok(new { success = true, username = user.Username });
         }
 
         [HttpPost]

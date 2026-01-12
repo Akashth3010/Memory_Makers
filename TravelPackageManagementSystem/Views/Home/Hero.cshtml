@@ -1,201 +1,210 @@
-﻿@* Updated Hero.cshtml - Unified Version *@
+﻿@* Updated Hero.cshtml *@
 @{
-	Layout = "_Layout"; // Ensures it uses your layout
+    Layout = "_Layout";
 }
 
 <style>
-	/* 1. Fix the Confirm Password Label Alignment */
-	#authModal .input-label {
-		display: block;
-		width: 100%;
-		text-align: left;
-	}
+    #authModal .input-label {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
 
-	/* 2. Target ONLY the footer inside the modal */
-	#authModal .footer-text {
-		color: rgba(255, 255, 255, 0.6) !important;
-		font-size: 0.9rem;
-	}
+    #authModal .footer-text {
+        color: rgba(255, 255, 255, 0.6) !important;
+        font-size: 0.9rem;
+    }
 
-	#authModal .footer-link {
-		color: #ffffff !important; /* Forces white only in the modal */
-		font-weight: 700;
-		text-decoration: none;
-		transition: all 0.3s ease;
-	}
+    #authModal .footer-link {
+        color: #ffffff !important;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
 
-		#authModal .footer-link:hover {
-			color: #00d2ff !important;
-			text-decoration: underline;
-		}
+        #authModal .footer-link:hover {
+            color: #00d2ff !important;
+            text-decoration: underline;
+        }
 
-	/* 3. Ensure inputs take full width */
-	#authModal .auth-input {
-		width: 100%;
-	}
+    #authModal .auth-input {
+        width: 100%;
+    }
+
+    /* Hide signup fields by default if you want to start on Login,
+           or keep visible if starting on Register */
+    .signup-only {
+        display: block;
+    }
 </style>
 
 <header class="header-wrapper">
-	<div class="overlay"></div>
+    <div class="overlay"></div>
 
-	<div class="top-bar">
-		<div class="container-fluid d-flex justify-content-between align-items-center px-4">
-			<div class="top-left">
-				<i class="fa-solid fa-phone"></i> (+91) 9512535115
-				<span class="ms-3"><i class="fa-solid fa-envelope"></i> easysafar@gmail.com</span>
-			</div>
-			<div class="top-right">
-				<i class="fab fa-facebook-f"></i>
-				<i class="fab fa-x mx-3"></i>
-				<i class="fab fa-linkedin-in"></i>
+    <div class="top-bar">
+        <div class="container-fluid d-flex justify-content-between align-items-center px-4">
+            <div class="top-left">
+                <i class="fa-solid fa-phone"></i> (+91) 9512535115
+                <span class="ms-3"><i class="fa-solid fa-envelope"></i> easysafar@gmail.com</span>
+            </div>
+            <div class="top-right">
+                <i class="fab fa-facebook-f"></i>
+                <i class="fab fa-x mx-3"></i>
+                <i class="fab fa-linkedin-in"></i>
 
-				<span class="ms-4 text-white" style="cursor: pointer;">
-					<a asp-controller="Home" asp-action="Host" class="text-white text-decoration-none">
-						Become a Host
-					</a>
-				</span>
+                <span class="ms-4 text-white" style="cursor: pointer;">
+                    <a asp-controller="Home" asp-action="Host" class="text-white text-decoration-none">
+                        Become a Host
+                    </a>
+                </span>
 
-				<div id="authSection" class="d-inline-block ms-4">
-					@if (Context.Session.GetString("UserName") != null)
-					{
-						<span class="text-white fw-bold me-3">
-							<i class="fa-solid fa-user-circle me-1"></i>Hi, @Context.Session.GetString("UserName")
-						</span>
-						<button onclick="handleLogout()" class="btn btn-sm btn-outline-light" style="border-radius: 20px; font-size: 0.8rem;">
-							Logout <i class="fa-solid fa-right-from-bracket ms-1"></i>
-						</button>
-					}
-					else
-					{
-						<span class="text-white" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#authModal">
-							Sign in / Sign up
-						</span>
-					}
-				</div>
+                <div id="authSection" class="d-inline-block ms-4">
+                    @if (Context.Session.GetString("UserName") != null)
+                    {
+                        <span class="text-white fw-bold me-3">
+                            <i class="fa-solid fa-user-circle me-1"></i>Hi, @Context.Session.GetString("UserName")
+                        </span>
+                        <button onclick="handleLogout()" class="btn btn-sm btn-outline-light" style="border-radius: 20px; font-size: 0.8rem;">
+                            Logout <i class="fa-solid fa-right-from-bracket ms-1"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <span class="text-white" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#authModal">
+                            Sign in / Sign up
+                        </span>
+                    }
+                </div>
 
-				<span class="ms-4 text-white" style="cursor: pointer;" onclick="openAdminLogin()">
-					Admin Login
-				</span>
-			</div>
-		</div>
-	</div>
+                <span class="ms-4 text-white" style="cursor: pointer;" onclick="openAdminLogin()">
+                    Admin Login
+                </span>
+            </div>
+        </div>
+    </div>
 
-	<nav class="navbar navbar-expand-lg navbar-dark">
-		<div class="container-fluid px-4">
-			<a class="navbar-brand fw-bold" href="#">
-				<i class="fa-solid fa-paper-plane"></i> EasySafar
-			</a>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fa-solid fa-paper-plane"></i> EasySafar
+            </a>
 
-			<div class="collapse navbar-collapse justify-content-end">
-				<ul class="navbar-nav gap-4">
-					<li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Home")#top-destinations">Holidays</a></li>
-					<li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="TravelGuide">Travel Guide</a></li>
-					<li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="CustomerSupport">Customer Support</a></li>
-					<li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="MyBookings">My Bookings</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav gap-4">
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Home")#top-destinations">Holidays</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="TravelGuide">Travel Guide</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="CustomerSupport">Customer Support</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="MyBookings">My Bookings</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-	<div class="container-fluid hero-content text-center">
-		<h1>Let's Travel India Together!</h1>
-		<p>Find awesome flights, hotels, holidays, cabs, buses and cruise</p>
-	</div>
+    <div class="container-fluid hero-content text-center">
+        <h1>Let's Travel India Together!</h1>
+        <p>Find awesome flights, hotels, holidays, cabs, buses and cruise</p>
+    </div>
 </header>
 
+@* Search Panel *@
 <section class="search-panel" style="width: 100%">
-	<div class="container">
-		<div class="search-box shadow-lg">
-			<div class="row g-3 align-items-center">
-				<div class="col-md-3">
-					<label>Destination</label>
-					<select id="destInput" class="form-control">
-						<option value="">Where are you going?</option>
-						<option value="meghalaya">Meghalaya</option>
-						<option value="sikkim">Sikkim</option>
-						<option value="arunachal">Arunachal Pradesh</option>
-						<option value="assam">Assam</option>
-					</select>
-				</div>
+    <div class="container">
+        <div class="search-box shadow-lg">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-3">
+                    <label>Destination</label>
+                    <select id="destInput" class="form-control">
+                        <option value="">Where are you going?</option>
+                        <option value="meghalaya">Meghalaya</option>
+                        <option value="sikkim">Sikkim</option>
+                        <option value="arunachal">Arunachal Pradesh</option>
+                        <option value="assam">Assam</option>
+                    </select>
+                </div>
 
-				<div class="col-md-3">
-					<label>Departure - Return</label>
-					<input type="date" id="dateInput" class="form-control">
-				</div>
+                <div class="col-md-3">
+                    <label>Departure - Return</label>
+                    <input type="date" id="dateInput" class="form-control">
+                </div>
 
-				<div class="col-md-3">
-					<label>Travellers</label>
-					<select id="travellerInput" class="form-control">
-						<option value="1">1 Adult</option>
-						<option value="2">2 Adults</option>
-						<option value="3">2 Adults, 1 Child</option>
-						<option value="4">Family Pack (4+)</option>
-					</select>
-				</div>
+                <div class="col-md-3">
+                    <label>Travellers</label>
+                    <select id="travellerInput" class="form-control">
+                        <option value="1">1 Adult</option>
+                        <option value="2">2 Adults</option>
+                        <option value="3">2 Adults, 1 Child</option>
+                        <option value="4">Family Pack (4+)</option>
+                    </select>
+                </div>
 
-				<div class="col-md-3 d-grid">
-					<button class="btn btn-primary btn-lg mt-4" onclick="executeSearch()">Search Packages</button>
-				</div>
-			</div>
-		</div>
-	</div>
+                <div class="col-md-3 d-grid">
+                    <button class="btn btn-primary btn-lg mt-4" onclick="handleFullSearch()">Search Packages</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
+@* Auth Modal *@
 <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; right: 20px; top: 20px; z-index: 100; filter: invert(1);"></button>
-			<div class="modal-body p-4 p-md-5">
-				<div class="text-center mb-4">
-					<h2 id="modalTitle" class="auth-title fw-bold">Create an Account</h2>
-					<p id="modalSubtitle" class="auth-subtitle">Join Memory Makers to start your journey.</p>
-				</div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; right: 20px; top: 20px; z-index: 100; filter: invert(1);"></button>
+            <div class="modal-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <h2 id="modalTitle" class="auth-title fw-bold">Create an Account</h2>
+                    <p id="modalSubtitle" class="auth-subtitle">Join EasySafar to start your journey.</p>
+                </div>
 
-				<form id="authForm">
-					<div class="mb-3 signup-only">
-						<label class="input-label">Username</label>
-						<div class="input-glow-container">
-							<input type="text" id="regUsername" name="Username" class="auth-input form-control" placeholder="johndoe">
-						</div>
-						<span class="text-danger err-msg" id="err-Username"></span>
-					</div>
+                @* IMPORTANT: No 'action' or 'method' attributes so JS handles it exclusively *@
+                <form id="authForm" novalidate>
+                    @* --- Update these fields inside your authForm in Hero.cshtml --- *@
 
-					<div class="mb-3">
-						<label class="input-label">Email Address</label>
-						<div class="input-glow-container">
-							<input type="email" id="authEmail" name="Email" class="auth-input form-control" placeholder="name@example.com">
-						</div>
-						<span class="text-danger err-msg" id="err-Email"></span>
-					</div>
+                    <div class="mb-3 signup-only">
+                        <label class="input-label">Username</label>
+                        <div class="input-glow-container">
+                            <input type="text" id="regUsername" class="auth-input form-control" placeholder="johndoe">
+                        </div>
+                        <span class="text-danger err-msg" id="err-Username"></span>
+                    </div>
 
-					<div class="mb-3">
-						<label class="input-label">Password</label>
-						<div class="input-glow-container">
-							<input type="password" id="authPassword" name="Password" class="auth-input form-control" placeholder="••••••••">
-						</div>
-						<span class="text-danger err-msg" id="err-Password"></span>
-					</div>
+                    <div class="mb-3">
+                        <label id="emailLabel" class="input-label">Email Address</label>
+                        <div class="input-glow-container">
+                            <input type="text" id="authEmail" class="auth-input form-control" placeholder="Enter your email">
+                        </div>
+                        <span class="text-danger err-msg" id="err-Email"></span>
+                        <span class="text-danger err-msg" id="err-Username-Login"></span>
+                    </div>
 
-					<div class="signup-only mb-4">
-						<label class="input-label">Confirm Password</label>
-						<div class="input-glow-container">
-							<input type="password" id="authConfirmPassword" class="auth-input form-control" placeholder="••••••••">
-						</div>
-						<span class="text-danger err-msg" id="err-ConfirmPassword"></span>
-					</div>
+                    <div class="mb-3">
+                        <label class="input-label">Password</label>
+                        <div class="input-glow-container">
+                            <input type="password" id="authPassword" name="Password" class="auth-input form-control" placeholder="••••••••">
+                        </div>
+                        <span class="text-danger err-msg" id="err-Password"></span>
+                    </div>
 
-					<button type="submit" id="submitBtn" class="submit-glow-btn">Sign Up &rarr;</button>
-				</form>
+                    <div class="signup-only mb-4">
+                        <label class="input-label">Confirm Password</label>
+                        <div class="input-glow-container">
+                            <input type="password" id="authConfirmPassword" class="auth-input form-control" placeholder="••••••••">
+                        </div>
+                        <span class="text-danger err-msg" id="err-ConfirmPassword"></span>
+                    </div>
 
-				<div class="text-center mt-4">
-					<p class="footer-text mb-0">
-						<span id="toggleText">Already have an account?</span>
-						<a href="javascript:void(0)" id="toggleAuth" class="footer-link" onclick="handleAuthToggle()">Login</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <button type="submit" id="submitBtn" class="submit-glow-btn">Sign Up &rarr;</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="footer-text mb-0">
+                        <span id="toggleText">Already have an account?</span>
+                        <a href="javascript:void(0)" id="toggleAuth" class="footer-link" onclick="handleAuthToggle()">Login</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<script src="/js/Hero.js"></script>
+<script src="/js/hero.js"></script>

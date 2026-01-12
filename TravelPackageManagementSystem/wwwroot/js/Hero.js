@@ -1,221 +1,170 @@
-﻿function handleFullSearch() {
-    // 1. Get values from all three columns
+﻿// --- 1. Search Logic ---
+function handleFullSearch() {
     const destination = document.getElementById('destInput').value.toLowerCase().trim();
     const travelDate = document.getElementById('dateInput').value;
     const travellers = document.getElementById('travellerInput').value;
 
-    // 2. Validation: Ensure destination is entered
     if (destination === "") {
         alert("Please enter a destination to search.");
         return;
     }
 
-    // 3. Logic for Redirection or Filtering
-    console.log(`Searching for: ${destination}, Date: ${travelDate}, Guests: ${travellers}`);
-
     if (destination.includes("meghalaya")) {
-        // You can also pass these values to the next page via URL parameters
         window.location.href = `/Home/MeghalayaTD?date=${travelDate}&guests=${travellers}`;
     } else {
         alert("We currently only have packages available for 'Meghalaya'.");
     }
 }
-// Run this as soon as the page loads
-document.addEventListener("DOMContentLoaded", function () {
-    const dateInput = document.getElementById('dateInput');
 
-    // Get today's date in YYYY-MM-DD format
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const yyyy = today.getFullYear();
-
-    const formattedToday = yyyy + '-' + mm + '-' + dd;
-
-    // Set the 'min' attribute to today's date
-    dateInput.min = formattedToday;
-
-    // Optional: Default the calendar to today's date
-    dateInput.value = formattedToday;
-});
-// Search panel end here //
+// --- 2. Auth Toggle Logic ---
 function handleAuthToggle() {
     const signupFields = document.querySelectorAll('.signup-only');
     const modalTitle = document.getElementById('modalTitle');
-    const modalSubtitle = document.getElementById('modalSubtitle');
     const submitBtn = document.getElementById('submitBtn');
     const toggleText = document.getElementById('toggleText');
     const toggleLink = document.getElementById('toggleAuth');
+    const emailLabel = document.getElementById('emailLabel');
+    const emailInput = document.getElementById('authEmail');
 
-    // Use a data attribute or check the button text more reliably
     const isCurrentlySignup = submitBtn.innerText.includes("Sign Up");
 
+    // IMPORTANT: Clear all error messages when switching
+    document.querySelectorAll('.err-msg').forEach(el => el.innerText = "");
+
     if (isCurrentlySignup) {
-        // --- SWITCH TO LOGIN ---
+        // Switch to LOGIN mode
         signupFields.forEach(f => f.style.setProperty('display', 'none', 'important'));
         modalTitle.innerText = "Welcome Back";
-        modalSubtitle.innerText = "Log in to access your account.";
+        emailLabel.innerText = "Username or Email";
+        emailInput.placeholder = "Enter your username or email"; // Login Placeholder
         submitBtn.innerText = "Login →";
-        toggleText.innerText = "Don't have an account?";
+        toggleText.innerText = "Don't have an account? ";
         toggleLink.innerText = "Sign Up";
     } else {
-        // --- SWITCH TO SIGNUP ---
+        // Switch to SIGNUP mode
         signupFields.forEach(f => f.style.setProperty('display', 'block', 'important'));
         modalTitle.innerText = "Create an Account";
-        modalSubtitle.innerText = "Join EasySafar to start your journey.";
+        emailLabel.innerText = "Email Address";
+        emailInput.placeholder = "Enter your email"; // Register Placeholder
         submitBtn.innerText = "Sign Up →";
-        toggleText.innerText = "Already have an account?";
+        toggleText.innerText = "Already have an account? ";
         toggleLink.innerText = "Login";
     }
 }
-
-document.getElementById('authForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const isLogin = document.getElementById('submitBtn').innerText.includes("Login");
-
-    // Values from HTML
-    const emailValue = document.getElementById('authEmail').value;
-    const passwordValue = document.getElementById('authPassword').value;
-    const regUsernameValue = document.getElementById('regUsername').value;
-    const confirmPasswordValue = document.getElementById('authConfirmPassword').value;
-
-    let payload = {};
-    let endpoint = isLogin ? '/Account/Login' : '/Account/Register';
-
-    if (isLogin) {
-        payload = {
-            Username: emailValue, // LoginViewModel expects 'Username'
-            Password: passwordValue
-        };
-    } else {
-        // Validation: Passwords must match before sending to server
-        if (passwordValue !== confirmPasswordValue) {
-            document.getElementById('err-ConfirmPassword').innerText = "Passwords do not match";
-            return;
-        }
-
-        payload = {
-            Username: regUsernameValue, // Must match User.cs or RegisterViewModel property
-            Email: emailValue,
-            Password: passwordValue,
-            ConfirmPassword: confirmPasswordValue
-        };
+// --- 3. Form Submission & Global Event Listeners ---
+document.addEventListener("DOMContentLoaded", function () {
+    // A. Setup Date Input
+    const dateInput = document.getElementById('dateInput');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+        dateInput.value = today;
     }
 
-    try {
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+    // B. Handle Form Submission
+    const authForm = document.getElementById('authForm');
+    if (authForm) {
+        authForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-        if (response.ok) {
-            alert(isLogin ? "Welcome back!" : "Registration Successful!");
-            window.location.reload(); // Refresh to update the UI with Session data
-        } else {
-            const errorData = await response.json();
-            displayErrors(errorData);
-        }
-    } catch (error) {
-        console.error("Critical Auth Error:", error);
-    }
-});
+            const isLogin = submitBtn.innerText.includes("Login");
+            const sharedValue = document.getElementById('authEmail').value; // The input field
+            const passwordValue = document.getElementById('authPassword').value;
 
-function displayErrors(errors) {
-    // Clear previous errors first
-    document.querySelectorAll('.err-msg').forEach(el => el.innerText = "");
+            let payload = {};
+            let endpoint = isLogin ? '/Account/Login' : '/Account/Register';
 
-    Object.keys(errors).forEach(key => {
-        // Find the span with ID err-Username, err-Email, etc.
-        const span = document.getElementById(`err-${key}`);
-        if (span) {
-            // Handle both array of strings (ModelState) or single string
-            const message = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
-            span.innerText = message;
-        }
-    });
-}
-	});
+            if (isLogin) {
+                payload = {
+                    Username: sharedValue, // Login uses 'Username' property
+                    Password: passwordValue
+                };
+            } else {
+                // REGISTER: We need Username, Email, and Password
+                const regUsername = document.getElementById('regUsername').value;
+                const confirmPassword = document.getElementById('authConfirmPassword').value;
 
-// Glow effect logic
-document.addEventListener('DOMContentLoaded', function () {
+                payload = {
+                    Username: regUsername,
+                    Email: sharedValue,    // Register uses 'Email' property
+                    Password: passwordValue,
+                    ConfirmPassword: confirmPassword
+                };
+            }
 
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    const authSection = document.getElementById('authSection');
-    const user = JSON.parse(localStorage.getItem('user'));
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-    if (isLoggedIn && user) {
-        // Clear the "Sign in" link and add the Name + separate Logout button
-        authSection.innerHTML = `
-			<span class="text-white fw-bold me-3">
-				<i class="fa-solid fa-user-circle me-1"></i>Hi, ${user.firstName}
-			</span>
-			<button id="logoutBtn" class="btn btn-sm btn-outline-light" style="border-radius: 20px; font-size: 0.8rem;">
-				Logout <i class="fa-solid fa-right-from-bracket ms-1"></i>
-			</button>
-		`;
+                const result = await response.json();
 
-        // Attach event listener specifically to the new Logout button
-        document.getElementById('logoutBtn').addEventListener('click', function () {
-            if (confirm("Are you sure you want to logout?")) {
-                localStorage.removeItem('isLoggedIn');
-                window.location.reload();
+                if (response.ok) {
+                    window.location.href = "/";
+                } else {
+                    // This is the CRITICAL fix: 
+                    // If the server returns 400 (Validation Error), display them!
+                    displayErrors(result);
+                }
+            } catch (error) {
+                // Only alert if the fetch actually fails (network down)
+                console.error("Fetch error:", error);
             }
         });
     }
 
-    // Track movement on the entire document for maximum responsiveness
+    // C. Glow Effect Logic
     document.addEventListener('mousemove', (e) => {
-        // Only run the logic if the modal is actually open/visible
         const authModal = document.getElementById('authModal');
         if (!authModal || !authModal.classList.contains('show')) return;
 
         const containers = authModal.querySelectorAll('.input-glow-container');
-
         containers.forEach(container => {
             const rect = container.getBoundingClientRect();
-
-            // Precise coordinate calculation
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            container.style.setProperty('--mouse-x', `${x}px`);
-            container.style.setProperty('--mouse-y', `${y}px`);
+            container.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+            container.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
         });
     });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const holidayLink = document.querySelector('a[href="#top-destinations"]');
+// --- 4. Error Display ---
+function displayErrors(errors) {
+    // Clear all previous errors
+    document.querySelectorAll('.err-msg').forEach(el => el.innerText = "");
 
-    if (holidayLink) {
-        holidayLink.addEventListener("click", function (e) {
-            e.preventDefault(); // Stop the "jump"
+    if (!errors) return;
 
-            const target = document.getElementById("top-destinations");
-            if (target) {
-                const headerOffset = 100; // Adjust this for your navbar height
-                const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    Object.keys(errors).forEach(key => {
+        // Try various ID formats used in your HTML
+        const span = document.getElementById(`err-${key}`) || document.getElementById(`err-${key}-Reg`);
+        if (span) {
+            //span.innerText = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
+            const errorData = errors[key];
+            span.innerText = Array.isArray(errorData) ? errorData[0] : errorData;
 
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: "smooth"
-                });
-            }
-        });
-    }
-});
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth'
-            });
+            span.style.display = "block";
+            Console.log(`Setting error for ${key}: ${message}`);
+        }
+        else {
+            console.warn(`Could not find span with id: err-${key}`);
         }
     });
-});
+}
+
+// --- 5. Logout Function ---
+async function handleLogout() {
+    if (confirm("Are you sure you want to logout?")) {
+        try {
+            const response = await fetch('/Account/Logout', { method: 'POST' });
+            if (response.ok) {
+                window.location.href = '/';
+            }
+        } catch (error) {
+            console.error("Logout error:", error);
+            // Fallback: Force refresh
+            window.location.reload();
+        }
+    }
+}
