@@ -112,10 +112,13 @@
                             <option value="1">1 person</option>
                             <option value="2">2 persons</option>
                             <option value="3">3 persons</option>
+                            <option value="4">4 persons</option>
                         </select>
 
                         <label>Contact Email</label>
                         <input type="email" placeholder="you@example.com" required />
+                        <label for="phone">Phone</label>
+                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
 
                         <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
                     </form>
