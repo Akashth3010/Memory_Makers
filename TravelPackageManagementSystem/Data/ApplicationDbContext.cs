@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TravelPackageManagementSystem.Models; // Make sure this namespace is correct
+using TravelPackageManagementSystem.Application.Models; // Make sure this namespace is correct
 
 public class ApplicationDbContext : DbContext
 {
