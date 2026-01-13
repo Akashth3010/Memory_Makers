@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TravelPackageManagementSystem.Models;
+using TravelPackageManagementSystem.Repository.Models;
 
 namespace TravelPackageManagementSystem.Controllers
 {

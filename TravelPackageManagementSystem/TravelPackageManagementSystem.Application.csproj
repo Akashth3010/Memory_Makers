@@ -53,4 +53,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TravelPackageManagementSystem.Repository\TravelPackageManagementSystem.Repository.csproj" />
+    <ProjectReference Include="..\TravelPackageManagementSystem.Services\TravelPackageManagementSystem.Services.csproj" />
+  </ItemGroup>
+
 </Project>

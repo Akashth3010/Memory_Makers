@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using TravelPackageManagementSystem.Application.Data;
-using TravelPackageManagementSystem.Application.Models;
+//using TravelPackageManagementSystem.Application.Data;
+using TravelPackageManagementSystem.Repository.Data;
+using TravelPackageManagementSystem.Repository.Models;
+//using TravelPackageManagementSystem.Application.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddSession(options =>
 {
@@ -13,10 +16,10 @@ builder.Services.AddSession(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
+builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
 var app = builder.Build();
 
