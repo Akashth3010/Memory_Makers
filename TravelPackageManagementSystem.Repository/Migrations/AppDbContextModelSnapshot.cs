@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TravelPackageManagementSystem.Application.Data;
+using TravelPackageManagementSystem.Repository.Data;
 
 #nullable disable
 
-namespace TravelPackageManagementSystem.Application.Migrations
+namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace TravelPackageManagementSystem.Application.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.Booking", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Booking", b =>
                 {
                     b.Property<int>("BookingId")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace TravelPackageManagementSystem.Application.Migrations
                     b.ToTable("Bookings");
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.Itinerary", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Itinerary", b =>
                 {
                     b.Property<int>("ItineraryId")
                         .ValueGeneratedOnAdd()
@@ -76,7 +76,7 @@ namespace TravelPackageManagementSystem.Application.Migrations
                     b.ToTable("Itineraries");
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.Payment", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Payment", b =>
                 {
                     b.Property<int>("PaymentId")
                         .ValueGeneratedOnAdd()
@@ -103,7 +103,7 @@ namespace TravelPackageManagementSystem.Application.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.TravelPackage", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.TravelPackage", b =>
                 {
                     b.Property<int>("PackageId")
                         .ValueGeneratedOnAdd()
@@ -155,7 +155,7 @@ namespace TravelPackageManagementSystem.Application.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.User", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -189,15 +189,15 @@ namespace TravelPackageManagementSystem.Application.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.Booking", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Booking", b =>
                 {
-                    b.HasOne("TravelPackageManagementSystem.Application.Models.User", "User")
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.User", "User")
                         .WithMany("Bookings")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TravelPackageManagementSystem.Application.Models.TravelPackage", "TravelPackage")
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.TravelPackage", "TravelPackage")
                         .WithMany()
                         .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -208,9 +208,9 @@ namespace TravelPackageManagementSystem.Application.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.Itinerary", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Itinerary", b =>
                 {
-                    b.HasOne("TravelPackageManagementSystem.Application.Models.TravelPackage", "TravelPackage")
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.TravelPackage", "TravelPackage")
                         .WithMany("Itineraries")
                         .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -219,9 +219,9 @@ namespace TravelPackageManagementSystem.Application.Migrations
                     b.Navigation("TravelPackage");
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.Payment", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Payment", b =>
                 {
-                    b.HasOne("TravelPackageManagementSystem.Application.Models.Booking", "Booking")
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.Booking", "Booking")
                         .WithMany("Payments")
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -230,17 +230,17 @@ namespace TravelPackageManagementSystem.Application.Migrations
                     b.Navigation("Booking");
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.Booking", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Booking", b =>
                 {
                     b.Navigation("Payments");
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.TravelPackage", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.TravelPackage", b =>
                 {
                     b.Navigation("Itineraries");
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Application.Models.User", b =>
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.User", b =>
                 {
                     b.Navigation("Bookings");
                 });

@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using TravelPackageManagementSystem.Application.Data;
-using TravelPackageManagementSystem.Application.Models;
+//using TravelPackageManagementSystem.Application.Data;
+//using TravelPackageManagementSystem.Application.Models;
+using TravelPackageManagementSystem.Repository.Data;
+using TravelPackageManagementSystem.Repository.Models;
 
 namespace TravelPackageManagementSystem.Application.Controllers
 {
@@ -13,7 +15,7 @@ namespace TravelPackageManagementSystem.Application.Controllers
     {
         private readonly AppDbContext _context;
         // PasswordHasher helps securely store passwords
-        private readonly PasswordHasher<User> _hasher = new PasswordHasher<User>();
+        private readonly PasswordHasher<Repository.Models.User> _hasher = new PasswordHasher<Repository.Models.User>();
 
         public AccountController(AppDbContext context)
         {
@@ -21,7 +23,7 @@ namespace TravelPackageManagementSystem.Application.Controllers
         }
         // Update Register
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody] Repository.Models.RegisterViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -42,11 +44,11 @@ namespace TravelPackageManagementSystem.Application.Controllers
             }
 
             // 2. If no duplicate, proceed with creation
-            var user = new User
+            var user = new Repository.Models.User
             {
                 Username = model.Username,
                 Email = model.Email,
-                Role = UserRole.CUSTOMER
+                Role = Repository.Models.UserRole.CUSTOMER
             };
 
             user.Password = _hasher.HashPassword(user, model.Password);
@@ -71,7 +73,7 @@ namespace TravelPackageManagementSystem.Application.Controllers
 
         // Update Login
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody] Repository.Models.LoginViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
