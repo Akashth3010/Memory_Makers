@@ -27,21 +27,18 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }   
 
-        public IActionResult Coorg()
-        {
-            return View();
-        }
+       
         public IActionResult Vrindavan()
         {
-            return View();
+            return View("Trending/Vrindavan");
         }
         public IActionResult Rameshwaram()
         {
-            return View();
+            return View("Trending/Rameshwaram");
         }
         public IActionResult Darjiling()
         {
-            return View();
+            return View("Trending/Darjiling");
         }
         
 
@@ -53,17 +50,17 @@ namespace TravelPackageManagementSystem.Controllers
         public IActionResult TamilnaduTD(string id)
         {
             ViewBag.PackageId = id;
-            return View();
+            return View("TopDestination/TamilnaduTD");
         }
         public IActionResult KeralaTD(string id)
         {
             ViewBag.PackageId = id;
-            return View();
+            return View("TopDestination/KeralaTD");
         }
         public IActionResult MizoramTD(string id)
         {
             ViewBag.PackageId = id;
-            return View();
+            return View("TopDestination/MizoramTD");
         }
 
 
@@ -73,106 +70,98 @@ namespace TravelPackageManagementSystem.Controllers
             // Add this method
             public IActionResult GoaTD()
             {
-                return View();
+                return View("TopDestination/GoaTD");
             }
 
             // Add this for Uttarakhand
             public IActionResult UttarakhandTD()
             {
-                return View();
+                return View("TopDestination/uttarakhandTD");
             }
 
             // Add this for Meghalaya
             public IActionResult MeghalayaTD()
             {
-                return View();
+                return View("TopDestination/MeghalayaTD");
             }    
-        public IActionResult GoaPack1()
-        {
-            return View();
-        }
+        
 
         
 
         public IActionResult Manali()
         {
-            return View();
+            return View("Trending/Manali");
         }
 
-        public IActionResult GoaPack2()
-        {
-            return View();
-        }
         public IActionResult Gangtok()
         {
-            return View();
+            return View("Trending/Gangtok");
         }
 
         public IActionResult Jaipur()
         {
-            return View();
+            return View("Trending/Jaipur");
         }
+      
 
-        public IActionResult GoaPack3()
-        {
-            return View();
-        }
-        public IActionResult MeghPack1()
-        {
-            return View();
-        }
-        public IActionResult MeghPack2()
-        {
-            return View();
-        }
-        public IActionResult MeghPack3()
-        {
-            return View();
-        }
-        public IActionResult UttaraPack1()
-        {
-            return View();
-        }
-        public IActionResult UttaraPack2()
-        {
-            return View();
-        }
-        public IActionResult UttaraPack3()
-        {
-            return View();
-        }
+      
+        public IActionResult GoaPack1() => View("Package/GoaPack1");
+        public IActionResult GoaPack2() => View("Package/GoaPack2");
+        public IActionResult GoaPack3() => View("Package/GoaPack3");
+        public IActionResult KeralaPack1() => View("Package/KeralaPack1");
+        public IActionResult KeralaPack2() => View("Package/KeralaPack2");
+        public IActionResult KeralaPack3() => View("Package/KeralaPack3");
+        public IActionResult MeghPack1() => View("Package/MeghPack1");
+        public IActionResult MeghPack2() => View("Package/MeghPack2");
+
+        public IActionResult MeghPack3() => View("Package/MeghPack3");
+        public IActionResult MizoPack1() => View("Package/MizoPack1");
+        public IActionResult MizoPack2() => View("Package/MizoPack2");
+
+        public IActionResult MizoPack3() => View("Package/MizoPack3");
+        public IActionResult TamilPack1() => View("Package/TamilPack1");
+        public IActionResult TamilPack2() => View("Package/TamilPack2");
+
+        public IActionResult TamilPack3() => View("Package/TamilPack3");
+        public IActionResult UttaraPack1() => View("Package/UttaraPack1");
+        public IActionResult UttaraPack2() => View("Package/UttaraPack2");
+
+        public IActionResult UttaraPack3() => View("Package/UttaraPack3");
+
 
         public IActionResult Banaras()
         {
-            return View();
+            return View("Trending/Banaras");
         }
 
         public IActionResult Mumbai()
         {
-            return View();
+            return View("Trending/Mumbai");
         }
 
         public IActionResult Munnar()
         {
-            return View();
+            return View("Trending/Munnar");
         }
 
         public IActionResult Ooty()
         {
-            return View();
+            return View("Trending/Ooty");
         }
         public IActionResult Goa()
         {
-            return View();
+            return View("Trending/Goa");
         }
        
 
         public IActionResult TajMahal()
         {
-            return View();
+            return View("Trending/TajMahal");
         }
 
-        public IActionResult Host() { return View(); }
+        public IActionResult Host() {
+            
+            return View(); }
         public IActionResult PaymentPage()
         {
             return View();
