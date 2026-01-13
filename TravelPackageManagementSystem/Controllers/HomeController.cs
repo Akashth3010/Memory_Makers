@@ -84,10 +84,7 @@ namespace TravelPackageManagementSystem.Controllers
             {
                 return View("TopDestination/MeghalayaTD");
             }    
-        public IActionResult GoaPack1()
-        {
-            return View("Packages/Goa/GoaPack1");
-        }
+        
 
         
 
@@ -96,10 +93,6 @@ namespace TravelPackageManagementSystem.Controllers
             return View("Trending/Manali");
         }
 
-        public IActionResult GoaPack2()
-        {
-            return View();
-        }
         public IActionResult Gangtok()
         {
             return View("Trending/Gangtok");
@@ -109,47 +102,32 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View("Trending/Jaipur");
         }
-        public IActionResult KeralaPack1()
-        {
-            return View();
-        }
-        public IActionResult KeralaPack2()
-        {
-            return View();
-        }
-        public IActionResult KeralaPack3()
-        {
-            return View();
-        }
+      
 
-        public IActionResult GoaPack3()
-        {
-            return View();
-        }
-        public IActionResult MeghPack1()
-        {
-            return View();
-        }
-        public IActionResult MeghPack2()
-        {
-            return View();
-        }
-        public IActionResult MeghPack3()
-        {
-            return View();
-        }
-        public IActionResult UttaraPack1()
-        {
-            return View();
-        }
-        public IActionResult UttaraPack2()
-        {
-            return View();
-        }
-        public IActionResult UttaraPack3()
-        {
-            return View();
-        }
+      
+        public IActionResult GoaPack1() => View("Package/GoaPack1");
+        public IActionResult GoaPack2() => View("Package/GoaPack2");
+        public IActionResult GoaPack3() => View("Package/GoaPack3");
+        public IActionResult KeralaPack1() => View("Package/KeralaPack1");
+        public IActionResult KeralaPack2() => View("Package/KeralaPack2");
+        public IActionResult KeralaPack3() => View("Package/KeralaPack3");
+        public IActionResult MeghPack1() => View("Package/MeghPack1");
+        public IActionResult MeghPack2() => View("Package/MeghPack2");
+
+        public IActionResult MeghPack3() => View("Package/MeghPack3");
+        public IActionResult MizoPack1() => View("Package/MizoPack1");
+        public IActionResult MizoPack2() => View("Package/MizoPack2");
+
+        public IActionResult MizoPack3() => View("Package/MizoPack3");
+        public IActionResult TamilPack1() => View("Package/TamilPack1");
+        public IActionResult TamilPack2() => View("Package/TamilPack2");
+
+        public IActionResult TamilPack3() => View("Package/TamilPack3");
+        public IActionResult UttaraPack1() => View("Package/UttaraPack1");
+        public IActionResult UttaraPack2() => View("Package/UttaraPack2");
+
+        public IActionResult UttaraPack3() => View("Package/UttaraPack3");
+
 
         public IActionResult Banaras()
         {

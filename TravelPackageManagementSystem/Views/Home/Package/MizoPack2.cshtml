@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.Title = "MizoPack2 - Local Festivals";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>MizoPack2 - Local Festivals</title>
+    <link rel="stylesheet" href="/css/PackTD.css" />
+</head>
+<body>
+
+    <section class="hero">
+        <img class="hero-img" src="/lib/Image/m21.jpg" alt="Mizo Festival" />
+        <div class="hero-content">
+            <h1>Mizoram: Local Festivals</h1>
+            <p>4 Days • Chapchar Kut • Cultural Shows</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="flex">
+
+            <div class="left-col">
+                <div class="package-header">
+                    <div class="package-title">
+                        <h2>Discover Mizoram: Local Festivals</h2>
+                        <div class="rating">★ 4.7 (528 reviews)</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:14px;color:#666;">Duration</div>
+                        <div style="font-weight:700;font-size:16px;">4 Days / 3 Nights</div>
+                    </div>
+                </div>
+
+                <div class="gallery">
+                    <div id="mainImage" class="main-image" style="background-image:url('/lib/Image/m22.jpg');"></div>
+                    <div class="thumbs">
+                        <button class="thumb active" data-src="/lib/Image/m22.jpg" style="background-image:url('/lib/Image/m22.jpg');"></button>
+                        <button class="thumb" data-src="/lib/Image/m23.jpg" style="background-image:url('/lib/Image/m23.jpg');"></button>
+                        <button class="thumb" data-src="/lib/Image/m24.jpg" style="background-image:url('/lib/Image/m24.jpg');"></button>
+                        <button class="thumb" data-src="/lib/Image/m25.jpg" style="background-image:url('/lib/Image/m25.jpg');"></button>
+                    </div>
+                </div>
+
+                <div class="itinerary">
+                    <h3>Day-by-Day Itinerary</h3>
+
+                    <div class="day">
+                        <div class="day-header">
+                            <h4>Day 1 — Arrival</h4>
+                            <span class="toggle">+</span>
+                        </div>
+                        <div class="day-body">
+                            <p>Welcome dinner with cultural performance and orientation.</p>
+                        </div>
+                    </div>
+
+                    <div class="day">
+                        <div class="day-header">
+                            <h4>Day 2 — Chapchar Kut</h4>
+                            <span class="toggle">+</span>
+                        </div>
+                        <div class="day-body">
+                            <p>Festival parade, bamboo dance (Cheraw), and traditional music showcases.</p>
+                        </div>
+                    </div>
+
+                    <div class="day">
+                        <div class="day-header">
+                            <h4>Day 3 — Village Visit</h4>
+                            <span class="toggle">+</span>
+                        </div>
+                        <div class="day-body">
+                            <p>Explore local handicrafts, traditional cuisine, and interaction with village elders.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="price-card">
+                    <div class="price-row">
+                        <div>Base Price (per person)</div>
+                        <div class="price-total">₹12,499</div>
+                    </div>
+                    <div class="price-row">
+                        <div>Taxes & Fees</div>
+                        <div>₹1,250</div>
+                    </div>
+                    <div class="price-row">
+                        <div>Selected Guests</div>
+                        <div id="priceSummary">1 person</div>
+                    </div>
+                    <hr style="margin:10px 0; border:none; border-top:1px solid #eee;" />
+                    <div style="font-weight:700; display:flex; justify-content:space-between;">
+                        <div>Total Payable</div>
+                        <div class="price-total" id="totalPayable">₹13,749</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <aside class="booking-box">
+                    <h3>Book This Package</h3>
+                    <form id="bookingForm">
+                        <label>Travel Date</label>
+                        <input type="date" required />
+
+                        <label>Guests</label>
+                        <select id="guests">
+                            <option value="1">1 person</option>
+                            <option value="2">2 persons</option>
+                            <option value="3">3 persons</option>
+                            <option value="4">4 persons</option>
+                        </select>
+
+                        <label>Contact Email</label>
+                        <input type="email" placeholder="you@example.com" required />
+                        <label for="phone">Phone</label>
+                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
+
+                        <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
+                    </form>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; justify-content:center; align-items:center;">
+        <img id="lightboxImg" src="" style="max-width:90%; max-height:80%;" />
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 1. GALLERY & LIGHTBOX
+            const main = document.getElementById('mainImage');
+            const thumbs = document.querySelectorAll('.thumb');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+
+            thumbs.forEach(t => {
+                t.addEventListener('click', () => {
+                    thumbs.forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                    const src = t.getAttribute('data-src');
+                    main.style.backgroundImage = `url('${src}')`;
+                });
+            });
+
+            main.addEventListener('click', () => {
+                const currentBg = main.style.backgroundImage.slice(5, -2).replace(/"/g, "");
+                lightboxImg.src = currentBg;
+                lightbox.style.display = 'flex';
+            });
+
+            lightbox.addEventListener('click', () => {
+                lightbox.style.display = 'none';
+            });
+
+            // 2. ITINERARY DROPDOWN
+            const headers = document.querySelectorAll('.day-header');
+            headers.forEach(h => {
+                h.addEventListener('click', () => {
+                    const body = h.nextElementSibling;
+                    const toggle = h.querySelector('.toggle');
+
+                    if (body.style.display === "block") {
+                        body.style.display = "none";
+                        toggle.textContent = "+";
+                    } else {
+                        body.style.display = "block";
+                        toggle.textContent = "-";
+                    }
+                });
+            });
+
+            // 3. PRICE UPDATE
+            const guestSelect = document.getElementById('guests');
+            const totalDisplay = document.getElementById('totalPayable');
+            const summaryDisplay = document.getElementById('priceSummary');
+            const basePrice = 12499;
+            const taxes = 1250;
+
+            guestSelect.addEventListener('change', function() {
+                const count = parseInt(this.value);
+                const total = (basePrice + taxes) * count;
+                summaryDisplay.textContent = count + (count > 1 ? " persons" : " person");
+                totalDisplay.textContent = "₹" + total.toLocaleString('en-IN');
+            });
+        });
+            // Get today's date in YYYY-MM-DD format
+        const today = new Date().toISOString().split('T')[0];
+
+        // Set the 'min' attribute so back dates are greyed out
+        document.getElementById('travelDate').setAttribute('min', today);
+    </script>
+</body>
+</html>
