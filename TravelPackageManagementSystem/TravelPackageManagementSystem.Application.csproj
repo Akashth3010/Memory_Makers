@@ -8,10 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\NewFolder\**" />
+    <Compile Remove="Views\Home\Packages\**" />
     <Compile Remove="Views\TopDestination\**" />
     <Content Remove="Controllers\NewFolder\**" />
+    <Content Remove="Views\Home\Packages\**" />
     <Content Remove="Views\TopDestination\**" />
     <EmbeddedResource Remove="Controllers\NewFolder\**" />
+    <EmbeddedResource Remove="Views\Home\Packages\**" />
     <EmbeddedResource Remove="Views\TopDestination\**" />
     <None Remove="Controllers\NewFolder\**" />
     <Compile Remove="Views\LandingPage\**" />
@@ -23,6 +26,7 @@
     <EmbeddedResource Remove="Views\LandingPage\**" />
     <EmbeddedResource Remove="wwwroot\lib\images\**" />
     <None Remove="Controllers\NewFolder\**" />
+    <None Remove="Views\Home\Packages\**" />
     <None Remove="Views\LandingPage\**" />
     <None Remove="Views\TopDestination\**" />
     <None Remove="wwwroot\lib\images\**" />
@@ -47,6 +51,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TravelPackageManagementSystem.Repository\TravelPackageManagementSystem.Repository.csproj" />
+    <ProjectReference Include="..\TravelPackageManagementSystem.Services\TravelPackageManagementSystem.Services.csproj" />
   </ItemGroup>
 
 </Project>

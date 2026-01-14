@@ -1,0 +1,188 @@
+﻿@{
+    ViewBag.Title = "Rameshwaram Package Details";
+    Layout = null;   // remove if you are using _Layout.cshtml
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet" href="@(Url.Content("~/css/Rameshwaram.css"))" />
+</head>
+
+<body>
+
+    <!-- HERO IMAGE -->
+    <section class="hero" style="background-image: url('@Url.Content("~/lib/image/rameshwaram.jpg")');">
+        <div class="hero-content">
+            <h1>Rameshwaram Coastal Escape</h1>
+            <p>3 Days • Temples • Pamban Bridge • Dhanushkodi</p>
+        </div>
+    </section>
+
+    <!-- PACKAGE + BOOKING -->
+    <div class="container">
+        <div class="flex">
+
+            <!-- LEFT / DETAILS -->
+            <div class="left-col">
+
+                <div class="package-header">
+                    <div class="package-title">
+                        <h2>Rameshwaram: Pilgrimage & Coastal Sights</h2>
+                        <div class="rating">★ 4.6 (3,100 reviews)</div>
+                    </div>
+
+                    <div style="text-align: right;">
+                        <div style="font-size: 14px; color:#666;">Duration</div>
+                        <div style="font-weight:700; font-size:16px;">3 Days / 2 Nights</div>
+                    </div>
+                </div>
+
+                <!-- IMAGE GALLERY -->
+                <div class="gallery" aria-label="Image gallery">
+                    <div id="mainImage" class="main-image" role="img" aria-label="Main image" style="background-image: url('@Url.Content("~/lib/image/rameshwaram.jpg")');"></div>
+
+                    <div class="thumbs" role="list">
+                        <button class="thumb active" role="listitem" tabindex="0" type="button" data-src="@Url.Content("~/lib/image/rameshwaram2.jpg")" style="background-image: url('@Url.Content("~/lib/image/rameshwaram2.jpg")');" aria-label="Temple"></button>
+                        <button class="thumb" role="listitem" tabindex="0" type="button" data-src="@Url.Content("~/lib/image/rameshwaram3.jpg")" style="background-image: url('@Url.Content("~/lib/image/rameshwaram3.jpg")');" aria-label="Pamban Bridge"></button>
+                        <button class="thumb" role="listitem" tabindex="0" type="button" data-src="@Url.Content("~/lib/image/rameshwaram4.jpg")" style="background-image: url('@Url.Content("~/lib/image/rameshwaram4.jpg")');" aria-label="Dhanushkodi"></button>
+                        <button class="thumb" role="listitem" tabindex="0" type="button" data-src="@Url.Content("~/lib/image/rameshwaram5.jpg")" style="background-image: url('@Url.Content("~/lib/image/rameshwaram5.jpg")');" aria-label="Beach"></button>
+                    </div>
+                </div>
+
+                <!-- LIGHTBOX -->
+                <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+                    <img id="lightboxImg" src="" alt="Large view" />
+                </div>
+
+                <!-- PACKAGE DESCRIPTION -->
+                <div class="overview">
+                    <h3>Overview</h3>
+                    <p>
+                        Discover Rameshwaram's spiritual legacy and coastal scenery. Visit the famous Ramanathaswamy Temple,
+                        cross the historic Pamban Bridge, explore Dhanushkodi and relax on pristine beaches.
+                        Comfortable stays, local transfers and guided sightseeing included.
+                    </p>
+                </div>
+
+                <!-- ITINERARY -->
+                <div class="itinerary" aria-label="Day by day itinerary">
+                    <h3>Day-by-Day Itinerary</h3>
+
+                    <div class="day">
+                        <div class="day-header" data-day="1">
+                            <h4>Day 1 — Arrival & Temple Visit</h4>
+                            <div class="toggle" aria-hidden="true">+</div>
+                        </div>
+                        <div class="day-body">
+                            <p>Arrival at Madurai/Trichy and transfer to Rameshwaram. Evening visit to Ramanathaswamy Temple and local markets.</p>
+                        </div>
+                    </div>
+
+                    <div class="day">
+                        <div class="day-header" data-day="2">
+                            <h4>Day 2 — Pamban Bridge & Dhanushkodi</h4>
+                            <div class="toggle" aria-hidden="true">+</div>
+                        </div>
+                        <div class="day-body">
+                            <p>Drive across the Pamban Bridge, visit Pamban Island viewpoints and proceed to Dhanushkodi for coastal sightseeing and sunrise/sunset views.</p>
+                        </div>
+                    </div>
+
+                    <div class="day">
+                        <div class="day-header" data-day="3">
+                            <h4>Day 3 — Coastal Sights & Departure</h4>
+                            <div class="toggle" aria-hidden="true">+</div>
+                        </div>
+                        <div class="day-body">
+                            <p>Morning at Agni Theertham / local beach, checkout and transfer back to Madurai/Trichy for onward connections.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- PRICING & INCLUSIONS -->
+                <div class="price-card" aria-label="Pricing and inclusions">
+                    <div class="price-row">
+                        <div>Base Price (per person)</div>
+                        <div class="price-total" id="pricePerPerson">₹12,500</div>
+                    </div>
+
+                    <div class="price-row">
+                        <div>Taxes & Fees</div>
+                        <div>₹1,125</div>
+                    </div>
+
+                    <div class="price-row">
+                        <div>Selected Guests</div>
+                        <div id="priceSummary">1 person</div>
+                    </div>
+
+                    <hr />
+
+                    <div style="font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+                        <div>Total Payable</div>
+                        <div class="price-total" id="totalPayable">₹13,625</div>
+                    </div>
+
+                    <div class="includes">
+                        <h4>What's Included</h4>
+                        <div class="list-inline">
+                            <div class="included">Hotel stays (2 nights)</div>
+                            <div class="included">Daily breakfast</div>
+                            <div class="included">All transfers & sightseeing</div>
+                            <div class="included">Experienced local guide</div>
+                        </div>
+                    </div>
+
+                    <div class="excludes">
+                        <h4>What's Excluded</h4>
+                        <div class="list-inline">
+                            <div class="excluded">Airfare / Train fare</div>
+                            <div class="excluded">Monument / ferry fees (if any)</div>
+                            <div class="excluded">Personal expenses</div>
+                            <div class="excluded">Meals not specified</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT / BOOKING -->
+            <div class="right-col">
+                <aside class="booking-box" aria-labelledby="bookingHeading">
+                    <h3 id="bookingHeading">Book This Package</h3>
+
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
+                        <label for="travelDate">Travel Date</label>
+                        <input id="travelDate" name="TravelDate" type="date" required />
+
+                        <label for="guests">Guests</label>
+                        <select id="guests" name="Guests" required>
+                            <option value="1" selected>1 person</option>
+                            <option value="2">2 persons</option>
+                            <option value="3">3 persons</option>
+                            <option value="4">4 persons</option>
+                        </select>
+
+                        <label for="contactEmail">Contact Email</label>
+                        <input id="contactEmail" name="Email" type="email" placeholder="you@example.com" required />
+
+                        <label for="phone">Phone</label>
+                        <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" />
+
+                        <div class="booking-cta" style="margin-top:8px;">
+                            <button type="submit" class="btn btn-primary" id="bookNowBtn">Book Now</button>
+                        </div>
+
+                    </form>
+                </aside>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="@(Url.Content("~/js/Rameshwaram.js"))" defer></script>
+</body>
+</html>

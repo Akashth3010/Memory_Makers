@@ -1,0 +1,189 @@
+﻿@{
+    ViewBag.Title = "Munnar Package Details";
+    Layout = null;   // remove if you are using _Layout.cshtml
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet" href="@(Url.Content("~/css/Munnar.css"))" />
+</head>
+
+<body>
+
+    <!-- HERO IMAGE -->
+    <section class="hero" style="background-image: url('@Url.Content("~/lib/image/munnar1.jpg")');">
+        <div class="hero-content">
+            <h1>Munnar Short Escape</h1>
+            <p>3 Days • Tea gardens • Hill views • Wildlife</p>
+        </div>
+    </section>
+
+    <!-- PACKAGE + BOOKING -->
+    <div class="container">
+        <div class="flex">
+
+            <!-- LEFT / DETAILS -->
+            <div class="left-col">
+
+                <div class="package-header">
+                    <div class="package-title">
+                        <h2>Munnar: Tea Gardens & Hills</h2>
+                        <div class="rating">★ 4.8 (1,024 reviews)</div>
+                    </div>
+
+                    <div style="text-align: right;">
+                        <div style="font-size: 14px; color:#666;">Duration</div>
+                        <div style="font-weight:700; font-size:16px;">3 Days / 2 Nights</div>
+                    </div>
+                </div>
+
+                <!-- IMAGE GALLERY -->
+                <div class="gallery" aria-label="Image gallery">
+                    <div id="mainImage" class="main-image" role="img" aria-label="Main image" style="background-image: url('@Url.Content("~/lib/image/munnar1.jpg")');"></div>
+
+                    <div class="thumbs" role="list">
+                        <button class="thumb active" role="listitem" tabindex="0" type="button" data-src="@Url.Content("~/lib/image/munnar2.jpg")" style="background-image: url('@Url.Content("~/lib/image/munnar2.jpg")');" aria-label="Tea gardens"></button>
+                        <button class="thumb" role="listitem" tabindex="0" type="button" data-src="@Url.Content("~/lib/image/munnar3.jpg")" style="background-image: url('@Url.Content("~/lib/image/munnar3.jpg")');" aria-label="Mattupetty"></button>
+                        <button class="thumb" role="listitem" tabindex="0" type="button" data-src="@Url.Content("~/lib/image/munnar4.jpg")" style="background-image: url('@Url.Content("~/lib/image/munnar4.jpg")');" aria-label="Eravikulam"></button>
+                        <button class="thumb" role="listitem" tabindex="0" type="button" data-src="@Url.Content("~/lib/image/munnar5.jpg")" style="background-image: url('@Url.Content("~/lib/image/munnar5.jpg")');" aria-label="Echo Point"></button>
+                    </div>
+                </div>
+
+                <!-- LIGHTBOX -->
+                <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+                    <img id="lightboxImg" src="" alt="Large view" />
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div style="margin-top:16px;">
+                    <h3>Overview</h3>
+                    <p>
+                        Enjoy a quick Munnar escape among rolling tea plantations, misty hilltops and rich biodiversity.
+                        Highlights include guided tea estate visits, Eravikulam National Park, Mattupetty Dam and scenic viewpoints.
+                        Comfortable hotels, local transfers and guided sightseeing included.
+                    </p>
+                </div>
+
+                <!-- ITINERARY -->
+                <div class="itinerary" aria-label="Day by day itinerary">
+                    <h3 style="margin-bottom:10px;">Day-by-Day Itinerary</h3>
+
+                    <div class="day">
+                        <div class="day-header" data-day="1">
+                            <h4>Day 1 — Arrival & Transfer to Munnar</h4>
+                            <div class="toggle">+</div>
+                        </div>
+                        <div class="day-body">
+                            <p>Arrival at Kochi/Cochin and transfer to Munnar. Evening at leisure with a walk through tea gardens.</p>
+                        </div>
+                    </div>
+
+                    <div class="day">
+                        <div class="day-header" data-day="2">
+                            <h4>Day 2 — Munnar Sightseeing</h4>
+                            <div class="toggle">+</div>
+                        </div>
+                        <div class="day-body">
+                            <p>Visit Eravikulam National Park, Mattupetty Dam, Echo Point and a tea factory.</p>
+                        </div>
+                    </div>
+
+                    <div class="day">
+                        <div class="day-header" data-day="3">
+                            <h4>Day 3 — Morning at Leisure & Departure</h4>
+                            <div class="toggle">+</div>
+                        </div>
+                        <div class="day-body">
+                            <p>Relaxed morning in Munnar, checkout and transfer back to Kochi for onward travel.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- PRICING & INCLUSIONS -->
+                <div class="price-card" aria-label="Pricing and inclusions">
+                    <div class="price-row">
+                        <div>Base Price (per person)</div>
+                        <div class="price-total" id="pricePerPerson">₹18,500</div>
+                    </div>
+
+                    <div class="price-row">
+                        <div>Taxes & Fees</div>
+                        <div>₹1,665</div>
+                    </div>
+
+                    <div class="price-row">
+                        <div>Selected Guests</div>
+                        <div id="priceSummary">1 person</div>
+                    </div>
+
+                    <hr style="margin:10px 0; border:none; border-top:1px solid #e6e9ef;" />
+
+                    <div style="font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+                        <div>Total Payable</div>
+                        <div class="price-total" id="totalPayable">₹20,165</div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <h4 style="font-size:15px; margin-bottom:6px;">What's Included</h4>
+                        <div class="list-inline">
+                            <div class="included">Hotel stays (2 nights)</div>
+                            <div class="included">Daily breakfast</div>
+                            <div class="included">All transfers & sightseeing</div>
+                            <div class="included">Experienced local guide</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <h4 style="font-size:15px; margin-bottom:6px;">What's Excluded</h4>
+                        <div class="list-inline">
+                            <div class="excluded">Airfare / Train fare</div>
+                            <div class="excluded">Entrance fees where applicable</div>
+                            <div class="excluded">Personal expenses</div>
+                            <div class="excluded">Meals not specified</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT / BOOKING -->
+            <div class="right-col">
+                <aside class="booking-box" aria-labelledby="bookingHeading">
+                    <h3 id="bookingHeading">Book This Package</h3>
+
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
+                        <label for="travelDate">Travel Date</label>
+                        <input id="travelDate" name="TravelDate" type="date" required />
+
+                        <label for="guests">Guests</label>
+                        <select id="guests" name="Guests" required>
+                            <option value="1" selected>1 person</option>
+                            <option value="2">2 persons</option>
+                            <option value="3">3 persons</option>
+                            <option value="4">4 persons</option>
+                        </select>
+
+                        <label for="contactEmail">Contact Email</label>
+                        <input id="contactEmail" name="Email" type="email" placeholder="you@example.com" required />
+
+                        <label for="phone">Phone</label>
+                        <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" />
+
+                        <div class="booking-cta" style="margin-top:8px;">
+                            <button type="submit" class="btn btn-primary" id="bookNowBtn">Book Now</button>
+                        </div>
+
+                        
+                    </form>
+                </aside>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="@(Url.Content("~/js/Munnar.js"))" defer></script>
+</body>
+</html>

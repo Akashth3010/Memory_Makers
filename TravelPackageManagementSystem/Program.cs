@@ -1,11 +1,25 @@
 using Microsoft.EntityFrameworkCore;
-// ADD THIS LINE: This tells the app where AppDbContext is located
-using TravelPackageManagementSystem.Application.Data;
+//using TravelPackageManagementSystem.Application.Data;
+using TravelPackageManagementSystem.Repository.Data;
+using TravelPackageManagementSystem.Repository.Models;
+//using TravelPackageManagementSystem.Application.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // session expires after 30mins
+    options.Cookie.HttpOnly = true; // security: prevents JS Access to session cookie
+    options.Cookie.IsEssential = true; // necessary for the app to function
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
 // Register the Database Context
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -23,6 +37,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 // Note: In .NET 9, MapStaticAssets replaces UseStaticFiles for better performance
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
