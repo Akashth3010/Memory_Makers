@@ -26,7 +26,6 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }   
-
        
         public IActionResult Vrindavan()
         {
@@ -41,7 +40,6 @@ namespace TravelPackageManagementSystem.Controllers
             return View("Trending/Darjiling");
         }
         
-
         // The individual detail page
         public IActionResult Tamilnadu()
         {
@@ -63,10 +61,6 @@ namespace TravelPackageManagementSystem.Controllers
             return View("TopDestination/MizoramTD");
         }
 
-
-        
-           
-
             // Add this method
             public IActionResult GoaTD()
             {
@@ -84,9 +78,6 @@ namespace TravelPackageManagementSystem.Controllers
             {
                 return View("TopDestination/MeghalayaTD");
             }    
-        
-
-        
 
         public IActionResult Manali()
         {
@@ -103,31 +94,29 @@ namespace TravelPackageManagementSystem.Controllers
             return View("Trending/Jaipur");
         }
       
-
-      
         public IActionResult GoaPack1() => View("Package/GoaPack1");
         public IActionResult GoaPack2() => View("Package/GoaPack2");
         public IActionResult GoaPack3() => View("Package/GoaPack3");
+
         public IActionResult KeralaPack1() => View("Package/KeralaPack1");
         public IActionResult KeralaPack2() => View("Package/KeralaPack2");
         public IActionResult KeralaPack3() => View("Package/KeralaPack3");
+
         public IActionResult MeghPack1() => View("Package/MeghPack1");
         public IActionResult MeghPack2() => View("Package/MeghPack2");
-
         public IActionResult MeghPack3() => View("Package/MeghPack3");
+
         public IActionResult MizoPack1() => View("Package/MizoPack1");
         public IActionResult MizoPack2() => View("Package/MizoPack2");
 
         public IActionResult MizoPack3() => View("Package/MizoPack3");
         public IActionResult TamilPack1() => View("Package/TamilPack1");
         public IActionResult TamilPack2() => View("Package/TamilPack2");
-
         public IActionResult TamilPack3() => View("Package/TamilPack3");
+
         public IActionResult UttaraPack1() => View("Package/UttaraPack1");
         public IActionResult UttaraPack2() => View("Package/UttaraPack2");
-
         public IActionResult UttaraPack3() => View("Package/UttaraPack3");
-
 
         public IActionResult Banaras()
         {
@@ -153,7 +142,6 @@ namespace TravelPackageManagementSystem.Controllers
             return View("Trending/Goa");
         }
        
-
         public IActionResult TajMahal()
         {
             return View("Trending/TajMahal");
@@ -166,8 +154,6 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }
-
-     
 
         public IActionResult Dashboard()
         {
@@ -189,5 +175,5 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
     }
-    }
+}
 

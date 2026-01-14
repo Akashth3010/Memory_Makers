@@ -22,10 +22,27 @@ namespace TravelPackageManagementSystem.Repository.Models
         [Required]
         public int PackageId { get; set; }
 
+        
+
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Booking Date")]
         public DateTime BookingDate { get; set; } = DateTime.Now;
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime TravelDate { get; set; }
+
+        [Required]
+        public int Guests { get; set; }
+
+        [Required]
+        [Phone]
+        public string ContactPhone { get; set; }
+
+        [Required]
+        [Column(TypeName = "decimal(18,2")]
+        public decimal TotalAmount { get; set; }
 
         [Required]
         public BookingStatus Status { get; set; } = BookingStatus.CONFIRMED;
