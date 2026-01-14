@@ -1,96 +1,54 @@
-﻿using Microsoft.AspNetCore.Http; // Required for Session
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-//using TravelPackageManagementSystem.Application.Data;
-//using TravelPackageManagementSystem.Application.Models;
-using TravelPackageManagementSystem.Repository.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using TravelPackageManagementSystem.Repository.Models;
+using TravelPackageManagementSystem.Services.Interfaces; 
 
 namespace TravelPackageManagementSystem.Application.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AppDbContext _context;
-        // PasswordHasher helps securely store passwords
-        private readonly PasswordHasher<Repository.Models.User> _hasher = new PasswordHasher<Repository.Models.User>();
+        private readonly IAuthModelService _authService;
 
-        public AccountController(AppDbContext context)
+        // Inject the Service, not the DbContext
+        public AccountController(IAuthModelService authService)
         {
-            _context = context;
+            _authService = authService;
         }
-        // Update Register
+
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] Repository.Models.RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // 1. Check for existing Username
-            var existingUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == model.Username || u.Email == model.Email);
+            // Logic is moved to Service. RegisterUserAsync should return a result object.
+            var result = await _authService.RegisterUserAsync(model);
 
-            if (existingUser != null)
+            if (!result.Success)
             {
-                if (existingUser.Username == model.Username)
-                {
-                    return BadRequest(new { Username = "This username is already taken." });
-                }
-                if (existingUser.Email == model.Email)
-                {
-                    return BadRequest(new { Email = "This email is already registered." });
-                }
+                // result.Message would contain "Username or Email already taken"
+                return BadRequest(new { Username = result.Message });
             }
 
-            // 2. If no duplicate, proceed with creation
-            var user = new Repository.Models.User
-            {
-                Username = model.Username,
-                Email = model.Email,
-                Role = Repository.Models.UserRole.CUSTOMER
-            };
-
-            user.Password = _hasher.HashPassword(user, model.Password);
-
-            try
-            {
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync(); // This is where it was crashing
-            }
-            catch (DbUpdateException)
-            {
-                return BadRequest(new { Username = "A database error occurred. Please try a different username." });
-            }
-
-            // 3. Set Session and return success
-            HttpContext.Session.SetString("UserName", user.Username);
-            HttpContext.Session.SetInt32("UserId", user.UserId);
-            HttpContext.Session.SetString("UserRole", user.Role.ToString());
+            // Set Session using the User object returned from the service
+            SetUserSession(result.User);
 
             return Ok(new { success = true });
         }
 
-        // Update Login
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] Repository.Models.LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // 1. Find user by Username (since your LoginViewModel uses Username)
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username || u.Email == model.Username);
+            // Pass the username/password to the service to verify
+            var user = await _authService.AuthenticateUserAsync(model.Username, model.Password);
 
-            // 2. Verify user exists and password matches
-            if (user == null || _hasher.VerifyHashedPassword(user, user.Password, model.Password) == PasswordVerificationResult.Failed)
+            if (user == null)
             {
-                // Return a key that matches your "err-Password" span in the HTML
                 return BadRequest(new { Password = "Invalid Username or Password" });
             }
 
-            // 3. CRITICAL: Set the exact same Session keys as Register
-            HttpContext.Session.SetString("UserName", user.Username);
-            HttpContext.Session.SetInt32("UserId", user.UserId);
-            HttpContext.Session.SetString("UserRole", user.Role.ToString());
+            // Set Session
+            SetUserSession(user);
 
             return Ok(new { success = true, username = user.Username });
         }
@@ -100,6 +58,14 @@ namespace TravelPackageManagementSystem.Application.Controllers
         {
             HttpContext.Session.Clear();
             return Ok(new { message = "Logged out successfully" });
+        }
+
+        // Helper method to keep Session keys consistent
+        private void SetUserSession(User user)
+        {
+            HttpContext.Session.SetString("UserName", user.Username);
+            HttpContext.Session.SetInt32("UserId", user.UserId);
+            HttpContext.Session.SetString("UserRole", user.Role.ToString());
         }
     }
 }

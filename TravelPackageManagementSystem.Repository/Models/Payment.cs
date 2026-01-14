@@ -31,6 +31,8 @@ namespace TravelPackageManagementSystem.Repository.Models
         [Required]
         public PaymentStatus Status { get; set; } = PaymentStatus.PENDING;
 
+        [Required]
+        public int BookingId { get; set; }
         //Navigation Property
         [ForeignKey("BookingId")]
         public virtual Booking Booking { get; set; }
