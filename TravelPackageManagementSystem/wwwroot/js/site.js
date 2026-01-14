@@ -7,7 +7,3 @@
     });
 
 });
-    card.addEventListener('click', () => {
-        alert("Booking feature coming soon!");
-    });
-});
