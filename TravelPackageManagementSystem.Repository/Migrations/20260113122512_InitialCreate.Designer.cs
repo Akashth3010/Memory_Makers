@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelPackageManagementSystem.Repository.Data;
 
@@ -11,9 +12,11 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260113122512_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,14 +45,11 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("BookingId");
 
-                    b.HasIndex("PackageId");
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PackageId");
 
                     b.ToTable("Bookings");
                 });
@@ -194,15 +194,15 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Booking", b =>
                 {
-                    b.HasOne("TravelPackageManagementSystem.Repository.Models.TravelPackage", "TravelPackage")
-                        .WithMany()
-                        .HasForeignKey("PackageId")
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.User", "User")
+                        .WithMany("Bookings")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TravelPackageManagementSystem.Repository.Models.User", "User")
-                        .WithMany("Bookings")
-                        .HasForeignKey("UserId")
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.TravelPackage", "TravelPackage")
+                        .WithMany()
+                        .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,7 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 //using TravelPackageManagementSystem.Application.Data;
 using TravelPackageManagementSystem.Repository.Data;
+using TravelPackageManagementSystem.Repository.Implementations;
+using TravelPackageManagementSystem.Repository.Interfaces;
 using TravelPackageManagementSystem.Repository.Models;
+using TravelPackageManagementSystem.Services.Implementations;
+using TravelPackageManagementSystem.Services.Interfaces;
 //using TravelPackageManagementSystem.Application.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,10 +21,22 @@ builder.Services.AddSession(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
 
-builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
+builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
 
+// 1. Database Connection
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
+
+// 2. Register Repositories
+builder.Services.AddScoped<IPackageRepository, PackageRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
+// 3. Register Services
+builder.Services.AddScoped<IPackageService, PackageService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -77,13 +77,25 @@ namespace TravelPackageManagementSystem.Controllers
             public IActionResult UttarakhandTD()
             {
                 return View("TopDestination/uttarakhandTD");
-            }
+        }
 
             // Add this for Meghalaya
-            public IActionResult MeghalayaTD()
-            {
-                return View("TopDestination/MeghalayaTD");
-            }    
+            //public IActionResult MeghalayaTD()
+            //{
+            //    return View("TopDestination/MeghalayaTD");
+            //}
+             public IActionResult MeghalayaTD()
+{
+    // In a real app, this comes from _context.Packages.ToList();
+    var packages = new List<TravelPackage>
+    {
+        new TravelPackage { Id = 1, Name = "Quick Escape", Duration = "3 Days", Price = 9999, ImageUrl = "/lib/Image/meghalaya.jpg" },
+        new TravelPackage { Id = 2, Name = "The Classic", Duration = "5 Days", Price = 17999, ImageUrl = "/lib/Image/Waterfall.jpg", IsTrending = true },
+        // ... more packages
+    };
+
+    return View(packages);
+}
         
 
         
