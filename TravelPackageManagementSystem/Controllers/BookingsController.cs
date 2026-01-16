@@ -1,28 +1,50 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TravelPackageManagementSystem.Repository.Data; // Ensure this is your correct Data namespace
+using TravelPackageManagementSystem.Repository.Models;
 
-public class BookingsController : Controller
+namespace TravelPackageManagementSystem.Controllers
 {
-    // REMOVED: private readonly ApplicationDbContext _context; 
-    // Since you don't want a database yet, we don't need the constructor.
-
-    public IActionResult Index()
+    public class BookingsController : Controller
     {
-        // Return the view you created
-        return View();
-    }
+        // Fix: Declaring _context inside the class resolves "does not exist in current context"
+        private readonly AppDbContext _context;
 
-    // This handles the "View Details" request if you decide to use a separate page
-    public IActionResult Details(string id)
-    {
-        // For now, just return the view. 
-        // In a real app, you'd fetch data here.
-        return View();
-    }
+        // Fix: Constructor for Dependency Injection - required for _context to work
+        public BookingsController(AppDbContext context)
+        {
+            _context = context;
+        }
 
-    [HttpPost]
-    public IActionResult Cancel(string id)
-    {
-        // Simply redirect back to the list for now
-        return RedirectToAction("Index");
+        // Fix: Moved 'Create' out of any other method so it's a proper Action, not a local function
+        [HttpPost]
+        public async Task<IActionResult> Create(int PackageId, DateTime BookingDate)
+        {
+            var booking = new Booking
+            {
+                PackageId = PackageId,
+                BookingDate = BookingDate,
+                // Fix: Uses the Enum 'BookingStatus.PENDING' instead of a string "PENDING"
+                Status = BookingStatus.PENDING,
+                UserId = 1 // Hardcoded for now
+            };
+
+            _context.Bookings.Add(booking);
+            await _context.SaveChangesAsync();
+
+            // Fix: RedirectToAction now works because it is inside the Controller class
+            return RedirectToAction("PaymentPage", "Home");
+        }
+
+        public async Task<IActionResult> MyBookings()
+        {
+            // Fix: Added .Include to handle the non-nullable TravelPackage property warning
+            var bookings = await _context.Bookings
+                .Include(b => b.TravelPackage)
+                .Where(b => b.UserId == 1)
+                .ToListAsync();
+
+            return View(bookings);
+        }
     }
 }
