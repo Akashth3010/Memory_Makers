@@ -1,206 +1,225 @@
 ﻿@{
-    ViewData["Title"] = "Become a Host";
-    Layout = null;
+	ViewData["Title"] = "Become a Host";
+	Layout = null;
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>easy Safar | Become a Host</title>
+	<meta charset="utf-8" />
+	<title>easy Safar | Become a Host</title>
 
-    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    <link href="~/css/host.css" rel="stylesheet" />
+	<link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+	<link href="~/css/host.css" rel="stylesheet" />
 </head>
 
 <body>
 
-    <!-- ================= STICKY NAV ================= -->
-    <div class="sticky-nav">
+	<!-- ================= STICKY NAV ================= -->
+	<div class="sticky-nav">
 
-        <div class="top-info-bar">
-            <div class="info-left">
-                <span><i class="fa fa-phone"></i> (+91) 9512535115</span>
-                <span><i class="fa fa-envelope"></i> memorymakers@gmail.com</span>
-            </div>
+		<div class="top-info-bar">
+			<div class="info-left">
+				<span><i class="fa fa-phone"></i> (+91) 9512535115</span>
+				<span><i class="fa fa-envelope"></i> memorymakers@gmail.com</span>
+			</div>
 
-            <div class="info-right">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#">Sign in / Sign up</a>
-            </div>
-        </div>
+			<div class="info-right">
+				<a href="#"><i class="fab fa-facebook-f"></i></a>
+				<a href="#"><i class="fab fa-linkedin-in"></i></a>
+				<a href="#">Sign in / Sign up</a>
+			</div>
+		</div>
 
-        <div class="main-navbar">
-            <div class="brand">
-                <i class="fa-solid fa-location-arrow"></i>
-                <span>easy Safar</span>
-            </div>
+		<div class="main-navbar">
+			<div class="brand">
+				<i class="fa-solid fa-location-arrow"></i>
+				<span>easy Safar</span>
+			</div>
 
-            <div class="menu">
-                <a asp-controller="Home" asp-action="Index">Home</a>
-            </div>
-        </div>
-    </div>
+			<div class="menu">
+				<a asp-controller="Home" asp-action="Index">Home</a>
+			</div>
+		</div>
+	</div>
 
-    <!-- ================= HERO SLIDER ================= -->
-    <section class="hero-slider">
+	<!-- ================= HERO SLIDER ================= -->
+	<section class="hero-slider">
 
-        <div class="slides active" style="background-image:url('/lib/Image/Adventure.jpeg')">
-            <div class="hero-content">
-                <h1 class="hero-title">Become a Travel Host</h1>
-                <p class="hero-subtitle">Share your packages. Create memories.</p>
-            </div>
-        </div>
+		<div class="slides active" style="background-image:url('/lib/Image/Adventure.jpeg')">
+			<div class="hero-content">
+				<h1 class="hero-title">Become a Travel Host</h1>
+				<p class="hero-subtitle">Share your packages. Create memories.</p>
+			</div>
+		</div>
 
-        <div class="slides" style="background-image:url('/lib/Image/city.jpeg')">
-            <div class="hero-content">
-                <h1 class="hero-title">Share Your Packages</h1>
-                <p class="hero-subtitle">Reach thousands of travelers easily.</p>
-            </div>
-        </div>
+		<div class="slides" style="background-image:url('/lib/Image/city.jpeg')">
+			<div class="hero-content">
+				<h1 class="hero-title">Share Your Packages</h1>
+				<p class="hero-subtitle">Reach thousands of travelers easily.</p>
+			</div>
+		</div>
 
-        <div class="slides" style="background-image:url('/lib/Image/travel.jpeg')">
-            <div class="hero-content">
-                <h1 class="hero-title">Grow Your Travel Business</h1>
-                <p class="hero-subtitle">Partner with easy Safar today.</p>
-            </div>
-        </div>
+		<div class="slides" style="background-image:url('/lib/Image/travel.jpeg')">
+			<div class="hero-content">
+				<h1 class="hero-title">Grow Your Travel Business</h1>
+				<p class="hero-subtitle">Partner with easy Safar today.</p>
+			</div>
+		</div>
 
-    </section>
+	</section>
 
-    <!-- ================= WHY HOST ================= -->
-    <section class="why-host">
-        <h2>Why Become a Host?</h2>
-        <div class="why-cards">
-            <div class="why-card"><i class="fa fa-wallet"></i><h5>Earn More</h5></div>
-            <div class="why-card"><i class="fa fa-globe"></i><h5>Wide Reach</h5></div>
-            <div class="why-card"><i class="fa fa-shield-halved"></i><h5>Trusted Platform</h5></div>
-            <div class="why-card"><i class="fa fa-bolt"></i><h5>Easy Approval</h5></div>
-        </div>
-    </section>
+	<!-- ================= WHY HOST ================= -->
+	<section class="why-host">
+		<h2>Why Become a Host?</h2>
+		<div class="why-cards">
+			<div class="why-card"><i class="fa fa-wallet"></i><h5>Earn More</h5></div>
+			<div class="why-card"><i class="fa fa-globe"></i><h5>Wide Reach</h5></div>
+			<div class="why-card"><i class="fa fa-shield-halved"></i><h5>Trusted Platform</h5></div>
+			<div class="why-card"><i class="fa fa-bolt"></i><h5>Easy Approval</h5></div>
+		</div>
+	</section>
 
-    <!-- ================= APPROVAL PROCESS ================= -->
-    <section class="approval-flow" id="approvalFlow">
-        <h2>How Approval Works</h2>
+	<!-- ================= APPROVAL PROCESS ================= -->
+	<section class="approval-flow" id="approvalFlow">
+		<h2>How Approval Works</h2>
 
-        <div class="flow-steps">
-            <div class="step"><span>1</span><p>Submit Package Details</p></div>
-            <div class="step"><span>2</span><p>Admin Reviews Information</p></div>
-            <div class="step"><span>3</span><p>Package Goes Live</p></div>
-        </div>
-    </section>
+		<div class="flow-steps">
+			<div class="step"><span>1</span><p>Submit Package Details</p></div>
+			<div class="step"><span>2</span><p>Admin Reviews Information</p></div>
+			<div class="step"><span>3</span><p>Package Goes Live</p></div>
+		</div>
+	</section>
 
-    <!-- ================= FORM ================= -->
-    <section class="form-section">
-        <div class="form-card">
+	<!-- ================= FORM ================= -->
+	<section class="form-section">
+		<div class="form-card">
 
-            <h3 class="form-title">Host Package Submission</h3>
-            <p class="form-subtitle">Please provide accurate details for faster approval</p>
+			<h3 class="form-title">Host Package Submission</h3>
+			<p class="form-subtitle">Please provide accurate details for faster approval</p>
 
-            <form id="hostForm">
+			<form id="hostForm">
 
-                <h5 class="section-title">Contact Details</h5>
+				<h5 class="section-title">Contact Details</h5>
 
-                <input type="text" placeholder="Host / Agency Name *" required />
-                <input type="email" placeholder="Email Address *" required />
-                <input type="tel" placeholder="Phone Number *"
-                       pattern="[0-9]{10}" maxlength="10" required />
-                <input type="text" placeholder="City / Country *" required />
+				<input type="text" placeholder="Host / Agency Name *" required />
+				<input type="email" placeholder="Email Address *" required />
+				<input type="tel" placeholder="Phone Number *"
+					   pattern="[0-9]{10}" maxlength="10" required />
+				<input type="text" placeholder="City / Country *" required />
 
-                <hr />
+				<hr />
 
-                <h5 class="section-title">Package Details</h5>
+				<h5 class="section-title">Package Details</h5>
 
-                <input type="text" placeholder="Package Name *" required />
-                <input type="text" placeholder="Destination *" required />
+				<input type="text" placeholder="Package Name *" required />
+				<input type="text" placeholder="Destination *" required />
 
-                <select required>
-                    <option value="">Select Package Type *</option>
-                    <option>Family</option>
-                    <option>Honeymoon</option>
-                    <option>Friends Trip</option>
-                    <option>Adventure</option>
-                </select>
+				<select required>
+					<option value="">Select Package Type *</option>
+					<option>Family</option>
+					<option>Honeymoon</option>
+					<option>Friends Trip</option>
+					<option>Adventure</option>
+				</select>
 
-                <input type="number" placeholder="Duration (Days) *" required />
-                <input type="number" placeholder="Price *" required />
+				<input type="number" placeholder="Duration (Days) *" required />
+				<input type="number" placeholder="Price *" required />
 
-<textarea rows="4" placeholder="Package Description *" required></textarea>
+				<textarea rows="4" placeholder="Package Description *" required></textarea>
 
-                <div class="upload-box">
-                    <label>Upload Package Image</label>
-                    <input type="file" />
-                </div>
+				<div class="upload-box">
+					<label>Upload Package Image</label>
+					<input type="file" />
+				</div>
 
-                <button type="submit" class="submit-btn">Submit for Approval</button>
+				<button type="submit" class="submit-btn">Submit for Approval</button>
 
-                <p class="status-text">
-                    ✨ We’ve received your request!
-                    <a href="#">Track your status here</a>
-                </p>
+				<p class="status-text">
+					✨ We’ve received your request!
+					<a href="#">Track your status here</a>
+				</p>
 
-                <div class="trust-box">🔒 Your details are safe and reviewed manually.</div>
-                <div class="warning-box">⚠️ Please ensure all information is accurate.</div>
+				<div class="trust-box">🔒 Your details are safe and reviewed manually.</div>
+				<div class="warning-box">⚠️ Please ensure all information is accurate.</div>
 
-            </form>
-        </div>
-    </section>
+			</form>
+		</div>
+	</section>
 
-    <!-- ================= POPUP ================= -->
-    <div class="popup-overlay" id="successPopup">
-        <div class="popup-box success">
-            <i class="fa-solid fa-circle-check"></i>
-            <h4>Details Sent!</h4>
-            <p>Your package has been sent for admin approval.</p>
-            <button onclick="closePopup()">OK</button>
-        </div>
-    </div>
+	<!-- ================= POPUP ================= -->
+	<div class="popup-overlay" id="successPopup">
+		<div class="popup-box success">
+			<i class="fa-solid fa-circle-check"></i>
+			<h4>Details Sent!</h4>
+			<p>Your package has been sent for admin approval.</p>
+			<button onclick="closePopup()">OK</button>
+		</div>
+	</div>
 
-    <script>
-        /* HERO SLIDER */
-        const slides = document.querySelectorAll('.slides');
-        let index = 0;
+	<script>
+				/* HERO SLIDER */
+		const slides = document.querySelectorAll('.slides');
+		let index = 0;
+		setInterval(() => {
+			slides[index].classList.remove('active');
+			index = (index + 1) % slides.length;
+			slides[index].classList.add('active');
+		}, 2000);
 
-        setInterval(() => {
-            slides[index].classList.remove('active');
-            index = (index + 1) % slides.length;
-            slides[index].classList.add('active');
-        }, 2000);
+				/* FORM SUBMIT */
+		document.getElementById("hostForm").addEventListener("submit", function (e) {
+			e.preventDefault();
 
-        /* FORM SUBMIT */
-        document.getElementById("hostForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            document.getElementById("successPopup").style.display = "flex";
-            this.reset();
-        });
+			let formData = new FormData();
+			formData.append("HostAgencyName", this.querySelector('input[placeholder*="Agency"]').value);
+			formData.append("EmailAddress", this.querySelector('input[type="email"]').value);
+			formData.append("PhoneNumber", this.querySelector('input[type="tel"]').value);
+			formData.append("CityCountry", this.querySelector('input[placeholder*="City"]').value);
+			formData.append("PackageName", this.querySelector('input[placeholder="Package Name *"]').value);
+			formData.append("Destination", this.querySelector('input[placeholder="Destination *"]').value);
+			formData.append("PackageType", this.querySelector('select').value);
+			formData.append("Duration", this.querySelector('input[placeholder*="Duration"]').value);
+			formData.append("Price", this.querySelector('input[placeholder="Price *"]').value);
+			formData.append("Description", this.querySelector('textarea').value);
 
-        /* APPROVAL FLOW ANIMATION */
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("show");
-                } else {
-                    entry.target.classList.remove("show");
-                }
-            });
-        }, {
-            threshold: 0.3
-        });
+			fetch('/Home/SubmitPackage', {
+				method: 'POST',
+				body: formData
+			})
+			.then(res => res.json())
+			.then(data => {
+				if(data.success) {
+					document.getElementById("successPopup").style.display = "flex";
+					this.reset();
+				}
+			});
+		});
 
-        document.querySelectorAll(".step").forEach(step => observer.observe(step));
-            });
-        });
+		/* APPROVAL FLOW ANIMATION */
+		const observer = new IntersectionObserver(entries => {
+			entries.forEach(entry => {
+				const observer = new IntersectionObserver(entries => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							entry.target.classList.add("show");
+						} else {
+							entry.target.classList.remove("show");
+						}
+					});
+				}, {
+					threshold: 0.3
+				});
+				document.querySelectorAll(".step").forEach(step => observer.observe(step));
+			});
+		});
 
-        document.querySelectorAll(".step").forEach(step => observer.observe(step));
+		document.querySelectorAll(".step").forEach(step => observer.observe(step));
 
-        function closePopup() {
-            document.getElementById("successPopup").style.display = "none";
-        }
-    </script>
-
+		function closePopup() {
+			document.getElementById("successPopup").style.display = "none";
+		}
+	</script>
 </body>
 </html>
