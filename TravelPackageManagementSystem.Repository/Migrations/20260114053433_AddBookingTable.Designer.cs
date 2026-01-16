@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelPackageManagementSystem.Repository.Data;
 
@@ -11,9 +12,11 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260114053433_AddBookingTable")]
+    partial class AddBookingTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,14 +36,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ContactPhone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Guests")
                         .HasColumnType("int");
 
                     b.Property<int>("PackageId")
@@ -51,13 +47,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2");
-
-                    b.Property<DateTime>("TravelDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("BookingId");
 
                     b.HasKey("BookingId");
 
@@ -66,42 +55,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
-                });
-
-            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.HostContactDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CityCountry")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("HostAgencyName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HostContactDetails");
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Itinerary", b =>
@@ -164,52 +117,48 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PackageId"));
 
-                    b.Property<int>("ApprovalStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AvailabilityStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Destination")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Duration")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("HostId")
+                    b.Property<int>("Duration")
                         .HasColumnType("int");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsTrending")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PackageName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PackageType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("PackageId");
 
-                    b.HasIndex("HostId");
-
                     b.ToTable("TravelPackages");
+
+                    b.HasData(
+                        new
+                        {
+                            PackageId = 1,
+                            Destination = "France",
+                            Duration = 5,
+                            PackageName = "Paris Getaway",
+                            Price = 1200.00m,
+                            Status = 0
+                        },
+                        new
+                        {
+                            PackageId = 2,
+                            Destination = "Japan",
+                            Duration = 7,
+                            PackageName = "Tokyo Adventure",
+                            Price = 1500.00m,
+                            Status = 0
+                        });
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.User", b =>
@@ -285,17 +234,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Booking");
-                });
-
-            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.TravelPackage", b =>
-                {
-                    b.HasOne("TravelPackageManagementSystem.Repository.Models.HostContactDetail", "Host")
-                        .WithMany()
-                        .HasForeignKey("HostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Host");
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Booking", b =>

@@ -1,4 +1,7 @@
-﻿@{
+﻿@* 1. Define the data model expected from the backend *@
+@model IEnumerable<TravelPackageManagementSystem.Repository.Models.TravelPackage>
+
+@{
     ViewData["Title"] = "Meghalaya | Into the Clouds";
 }
 
@@ -38,19 +41,20 @@
             color: var(--accent-color);
         }
 
-    .status-msg {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 15px;
-        border-radius: 50px;
-        width: fit-content;
-        margin: 20px auto;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Adjusting card layout for dynamic generation */
+    .packages-section {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        padding: 20px;
     }
 
-    .active-msg {
-        color: var(--accent-color);
-        border-color: var(--accent-color);
+    /* Ensure dynamic images fit correctly */
+    .pkg-img {
+        height: 250px;
+        background-size: cover;
+        background-position: center;
     }
 </style>
 
@@ -61,39 +65,32 @@
     </div>
 
     <div class="packages-section">
-        <div class="pkg-card" onclick="location.href='/Home/MeghPack1'">
-            <div class="pkg-img" style="background-image: url('/lib/Image/meghalaya.jpg');"></div>
-            <div class="pkg-body">
-                <h3>Quick Escape</h3>
-                <p>3 Days • Shillong Peak</p>
-                <div class="pkg-price">₹9,999</div>
-                <button class="select-btn">Select Plan</button>
-            </div>
-        </div>
+        @* 2. The Dynamic Loop: This replaces your hardcoded cards *@
+        @foreach (var item in Model)
+        {
+            <div class="pkg-card @(item.IsTrending ? "highlight" : "")"
+                 onclick="location.href='@Url.Action("MeghPack3", "Home", new { id = item.PackageId })'">
 
-        <div class="pkg-card highlight" onclick="location.href='/Home/MeghPack2'">
-            <div class="pkg-img" style="background-image: url('/lib/Image/Waterfall.jpg');"></div>
-            <div class="pkg-body">
-                <span class="hot-tag">Trending</span>
-                <h3>The Classic</h3>
-                <p>5 Days • Root Bridges</p>
-                <div class="pkg-price">₹17,999</div>
-                <button class="select-btn">Select Plan</button>
-            </div>
-        </div>
+                @* DYNAMIC BACKGROUND IMAGE *@
+                <div class="pkg-img" style="background-image: url('@item.ImageUrl');"></div>
 
-        <div class="pkg-card" onclick="location.href='/Home/MeghPack3'">
-            <div class="pkg-img" style="background-image: url('/lib/Image/meghbg.jpg');"></div>
-            <div class="pkg-body">
-                <h3>Deep Explorer</h3>
-                <p>7 Days • Hidden Caves</p>
-                <div class="pkg-price">₹25,999</div>
-                <button class="select-btn">Select Plan</button>
+                <div class="pkg-body">
+                    @if (item.IsTrending)
+                    {
+                        <span class="hot-tag">Trending</span>
+                    }
+
+                    @* DYNAMIC CONTENT FROM DATABASE *@
+                    <h3>@item.PackageName</h3>
+                    <p>@item.Duration • @item.Location</p>
+                    <div class="pkg-price">₹@item.Price.ToString("N0")</div>
+
+                    @* DYNAMIC LINK *@
+                    <button class="select-btn">Select Plan</button>
+                </div>
             </div>
-        </div>
+        }
     </div>
-
-   
 
     <h2 class="gallery-title">Hidden <span>Gems</span> of the Northeast</h2>
 
@@ -105,33 +102,6 @@
             <div class="gem-item"><img src="/lib/Image/meg4.jpg"><span>Wei Sawdong Falls</span></div>
             <div class="gem-item"><img src="/lib/Image/meg5.jpg"><span>Laitlum Canyons</span></div>
             <div class="gem-item"><img src="/lib/Image/meg6.jpg"><span>Mawsmai Caves</span></div>
-            <div class="gem-item"><img src="/lib/Image/meg1.jpg"><span>Krang Suri Blue Falls</span></div>
-            <div class="gem-item"><img src="/lib/Image/meg2.jpg"><span>Double Decker Root Bridge</span></div>
         </div>
     </div>
 </div>
-
-
-<script>
-    function selectPkg(name) {
-        const msg = document.getElementById('selection-msg');
-        msg.innerHTML = `Ready to book <strong>${name}</strong>? Redirecting to payment...`;
-        msg.classList.add('active-msg');
-    }
-    function selectPkg(name) {
-         // Logic to redirect based on the package selected
-         switch (name) {
-        case 'Quick Escape':
-            window.location.href = '/Home/MeghPack1';
-            break;
-
-        case 'The Classic':
-            window.location.href = '/Home/MeghPack2';
-            break;
-
-        case 'Deep Explorer':
-            window.location.href = '/Home/MeghPack3';
-            break;
-         }
-    }
-</script>
