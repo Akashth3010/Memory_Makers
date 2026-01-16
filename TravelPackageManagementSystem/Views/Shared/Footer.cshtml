@@ -1,126 +1,197 @@
-@* No Layout, No <html>, No <body> tags needed here *@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Navy White Footer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<style>
-    footer {
-        /* Updated to match your 'Why Choose Us' section background */
-        background: #f5f7fa;
-        color: #666 !important; /* Softened the text color for better readability on light gray */
-        padding-top: 5rem;
-        padding-bottom: 2rem;
-        border-top: none;
-    }
-
-    .footer-title {
-        font-weight: 600;
-        color: #111 !important; /* Slightly softer than pure black */
-        margin-bottom: 1.25rem;
-    }
-
-    .footer-link {
-        color: black !important;
-        text-decoration: none;
-        display: inline-block;
-        margin-bottom: 0.5rem;
-        transition: 0.3s;
-    }
-
-        .footer-link:hover {
-            color: #ff7b54 !important;
+    <style>
+        footer {
+            background: #0b1d3a; /* deep navy background */
+            color: #fff;
+            padding-top: 4rem;
+            padding-bottom: 2rem;
+            border-top: 3px solid #1e3a68; /* darker navy accent */
+            font-size: 0.95rem;
         }
 
-    /* ? FIX 2: Rounded input and button for the Mailing List to avoid 'boxiness' */
-    .form-control {
-        border-radius: 50px;
-        padding-left: 1.5rem;
-        background: #ffffff; /* White background inside the box makes it look clean */
-        /* Added a clear border */
-        border: 1px solid #ced4da;
-        color: #333;
-        transition: border-color 0.3s, box-shadow 0.3s;
-    }
+            footer .footer-title {
+                font-weight: 700;
+                color: #fff;
+                margin-bottom: 1.25rem;
+                font-size: 1.1rem;
+                position: relative;
+            }
 
-        .form-control:focus {
-            border-color: #ff7b54;
-            box-shadow: 0 0 0 0.2rem rgba(255, 123, 84, 0.25);
-            outline: none;
+                footer .footer-title::after {
+                    content: "";
+                    display: block;
+                    width: 40px;
+                    height: 3px;
+                    background: #1e90ff; /* sky blue underline */
+                    margin-top: 0.5rem;
+                    border-radius: 2px;
+                }
+
+            footer .footer-link {
+                color: #fff; /* white text */
+                text-decoration: none;
+                display: inline-block;
+                margin-bottom: 0.5rem;
+                transition: color 0.3s, transform 0.3s, box-shadow 0.3s;
+                padding: 2px 6px;
+                border-radius: 4px;
+            }
+
+                footer .footer-link:hover {
+                    color: #1e90ff; /* faint sky blue hover */
+                    transform: translateX(4px);
+                    box-shadow: 0 0 8px rgba(255,255,255,0.8); /* white glow */
+                }
+
+            footer .form-control {
+                border-radius: 50px;
+                padding-left: 1.25rem;
+                background: #fff;
+                border: 1px solid #ced4da;
+                color: #111;
+                transition: border-color 0.3s, box-shadow 0.3s;
+                flex: 1;
+                height: 40px;
+            }
+
+                footer .form-control:focus {
+                    border-color: #1e90ff;
+                    box-shadow: 0 0 8px rgba(30,144,255,0.4);
+                    outline: none;
+                }
+
+            footer .btn-glow {
+                background: linear-gradient(135deg, #1e3a68, #1e90ff);
+                border: none;
+                padding: 0.6rem 1.6rem;
+                border-radius: 50px;
+                font-weight: 600;
+                color: #fff;
+                transition: transform 0.25s, box-shadow 0.25s;
+                cursor: pointer;
+                height: 40px;
+            }
+
+                footer .btn-glow:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 0 12px rgba(255,255,255,0.6); /* white glow */
+                }
+
+            footer .social a {
+                background: #1e3a68;
+                color: #fff;
+                margin-right: 0.6rem;
+                font-size: 1.1rem;
+                width: 36px;
+                height: 36px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+            }
+
+                footer .social a:hover {
+                    background: #1e90ff;
+                    transform: scale(1.08);
+                    box-shadow: 0 0 10px rgba(255,255,255,0.7);
+                }
+
+            footer .payments i {
+                font-size: 1.5rem;
+                margin-right: 0.75rem;
+                color: #fff;
+                transition: color 0.25s, transform 0.25s;
+            }
+
+                footer .payments i:hover {
+                    color: #1e90ff;
+                    transform: translateY(-2px);
+                }
+
+            footer .footer-bottom {
+                border-top: 1px solid rgba(255,255,255,0.2);
+                margin-top: 2rem;
+                padding-top: 1rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+
+        @@media (max-width: 768px) {
+            footer .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
         }
+    </style>
+</head>
+<body>
 
-    .btn-glow {
-        background: linear-gradient(135deg, #ff7b54, #ffd56b);
-        border: none;
-        padding: 0.5rem 1.5rem;
-        border-radius: 50px;
-        font-weight: 600;
-        color: #111;
-    }
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row" style="display:flex; flex-wrap:wrap; gap:2rem;">
+                <!-- Help -->
+                <div class="col-md-3" style="flex:1; min-width:200px;">
+                    <div class="footer-title">Need Help?</div>
+                    <p>Call Us: +91 95125 35115</p>
+                    <p>Siruseri, Chennai</p>
+                    <div class="social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
 
-    .social a {
-        color: #fff;
-        margin-right: 1rem;
-        font-size: 1.2rem;
-        transition: 0.3s;
-    }
+                <!-- Company -->
+                <div class="col-md-2" style="flex:1; min-width:150px;">
+                    <div class="footer-title">Company</div>
+                    <a class="footer-link" href="@Url.Action("AboutUs", "Home")">About us</a><br />
 
-        .social a:hover {
-            color: #ff7b54;
-        }
+                    <a class="footer-link" href="#">Careers</a><br />
+                    <a class="footer-link" href="#">Privacy Statement</a>
+                </div>
 
-    .payments i {
-        font-size: 1.5rem;
-        margin-right: 0.75rem;
-        color: black;
-    }
-</style>
+                <!-- Support -->
+                <div class="col-md-2" style="flex:1; min-width:150px;">
+                    <div class="footer-title">Support</div>
+                    <a class="footer-link" href="#">Account</a><br />
+                    <a class="footer-link" href="#">Contact</a><br />
+                    <a class="footer-link" href="#">Affiliate Program</a>
+                </div>
 
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="footer-title">Need Help?</div>
-                <p>Call Us: +1 (234) 567-8901</p>
-                <p>12345 NE 51st Ave, Miami, FL 12345</p>
-                <div class="social">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-x-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <!-- Mailing List -->
+                <div class="col-md-5" style="flex:2; min-width:250px;">
+                    <div class="footer-title">Mailing List</div>
+                    <p style="color:#ddd;">Sign up to get latest updates and offers.</p>
+                    <form method="post" style="display:flex; gap:0.5rem;">
+                        <input type="email" class="form-control" placeholder="Enter your email" />
+                        <button type="submit" class="btn-glow">Subscribe</button>
+                    </form>
                 </div>
             </div>
 
-            <div class="col-md-2">
-                <div class="footer-title">Company</div>
-                <a class="footer-link" href="#">About us</a><br />
-                <a class="footer-link" href="#">Careers</a><br />
-                <a class="footer-link" href="#">Privacy Statement</a>
-            </div>
-
-            <div class="col-md-2">
-                <div class="footer-title">Support</div>
-                <a class="footer-link" href="#">Account</a><br />
-                <a class="footer-link" href="#">Contact</a><br />
-                <a class="footer-link" href="#">Affiliate Program</a>
-            </div>
-
-            <div class="col-md-5">
-                <div class="footer-title">Mailing List</div>
-                <p>Sign up to get latest updates and offers.</p>
-                <form method="post" class="d-flex gap-2">
-                    <input type="email" class="form-control" placeholder="Enter your email" />
-                    <button type="submit" class="btn btn-glow">Subscribe</button>
-                </form>
+            <!-- Bottom -->
+            <div class="footer-bottom">
+                <div class="payments">
+                    <i class="fab fa-cc-discover"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-cc-visa"></i>
+                </div>
+                <small>&copy; 2026 Travel Co. All rights reserved.</small>
             </div>
         </div>
+    </footer>
 
-        @* This line is internal to the footer and helps separate the copyright section *@
-        @* <hr class="mt-5 mb-4" style="border-color: rgba(255,255,255,0.05)"> *@
-
-        @* <div class="d-flex justify-content-between align-items-center">
-            <div class="payments">
-                <i class="fab fa-cc-discover"></i>
-                <i class="fab fa-cc-mastercard"></i>
-                <i class="fab fa-cc-paypal"></i>
-                <i class="fab fa-cc-visa"></i>
-            </div>
-            <small>&copy; @DateTime.Now.Year Travel Co. All rights reserved.</small> 
-        </div> *@
-    </div>
-</footer>
+</body>
+</html>

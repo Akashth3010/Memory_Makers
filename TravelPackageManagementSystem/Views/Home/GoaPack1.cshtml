@@ -92,7 +92,9 @@
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
                     <form id="bookingForm">
-                        <label>Travel Date</label><input type="date" required />
+                        <label for="travelDate">Travel Date</label>
+                        <input type="date" id="travelDate" name="travelDate" required />
+
                         <label>Guests</label>
                         <select id="guests">
                             <option value="1">1 person</option>
@@ -135,6 +137,16 @@
                 document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
             });
         })();
+                document.addEventListener("DOMContentLoaded", function () {
+            // ... your gallery & itinerary logic ...
+
+            // Get today's date in YYYY-MM-DD format
+            const today = new Date().toISOString().split('T')[0];
+
+            // Set the 'min' attribute on the input so past dates are disabled
+            document.getElementById('travelDate').setAttribute('min', today);
+        });
+
     </script>
 </body>
 </html>

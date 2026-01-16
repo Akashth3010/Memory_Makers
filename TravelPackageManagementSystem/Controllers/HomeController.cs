@@ -237,6 +237,12 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }
+        public IActionResult AboutUs()
+        {
+            return View("~/Views/Shared/aboutus.cshtml");
+        }
     }
+    
+
     }
 

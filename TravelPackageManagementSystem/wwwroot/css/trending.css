@@ -119,7 +119,7 @@ body {
     transition: .22s;
 }
 
-    .card:hover {
+/* .card:hover {
         transform: translateY(-2px) scale(1.02);
         border-color: rgba(30,144,255,.35);
         box-shadow: 0 14px 28px rgba(0,0,0,.18), 0 0 0 2px rgba(30,144,255,.18), 0 0 14px rgba(30,144,255,.28);
@@ -128,7 +128,7 @@ body {
 .card-media {
     position: relative;
     height: 170px;
-}
+}*/
 
     .card-media img {
         width: 100%;
@@ -294,3 +294,78 @@ body {
         --size: 0.9rem;
     }
 }
+/*trial-erro*/
+/* Grid layout: 4 cards per row */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+/* Card base style */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+    /* Hover effect: zoom + hot pink border + baby pink background */
+    .card:hover {
+        transform: scale(1.05); /* zoom in */
+        box-shadow: 0 0 15px rgba(255, 105, 180, 0.6); /* hot pink glow */
+        border-color: #ff69b4; /* hot pink border */
+        background-color: #ffdde9; /* baby pink background */
+    }
+
+/* Card media (image) */
+.card-media img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+/* Slight zoom on image too */
+.card:hover .card-media img {
+    transform: scale(1.08);
+}
+
+/* Card body */
+.card-body {
+    padding: 15px;
+    transition: color 0.3s ease;
+}
+
+/* Text color shift on hover */
+.card:hover .card-body {
+    color: #333;
+}
+
+/* Title */
+.card-title {
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+/* Price styling */
+.price strong {
+    color: #ff69b4; /* hot pink accent */
+}
+
+/* Responsive tweaks */
+@media (max-width: 992px) {
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
