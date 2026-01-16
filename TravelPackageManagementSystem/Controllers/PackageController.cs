@@ -1,29 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TravelPackageManagementSystem.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using TravelPackageManagementSystem.Repository.Data;
 
 public class PackageController : Controller
 {
-    private readonly IPackageService _packageService;
+    private readonly AppDbContext _context;
 
-    // The constructor "injects" the service so this controller can fetch data
-    public PackageController(IPackageService packageService)
-    {
-        _packageService = packageService;
-    }
+    public PackageController(AppDbContext context) => _context = context;
 
-    // This handles Page 2: Showing the packages for a destination
-    public async Task<IActionResult> List(string destination = "Meghalaya")
+    // 1. GET ALL PACKAGES (Screenshot 1: The Listing Page)
+    public async Task<IActionResult> Index(string destination = "Meghalaya")
     {
-        var packages = await _packageService.GetPackagesByDestinationAsync(destination);
+        var packages = await _context.TravelPackages
+            .Where(p => p.Destination == destination)
+            .ToListAsync();
         return View(packages);
     }
 
-    // This handles Page 3: Showing details of one package
+    // 2. GET PACKAGE DETAILS + ITINERARY (Screenshot 2: Detail Page)
     public async Task<IActionResult> Details(int id)
     {
-        var package = await _packageService.GetPackageByIdAsync(id);
-        if (package == null) return NotFound();
+        // "Include" fetches the Itinerary table data linked to this Package
+        var package = await _context.TravelPackages
+            .Include(p => p.Itineraries)
+            .FirstOrDefaultAsync(p => p.PackageId == id);
 
+        if (package == null) return NotFound();
         return View(package);
     }
 }
