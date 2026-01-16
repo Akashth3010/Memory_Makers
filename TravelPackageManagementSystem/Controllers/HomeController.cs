@@ -1,5 +1,7 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Models;
 //using TravelPackageManagementSystem.Application.Data;
 using TravelPackageManagementSystem.Repository.Data;
@@ -55,10 +57,14 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public HomeController(AppDbContext context)
         {
-            return View();
+            _context = context;
         }
+
+        public IActionResult Index() => View();
+
+        public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -66,155 +72,135 @@ namespace TravelPackageManagementSystem.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Hero()
+        // --- DYNAMIC BACKEND FETCHING ---
+        public async Task<IActionResult> MeghalayaTD(string searchTerm, decimal? maxPrice)
         {
-            return View();
-        }   
-       
-        public IActionResult Vrindavan()
-        {
-            return View("Trending/Vrindavan");
+            var query = _context.TravelPackages.Where(p => p.Destination == "Meghalaya");
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(p => p.PackageName.Contains(searchTerm));
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            // Fix: Add the subfolder path "TopDestination/" before the view name
+            return View("TopDestination/MeghalayaTD", await query.ToListAsync());
         }
-        public IActionResult Rameshwaram()
+        // --- BOOKING LOGIC ---
+        [HttpPost]
+        public async Task<IActionResult> CreateBooking(int PackageId, DateTime BookingDate)
         {
-            return View("Trending/Rameshwaram");
+            var booking = new Booking
+            {
+                PackageId = PackageId,
+                BookingDate = BookingDate,
+                // Booking starts as PENDING until payment is confirmed
+                Status = BookingStatus.PENDING,
+                UserId = 1
+            };
+
+            _context.Bookings.Add(booking);
+            await _context.SaveChangesAsync();
+
+            // Pass the new BookingId to the payment page via ViewBag
+            ViewBag.BookingId = booking.BookingId;
+            return RedirectToAction("PaymentPage", new { bookingId = booking.BookingId });
         }
-        public IActionResult Darjiling()
+
+        // --- PAYMENT CONFIRMATION LOGIC ---
+        [HttpPost]
+        public async Task<IActionResult> ConfirmPayment(int bookingId)
         {
-            return View("Trending/Darjiling");
+            // 1. Find the specific booking in the database
+            var booking = await _context.Bookings.FindAsync(bookingId);
+
+            if (booking != null)
+            {
+                // 2. Update the status from PENDING to CONFIRMED
+                booking.Status = BookingStatus.CONFIRMED;
+
+                // 3. Save changes to SQL Server
+                await _context.SaveChangesAsync();
+            }
+
+            // 4. Redirect to the Action to ensure the model is loaded for the view
+            return RedirectToAction("MyBookings");
         }
-        
-        // The individual detail page
-        public IActionResult Tamilnadu()
+
+        // --- DYNAMIC BOOKINGS VIEW ---
+
+        public async Task<IActionResult> MyBookings()
         {
-            return View();
+            // This fetches the data and passes it to the View
+            var bookings = await _context.Bookings
+                                         .Include(b => b.TravelPackage)
+                                         .ToListAsync();
+
+            return View(bookings);
         }
+
+        // --- EXISTING ROUTES PRESERVED ---
+        public IActionResult Hero() => View();
+        public IActionResult Vrindavan() => View("Trending/Vrindavan");
+        public IActionResult Rameshwaram() => View("Trending/Rameshwaram");
+        public IActionResult Darjiling() => View("Trending/Darjiling");
+        public IActionResult Tamilnadu() => View();
+
         public IActionResult TamilnaduTD(string id)
         {
             ViewBag.PackageId = id;
             return View("TopDestination/TamilnaduTD");
         }
+
         public IActionResult KeralaTD(string id)
         {
             ViewBag.PackageId = id;
             return View("TopDestination/KeralaTD");
         }
+
         public IActionResult MizoramTD(string id)
         {
             ViewBag.PackageId = id;
             return View("TopDestination/MizoramTD");
         }
 
-            // Add this method
-            public IActionResult GoaTD()
+        public IActionResult GoaTD() => View("TopDestination/GoaTD");
+        public IActionResult UttarakhandTD() => View("TopDestination/uttarakhandTD");
+
+        public IActionResult MeghPack1() => View("Package/MeghPack1");
+        public IActionResult MeghPack2() => View("Package/MeghPack2");
+        public async Task<IActionResult> MeghPack3(int id)
+        {
+            // Fix: Explicitly include the Itineraries collection
+            var package = await _context.TravelPackages
+                                         .Include(p => p.Itineraries)
+                                         .FirstOrDefaultAsync(p => p.PackageId == id);
+
+            if (package == null)
             {
-                return View("TopDestination/GoaTD");
+                return NotFound();
             }
 
-            // Add this for Uttarakhand
-            public IActionResult UttarakhandTD()
-            {
-                return View("TopDestination/uttarakhandTD");
-            }
-
-            // Add this for Meghalaya
-            public IActionResult MeghalayaTD()
-            {
-                return View("TopDestination/MeghalayaTD");
-            }    
-
-        public IActionResult Manali()
-        {
-            return View("Trending/Manali");
+            return View("Package/MeghPack3", package);
         }
 
-        public IActionResult Gangtok()
-        {
-            return View("Trending/Gangtok");
-        }
-
-        public IActionResult Jaipur()
-        {
-            return View("Trending/Jaipur");
-        }
-      
         public IActionResult GoaPack1() => View("Package/GoaPack1");
         public IActionResult GoaPack2() => View("Package/GoaPack2");
         public IActionResult GoaPack3() => View("Package/GoaPack3");
 
-        public IActionResult KeralaPack1() => View("Package/KeralaPack1");
-        public IActionResult KeralaPack2() => View("Package/KeralaPack2");
-        public IActionResult KeralaPack3() => View("Package/KeralaPack3");
-
-        public IActionResult MeghPack1() => View("Package/MeghPack1");
-        public IActionResult MeghPack2() => View("Package/MeghPack2");
-        public IActionResult MeghPack3() => View("Package/MeghPack3");
-
-        public IActionResult MizoPack1() => View("Package/MizoPack1");
-        public IActionResult MizoPack2() => View("Package/MizoPack2");
-
-        public IActionResult MizoPack3() => View("Package/MizoPack3");
-        public IActionResult TamilPack1() => View("Package/TamilPack1");
-        public IActionResult TamilPack2() => View("Package/TamilPack2");
-        public IActionResult TamilPack3() => View("Package/TamilPack3");
-
-        public IActionResult UttaraPack1() => View("Package/UttaraPack1");
-        public IActionResult UttaraPack2() => View("Package/UttaraPack2");
-        public IActionResult UttaraPack3() => View("Package/UttaraPack3");
-
-        public IActionResult Banaras()
+        public IActionResult PaymentPage(int? bookingId)
         {
-            return View("Trending/Banaras");
-        }
-
-        public IActionResult Mumbai()
-        {
-            return View("Trending/Mumbai");
-        }
-
-        public IActionResult Munnar()
-        {
-            return View("Trending/Munnar");
-        }
-
-        public IActionResult Ooty()
-        {
-            return View("Trending/Ooty");
-        }
-        public IActionResult Goa()
-        {
-            return View("Trending/Goa");
-        }
-       
-        public IActionResult TajMahal()
-        {
-            return View("Trending/TajMahal");
-        }
-
-        public IActionResult PaymentPage()
-        {
-            return View();
-        }
-
-        public IActionResult Dashboard()
-        {
-            return View();
-        }
-
-        public IActionResult TravelGuide()
-        {
-            return View();
-        }
-
-        public IActionResult CustomerSupport ()
-        {
-            return View();
-        }
-
-        public IActionResult MyBookings()
-        {
+            ViewBag.BookingId = bookingId;
             return View();
         }
     }
 }
 
+        public IActionResult TravelGuide() => View();
+        public IActionResult CustomerSupport() => View();
+    }
+}

@@ -31,15 +31,24 @@
                 </div>
             </div>
 
-            <div class="card" onclick="location.href='@Url.Action("MeghalayaTD", "Home")'" style="cursor:pointer;">
+          @*   <div class="card" onclick="location.href='@Url.Action("MeghalayaTD", "Home")'" style="cursor:pointer;">
                 <img src="/lib/Image/meghalaya.jpg" alt="Meghalaya">
                 <div class="overlay">
                     <h3>Meghalaya</h3>
                     <p>18 Hotels</p>
                     <p>29 Holidays</p>
                 </div>
-            </div>
-
+            </div> *@
+            <a href="@Url.Action("MeghalayaTD", "Home")" class="card-link">
+                <div class="card">
+                    <img src="/lib/Image/meghalaya.jpg" alt="Scenic view of Meghalaya">
+                    <div class="overlay">
+                        <h3>Meghalaya</h3>
+                        <p>18 Hotels</p>
+                        <p>29 Holidays</p>
+                    </div>
+                </div>
+            </a>
             <div class="card" onclick="location.href='@Url.Action("GoaTD", "Home")'" style="cursor:pointer;">
                 <img src="/lib/Image/goa.jpg" alt="Goa">
                 <div class="overlay">
