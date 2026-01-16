@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TravelPackageManagementSystem.Repository.Interface;
-using TravelPackageManagementSystem.Repository.Implementation;
+using TravelPackageManagementSystem.Repository.Implementations;
 using TravelPackageManagementSystem.Services.Interfaces;
 using TravelPackageManagementSystem.Services.Implementations;
 
