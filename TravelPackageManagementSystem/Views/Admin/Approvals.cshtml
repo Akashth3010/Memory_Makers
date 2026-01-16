@@ -57,78 +57,14 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    // Dummy data (later DB se aayega)
-    let approvals = [
-        {
-            id: 1,
-            status: "pending",
-            host: "ABC Travels",
-            email: "abc@gmail.com",
-            phone: "9876543210",
-            city: "Delhi",
-            package: "Goa Delight",
-            destination: "Goa",
-            type: "Family",
-            duration: "5 Days",
-            price: "14999",
-            desc: "Enjoy beaches, cruises and nightlife in Goa."
-        }
-    ];
-
     let currentStatus = "pending";
     let selectedId = null;
 
-    function renderList() {
-        $("#approvalList").html("");
-
-        let filtered = approvals.filter(a => a.status === currentStatus);
-
-        if (filtered.length === 0) {
-            $("#approvalList").html(`<p class="empty-text">No ${currentStatus} requests</p>`);
-            return;
-        }
-
-        filtered.forEach(a => {
-            $("#approvalList").append(`
-                <div class="approval-card glow-card">
-                    <h5>${a.package}</h5>
-                    <p><b>Host:</b> ${a.host}</p>
-                    <p><b>Type:</b> ${a.type}</p>
-                    <button onclick="viewDetails(${a.id})">View Details</button>
-                </div>
-            `);
-        });
-    }
-
-    function viewDetails(id) {
-        let a = approvals.find(x => x.id === id);
-        selectedId = id;
-
-        $("#dHost").text(a.host);
-        $("#dEmail").text(a.email);
-        $("#dPhone").text(a.phone);
-        $("#dCity").text(a.city);
-        $("#dPackage").text(a.package);
-        $("#dDestination").text(a.destination);
-        $("#dType").text(a.type);
-        $("#dDuration").text(a.duration);
-        $("#dPrice").text(a.price);
-        $("#dDesc").text(a.desc);
-
-        $("#approvalDetails").fadeIn();
-    }
-
-    function updateStatus(newStatus) {
-        let a = approvals.find(x => x.id === selectedId);
-        a.status = newStatus;
-        $("#approvalDetails").fadeOut();
-        renderList();
-    }
-
     $(document).ready(function () {
-
+        // Load the initial list from the database
         renderList();
 
+        // Handle Tab switching (Pending, Approved, Rejected)
         $(".tab").click(function () {
             $(".tab").removeClass("active");
             $(this).addClass("active");
@@ -136,8 +72,65 @@
             renderList();
         });
 
-        $(".btn-approve").click(() => updateStatus("approved"));
-        $(".btn-reject").click(() => updateStatus("rejected"));
+        // Set up action buttons
+        $(".btn-approve").click(() => updateStatus("Approved"));
+        $(".btn-reject").click(() => updateStatus("Rejected"));
         $(".btn-close").click(() => $("#approvalDetails").fadeOut());
     });
+
+    // FETCH LIVE DATA FROM THE CONTROLLER
+    function renderList() {
+        $("#approvalList").html("<p class='loading-text'>Fetching requests from database...</p>");
+
+        // Calls the GetApprovals method in AdminController.cs
+        $.get(`/Admin/GetApprovals?status=${currentStatus}`, function (data) {
+            $("#approvalList").html("");
+
+            if (data.length === 0) {
+                $("#approvalList").html(`<p class="empty-text">No ${currentStatus} requests found.</p>`);
+                return;
+            }
+
+            data.forEach(a => {
+                $("#approvalList").append(`
+                    <div class="approval-card glow-card">
+                        <h5>${a.package}</h5>
+                        <p><b>Host:</b> ${a.host}</p>
+                        <p><b>Type:</b> ${a.type}</p>
+                        <button onclick='viewDetails(${JSON.stringify(a)})'>View Details</button>
+                    </div>
+                `);
+            });
+        });
+    }
+
+    function viewDetails(data) {
+        selectedId = data.id;
+
+        // Populate the details panel with real database values
+        $("#dHost").text(data.host);
+        $("#dEmail").text(data.email);
+        $("#dPhone").text(data.phone);
+        $("#dCity").text(data.city);
+        $("#dPackage").text(data.package);
+        $("#dDestination").text(data.destination);
+        $("#dType").text(data.type);
+        $("#dDuration").text(data.duration);
+        $("#dPrice").text(data.price);
+        $("#dDesc").text(data.desc);
+
+        $("#approvalDetails").fadeIn();
+    }
+
+    // UPDATE DATABASE STATUS (Accept/Reject)
+    function updateStatus(newStatus) {
+        $.post('/Admin/UpdateStatus', { id: selectedId, status: newStatus }, function (res) {
+            if (res.success) {
+                $("#approvalDetails").fadeOut();
+                renderList(); // Refresh list to move item to the new tab
+            } else {
+                alert("Error updating status: " + res.message);
+            }
+        });
+    }
 </script>

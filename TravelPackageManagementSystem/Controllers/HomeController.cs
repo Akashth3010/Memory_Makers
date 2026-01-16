@@ -3,12 +3,59 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Models;
+//using TravelPackageManagementSystem.Application.Data;
+using TravelPackageManagementSystem.Repository.Data;
+using TravelPackageManagementSystem.Application.Models;
 
 namespace TravelPackageManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
         private readonly AppDbContext _context;
+        public HomeController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public IActionResult Host() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitPackage(HostSubmissionViewModel model)
+        {
+            // 1.Create Host Detail
+            var host = new HostContactDetail
+            {
+                HostAgencyName = model.HostAgencyName,
+                EmailAddress = model.EmailAddress,
+                PhoneNumber = model.PhoneNumber,
+                CityCountry = model.CityCountry,
+            };
+            _context.HostContactDetails.Add(host);
+            await _context.SaveChangesAsync();
+
+            //2.Create Package Detail linked to Host
+            var package = new TravelPackage
+            {
+                PackageName = model.PackageName,
+                Destination = model.Destination,
+                PackageType = model.PackageType,
+                Duration = model.Duration,
+                Price = model.Price,
+                Description = model.Description,
+                HostId = host.Id,
+                AvailabilityStatus = PackageStatus.AVAILABLE,
+                ApprovalStatus = ApprovalStatus.Pending
+            };
+
+            _context.TravelPackages.Add(package);
+            await _context.SaveChangesAsync();
+
+            return Json(new { Success = true });
+        }
+        public IActionResult Index()
+        {
+            return View();
+        }
 
         public HomeController(AppDbContext context)
         {
@@ -150,6 +197,8 @@ namespace TravelPackageManagementSystem.Controllers
             ViewBag.BookingId = bookingId;
             return View();
         }
+    }
+}
 
         public IActionResult TravelGuide() => View();
         public IActionResult CustomerSupport() => View();

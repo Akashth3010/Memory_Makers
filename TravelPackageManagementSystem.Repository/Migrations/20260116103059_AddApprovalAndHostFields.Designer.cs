@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelPackageManagementSystem.Repository.Data;
 
@@ -11,9 +12,11 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260116103059_AddApprovalAndHostFields")]
+    partial class AddApprovalAndHostFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,8 +52,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2");
 
@@ -59,11 +60,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     b.HasKey("BookingId");
 
-                    b.HasKey("BookingId");
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("PackageId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -167,9 +166,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<int>("ApprovalStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("AvailabilityStatus")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -204,6 +200,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("PackageId");
 
@@ -248,15 +247,15 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Booking", b =>
                 {
-                    b.HasOne("TravelPackageManagementSystem.Repository.Models.TravelPackage", "TravelPackage")
-                        .WithMany()
-                        .HasForeignKey("PackageId")
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.User", "User")
+                        .WithMany("Bookings")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TravelPackageManagementSystem.Repository.Models.User", "User")
-                        .WithMany("Bookings")
-                        .HasForeignKey("UserId")
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.TravelPackage", "TravelPackage")
+                        .WithMany()
+                        .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -20,6 +20,7 @@ builder.Services.AddSession(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
 
@@ -33,6 +34,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // 2. Register Repositories
 builder.Services.AddScoped<IPackageRepository, PackageRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthModelService, AuthModelService>();
+
+builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
 // 3. Register Services
 builder.Services.AddScoped<IPackageService, PackageService>();
