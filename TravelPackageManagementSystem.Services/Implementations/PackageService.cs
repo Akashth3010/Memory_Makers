@@ -1,22 +1,42 @@
-﻿using TravelPackageManagementSystem.Repository.Interfaces;
-using TravelPackageManagementSystem.Repository.Models;
+﻿using TravelPackageManagementSystem.Repository.Models;
+using TravelPackageManagementSystem.Repository.Interfaces;
 using TravelPackageManagementSystem.Services.Interfaces;
 
 namespace TravelPackageManagementSystem.Services.Implementations
 {
     public class PackageService : IPackageService
     {
-        private readonly IPackageRepository _packageRepo;
+        private readonly IPackageRepository _packageRepository;
 
-        public PackageService(IPackageRepository packageRepo)
+        public PackageService(IPackageRepository packageRepository)
         {
-            _packageRepo = packageRepo;
+            _packageRepository = packageRepository;
         }
 
-        public async Task<IEnumerable<TravelPackage>> GetPackagesForFrontendAsync()
+        public async Task<IEnumerable<TravelPackage>> GetPackages()
         {
-            // Here you can filter or sort the packages before sending to UI
-            return await _packageRepo.GetAllPackagesAsync();
+            // Ensure this matches the method name in IPackageRepository
+            return await _packageRepository.GetAllPackages();
+        }
+
+        public async Task<TravelPackage?> GetPackage(int id)
+        {
+            return await _packageRepository.GetPackageById(id);
+        }
+
+        public async Task CreatePackage(TravelPackage package)
+        {
+            await _packageRepository.AddPackage(package);
+        }
+
+        public async Task UpdatePackage(TravelPackage package)
+        {
+            await _packageRepository.UpdatePackage(package);
+        }
+
+        public async Task DeletePackage(int id)
+        {
+            await _packageRepository.DeletePackage(id);
         }
     }
 }

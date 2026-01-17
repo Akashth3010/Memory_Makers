@@ -78,11 +78,12 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="small fw-semibold">@booking.BookingDate.ToString("MMM dd, yyyy")</div>
-                                        <small class="text-muted">@(booking.TravelPackage?.Duration ?? "N/A")</small>
+                                        <div class="small fw-semibold">@booking.TravelDate.ToString("dd-MMM-yyyy")</div>
+                                        <small class="text-muted">Booked on: @booking.BookingDate.ToShortDateString()</small>
                                     </td>
                                     <td>
-                                        <div class="fw-bold text-primary">₹@(booking.TravelPackage?.Price.ToString("N0") ?? "0")</div>
+                                        <div class="fw-bold text-primary">₹@booking.TotalAmount.ToString("N0")</div>
+                                        <small class="text-muted">(@booking.Guests Guests)</small>
                                     </td>
                                     <td>
                                         @{

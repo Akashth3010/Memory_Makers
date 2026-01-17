@@ -7,10 +7,10 @@ namespace TravelPackageManagementSystem.Repository.Interfaces
 {
     public interface IPackageRepository
     {
-        void AddPackage(TravelPackage package);
-        List<TravelPackage> GetAllPackages();
-        TravelPackage GetPackageById(int id);
-        void UpdatePackage(TravelPackage package);
-        void DeletePackage(int id);
+        Task<IEnumerable<TravelPackage>> GetAllPackages(); // Changed from List to Task<IEnumerable>
+        Task<TravelPackage?> GetPackageById(int id);      // Changed to Task<TravelPackage?>
+        Task AddPackage(TravelPackage package);           // Changed from void to Task
+        Task UpdatePackage(TravelPackage package);        // Changed from void to Task
+        Task DeletePackage(int id);                       // Changed from void to Task
     }
 }

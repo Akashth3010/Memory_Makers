@@ -7,10 +7,11 @@ namespace TravelPackageManagementSystem.Services.Interfaces
 {
     public interface IPackageService
     {
-        void CreatePackage(TravelPackage package);
-        List<TravelPackage> GetPackages();
-        TravelPackage GetPackage(int id);
-        void UpdatePackage(TravelPackage package);
-        void DeletePackage(int id);
+        // Change return types to Task or Task<T> to support async
+        Task<IEnumerable<TravelPackage>> GetPackages();
+        Task<TravelPackage?> GetPackage(int id);
+        Task CreatePackage(TravelPackage package);
+        Task UpdatePackage(TravelPackage package);
+        Task DeletePackage(int id);
     }
 }

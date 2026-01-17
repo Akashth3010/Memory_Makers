@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+//using TravelPackageManagementSystem.Data;
 using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Interfaces;
 using TravelPackageManagementSystem.Repository.Models;
@@ -14,18 +15,41 @@ namespace TravelPackageManagementSystem.Repository.Implementations
             _context = context;
         }
 
-        // Fetching all travel packages from the database
-        public async Task<IEnumerable<TravelPackage>> GetAllPackagesAsync()
+        public async Task<IEnumerable<TravelPackage>> GetAllPackages()
         {
             return await _context.TravelPackages.ToListAsync();
         }
 
-        // Fetching a single package by its ID (useful for Page 3 details)
-        public async Task<TravelPackage?> GetPackageByIdAsync(int id)
+        // Fix: Change 'Task<TravelPackage>' to 'Task<TravelPackage?>'
+        public async Task<TravelPackage?> GetPackageById(int id)
         {
-            return await _context.TravelPackages
-                .Include(p => p.Itineraries) // This includes the days/activities
-                .FirstOrDefaultAsync(p => p.Id == id);
+            // The compiler warned about a "Possible null reference return" here.
+            // This method correctly returns null if the ID isn't found in the DB.
+            return await _context.TravelPackages.FirstOrDefaultAsync(p => p.PackageId == id);
+        }
+
+        public async Task AddPackage(TravelPackage package)
+        {
+            _context.TravelPackages.Add(package);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePackage(TravelPackage package)
+        {
+            _context.TravelPackages.Update(package);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeletePackage(int id)
+        {
+            var package = await GetPackageById(id);
+
+            // Fix: Always check for null before using the object
+            if (package != null)
+            {
+                _context.TravelPackages.Remove(package);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

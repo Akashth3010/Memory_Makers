@@ -5,41 +5,26 @@ using System.ComponentModel.DataAnnotations.Schema;
 using TravelPackageManagementSystem.Repository.Models;
 
 namespace TravelPackageManagementSystem.Repository.Models
-
 {
-
     public enum BookingStatus
-
     {
-
         CONFIRMED,
-
         CANCELLED,
-
-        COMPLETED
-
+        COMPLETED,
+        AVAILABLE,
+        PENDING
     }
-
     public class Booking
-
     {
-
         [Key]
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
         public int BookingId { get; set; }
 
+        //[Required]
+        //public int CustomerId { get; set; }
+
         [Required]
-
-        public int CustomerId { get; set; }
-
-        [Required]
-
         public int PackageId { get; set; }
-
-
-        
 
         [Required]
 
@@ -67,8 +52,7 @@ namespace TravelPackageManagementSystem.Repository.Models
 
         [Required]
 
-        [Column(TypeName = "decimal(18,2")]
-
+        [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
 
         [Required]
@@ -76,15 +60,14 @@ namespace TravelPackageManagementSystem.Repository.Models
         public BookingStatus Status { get; set; } = BookingStatus.CONFIRMED;
 
         // Navigation properties
+        [Required]
+        public int UserId { get; set; } // Fix: Added this to resolve 'UserId' error
 
-        [ForeignKey("CustomerId")]
-
+        [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
         [ForeignKey("PackageId")]
-
         public virtual TravelPackage TravelPackage { get; set; }
-
         public virtual ICollection<Payment> Payments { get; set; }
 
     }

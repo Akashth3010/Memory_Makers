@@ -38,6 +38,7 @@ namespace TravelPackageManagementSystem.Controllers
             {
                 PackageName = model.PackageName,
                 Destination = model.Destination,
+                Location = model.Location,
                 PackageType = model.PackageType,
                 Duration = model.Duration,
                 Price = model.Price,
@@ -56,13 +57,6 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }
-
-        public HomeController(AppDbContext context)
-        {
-            _context = context;
-        }
-
-        public IActionResult Index() => View();
 
         public IActionResult Privacy() => View();
 
@@ -87,27 +81,40 @@ namespace TravelPackageManagementSystem.Controllers
                 query = query.Where(p => p.Price <= maxPrice.Value);
             }
 
-            // Fix: Add the subfolder path "TopDestination/" before the view name
             return View("TopDestination/MeghalayaTD", await query.ToListAsync());
         }
         // --- BOOKING LOGIC ---
         [HttpPost]
-        public async Task<IActionResult> CreateBooking(int PackageId, DateTime BookingDate)
+        public async Task<IActionResult> CreateBooking(int PackageId, DateTime TravelDate, int Guests, string ContactPhone)
         {
+            // 1. Fetch the actual package from DB to get the reliable Price
+            var package = await _context.TravelPackages.FindAsync(PackageId);
+            if (package == null) return NotFound();
+
+            // 2. GET ACTUAL USER ID: Assuming the user is authenticated, 
+            // we find them in the database by their Email/Username.
+            // For now, let's fetch the first user or the one matching the session.
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name)
+                       ?? await _context.Users.FirstOrDefaultAsync(); // Fallback for testing
+
+            // 3. SERVER-SIDE CALCULATION: Prevents the "0" amount error
+            decimal finalTotal = package.Price * Guests;
+
             var booking = new Booking
             {
                 PackageId = PackageId,
-                BookingDate = BookingDate,
-                // Booking starts as PENDING until payment is confirmed
-                Status = BookingStatus.PENDING,
-                UserId = 1
+                UserId = user.UserId, // USE DYNAMIC ID
+                BookingDate = DateTime.Now,
+                TravelDate = TravelDate,
+                Guests = Guests,
+                ContactPhone = ContactPhone,
+                TotalAmount = finalTotal, // Use the calculated variable
+                Status = BookingStatus.PENDING
             };
 
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
-            // Pass the new BookingId to the payment page via ViewBag
-            ViewBag.BookingId = booking.BookingId;
             return RedirectToAction("PaymentPage", new { bookingId = booking.BookingId });
         }
 
@@ -197,10 +204,5 @@ namespace TravelPackageManagementSystem.Controllers
             ViewBag.BookingId = bookingId;
             return View();
         }
-    }
-}
-
-        public IActionResult TravelGuide() => View();
-        public IActionResult CustomerSupport() => View();
     }
 }
