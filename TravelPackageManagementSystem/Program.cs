@@ -8,6 +8,7 @@ using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Interfaces;
 using TravelPackageManagementSystem.Repository.Models;
 using TravelPackageManagementSystem.Services.Implementations;
+using TravelPackageManagementSystem.Repository.Interface;
 //using TravelPackageManagementSystem.Services.Interfaces;
 //using TravelPackageManagementSystem.Application.Models;
 
