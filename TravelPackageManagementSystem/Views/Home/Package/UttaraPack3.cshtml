@@ -1,6 +1,9 @@
 ﻿@{
+
     ViewBag.Title = "Himalayan Grand Explorer";
+
     Layout = null;
+
 }
 <!DOCTYPE html>
 <html>
@@ -10,6 +13,7 @@
     <link rel="stylesheet" href="~/css/pack-details.css" />
 </head>
 <body>
+    <partial name="_Navbar" />
     <section class="hero" style="background-image: url('/lib/Image/uttar5.jpg');">
         <div class="hero-content">
             <h1>Himalayan Grand Explorer</h1>
@@ -93,61 +97,75 @@
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
                     <form id="bookingForm">
-                        <label for="travelDate">Travel Date</label>
-                        <input id="travelDate" type="date" required />                        <label>Guests</label>
+                        <label>Travel Date</label><input type="date" required />
+                        <label>Guests</label>
                         <select id="guests">
                             <option value="1">1 person</option>
                             <option value="2">2 persons</option>
                             <option value="3">3 persons</option>
                             <option value="4">4 persons</option>
                         </select>
-                        <label for="contactEmail">Contact Email</label>
-                        <input id="contactEmail" type="email" placeholder="you@example.com" required />
-
-                        <label for="phone">Phone</label>
-                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
+                        <label>Email</label><input type="email" required />
                         <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
                     </form>
                 </aside>
             </div>
         </div>
     </div>
-
+    <partial name="_Footer" />
     <script>
+
         (function () {
+
             const main = document.getElementById('mainImage');
+
             const thumbs = document.querySelectorAll('.thumb');
+
             const guests = document.getElementById('guests');
+
             const basePrice = 28999;
 
             thumbs.forEach(t => {
+
                 t.addEventListener('click', () => {
+
                     thumbs.forEach(x => x.classList.remove('active'));
+
                     t.classList.add('active');
+
                     main.style.backgroundImage = `url('${t.dataset.src}')`;
+
                 });
+
             });
 
             document.querySelectorAll('.day-header').forEach(h => {
+
                 h.addEventListener('click', () => {
+
                     const body = h.nextElementSibling;
+
                     const isOpen = body.style.display === 'block';
+
                     document.querySelectorAll('.day-body').forEach(db => db.style.display = 'none');
+
                     if (!isOpen) { body.style.display = 'block'; }
+
                 });
+
             });
 
             guests.addEventListener('change', () => {
-                const count = parseInt(guests.value);
-                document.getElementById('totalPayable').textContent = `₹${(basePrice * count).toLocaleString()}`;
-                document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
-            });
-        })();
-            // Get today's date in YYYY-MM-DD format
-        const today = new Date().toISOString().split('T')[0];
 
-        // Set the 'min' attribute so back dates are greyed out
-        document.getElementById('travelDate').setAttribute('min', today);
+                const count = parseInt(guests.value);
+
+                document.getElementById('totalPayable').textContent = `₹${(basePrice * count).toLocaleString()}`;
+
+                document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
+
+            });
+
+        })();
     </script>
 </body>
 </html>

@@ -1,6 +1,9 @@
 ﻿@{
+
     ViewBag.Title = "TamilPack1 - Madurai & Thanjavur";
+
     Layout = null;
+
 }
 
 <!DOCTYPE html>
@@ -11,6 +14,7 @@
     <link rel="stylesheet" href="/css/PackTD.css" />
 </head>
 <body>
+    <partial name="_Navbar" />
     <section class="hero">
         <img class="hero-img" src="/lib/Image/t1.jpg" alt="Madurai Temple" />
         <div class="hero-content">
@@ -93,58 +97,87 @@
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
                     <form id="bookingForm" method="post" action="/Home/PaymentPage">
-                        <label>Travel Date</label><input type="date" required />
+                        <label for="travelDate">Travel Date</label>
+                        <input type="date" id="travelDate" name="travelDate" required />
+
                         <label>Guests</label>
                         <select id="guests">
                             <option value="1">1 person</option>
                             <option value="2">2 persons</option>
-                            <option value="3">3 persons</option>
-                            <option value="4">4 persons</option>
                         </select>
-                        <label for="contactEmail">Contact Email</label>
-                        <input id="contactEmail" type="email" placeholder="you@example.com" required />
-
-                        <label for="phone">Phone</label>
-                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
+                        <label>Email</label><input type="email" required />
+                        <label>Phone</label><input type="tel" />
                         <button type="submit" class="btn btn-primary">Book Now</button>
                     </form>
                 </aside>
             </div>
         </div>
     </div>
-
+    <partial name="_Footer" />
     <script>
+
         document.addEventListener("DOMContentLoaded", function () {
+
             // 1. GALLERY LOGIC
+
             const mainImage = document.getElementById('mainImage');
+
             const thumbnails = document.querySelectorAll('.thumb');
 
             thumbnails.forEach(thumb => {
+
                 thumb.addEventListener('click', function() {
+
                     const newSrc = this.getAttribute('data-src');
+
                     mainImage.style.backgroundImage = `url('${newSrc}')`;
+
                     thumbnails.forEach(t => t.classList.remove('active'));
+
                     this.classList.add('active');
+
                 });
+
             });
 
             // 2. ITINERARY DROPDOWN LOGIC (FIX)
+
             const headers = document.querySelectorAll('.day-header');
+
             headers.forEach(header => {
+
                 header.addEventListener('click', function() {
+
                     const body = this.nextElementSibling;
+
                     const toggle = this.querySelector('.toggle');
 
                     if (body.style.display === "block") {
+
                         body.style.display = "none";
+
                         toggle.textContent = "+";
+
                     } else {
+
                         body.style.display = "block";
+
                         toggle.textContent = "-";
+
                     }
+
                 });
+
             });
+
         });
+
+                              // Get today's date in YYYY-MM-DD format
+
+         const today = new Date().toISOString().split('T')[0]; // Set the 'min' attribute so back dates are greyed out
+
+         document.getElementById('travelDate').setAttribute('min', today);
+
     </script>
 </body>
 </html>

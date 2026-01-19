@@ -204,5 +204,10 @@ namespace TravelPackageManagementSystem.Controllers
             ViewBag.BookingId = bookingId;
             return View();
         }
+
+        public IActionResult aboutus()
+        {
+            return View();
+        }
     }
 }

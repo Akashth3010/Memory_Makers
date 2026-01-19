@@ -1,15 +1,20 @@
 ﻿@{
+
     ViewBag.Title = "Goa | Sun, Sand & Sea";
+
 }
 
-<link rel="stylesheet" href="~/css/travel-style1.css" />
+<link rel="stylesheet" href="~/css/travel-style.css" />
 <style>
+
     :root {
         --accent-color: #f39c12; /* Sunset Orange */
+
         --bg-gradient: linear-gradient(135deg, #2c3e50 0%, #fd746c 100%);
     }
 
     /* Centering the titles and making them attractive */
+
     .hero-text, .gallery-title {
         text-align: center;
         margin-top: 50px;
@@ -44,8 +49,9 @@
     </div>
 
     <div class="packages-section">
-        <div class="pkg-card" onclick="location.href='/Home/GoaPack1'">
-            <div class="pkg-img" style="background-image: url('/lib/Image/goa9.jpg');"></div>
+        <div class="pkg-card" onclick="selectPkg('North Goa Party')">
+            <img class="pkg-img" src="~/lib/Image/goa9.jpg" alt="Goa Party" />
+
             <div class="pkg-body">
                 <h3>Party Starter</h3>
                 <p>3 Days • Baga & Anjuna</p>
@@ -54,8 +60,8 @@
             </div>
         </div>
 
-        <div class="pkg-card highlight" onclick="/Home/GoaPack2">
-            <div class="pkg-img" style="background-image: url('/lib/Image/goa1.jpg');"></div>
+        <div class="pkg-card highlight" onclick="selectPkg('Total Goa Experience')">
+            <img class="pkg-img" src="~/lib/Image/goa1.jpg" alt="Total Goa Experience" />
             <div class="pkg-body">
                 <span class="hot-tag">Best Seller</span>
                 <h3>Goa Classic</h3>
@@ -65,8 +71,8 @@
             </div>
         </div>
 
-        <div class="pkg-card" onclick="/Home/GoaPack3">
-            <div class="pkg-img" style="background-image: url('/lib/Image/goa2.jpg');"></div>
+        <div class="pkg-card" onclick="selectPkg('South Goa Serenity')">
+            <img class="pkg-img" src="~/lib/Image/goa2.jpg" alt="South Goa Serenity" />
             <div class="pkg-body">
                 <h3>South Retreat</h3>
                 <p>4 Days • Palolem Peace</p>
@@ -88,33 +94,56 @@
             <div class="gem-item"><img src="/lib/Image/goa4.jpg"><span>Cola Beach Lagoon</span></div>
             <div class="gem-item"><img src="/lib/Image/goa5.jpg"><span>Fontainhas Latin Quarter</span></div>
             <div class="gem-item"><img src="/lib/Image/goa6.jpg"><span>Chorao Island</span></div>
+            <div class="gem-item"><img src="/lib/Image/goa4.jpg"><span>Cola Beach Lagoon</span></div>
+            <div class="gem-item"><img src="/lib/Image/goa5.jpg"><span>Fontainhas Latin Quarter</span></div>
+            <div class="gem-item"><img src="/lib/Image/goa6.jpg"><span>Chorao Island</span></div>
+            <div class="gem-item"><img src="/lib/Image/goa7.jpg"><span>Cabo de Rama Fort</span></div>
+            <div class="gem-item"><img src="/lib/Image/goa8.jpg"><span>Butterfly Beach</span></div>
+            <div class="gem-item"><img src="/lib/Image/goa4.jpg"><span>Cola Beach Lagoon</span></div>
+            <div class="gem-item"><img src="/lib/Image/goa5.jpg"><span>Fontainhas Latin Quarter</span></div>
+            <div class="gem-item"><img src="/lib/Image/goa6.jpg"><span>Chorao Island</span></div>
         </div>
     </div>
 </div>
 
 <script>
+
     function selectPkg(name) { alert("Adding " + name + " to your itinerary!"); }
 
-   
+
+
      function selectPkg(name) {
+
          // Logic to redirect based on the package selected
+
          switch (name) {
+
              case 'North Goa Party':
-                 window.location.href = '/Home/GoaPack1'; Goes to goa-pack1.cshtml
+
+                 window.location.href = '/Home/GoaPack1'; // Goes to goa-pack1.cshtml
+
                  break;
 
              case 'Total Goa Experience':
-                 window.location.href = '/Home/GoaPack1'; Goes to goa-pack2.cshtml
+
+                 window.location.href = '/Home/GoaPack2'; // Goes to goa-pack2.cshtml
+
                  break;
 
              case 'South Goa Serenity':
-                 window.location.href = '/Home/GoaPack1'; Goes to goa-pack3.cshtml
+
+                 window.location.href = '/Home/GoaPack3'; // Goes to goa-pack3.cshtml
+
                  break;
 
              default:
+
                  console.log("Package details not found.");
+
                  break;
+
          }
+
      }
 
 
