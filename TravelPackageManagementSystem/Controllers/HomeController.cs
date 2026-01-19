@@ -1,20 +1,64 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TravelPackageManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using TravelPackageManagementSystem.Repository.Data;
+using TravelPackageManagementSystem.Repository.Models;
+//using TravelPackageManagementSystem.Application.Data;
+using TravelPackageManagementSystem.Repository.Data;
+using TravelPackageManagementSystem.Application.Models;
 
 namespace TravelPackageManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly AppDbContext _context;
+        public HomeController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public IActionResult Host() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitPackage(HostSubmissionViewModel model)
+        {
+            // 1.Create Host Detail
+            var host = new HostContactDetail
+            {
+                HostAgencyName = model.HostAgencyName,
+                EmailAddress = model.EmailAddress,
+                PhoneNumber = model.PhoneNumber,
+                CityCountry = model.CityCountry,
+            };
+            _context.HostContactDetails.Add(host);
+            await _context.SaveChangesAsync();
+
+            //2.Create Package Detail linked to Host
+            var package = new TravelPackage
+            {
+                PackageName = model.PackageName,
+                Destination = model.Destination,
+                Location = model.Location,
+                PackageType = model.PackageType,
+                Duration = model.Duration,
+                Price = model.Price,
+                Description = model.Description,
+                HostId = host.Id,
+                AvailabilityStatus = PackageStatus.AVAILABLE,
+                ApprovalStatus = ApprovalStatus.Pending
+            };
+
+            _context.TravelPackages.Add(package);
+            await _context.SaveChangesAsync();
+
+            return Json(new { Success = true });
+        }
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -22,203 +66,146 @@ namespace TravelPackageManagementSystem.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Hero()
+        // --- DYNAMIC BACKEND FETCHING ---
+        public async Task<IActionResult> MeghalayaTD(string searchTerm, decimal? maxPrice)
         {
-            return View();
-        }   
+            var query = _context.TravelPackages.Where(p => p.Destination == "Meghalaya");
 
-        public IActionResult Coorg()
-        {
-            return View();
-        }
-        public IActionResult Vrindavan()
-        {
-            return View();
-        }
-        public IActionResult Rameshwaram()
-        {
-            return View();
-        }
-        public IActionResult Darjiling()
-        {
-            return View();
-        }
-        
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(p => p.PackageName.Contains(searchTerm));
+            }
 
-        // The individual detail page
-        public IActionResult Tamilnadu()
-        {
-            return View();
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            return View("TopDestination/MeghalayaTD", await query.ToListAsync());
         }
+        // --- BOOKING LOGIC ---
+        [HttpPost]
+        public async Task<IActionResult> CreateBooking(int PackageId, DateTime TravelDate, int Guests, string ContactPhone)
+        {
+            // 1. Fetch the actual package from DB to get the reliable Price
+            var package = await _context.TravelPackages.FindAsync(PackageId);
+            if (package == null) return NotFound();
+
+            // 2. GET ACTUAL USER ID: Assuming the user is authenticated, 
+            // we find them in the database by their Email/Username.
+            // For now, let's fetch the first user or the one matching the session.
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name)
+                       ?? await _context.Users.FirstOrDefaultAsync(); // Fallback for testing
+
+            // 3. SERVER-SIDE CALCULATION: Prevents the "0" amount error
+            decimal finalTotal = package.Price * Guests;
+
+            var booking = new Booking
+            {
+                PackageId = PackageId,
+                UserId = user.UserId, // USE DYNAMIC ID
+                BookingDate = DateTime.Now,
+                TravelDate = TravelDate,
+                Guests = Guests,
+                ContactPhone = ContactPhone,
+                TotalAmount = finalTotal, // Use the calculated variable
+                Status = BookingStatus.PENDING
+            };
+
+            _context.Bookings.Add(booking);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("PaymentPage", new { bookingId = booking.BookingId });
+        }
+
+        // --- PAYMENT CONFIRMATION LOGIC ---
+        [HttpPost]
+        public async Task<IActionResult> ConfirmPayment(int bookingId)
+        {
+            // 1. Find the specific booking in the database
+            var booking = await _context.Bookings.FindAsync(bookingId);
+
+            if (booking != null)
+            {
+                // 2. Update the status from PENDING to CONFIRMED
+                booking.Status = BookingStatus.CONFIRMED;
+
+                // 3. Save changes to SQL Server
+                await _context.SaveChangesAsync();
+            }
+
+            // 4. Redirect to the Action to ensure the model is loaded for the view
+            return RedirectToAction("MyBookings");
+        }
+
+        // --- DYNAMIC BOOKINGS VIEW ---
+
+        public async Task<IActionResult> MyBookings()
+        {
+            // This fetches the data and passes it to the View
+            var bookings = await _context.Bookings
+                                         .Include(b => b.TravelPackage)
+                                         .ToListAsync();
+
+            return View(bookings);
+        }
+
+        // --- EXISTING ROUTES PRESERVED ---
+        public IActionResult Hero() => View();
+        public IActionResult Vrindavan() => View("Trending/Vrindavan");
+        public IActionResult Rameshwaram() => View("Trending/Rameshwaram");
+        public IActionResult Darjiling() => View("Trending/Darjiling");
+        public IActionResult Tamilnadu() => View();
+
         public IActionResult TamilnaduTD(string id)
         {
             ViewBag.PackageId = id;
-            return View();
+            return View("TopDestination/TamilnaduTD");
         }
-       
+
+        public IActionResult KeralaTD(string id)
+        {
+            ViewBag.PackageId = id;
+            return View("TopDestination/KeralaTD");
+        }
+
         public IActionResult MizoramTD(string id)
         {
             ViewBag.PackageId = id;
-            return View();
+            return View("TopDestination/MizoramTD");
         }
 
+        public IActionResult GoaTD() => View("TopDestination/GoaTD");
+        public IActionResult UttarakhandTD() => View("TopDestination/uttarakhandTD");
 
-        
-           
+        public IActionResult MeghPack1() => View("Package/MeghPack1");
+        public IActionResult MeghPack2() => View("Package/MeghPack2");
+        public async Task<IActionResult> MeghPack3(int id)
+        {
+            // Fix: Explicitly include the Itineraries collection
+            var package = await _context.TravelPackages
+                                         .Include(p => p.Itineraries)
+                                         .FirstOrDefaultAsync(p => p.PackageId == id);
 
-            // Add this method
-            public IActionResult GoaTD()
+            if (package == null)
             {
-                return View();
+                return NotFound();
             }
 
-            // Add this for Uttarakhand
-            public IActionResult UttarakhandTD()
-            {
-                return View();
-            }
+            return View("Package/MeghPack3", package);
+        }
 
-            // Add this for Meghalaya
-            public IActionResult MeghalayaTD()
-            {
-                return View();
-            }    
-        public IActionResult GoaPack1()
-        {
-            return View();
-        }
-        public IActionResult KeralaPack1()
-        {
-            return View(); 
-        }
-        public IActionResult KeralaPack2()
-        {
-            return View();
-        }
-        public IActionResult KeralaPack3()
-        {
-            return View();
-        }
-        public IActionResult KeralaTD(string id)
-        {
+        public IActionResult GoaPack1() => View("Package/GoaPack1");
+        public IActionResult GoaPack2() => View("Package/GoaPack2");
+        public IActionResult GoaPack3() => View("Package/GoaPack3");
 
-        
-            ViewBag.PackageId = id;
-            return View();
-        }
-        public IActionResult TamilPack1()
+        public IActionResult PaymentPage(int? bookingId)
         {
-            return View();
-        }
-        public IActionResult TamilPack2()
-        {
-            return View();
-        }
-        public IActionResult TamilPack3()
-        {
-            return View();
-        }
-        public IActionResult MizoPack3()
-        {
-            return View();
-        }
-        public IActionResult MizoPack2()
-        {
-            return View();
-        }
-        public IActionResult MizoPack1()
-        {
+            ViewBag.BookingId = bookingId;
             return View();
         }
 
-
-        public IActionResult Manali()
-        {
-            return View();
-        }
-
-        public IActionResult GoaPack2()
-        {
-            return View();
-        }
-        public IActionResult Gangtok()
-        {
-            return View();
-        }
-
-        public IActionResult Jaipur()
-        {
-            return View();
-        }
-
-        public IActionResult GoaPack3()
-        {
-            return View();
-        }
-        public IActionResult MeghPack1()
-        {
-            return View();
-        }
-        public IActionResult MeghPack2()
-        {
-            return View();
-        }
-        public IActionResult MeghPack3()
-        {
-            return View();
-        }
-        public IActionResult UttaraPack1()
-        {
-            return View();
-        }
-        public IActionResult UttaraPack2()
-        {
-            return View();
-        }
-        public IActionResult UttaraPack3()
-        {
-            return View();
-        }
-
-        public IActionResult Banaras()
-        {
-            return View();
-        }
-
-        public IActionResult Mumbai()
-        {
-            return View();
-        }
-
-        public IActionResult Munnar()
-        {
-            return View();
-        }
-
-        public IActionResult Ooty()
-        {
-            return View();
-        }
-        public IActionResult Goa()
-        {
-            return View();
-        }
-       
-
-        public IActionResult TajMahal()
-        {
-            return View();
-        }
-
-        public IActionResult Host() { return View(); }
-        public IActionResult PaymentPage()
-        {
-            return View();
-        }
-
-     
-
-        public IActionResult Dashboard()
+        public IActionResult CustomerSupport()
         {
             return View();
         }
@@ -228,15 +215,9 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
 
-        public IActionResult CustomerSupport ()
-        {
-            return View();
-        }
-
-        public IActionResult MyBookings()
+        public IActionResult aboutus()
         {
             return View();
         }
     }
-    }
-
+}

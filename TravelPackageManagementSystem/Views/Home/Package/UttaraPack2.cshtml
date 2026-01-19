@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "Nainital & Mussoorie Special";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Uttarakhand Pack 2</title>
+    <link rel="stylesheet" href="~/css/pack-details.css" />
+</head>
+<body>
+    <partial name="_Navbar" />
+    <section class="hero" style="background-image: url('/lib/Image/uttar4.jpg');">
+        <div class="hero-content">
+            <h1>Nainital & Mussoorie Special</h1>
+            <p>5 Days • Naini Lake • Kempty Falls • Mall Road Shopping</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="flex">
+            <div class="left-col">
+                <div class="package-header">
+                    <div class="package-title">
+                        <h2>The Queen of Hills Tour</h2>
+                        <div class="rating">★ 4.8 (245 reviews)</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 14px; color:#666;">Duration</div>
+                        <div style="font-weight:700; font-size:16px;">5 Days / 4 Nights</div>
+                    </div>
+                </div>
+
+                <div class="gallery">
+                    <div id="mainImage" class="main-image" style="background-image: url('/lib/Image/uttar1.jpg');"></div>
+                    <div class="thumbs">
+                        <div class="thumb active" data-src="/lib/Image/uttar2.jpg" style="background-image: url('/lib/Image/uttar2.jpg');"></div>
+                        <div class="thumb" data-src="/lib/Image/uttar7.jpg" style="background-image: url('/lib/Image/uttar7.jpg');"></div>
+                        <div class="thumb" data-src="/lib/Image/uttar8.jpg" style="background-image: url('/lib/Image/uttar8.jpg');"></div>
+                        <div class="thumb" data-src="/lib/Image/uttar9.jpg" style="background-image: url('/lib/Image/uttar9.jpg');"></div>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px;">
+                    <h3>Overview</h3>
+                    <p>Discover the charm of Uttarakhand’s most beloved hill stations. Enjoy peaceful boating in Nainital and experience the colonial heritage and misty mountains of Mussoorie.</p>
+                </div>
+
+                <div class="itinerary">
+                    <h3>Day-by-Day Itinerary</h3>
+                    <div class="day">
+                        <div class="day-header"><h4>Day 1-2 — Nainital Lake Tour</h4><div class="toggle">+</div></div>
+                        <div class="day-body"><p>Arrival and check-in. Visit Naini Lake, Naina Devi Temple, and enjoy the Snow View Point cable car ride.</p></div>
+                    </div>
+                    <div class="day">
+                        <div class="day-header"><h4>Day 3 — Drive to Mussoorie</h4><div class="toggle">+</div></div>
+                        <div class="day-body"><p>Scenic drive via Dhanaulti. Check-in at Mussoorie and evening walk on the famous Mall Road.</p></div>
+                    </div>
+                    <div class="day">
+                        <div class="day-header"><h4>Day 4-5 — Mussoorie Local & Departure</h4><div class="toggle">+</div></div>
+                        <div class="day-body"><p>Visit Kempty Falls, Gun Hill, and Lal Tibba. Departure on Day 5 after breakfast.</p></div>
+                    </div>
+                </div>
+
+                <div class="price-card">
+                    <div class="price-row">
+                        <div>Base Price (per person)</div>
+                        <div class="price-total" id="pricePerPerson">₹16,500</div>
+                    </div>
+                    <div class="price-row">
+                        <div>Selected Guests</div>
+                        <div id="priceSummary">1 person</div>
+                    </div>
+                    <hr style="margin:10px 0; border:none; border-top:1px solid #e6e9ef;" />
+                    <div style="font-weight:700; display:flex; justify-content:space-between;">
+                        <div>Total Payable</div>
+                        <div class="price-total" id="totalPayable">₹16,500</div>
+                    </div>
+                    <div style="margin-top:12px;">
+                        <h4 style="font-size:15px; margin-bottom:6px;">What's Included</h4>
+                        <div class="list-inline">
+                            <div class="included">3* Mountain Resorts</div>
+                            <div class="included">Breakfast & Dinner</div>
+                            <div class="included">Private AC Sedan</div>
+                            <div class="included">Naini Lake Boating</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <aside class="booking-box">
+                    <h3>Book This Package</h3>
+                    <form id="bookingForm">
+                        <label for="travelDate">Travel Date</label>
+                        <input type="date" id="travelDate" name="travelDate" required />
+
+                        <label>Guests</label>
+                        <select id="guests">
+                            <option value="1">1 person</option>
+                            <option value="2">2 persons</option>
+                            <option value="3">3 persons</option>
+                            <option value="4">4 persons</option>
+                        </select>
+                        <label>Email</label><input type="email" required />
+                        <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
+                    </form>
+                </aside>
+            </div>
+        </div>
+    </div>
+    <partial name="_Footer" />
+    <script>
+        (function () {
+            const main = document.getElementById('mainImage');
+            const thumbs = document.querySelectorAll('.thumb');
+            const guests = document.getElementById('guests');
+            const basePrice = 16500;
+
+            thumbs.forEach(t => {
+                t.addEventListener('click', () => {
+                    thumbs.forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                    main.style.backgroundImage = `url('${t.dataset.src}')`;
+                });
+            });
+
+            document.querySelectorAll('.day-header').forEach(h => {
+                h.addEventListener('click', () => {
+                    const body = h.nextElementSibling;
+                    const isOpen = body.style.display === 'block';
+                    document.querySelectorAll('.day-body').forEach(db => db.style.display = 'none');
+                    if (!isOpen) { body.style.display = 'block'; }
+                });
+            });
+
+            guests.addEventListener('change', () => {
+                const count = parseInt(guests.value);
+                document.getElementById('totalPayable').textContent = `₹${(basePrice * count).toLocaleString()}`;
+                document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
+            });
+    </script>
+</body>
+</html>

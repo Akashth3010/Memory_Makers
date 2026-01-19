@@ -1,0 +1,86 @@
+﻿@{
+
+    ViewBag.Title = "Mizoram | The Land of Blue Mountains";
+
+}
+
+<link rel="stylesheet" href="~/css/travel-style.css" />
+<style>
+
+    :root {
+        --accent-color: #2ecc71; /* Lush Green */
+
+        --bg-gradient: linear-gradient(135deg, coral', #2c5364 100%); /* Misty Mountain Gradient */
+    }
+
+    .hero-text {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+        .hero-text h1 span {
+            color: var(--accent-color);
+        }
+</style>
+
+<div class="main-page">
+    <div class="hero-text">
+        <h1>Explore <span>Mizoram</span></h1>
+        <p>Verdant hills and vibrant culture.</p>
+    </div>
+
+    <div class="packages-section">
+        <div class="pkg-card" onclick="location.href='/Home/MizoPack1'">
+            <img src="~/lib/TopDestination/Mizoram - The Land of Hills.jpg" alt="Aizawl Hills" />
+            <div class="pkg-body">
+                <h3>Hill Retreat</h3>
+                <p>4 Days • Aizawl & Surroundings</p>
+                <div class="pkg-price">₹13,499</div>
+                <button class="select-btn">View Details</button>
+            </div>
+        </div>
+
+        <div class="pkg-card highlight" onclick="location.href='/Home/MizoPack2'">
+            <img src="~/lib/TopDestination/local culture.jpg" alt="Festival" />
+            <div class="pkg-body">
+                <span class="hot-tag">Most Popular</span>
+                <h3>Cultural Immersion</h3>
+                <p>5 Days • Local Festivals</p>
+                <div class="pkg-price">₹16,999</div>
+                <button class="select-btn">View Details</button>
+            </div>
+        </div>
+
+        <div class="pkg-card" onclick="location.href='/Home/MizoPack3'">
+            <img src="~/lib/TopDestination/blue mountains.jpg" alt="Nature Trails" />
+            <div class="pkg-body">
+                <h3>Nature Trails</h3>
+                <p>6 Days • Blue Mountains</p>
+                <div class="pkg-price">₹19,499</div>
+                <button class="select-btn">View Details</button>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="gallery-title">Blue Mountains & Hidden Gems</h2>
+    <div class="auto-scroll-container">
+        <div class="scroll-track">
+            <div class="gem-item"><img src="~/lib/TopDestination/Capital of Mizoram- Aizawl.jpg"><span>Aizawl</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Mizoram _ Northeast India.jpg"><span>Lunglei</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Champhai, Mizoram.jpg"><span>Champhai</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Phawngpui.jpg"><span>Phawngpui</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Serchhip.jpg"><span>Serchhip</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Capital of Mizoram- Aizawl.jpg"><span>Aizawl</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Mizoram _ Northeast India.jpg"><span>Lunglei</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Champhai, Mizoram.jpg"><span>Champhai</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Phawngpui.jpg"><span>Phawngpui</span></div>
+            <div class="gem-item"><img src="~/lib/TopDestination/Serchhip.jpg"><span>Serchhip</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    console.log("Mizoram Page Loaded");
+</script>
+

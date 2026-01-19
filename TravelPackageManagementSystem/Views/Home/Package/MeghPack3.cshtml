@@ -1,0 +1,212 @@
+﻿@model TravelPackageManagementSystem.Repository.Models.TravelPackage
+
+@{
+    ViewBag.Title = Model.PackageName;
+    Layout = "_Layout";
+}
+
+<style>
+    /* Professional Hero Section */
+    .hero-section {
+        height: 350px;
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('@Model.ImageUrl');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-bottom: 30px;
+        border-radius: 0 0 20px 20px;
+    }
+
+    /* Sticky Sidebar with specific visibility fixes */
+    .booking-sidebar-compact {
+        position: sticky;
+        top: 20px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        border: 1px solid #eee;
+        padding: 15px;
+        z-index: 100;
+    }
+
+    .compact-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: #7f8c8d;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+        display: block;
+    }
+
+    .compact-input {
+        font-size: 13px !important;
+        height: 34px !important;
+        background-color: #f8f9fa !important;
+        border: none !important;
+        margin-bottom: 8px;
+    }
+
+    .price-box-ui {
+        background: #eef7ff;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+
+    .thumb-nail {
+        width: 75px;
+        height: 55px;
+        object-fit: cover;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+
+        .thumb-nail.active {
+            border-color: #007bff;
+        }
+</style>
+
+<div class="hero-section shadow">
+    <div class="text-center">
+        <h1 class="display-4 fw-bold">@Model.PackageName</h1>
+        <p class="fs-5">@Model.Duration | @Model.Location</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="mb-4">
+                <img id="mainDisplay" src="@Model.ImageUrl" class="rounded-4 shadow-sm w-100" style="height: 400px; object-fit: cover;">
+            </div>
+
+            <div class="d-flex gap-2 mb-4">
+                <img src="@Model.ImageUrl" class="thumb-nail active" onclick="swap(this)">
+                <img src="/lib/Image/meg3.jpg" class="thumb-nail" onclick="swap(this)">
+                <img src="/lib/Image/meg4.jpg" class="thumb-nail" onclick="swap(this)">
+            </div>
+
+            <h4 class="fw-bold mb-3">Trip Itinerary</h4>
+            <div class="accordion border rounded-3 mb-4" id="itineraryAcc">
+                @if (Model.Itineraries != null)
+                {
+                    @foreach (var day in Model.Itineraries.OrderBy(d => d.DayNumber))
+                    {
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed py-2 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#day-@day.DayNumber">
+                                    Day @day.DayNumber — @day.ActivityTitle
+                                </button>
+                            </h2>
+                            <div id="day-@day.DayNumber" class="accordion-collapse collapse" data-bs-parent="#itineraryAcc">
+                                <div class="accordion-body text-muted small">@day.ActivityDescription</div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            @{
+                var fDay = Model.Itineraries?.OrderBy(d => d.DayNumber).FirstOrDefault();
+            }
+            <div class="row bg-light rounded-3 p-3 g-3">
+                <div class="col-md-6 border-end">
+                    <span class="fw-bold text-success small">✓ INCLUSIONS</span>
+                    <ul class="list-unstyled small mt-2 mb-0 text-muted">
+                        @if (fDay != null && !string.IsNullOrEmpty(fDay.Inclusions))
+                        {
+                            @foreach (var i in fDay.Inclusions.Split(';'))
+                            {
+                                <li>@i</li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <span class="fw-bold text-danger small">✕ EXCLUSIONS</span>
+                    <ul class="list-unstyled small mt-2 mb-0 text-muted">
+                        @if (fDay != null && !string.IsNullOrEmpty(fDay.Exclusions))
+                        {
+                            @foreach (var e in fDay.Exclusions.Split(';'))
+                            {
+                                <li>@e</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="booking-sidebar-compact">
+                <h6 class="fw-bold mb-3">Book This Package</h6>
+
+                <form asp-action="CreateBooking" method="post">
+                    <input type="hidden" name="PackageId" value="@Model.PackageId" />
+
+                    <span class="compact-label">Travel Date</span>
+                    <input type="date" id="tDate" name="TravelDate" class="form-control compact-input shadow-none" required>
+
+                    <span class="compact-label">Number of Guests</span>
+                    @* Numerical input allows for flexible group sizes *@
+                    <input type="number" id="gCount" name="Guests" class="form-control compact-input shadow-none"
+                           value="1" min="1" max="20" required>
+
+                    <span class="compact-label">Your Email</span>
+                    <input type="email" name="ContactEmail" class="form-control compact-input shadow-none" placeholder="mail@example.com" required>
+
+                    <span class="compact-label">Phone Number</span>
+                    <input type="tel" name="ContactPhone" class="form-control compact-input shadow-none" placeholder="+91 00000 00000" required>
+
+                    <div class="price-box-ui">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted fw-bold">Total Payable</span>
+                            <span class="h5 fw-bold text-primary mb-0" id="liveTotal">₹@Model.Price.ToString("N0")</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow-sm" style="border-radius: 8px;">
+                        CONFIRM BOOKING
+                    </button>
+                </form>
+
+                <div class="text-center mt-2" style="font-size: 10px; color: #999;">
+                    <i class="fas fa-lock me-1"></i> SSL Secure Payment
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function swap(el) {
+            document.getElementById('mainDisplay').src = el.src;
+            document.querySelectorAll('.thumb-nail').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        const price = @(Model?.Price ?? 0);
+        const guestInput = document.getElementById('gCount');
+        const totalDisplay = document.getElementById('liveTotal');
+
+        // Logic to update price based on numerical input
+        function updatePrice() {
+            let count = parseInt(guestInput.value) || 1;
+            if (count < 1) count = 1;
+
+            const total = price * count;
+            totalDisplay.innerText = '₹' + total.toLocaleString('en-IN');
+        }
+
+        // Listen for both typing and arrow clicks
+        guestInput.addEventListener('input', updatePrice);
+        guestInput.addEventListener('change', updatePrice);
+
+        document.getElementById('tDate').min = new Date().toISOString().split('T')[0];
+    </script>
+}
