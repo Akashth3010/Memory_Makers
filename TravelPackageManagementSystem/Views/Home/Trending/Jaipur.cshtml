@@ -1,6 +1,9 @@
 ﻿@{
+
     ViewBag.Title = "Jaipur Travel Package";
+
     Layout = null;   // remove if you are using _Layout.cshtml
+
 }
 
 <!DOCTYPE html>
@@ -13,7 +16,7 @@
 </head>
 
 <body>
-
+    <partial name="_Navbar" />
     <!-- HERO IMAGE -->
     <section class="hero">
         <img class="hero-img" src="/lib/Image/jaipur.jpg" alt="Jaipur" />
@@ -62,8 +65,11 @@
                 <div style="margin-top:16px;">
                     <h3>Overview</h3>
                     <p>
+
                         Explore Jaipur — the Pink City — with guided visits to Amer Fort, the City Palace complex,
+
                         and the iconic Hawa Mahal. Enjoy curated walks through vibrant bazaars, traditional Rajasthani cuisine,
+
                         and comfortable heritage-style accommodations.
                     </p>
                 </div>
@@ -176,13 +182,17 @@
                             <button type="submit" class="btn btn-primary" id="bookNowBtn" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
                         </div>
 
+                        <p style="font-size:13px; color:#666; margin-top:8px;">
+
+                            You'll be redirected to confirm availability and payment. Monument timings and access may vary by season.
+                        </p>
                     </form>
                 </aside>
             </div>
 
         </div>
     </div>
-
+    <partial name="_Footer" />
     <script src="/js/Jaipur.js"></script>
 </body>
 </html>

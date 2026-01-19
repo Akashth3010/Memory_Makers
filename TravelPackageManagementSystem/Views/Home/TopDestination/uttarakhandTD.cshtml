@@ -2,7 +2,7 @@
     ViewBag.Title = "Uttarakhand | Land of the Gods";
 }
 
-<link rel="stylesheet" href="~/css/travel-style1.css" />
+<link rel="stylesheet" href="~/css/travel-style.css" />
 <style>
     :root {
         --accent-color: #27ae60; /* Forest Green */
@@ -44,10 +44,10 @@
         <h1>Explore <span>Uttarakhand</span></h1>
         <p>Peak performance for your soul.</p>
     </div>
-
     <div class="packages-section">
-        <div class="pkg-card" onclick="location.href='/Home/UttaraPack1'">
-            <div class="pkg-img" style="background-image: url('/lib/Image/uttar1.jpg');"></div>
+        <!-- Package 1 -->
+        <div class="pkg-card" onclick="selectPkg('Rishikesh Quick Retreat')">
+            <img class="pkg-img" src="~/lib/Image/uttar1.jpg" alt="Rishikesh Quick Retreat" />
             <div class="pkg-body">
                 <h3>Rishikesh Quick Retreat</h3>
                 <p>3 Days • Rishikesh</p>
@@ -56,8 +56,9 @@
             </div>
         </div>
 
-        <div class="pkg-card highlight" onclick="location.href='/Home/UttaraPack2'">
-            <div class="pkg-img" style="background-image: url('/lib/Image/uttar2.jpg');"></div>
+        <!-- Package 2 -->
+        <div class="pkg-card highlight" onclick="selectPkg('Mussoorie Special')">
+            <img class="pkg-img" src="~/lib/Image/uttar2.jpg" alt="Mussoorie Special" />
             <div class="pkg-body">
                 <span class="hot-tag">Alpine Special</span>
                 <h3>Mussoorie Special</h3>
@@ -67,8 +68,9 @@
             </div>
         </div>
 
-        <div class="pkg-card" onclick="location.href='/Home/UttaraPack3'">
-            <div class="pkg-img" style="background-image: url('/lib/Image/uttar3.jpg');"></div>
+        <!-- Package 3 -->
+        <div class="pkg-card" onclick="selectPkg('Himalayan Grand Explorer')">
+            <img class="pkg-img" src="~/lib/Image/uttar3.jpg" alt="Himalayan Grand Explorer" />
             <div class="pkg-body">
                 <h3>Himalayan Grand Explorer</h3>
                 <p>4 Days • Nainital & Bhimtal</p>
@@ -77,6 +79,7 @@
             </div>
         </div>
     </div>
+
 
     <h2 class="gallery-title">Sacred Peaks & <span>Hidden Valleys</span></h2>
 

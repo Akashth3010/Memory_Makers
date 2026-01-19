@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/css/pack-details.css" />
 </head>
 <body>
+    <partial name="_Navbar" />
     <section class="hero" style="background-image: url('/lib/Image/uttar4.jpg');">
         <div class="hero-content">
             <h1>Nainital & Mussoorie Special</h1>
@@ -93,25 +94,23 @@
                     <h3>Book This Package</h3>
                     <form id="bookingForm">
                         <label for="travelDate">Travel Date</label>
-                        <input id="travelDate" type="date" required />                        <label>Guests</label>
+                        <input type="date" id="travelDate" name="travelDate" required />
+
+                        <label>Guests</label>
                         <select id="guests">
                             <option value="1">1 person</option>
                             <option value="2">2 persons</option>
                             <option value="3">3 persons</option>
                             <option value="4">4 persons</option>
                         </select>
-                        <label for="contactEmail">Contact Email</label>
-                        <input id="contactEmail" type="email" placeholder="you@example.com" required />
-
-                        <label for="phone">Phone</label>
-                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
+                        <label>Email</label><input type="email" required />
                         <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
                     </form>
                 </aside>
             </div>
         </div>
     </div>
-
+    <partial name="_Footer" />
     <script>
         (function () {
             const main = document.getElementById('mainImage');
@@ -141,12 +140,6 @@
                 document.getElementById('totalPayable').textContent = `₹${(basePrice * count).toLocaleString()}`;
                 document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
             });
-        })();
-            // Get today's date in YYYY-MM-DD format
-        const today = new Date().toISOString().split('T')[0];
-
-        // Set the 'min' attribute so back dates are greyed out
-        document.getElementById('travelDate').setAttribute('min', today);
     </script>
 </body>
 </html>

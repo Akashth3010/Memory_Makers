@@ -1,4 +1,5 @@
 ﻿/* Shared package details styles */
+
 * {
     margin: 0;
     padding: 0;
@@ -13,6 +14,7 @@ body {
 }
 
 /* ===== HERO SECTION ===== */
+
 .hero {
     height: 48vh;
     width: 100%;
@@ -52,6 +54,7 @@ body {
     }
 
 /* ===== MAIN CONTAINER ===== */
+
 .container {
     max-width: 1200px;
     margin: 24px auto 50px;
@@ -89,6 +92,7 @@ body {
 }
 
 /* ===== IMAGE GALLERY ===== */
+
 .gallery {
     margin-top: 14px;
 }
@@ -143,6 +147,7 @@ body {
     }
 
 /* ===== ITINERARY ===== */
+
 .itinerary {
     margin-top: 20px;
 }
@@ -170,6 +175,7 @@ body {
 }
 
 /* ===== PRICING & INCLUSIONS ===== */
+
 .price-card {
     margin-top: 18px;
     border: 1px solid #e6e9ef;
@@ -214,6 +220,7 @@ body {
 }
 
 /* ===== RIGHT COLUMN ===== */
+
 .right-col {
     flex: 1;
     min-width: 280px;
@@ -270,6 +277,7 @@ body {
 }
 
 @media (max-width: 900px) {
+
     .flex {
         flex-direction: column;
     }
