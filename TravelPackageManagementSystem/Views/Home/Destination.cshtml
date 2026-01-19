@@ -13,7 +13,7 @@
         <div class="destination-grid">
             @* <a href="TamilnaduTd.cstml"> *@
             <div class="card" onclick="location.href='@Url.Action("TamilnaduTD", "Home")'" style="cursor:pointer;">
-                <img src="/lib/TopDestination/OOtyTd2.jpg" alt="Tamilnadu">
+                <img src="/lib/Image/Tamilnadu.jpg" alt="Tamilnadu">
                 <div class="overlay">
                     <h3>Tamilnadu</h3>
                     <p>30 Hotels</p>
@@ -22,7 +22,7 @@
             </div>
             @* </a> *@
             <div class="card" onclick="location.href='@Url.Action("KeralaTD", "Home")'" style="cursor:pointer;">
-                <img src=" /lib/Image/KD1.jpg" alt="Kerala">
+                <img src=" /lib/Image/Kerala.jpg" alt="Kerala">
                 <div class="overlay">
                     <h3>Kerala</h3>
                     <p>22 Hotels</p>
@@ -30,15 +30,24 @@
                 </div>
             </div>
 
-            <div class="card" onclick="location.href='@Url.Action("MeghalayaTD", "Home")'" style="cursor:pointer;">
-                <img src="/lib/Image/meghbg.jpg" alt="Meghalaya">
-                <div class="overlay">
-                    <h3>Meghalaya</h3>
-                    <p>18 Hotels</p>
-                    <p>29 Holidays</p>
+            @*   <div class="card" onclick="location.href='@Url.Action("MeghalayaTD", "Home")'" style="cursor:pointer;">
+<img src="/lib/Image/meghalaya.jpg" alt="Meghalaya">
+<div class="overlay">
+<h3>Meghalaya</h3>
+<p>18 Hotels</p>
+<p>29 Holidays</p>
+</div>
+</div> *@
+            <a href="@Url.Action("MeghalayaTD", "Home")" class="card-link">
+                <div class="card">
+                    <img src="/lib/Image/meghalaya.jpg" alt="Scenic view of Meghalaya">
+                    <div class="overlay">
+                        <h3>Meghalaya</h3>
+                        <p>18 Hotels</p>
+                        <p>29 Holidays</p>
+                    </div>
                 </div>
-            </div>
-
+            </a>
             <div class="card" onclick="location.href='@Url.Action("GoaTD", "Home")'" style="cursor:pointer;">
                 <img src="/lib/Image/goa.jpg" alt="Goa">
                 <div class="overlay">
@@ -49,7 +58,7 @@
             </div>
 
             <div class="card" onclick="location.href='@Url.Action("uttarakhandTD", "Home")'" style="cursor:pointer;">
-                <img src="/lib/Image/UD1.jpg" alt="Uttrakhand">
+                <img src="/lib/Image/Kashmirr.jpg" alt="Uttrakhand">
                 <div class="overlay">
                     <h3>Uttarakhand</h3>
                     <p>12 Hotels</p>
@@ -59,7 +68,7 @@
             </a>
             @* <a href="MizoramTD.cshtml"> *@
             <div class="card" onclick="location.href='@Url.Action("MizoramTD", "Home")'" style="cursor:pointer;">
-                <img src="/lib/Image/MD1.jpg" alt="Mizoram">
+                <img src="/lib/Image/Mizoram.jpg" alt="Mizoram">
                 <div class="overlay">
                     <h3>Mizoram</h3>
                     <p>15 Hotels</p>
@@ -76,7 +85,8 @@
         <div class="container">
             <h2 class="text-center fw-bold mb-5">
                 Why Choose Us
-                <div class="mx-auto mt-2" style="width:60px;height:3px;background:#ff7b54"></div>
+                <div class="mx-auto mt-2"
+                     style="width:60px;height:3px;background:#ff7b54"></div>
             </h2>
 
             <div class="row text-center g-4">

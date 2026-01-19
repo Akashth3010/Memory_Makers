@@ -1,0 +1,70 @@
+﻿/* Slim Advanced Navbar */
+.safar-navbar {
+    background: linear-gradient(90deg, #000080 0%, #006a4e 100%);
+    padding: 0.5rem 2rem; /* Reduced padding for slim look */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    width: 100%;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Force links into one row */
+.navbar-nav-row {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 30px; /* Spacing between links */
+}
+
+/* Logo Styling */
+.nav-logo {
+    color: white;
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+    .nav-logo span {
+        color: #2ecc71; /* Highlighted green */
+    }
+
+/* Link Styling & Hover */
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.15); /* Soft glow hover */
+        color: #2ecc71;
+        transform: translateY(-1px);
+    }
+
+/* Slim Button */
+.nav-btn-slim {
+    background: #2ecc71;
+    color: white;
+    padding: 6px 18px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+    .nav-btn-slim:hover {
+        background: #27ae60;
+        box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
+    }

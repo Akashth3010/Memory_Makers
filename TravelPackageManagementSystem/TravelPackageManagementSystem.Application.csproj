@@ -32,12 +32,18 @@
     <Content Remove="Views\Home\Demo.cshtml" />
     <Content Remove="Views\Home\LandingPage.cshtml" />
     <Content Remove="Views\Home\SignUp.cshtml" />
+    <Content Remove="wwwroot\css\footer.css" />
     <Content Remove="wwwroot\lib\Image\Amritsar.jpg" />
     <Content Remove="wwwroot\lib\Image\Himachal Pradesh.jpg" />
     <Content Remove="wwwroot\lib\Image\Jaipur.jpg" />
     <Content Remove="wwwroot\lib\Image\kerala2.jpg" />
     <Content Remove="wwwroot\lib\Image\Ladakh.jpg" />
     <Content Remove="wwwroot\lib\Image\Vrindavan.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TravelPackageManagementSystem.Repository\TravelPackageManagementSystem.Repository.csproj" />
+    <ProjectReference Include="..\TravelPackageManagementSystem.Services\TravelPackageManagementSystem.Services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,245 +1,104 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>About Us - Travel Package Booking System</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+﻿@{
+    ViewData["Title"] = "About Us";
+}
+<link rel="stylesheet" href="~/css/aboutus.css" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            background: #f9fafc;
-            color: #333;
-        }
-
-        .about-hero {
-            background: linear-gradient(135deg, #0b1d3a, #1e90ff);
-            color: #fff;
-            text-align: center;
-            padding: 5rem 2rem;
-        }
-
-            .about-hero h1 {
-                font-size: 2.8rem;
-                margin-bottom: 1rem;
-            }
-
-            .about-hero p {
-                font-size: 1.2rem;
-                max-width: 700px;
-                margin: 0 auto;
-            }
-
-        .about-section {
-            max-width: 1100px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-        }
-
-            .about-section h2 {
-                font-size: 2rem;
-                color: #0b1d3a;
-                margin-bottom: 1rem;
-                position: relative;
-            }
-
-                .about-section h2::after {
-                    content: "";
-                    display: block;
-                    width: 60px;
-                    height: 3px;
-                    background: #1e90ff;
-                    margin-top: 0.5rem;
-                    border-radius: 2px;
-                }
-
-            .about-section p {
-                line-height: 1.7;
-                margin-bottom: 1.5rem;
-            }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .feature-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-            .feature-card:hover {
-                transform: translateY(-6px);
-                box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            }
-
-            .feature-card i {
-                font-size: 2rem;
-                color: #1e90ff;
-                margin-bottom: 1rem;
-            }
-
-            .feature-card h3 {
-                margin-bottom: 0.75rem;
-                color: #0b1d3a;
-            }
-
-        .team {
-            margin-top: 4rem;
-            text-align: center;
-        }
-
-            .team h2 {
-                margin-bottom: 2rem;
-            }
-
-        .team-members {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-        }
-
-        .member {
-            background: #fff;
-            border-radius: 12px;
-            padding: 1.5rem;
-            width: 220px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-            .member:hover {
-                transform: scale(1.05);
-            }
-
-            .member img {
-                width: 100%;
-                border-radius: 50%;
-                margin-bottom: 1rem;
-            }
-
-            .member h4 {
-                margin: 0.5rem 0;
-                color: #0b1d3a;
-            }
-
-            .member p {
-                font-size: 0.9rem;
-                color: #555;
-            }
-
-        .cta {
-            background: #1e90ff;
-            color: #fff;
-            text-align: center;
-            padding: 3rem 2rem;
-            margin-top: 4rem;
-        }
-
-            .cta h2 {
-                margin-bottom: 1rem;
-            }
-
-            .cta a {
-                display: inline-block;
-                background: #fff;
-                color: #1e90ff;
-                padding: 0.75rem 1.5rem;
-                border-radius: 50px;
-                font-weight: 600;
-                text-decoration: none;
-                transition: background 0.3s, color 0.3s;
-            }
-
-                .cta a:hover {
-                    background: #0b1d3a;
-                    color: #fff;
-                }
-    </style>
-</head>
-<body>
-
-    <!-- Hero -->
-    <section class="about-hero">
-        <h1>About TravelEase</h1>
-        <p>Your trusted partner in discovering, booking, and experiencing unforgettable travel packages worldwide.</p>
+<div class="about-page">
+    <section class="about-hero-dynamic">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content-box">
+            <h1 class="display-3 fw-bold animate-fade-up">About <span class="text-gradient">TravelEase</span></h1>
+            <p class="lead">Your trusted partner in discovering, booking, and experiencing unforgettable travel packages worldwide.</p>
+        </div>
     </section>
 
-    <!-- About -->
-    <section class="about-section">
-        <h2>Who We Are</h2>
-        <p>TravelEase is a comprehensive travel package booking system designed to simplify your journey planning. Whether you’re looking for flights, hotels, or curated holiday experiences, our platform brings everything together in one place. We combine cutting-edge technology with a passion for travel to make booking seamless, secure, and enjoyable.</p>
-
-        <h2>Our Mission</h2>
-        <p>We aim to empower travelers by offering transparent pricing, diverse options, and personalized recommendations. Our mission is to make travel accessible, affordable, and inspiring for everyone.</p>
-
-        <h2>What We Offer</h2>
-        <div class="features">
-            <div class="feature-card">
-                <i class="fa-solid fa-plane-departure"></i>
-                <h3>Flight Deals</h3>
-                <p>Exclusive discounts and flexible booking options for domestic and international flights.</p>
+    <section class="container my-5 py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4">
+                <div class="mission-card p-5">
+                    <h2 class="section-title">Who We Are</h2>
+                    <p>TravelEase is a comprehensive travel package booking system designed to simplify your journey planning. We combine cutting-edge technology with a passion for travel to make booking seamless, secure, and enjoyable.</p>
+                    <h2 class="section-title mt-4">Our Mission</h2>
+                    <p>We aim to empower travelers by offering transparent pricing, diverse options, and personalized recommendations. Making travel accessible, affordable, and inspiring for everyone.</p>
+                </div>
             </div>
-            <div class="feature-card">
-                <i class="fa-solid fa-hotel"></i>
-                <h3>Hotel Stays</h3>
-                <p>Handpicked accommodations ranging from budget-friendly stays to luxury resorts.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fa-solid fa-umbrella-beach"></i>
-                <h3>Holiday Packages</h3>
-                <p>Curated experiences including sightseeing, adventure tours, and cultural explorations.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fa-solid fa-headset"></i>
-                <h3>24/7 Support</h3>
-                <p>Dedicated customer service to assist you before, during, and after your trip.</p>
+            <div class="col-lg-6">
+                <div class="image-stack">
+                    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800" class="img-fluid rounded-4 shadow-lg" alt="Travel">
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Team -->
-    <section class="team about-section">
-        <h2>Meet Our Team</h2>
-        <div class="team-members">
-            <div class="member">
-                <img src="https://via.placeholder.com/150" alt="Team Member">
-                <h4>Priya Sharma</h4>
-                <p>Founder & CEO</p>
-            </div>
-            <div class="member">
-                <img src="https://via.placeholder.com/150" alt="Team Member">
-                <h4>Rahul Mehta</h4>
-                <p>Head of Operations</p>
-            </div>
-            <div class="member">
-                <img src="https://via.placeholder.com/150" alt="Team Member">
-                <h4>Ananya Rao</h4>
-                <p>Lead Designer</p>
-            </div>
-            <div class="member">
-                <img src="https://via.placeholder.com/150" alt="Team Member">
-                <h4>Arjun Patel</h4>
-                <p>Technical Architect</p>
+    <section class="features-gradient-bg py-5">
+        <div class="container text-center">
+            <h2 class="text-white mb-5">What We Offer</h2>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="feature-glow-card">
+                        <i class="fa-solid fa-plane-departure mb-3"></i>
+                        <h3>Flight Deals</h3>
+                        <p>Exclusive discounts and flexible booking options for everyone.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-glow-card">
+                        <i class="fa-solid fa-hotel mb-3"></i>
+                        <h3>Hotel Stays</h3>
+                        <p>Handpicked accommodations from budget to luxury resorts.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-glow-card">
+                        <i class="fa-solid fa-umbrella-beach mb-3"></i>
+                        <h3>Holiday Packages</h3>
+                        <p>Curated experiences including adventure and cultural tours.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-glow-card">
+                        <i class="fa-solid fa-headset mb-3"></i>
+                        <h3>24/7 Support</h3>
+                        <p>Dedicated customer service to assist you around the clock.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Call to Action -->
-    <section class="cta">
-        <h2>Ready to Explore the World?</h2>
-        <p>Join thousands of travelers who trust TravelEase for their journeys.</p>
-        <a href="/Home/Packages">Browse Packages</a>
+    <section class="container py-5 text-center">
+        <h2 class="section-title mx-auto mb-5">Meet Our Team</h2>
+        <div class="row g-4 justify-content-center">
+            @{
+                var team = new[] {
+                        new { Name = "Akash Thakkar", Role = "Founder & CEO" },
+                        new { Name = "Lina Patil", Role = "Head of Operations" },
+                        new { Name = "Anvith", Role = "Lead Designer" },
+                        new { Name = "Veena", Role = "Tech Architect" },
+                        new { Name = "Janvi Govindrao", Role = "Tech Architect" }
+                        };
+            }
+            @foreach (var member in team)
+            {
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="team-card-premium">
+                        <div class="member-img-wrapper">
+                            <img src="https://i.pravatar.cc/150?u=@member.Name" alt="@member.Name">
+                        </div>
+                        <h5>@member.Name</h5>
+                        <p>@member.Role</p>
+                    </div>
+                </div>
+            }
+        </div>
     </section>
 
-</body>
-</html>
-
+    <section class="cta-banner">
+        <div class="container text-center py-5">
+            <h2 class="display-5 fw-bold text-white">Ready to Explore the World?</h2>
+            <p class="text-white-50">Join thousands of travelers who trust TravelEase.</p>
+            <a href="/Home/Packages" class="btn btn-primary-glow btn-lg mt-3">Browse Packages</a>
+        </div>
+    </section>
+</div>

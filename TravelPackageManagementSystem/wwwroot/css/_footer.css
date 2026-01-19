@@ -1,0 +1,176 @@
+﻿/* 1. RESET: This kills the -50vw sliding effect from your Index page */
+.footer-container-main {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 60px 0 !important;
+    margin: 0 !important;
+    position: relative !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: transparent;
+}
+
+/* 2. THE GLOWING CARD */
+.footer-card {
+    position: relative;
+    width: 100% !important; /* This creates the attractive margins */
+    max-width: 1200px;
+    background: #0b1d3a;
+    border-radius: 30px;
+    padding: 3px; /* The thickness of the glow border */
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+    /* 3. THE ANIMATED GLOW (Navy/Blue/Green Rotation) */
+    .footer-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient( transparent, #2ecc71, /* Bottle Green */
+        #1e90ff, /* Blue Glow */
+        transparent 30% );
+        animation: rotateGlow 6s linear infinite;
+    }
+
+@keyframes rotateGlow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 4. INNER CONTENT (Navy to Green Gradient) */
+.footer-inner {
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(135deg, #0b1d3a 0%, #062c21 100%);
+    border-radius: 27px;
+    padding: 50px 40px;
+    color: white;
+}
+
+/* 5. HOVER EFFECTS */
+.footer-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 40px rgba(46, 204, 113, 0.4);
+}
+
+/* 6. GRID LAYOUT */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+}
+
+.footer-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: #ffffff !important;
+    letter-spacing: 1px;
+}
+
+.footer-link {
+    color: rgba(255,255,255,0.8) !important;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 10px;
+    transition: 0.3s ease;
+}
+
+    .footer-link:hover {
+        color: #2ecc71 !important;
+        transform: translateX(10px);
+    }
+
+/* 7. SOCIAL BUTTONS */
+.social-btns {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-btn {
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: white !important;
+    transition: 0.4s;
+}
+
+    .social-btn:hover {
+        background: #2ecc71;
+        transform: rotate(360deg) scale(1.1);
+    }
+
+/* 8. NEWSLETTER FORM */
+.subscribe-group {
+    display: flex;
+    margin-top: 15px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50px;
+    padding: 5px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+    .subscribe-group input {
+        background: transparent;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        width: 100%;
+        outline: none;
+    }
+
+.subscribe-btn {
+    background: linear-gradient(90deg, #2ecc71, #1e90ff);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 9. BOTTOM SECTION */
+.footer-hr {
+    opacity: 0.1;
+    margin: 30px 0;
+    border-top: 1px solid white;
+}
+
+.footer-base {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.payment-icons {
+    font-size: 1.5rem;
+    display: flex;
+    gap: 15px;
+}
+
+    .payment-icons i {
+        transition: 0.3s;
+    }
+
+        .payment-icons i:hover {
+            color: #1e90ff;
+            transform: scale(1.2);
+        }

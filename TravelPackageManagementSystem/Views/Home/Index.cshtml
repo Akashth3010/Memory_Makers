@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+<link rel="stylesheet" href="~/css/_footer.css" asp-append-version="true" />
 <style>
 .hero {
     min-height: 60vh;
@@ -18,7 +18,7 @@
     margin-bottom: 2rem;
 }
 
-.hero, footer, .footer-section{
+.hero{
         width: 100vw;
         position: relative;
         left: 50%;
@@ -52,6 +52,7 @@
     .btn-glow:hover {
         transform: scale(1.05);
     }
+
 </style>
 
 <div>
@@ -75,5 +76,4 @@
         <a href="#destination-section" class="btn btn-glow">Get Inspired</a>
     </div>
 </header>
-
-<partial name="Footer" /> 
+<partial name="_Footer" />
