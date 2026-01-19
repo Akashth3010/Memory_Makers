@@ -205,6 +205,16 @@ namespace TravelPackageManagementSystem.Controllers
             return View();
         }
 
+        public IActionResult CustomerSupport()
+        {
+            return View();
+        }
+
+        public IActionResult TravelGuide()
+        {
+            return View();
+        }
+
         public IActionResult aboutus()
         {
             return View();
