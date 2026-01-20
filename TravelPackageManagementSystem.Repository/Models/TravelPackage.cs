@@ -31,6 +31,8 @@ namespace TravelPackageManagementSystem.Repository.Models
         [StringLength(100)]
         public string Destination { get; set; } // e.g., "Meghalaya"
 
+        public int DestinationId { get; set; }
+
         [StringLength(100)]
         public string Location { get; set; }
         public string PackageType { get; set; } = string.Empty;
@@ -41,7 +43,7 @@ namespace TravelPackageManagementSystem.Repository.Models
         public string ImageUrl { get; set; } = string.Empty;
         public bool IsTrending { get; set; }
         public string? Description { get; set; }
-        //public PackageStatus status { get; set; } = PackageStatus.AVAILABLE;
+        public PackageStatus status { get; set; } = PackageStatus.AVAILABLE;
         public PackageStatus AvailabilityStatus { get; set; } = PackageStatus.AVAILABLE;
         public ApprovalStatus ApprovalStatus { get; set; } = ApprovalStatus.Pending;
 
@@ -51,5 +53,7 @@ namespace TravelPackageManagementSystem.Repository.Models
         public int? HostId { get; set; }
         [ForeignKey("HostId")]
         public virtual HostContactDetail? Host { get; set; }
+
+        public virtual Destination ParentDestination { get; set; }
     }
 }

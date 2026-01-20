@@ -22,46 +22,79 @@ namespace TravelPackageManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitPackage(HostSubmissionViewModel model)
         {
-            // 1.Create Host Detail
-            var host = new HostContactDetail
+            try
             {
-                HostAgencyName = model.HostAgencyName,
-                EmailAddress = model.EmailAddress,
-                PhoneNumber = model.PhoneNumber,
-                CityCountry = model.CityCountry,
-            };
-            _context.HostContactDetails.Add(host);
-            await _context.SaveChangesAsync();
+                // 1. Check if the Destination exists
+                var destinationRecord = await _context.Destinations
+                    .FirstOrDefaultAsync(d => d.StateName.ToLower() == model.Destination.Trim().ToLower());
 
-            //2.Create Package Detail linked to Host
-            var package = new TravelPackage
+                // 2. If it doesn't exist, create it using your model's exact properties
+                if (destinationRecord == null)
+                {
+                    destinationRecord = new Destination
+                    {
+                        StateName = model.Destination.Trim(),
+                        ImageUrl = "/lib/Image/default-destination.jpg", // Default image
+                        HotelCount = 0,   // Initial value
+                        HolidayCount = 1  // This is the first package for this destination
+                    };
+                    _context.Destinations.Add(destinationRecord);
+                    await _context.SaveChangesAsync();
+                }
+
+                // 3. Create and Save Host Detail
+                var host = new HostContactDetail
+                {
+                    HostAgencyName = model.HostAgencyName,
+                    EmailAddress = model.EmailAddress,
+                    PhoneNumber = model.PhoneNumber,
+                    CityCountry = model.CityCountry,
+                };
+                _context.HostContactDetails.Add(host);
+                await _context.SaveChangesAsync();
+
+                // 4. Create Travel Package linked to the new/existing Destination
+                var package = new TravelPackage
+                {
+                    PackageName = model.PackageName,
+                    Destination = model.Destination,
+                    DestinationId = destinationRecord.DestinationId,
+                    Location = model.Location ?? model.Destination,
+                    PackageType = model.PackageType,
+                    Duration = model.Duration,
+                    Price = model.Price,
+                    Description = model.Description,
+                    HostId = host.Id,
+                    IsTrending = false,
+                    AvailabilityStatus = PackageStatus.AVAILABLE,
+                    ApprovalStatus = ApprovalStatus.Pending // Hidden from public until Admin approves
+                };
+
+                _context.TravelPackages.Add(package);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
             {
-                PackageName = model.PackageName,
-                Destination = model.Destination,
-                Location = model.Location,
-                PackageType = model.PackageType,
-                Duration = model.Duration,
-                Price = model.Price,
-                Description = model.Description,
-                HostId = host.Id,
-                AvailabilityStatus = PackageStatus.AVAILABLE,
-                ApprovalStatus = ApprovalStatus.Pending
-            };
-
-            _context.TravelPackages.Add(package);
-            await _context.SaveChangesAsync();
-
-            return Json(new { Success = true });
+                // Helpful for debugging in the browser console
+                return Json(new { success = false, message = "Database Error: " + ex.InnerException?.Message ?? ex.Message });
+            }
         }
-        public IActionResult Index()
+
+        public IActionResult SubmissionSuccess()
         {
-            return View();
+            return View(); // Create a simple view saying "Your package is under review"
         }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
-        public HomeController(AppDbContext context)
-        {
-            _context = context;
-        }
+        //public HomeController(AppDbContext context)
+        //{
+        //    _context = context;
+        //}
         public async Task<IActionResult> Index()
         {
             // Pull the 4 main state cards for the top section
@@ -69,11 +102,12 @@ namespace TravelPackageManagementSystem.Controllers
 
             // Pull exactly the 12 packages marked as 'IsTrending = true'
             ViewBag.TrendingPackages = await _context.TravelPackages
-                .Where(p => p.IsTrending == true)
-                .ToListAsync();
+    .Where(p => p.IsTrending == true && p.ApprovalStatus == ApprovalStatus.Approved) // Add status check
+    .ToListAsync();
 
             return View(destinations);
         }
+
         public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -86,11 +120,10 @@ namespace TravelPackageManagementSystem.Controllers
         {
             // Fix: Only pull packages for this state that are NOT marked as trending
             var packages = await _context.TravelPackages
-                .Include(p => p.ParentDestination)
-                    .ThenInclude(d => d.GalleryImages)
-                .Where(p => p.ParentDestination.StateName.ToLower() == state.ToLower()
-                         && p.IsTrending == false) // This is the fix
-                .ToListAsync();
+    .Where(p => p.ParentDestination.StateName.ToLower() == state.ToLower()
+             && p.IsTrending == false
+             && p.ApprovalStatus == ApprovalStatus.Approved) // Add status check
+    .ToListAsync();
 
             ViewBag.StateName = state;
             return View("TopDestination/DestinationTD", packages);
@@ -292,15 +325,16 @@ namespace TravelPackageManagementSystem.Controllers
 
             ViewBag.SearchTerm = destination;
             return View("TopDestination/DestinationTD", results);
-        public IActionResult CustomerSupport()
-        {
-            return View();
         }
+        //public IActionResult CustomerSupport()
+        //{
+        //    return View();
+        //}
 
-        public IActionResult TravelGuide()
-        {
-            return View();
-        }
+        //public IActionResult TravelGuide()
+        //{
+        //    return View();
+        //}
 
         public IActionResult aboutus()
         {

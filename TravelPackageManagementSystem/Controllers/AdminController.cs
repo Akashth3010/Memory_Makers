@@ -32,25 +32,23 @@ namespace TravelPackageManagementSystem.Application.Controllers
         [HttpGet]
         public async Task<IActionResult> GetApprovals(string status)
         {
-            // 1. Fetch all packages and include Host details
-            //var query = _context.TravelPackages.Include(p => p.Host).AsQueryable();
-
-            // 2. Filter based on the status string from JavaScript
-            // We convert the Enum to string for a safe comparison
+            // Fix: status from your JS is "pending", but your Enum starts with "Pending" (Capital P)
+            // TryParse with 'true' handles case-insensitivity, which is good.
             if (!Enum.TryParse(status, true, out ApprovalStatus filterStatus))
             {
                 return Json(new List<object>());
             }
 
             var list = await _context.TravelPackages
+                .Include(p => p.Host)
                 .Where(p => p.ApprovalStatus == filterStatus)
                 .Select(p => new {
-                    id = p.PackageId,
+                    id = p.PackageId,        // Matches 'selectedId = data.id' in JS
                     host = p.Host != null ? p.Host.HostAgencyName : "Unknown Host",
                     email = p.Host != null ? p.Host.EmailAddress : "",
                     phone = p.Host != null ? p.Host.PhoneNumber : "",
                     city = p.Host != null ? p.Host.CityCountry : "",
-                    package = p.PackageName,
+                    package = p.PackageName, // Matches 'a.package' in JS
                     destination = p.Destination,
                     type = p.PackageType,
                     duration = p.Duration,

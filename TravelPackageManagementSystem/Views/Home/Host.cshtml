@@ -114,7 +114,7 @@
 				<h5 class="section-title">Package Details</h5>
 
 				<input type="text" placeholder="Package Name *" required />
-				<input type="text" placeholder="Destination *" required />
+				<input type="text" id="destinationInput" placeholder="Destination *" required />
 
 				<select required>
 					<option value="">Select Package Type *</option>
@@ -159,7 +159,7 @@
 	</div>
 
 	<script>
-				/* HERO SLIDER */
+		/* HERO SLIDER */
 		const slides = document.querySelectorAll('.slides');
 		let index = 0;
 		setInterval(() => {
@@ -168,7 +168,7 @@
 			slides[index].classList.add('active');
 		}, 2000);
 
-				/* FORM SUBMIT */
+		/* FORM SUBMIT */
 		document.getElementById("hostForm").addEventListener("submit", function (e) {
 			e.preventDefault();
 
@@ -178,7 +178,7 @@
 			formData.append("PhoneNumber", this.querySelector('input[type="tel"]').value);
 			formData.append("CityCountry", this.querySelector('input[placeholder*="City"]').value);
 			formData.append("PackageName", this.querySelector('input[placeholder="Package Name *"]').value);
-			formData.append("Destination", this.querySelector('input[placeholder="Destination *"]').value);
+			formData.append("Destination", document.getElementById("destinationInput").value);
 			formData.append("PackageType", this.querySelector('select').value);
 			formData.append("Duration", this.querySelector('input[placeholder*="Duration"]').value);
 			formData.append("Price", this.querySelector('input[placeholder="Price *"]').value);
@@ -190,32 +190,30 @@
 			})
 			.then(res => res.json())
 			.then(data => {
-				if(data.success) {
+				if (data.success || data.Success) {
 					document.getElementById("successPopup").style.display = "flex";
 					this.reset();
+				} else {
+					alert(data.message);
 				}
 			});
 		});
 
-		/* APPROVAL FLOW ANIMATION */
-		const observer = new IntersectionObserver(entries => {
+		/* APPROVAL FLOW ANIMATION - RESTORED & FIXED */
+		const stepObserver = new IntersectionObserver(entries => {
 			entries.forEach(entry => {
-				const observer = new IntersectionObserver(entries => {
-					entries.forEach(entry => {
-						if (entry.isIntersecting) {
-							entry.target.classList.add("show");
-						} else {
-							entry.target.classList.remove("show");
-						}
-					});
-				}, {
-					threshold: 0.3
-				});
-				document.querySelectorAll(".step").forEach(step => observer.observe(step));
+				if (entry.isIntersecting) {
+					entry.target.classList.add("show");
+				} else {
+					entry.target.classList.remove("show");
+				}
 			});
+		}, {
+			threshold: 0.3
 		});
 
-		document.querySelectorAll(".step").forEach(step => observer.observe(step));
+		// This single line triggers the observation for all steps
+		document.querySelectorAll(".step").forEach(step => stepObserver.observe(step));
 
 		function closePopup() {
 			document.getElementById("successPopup").style.display = "none";

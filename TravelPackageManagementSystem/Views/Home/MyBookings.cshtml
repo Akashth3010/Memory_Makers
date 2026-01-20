@@ -1,14 +1,17 @@
-﻿@* 1. Define the model as a list of Bookings *@
+﻿@using System.Linq
+@using System.Collections.Generic
+
 @model IEnumerable<TravelPackageManagementSystem.Repository.Models.Booking>
 
 @{
+    Layout = null;
     ViewData["Title"] = "My Bookings";
 }
 
 @* External CSS Links *@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<partial name = "_Navbar" />
+
 <div class="container py-5">
     <div class="row mb-4 align-items-end">
         <div class="col-md-6">
@@ -24,31 +27,29 @@
         </div>
     </div>
 
-    @* 2. CRITICAL FIX: Check if Model is null before calling Any() *@
+    @* 2. Use the Model with safety checks *@
     @if (Model == null)
     {
         <div class="alert alert-danger shadow-sm border-0 rounded-3 text-center py-5">
             <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
             <h4 class="fw-bold">Connection Error</h4>
-            <p>We are having trouble retrieving your booking data. Please ensure your database is running and try again.</p>
+            <p>We are having trouble retrieving your booking data.</p>
             <a href="/Home/Index" class="btn btn-danger mt-2">Return Home</a>
         </div>
     }
     else if (!Model.Any())
     {
-        @* 3. Handle the empty list state gracefully *@
         <div class="card border-0 shadow-sm text-center py-5 rounded-4">
             <div class="card-body">
                 <i class="fas fa-suitcase-rolling fa-4x text-light mb-4"></i>
                 <h4 class="text-dark fw-bold">No Bookings Found</h4>
-                <p class="text-muted mb-4">You haven't booked any trips yet. Ready to explore?</p>
+                <p class="text-muted mb-4">You haven't booked any trips yet.</p>
                 <a href="/Home/MeghalayaTD" class="btn btn-primary px-4 py-2 rounded-pill">Find a Destination</a>
             </div>
         </div>
     }
     else
     {
-        @* 4. Display the dynamic table if data exists *@
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -58,6 +59,7 @@
                                 <th class="ps-4 py-3">Package</th>
                                 <th class="py-3">Dates</th>
                                 <th class="py-3">Amount</th>
+                                <th class="py-3">Phone</th>
                                 <th class="py-3">Status</th>
                                 <th class="py-3 text-center">Actions</th>
                             </tr>
@@ -78,30 +80,46 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="small fw-semibold">@booking.TravelDate.ToString("dd-MMM-yyyy")</div>
-                                        <small class="text-muted">Booked on: @booking.BookingDate.ToShortDateString()</small>
+                                        @* Show the actual Travel Date here *@
+                                        <div class="small fw-semibold">@booking.TravelDate.ToString("MMM dd, yyyy")</div>
+                                        <small class="text-muted">@booking.Guests Guests</small>
                                     </td>
                                     <td>
+                                        @* Show TotalAmount from database instead of just package price *@
                                         <div class="fw-bold text-primary">₹@booking.TotalAmount.ToString("N0")</div>
-                                        <small class="text-muted">(@booking.Guests Guests)</small>
+                                    </td>
+                                    <td>
+                                        @* Dynamic Phone from Database *@
+                                        <div class="small">@booking.ContactPhone</div>
                                     </td>
                                     <td>
                                         @{
                                             var statusLabel = booking.Status.ToString();
-                                            var badgeClass = statusLabel == "CONFIRMED" ? "bg-success-subtle text-success border-success-subtle" : "bg-warning-subtle text-warning border-warning-subtle";
-                                            var iconClass = statusLabel == "CONFIRMED" ? "fa-check-circle" : "fa-clock";
+                                            var badgeClass = statusLabel switch
+                                            {
+                                                "CONFIRMED" => "bg-success-subtle text-success border-success-subtle",
+                                                "PENDING" => "bg-warning-subtle text-warning border-warning-subtle",
+                                                "CANCELLED" => "bg-danger-subtle text-danger border-danger-subtle",
+                                                _ => "bg-light text-muted"
+                                            };
                                         }
                                         <span class="badge @badgeClass border px-3 py-2">
-                                            <i class="fas @iconClass me-1"></i> @statusLabel
+                                            @statusLabel
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        <button class="btn btn-sm btn-outline-secondary me-1"
-                                                onclick="showDetails('@booking.TravelPackage?.PackageName', '#BK-@booking.BookingId', '@booking.BookingDate.ToShortDateString()', '@statusLabel', '₹@booking.TravelPackage?.Price')">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-download"></i>
+                                        @* Changed icon to download and function to generatePDF *@
+                                        <button class="btn btn-sm btn-outline-primary"
+                                                onclick="generatePDF({
+                                                    packageName: '@(booking.TravelPackage?.PackageName?.Replace("'", "\\'"))',
+                                                    ref: 'BK-@booking.BookingId',
+                                                    date: '@booking.TravelDate.ToString("dd MMM yyyy")',
+                                                    amount: '@booking.TotalAmount.ToString("N0")',
+                                                    phone: '@booking.ContactPhone',
+                                                    guests: '@booking.Guests',
+                                                    status: '@booking.Status'
+                                            })">
+                                            <i class="fas fa-download me-1"></i> Receipt
                                         </button>
                                     </td>
                                 </tr>
@@ -113,38 +131,47 @@
         </div>
     }
 </div>
+<div id="receiptTemplate" style="display: none;">
+    <div style="padding: 40px; font-family: sans-serif; border: 1px solid #eee;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #333; padding-bottom: 20px;">
+            <div>
+                <h1 style="margin: 0; color: #0d6efd;">easy Safar</h1>
+                <p style="margin: 5px 0;">Official Booking Receipt</p>
+            </div>
+            <div style="text-align: right;">
+                <h3 id="pdfRef" style="margin: 0;"></h3>
+                <p id="pdfDate" style="margin: 5px 0;"></p>
+            </div>
+        </div>
 
-@* Details Modal *@
-<div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Booking Details</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body text-center">
-                <i id="modalIcon" class="fas fa-map-marked-alt fa-3x text-primary mb-3"></i>
-                <h4 id="modalTitle" class="fw-bold"></h4>
-                <span id="modalRef" class="badge bg-light text-muted border mb-4"></span>
-                <div class="row g-3 text-start">
-                    <div class="col-6">
-                        <label class="small text-muted d-block">Travel Date</label>
-                        <span id="modalDates" class="fw-semibold"></span>
-                    </div>
-                    <div class="col-6">
-                        <label class="small text-muted d-block">Amount Paid</label>
-                        <span id="modalAmount" class="fw-bold text-primary"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer border-0">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-            </div>
+        <div style="margin-top: 30px;">
+            <p><strong>Package:</strong> <span id="pdfPackage"></span></p>
+            <p><strong>Customer Phone:</strong> <span id="pdfPhone"></span></p>
+            <p><strong>Total Guests:</strong> <span id="pdfGuests"></span></p>
+            <p><strong>Status:</strong> <span id="pdfStatus" style="color: green; font-weight: bold;"></span></p>
+        </div>
+
+        <table style="width: 100%; margin-top: 30px; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #f8f9fa;">
+                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Description</th>
+                    <th style="padding: 10px; border: 1px solid #ddd; text-align: right;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Travel Package Charges (Inclusive of all taxes)</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right;" id="pdfAmount"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 50px; text-align: center; font-size: 12px; color: #777;">
+            <p>Thank you for booking with easy Safar! Wish you a happy journey.</p>
+            <p>This is a computer-generated receipt and does not require a signature.</p>
         </div>
     </div>
 </div>
-
-<partial name = "_Footer" />
 
 <style>
     body {
@@ -160,16 +187,62 @@
         background-color: #fffaf0 !important;
         color: #9c6d19 !important;
     }
+
+    @@media print {
+        body {
+            background: white !important;
+        }
+
+        .no-print {
+            display: none !important;
+        }
+        /* Use this class to hide things on the PDF */
+    }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function showDetails(title, ref, date, status, amount) {
+    let myModal;
+    document.addEventListener("DOMContentLoaded", function() {
+        myModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+    });
+
+        function showDetails(title, ref, date, amount, guests, phone, status) {
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalRef').innerText = ref;
         document.getElementById('modalDates').innerText = date;
         document.getElementById('modalAmount').innerText = amount;
-        var myModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+        if(document.getElementById('modalPhone')) {
+            document.getElementById('modalPhone').innerText = phone;
+        }
+
+        // New dynamic fields
+        document.getElementById('modalGuests').innerText = guests + " Person(s)";
+        document.getElementById('modalPhone').innerText = phone;
+
         myModal.show();
+    }
+
+        function generatePDF(data) {
+        // 1. Fill the hidden template with data
+        document.getElementById('pdfPackage').innerText = data.packageName;
+        document.getElementById('pdfRef').innerText = data.ref;
+        document.getElementById('pdfDate').innerText = "Travel Date: " + data.date;
+        document.getElementById('pdfAmount').innerText = "₹" + data.amount;
+        document.getElementById('pdfPhone').innerText = data.phone;
+        document.getElementById('pdfGuests').innerText = data.guests;
+        document.getElementById('pdfStatus').innerText = data.status;
+
+        // 2. Create a temporary print window
+        const printContents = document.getElementById('receiptTemplate').innerHTML;
+        const originalContents = document.body.innerHTML;
+
+        // 3. Switch body to receipt content and print
+        document.body.innerHTML = printContents;
+        window.print();
+
+        // 4. Restore original page UI
+        document.body.innerHTML = originalContents;
+        window.location.reload(); // Reload to re-attach event listeners
     }
 </script>
