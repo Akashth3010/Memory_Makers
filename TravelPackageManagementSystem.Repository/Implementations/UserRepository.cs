@@ -6,7 +6,7 @@ using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Interface;
 using TravelPackageManagementSystem.Repository.Models;
 
-namespace TravelPackageManagementSystem.Repository.Implementation
+namespace TravelPackageManagementSystem.Repository.Implementations
 {
     public class UserRepository : IUserRepository
     {

@@ -1,11 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+//using TravelPackageManagementSystem.Repository.Interface;
+using TravelPackageManagementSystem.Repository.Implementations;
+using TravelPackageManagementSystem.Services.Interfaces;
 //using TravelPackageManagementSystem.Application.Data;
 using TravelPackageManagementSystem.Repository.Data;
-using TravelPackageManagementSystem.Repository.Implementations;
+//using TravelPackageManagementSystem.Repository.Implementations;
 using TravelPackageManagementSystem.Repository.Interfaces;
 using TravelPackageManagementSystem.Repository.Models;
 using TravelPackageManagementSystem.Services.Implementations;
-using TravelPackageManagementSystem.Services.Interfaces;
+using TravelPackageManagementSystem.Repository.Interface;
+//using TravelPackageManagementSystem.Services.Interfaces;
 //using TravelPackageManagementSystem.Application.Models;
 
 var builder = WebApplication.CreateBuilder(args);

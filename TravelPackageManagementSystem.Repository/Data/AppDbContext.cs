@@ -14,6 +14,7 @@ namespace TravelPackageManagementSystem.Repository.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Destination> Destinations { get; set; }
         public DbSet<GalleryImage> GalleryImages { get; set; }
+        public DbSet<HostContactDetail> HostContactDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

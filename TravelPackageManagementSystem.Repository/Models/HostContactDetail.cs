@@ -22,7 +22,7 @@ namespace TravelPackageManagementSystem.Repository.Models
         public string EmailAddress { get; set; }
 
         [Required(ErrorMessage = "Phone Number is required")]
-        [EmailAddress(ErrorMessage = "Invalid Phone Number")]
+        [Phone(ErrorMessage = "Invalid Phone Number")]
         [StringLength(20)]
         public string PhoneNumber { get; set; }
 

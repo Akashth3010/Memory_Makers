@@ -11,6 +11,7 @@
         //Package Info
         public string PackageName { get; set; } = string.Empty;
         public string Destination { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
         public string PackageType { get; set; } = string.Empty;
         public string Duration { get; set; } = string.Empty;
         public decimal Price { get; set; }

@@ -5,5 +5,4 @@
 //        alert("Booking feature coming soon!");
 
 //    });
-
 //});

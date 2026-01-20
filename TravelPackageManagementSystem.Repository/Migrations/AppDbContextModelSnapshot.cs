@@ -33,7 +33,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-<<<<<<< HEAD
                     b.Property<string>("ContactEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -41,14 +40,13 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<string>("ContactPhone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-=======
                     b.Property<string>("ContactPhone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
->>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
+
 
                     b.Property<int>("Guests")
                         .HasColumnType("int");
@@ -65,12 +63,13 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
                     b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("TravelDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("BookingId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("BookingId");
 
@@ -81,7 +80,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.ToTable("Bookings");
                 });
 
-<<<<<<< HEAD
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Destination", b =>
                 {
                     b.Property<int>("DestinationId")
@@ -144,9 +142,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.GalleryImage", b =>
-=======
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.HostContactDetail", b =>
->>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -154,7 +150,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
                     b.Property<string>("Caption")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -215,7 +210,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             DestinationId = 4,
                             ImageUrl = "/lib/Image/Goa1.jpg"
                         });
-=======
                     b.Property<string>("CityCountry")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -242,7 +236,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HostContactDetails");
->>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Itinerary", b =>
@@ -292,6 +285,16 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Exclusions = "Airfare;Lunch;Personal Expenses",
                             Inclusions = "Resort Stay;Daily Breakfast;Private SUV",
                             PackageId = 3
+                        },
+                        new
+                        {
+                            ItineraryId = 2,
+                            ActivityDescription = "Breathtaking views...",
+                            ActivityTitle = "Laitlum Canyons",
+                            DayNumber = 2,
+                            Exclusions = "Airfare;Lunch;Personal Expenses",
+                            Inclusions = "Resort Stay;Daily Breakfast;Private SUV",
+                            PackageId = 3
                         });
                 });
 
@@ -330,7 +333,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PackageId"));
 
-<<<<<<< HEAD
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -341,7 +343,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-=======
                     b.Property<int>("ApprovalStatus")
                         .HasColumnType("int");
 
@@ -353,16 +354,16 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     b.Property<string>("Destination")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Duration")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HostId")
+                    b.Property<int?>("HostId")
                         .HasColumnType("int");
 
->>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -371,12 +372,13 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PackageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-<<<<<<< HEAD
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -536,7 +538,8 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Price = 83000.00m,
                             Status = 0
                         });
-=======
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PackageType")
                         .IsRequired()
@@ -550,7 +553,51 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.HasIndex("HostId");
 
                     b.ToTable("TravelPackages");
->>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
+
+
+                    b.HasData(
+                        new
+                        {
+                            PackageId = 1,
+                            ApprovalStatus = 0,
+                            AvailabilityStatus = 0,
+                            Destination = "Meghalaya",
+                            Duration = "3 Days",
+                            ImageUrl = "/lib/Image/meghalaya.jpg",
+                            IsTrending = false,
+                            Location = "Shillong Peak",
+                            PackageName = "Quick Escape",
+                            PackageType = "",
+                            Price = 9999.00m
+                        },
+                        new
+                        {
+                            PackageId = 2,
+                            ApprovalStatus = 0,
+                            AvailabilityStatus = 0,
+                            Destination = "Meghalaya",
+                            Duration = "5 Days",
+                            ImageUrl = "/lib/Image/Waterfall.jpg",
+                            IsTrending = true,
+                            Location = "Root Bridges",
+                            PackageName = "The Classic",
+                            PackageType = "",
+                            Price = 17999.00m
+                        },
+                        new
+                        {
+                            PackageId = 3,
+                            ApprovalStatus = 0,
+                            AvailabilityStatus = 0,
+                            Destination = "Meghalaya",
+                            Duration = "7 Days",
+                            ImageUrl = "/lib/Image/meghbg.jpg",
+                            IsTrending = false,
+                            Location = "Hidden Caves",
+                            PackageName = "Deep Explorer",
+                            PackageType = "",
+                            Price = 25999.00m
+                        });
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.User", b =>
@@ -646,20 +693,15 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.TravelPackage", b =>
-<<<<<<< HEAD
-=======
                 {
                     b.HasOne("TravelPackageManagementSystem.Repository.Models.HostContactDetail", "Host")
                         .WithMany()
-                        .HasForeignKey("HostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HostId");
 
                     b.Navigation("Host");
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Booking", b =>
->>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
                 {
                     b.HasOne("TravelPackageManagementSystem.Repository.Models.Destination", "ParentDestination")
                         .WithMany("TravelPackages")
