@@ -33,6 +33,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
+<<<<<<< HEAD
                     b.Property<string>("ContactEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -40,6 +41,17 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<string>("ContactPhone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+=======
+                    b.Property<string>("ContactPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+>>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
+
+                    b.Property<int>("Guests")
+                        .HasColumnType("int");
 
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
@@ -52,6 +64,13 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2");
+
+                    b.Property<DateTime>("TravelDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("BookingId");
 
                     b.HasKey("BookingId");
 
@@ -62,6 +81,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.ToTable("Bookings");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Destination", b =>
                 {
                     b.Property<int>("DestinationId")
@@ -124,6 +144,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.GalleryImage", b =>
+=======
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.HostContactDetail", b =>
+>>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -131,6 +154,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+<<<<<<< HEAD
                     b.Property<string>("Caption")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -191,6 +215,34 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             DestinationId = 4,
                             ImageUrl = "/lib/Image/Goa1.jpg"
                         });
+=======
+                    b.Property<string>("CityCountry")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("HostAgencyName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HostContactDetails");
+>>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Itinerary", b =>
@@ -278,6 +330,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PackageId"));
 
+<<<<<<< HEAD
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -288,6 +341,28 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+=======
+                    b.Property<int>("ApprovalStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AvailabilityStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Destination")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Duration")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HostId")
+                        .HasColumnType("int");
+
+>>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -301,6 +376,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<string>("PackageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+<<<<<<< HEAD
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -460,6 +536,21 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Price = 83000.00m,
                             Status = 0
                         });
+=======
+
+                    b.Property<string>("PackageType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("PackageId");
+
+                    b.HasIndex("HostId");
+
+                    b.ToTable("TravelPackages");
+>>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.User", b =>
@@ -555,6 +646,20 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.TravelPackage", b =>
+<<<<<<< HEAD
+=======
+                {
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.HostContactDetail", "Host")
+                        .WithMany()
+                        .HasForeignKey("HostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Host");
+                });
+
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Booking", b =>
+>>>>>>> b2481f4d0beeb5caa0c540f4c8b586c63151307b
                 {
                     b.HasOne("TravelPackageManagementSystem.Repository.Models.Destination", "ParentDestination")
                         .WithMany("TravelPackages")

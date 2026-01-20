@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TravelPackageManagementSystem.Repository.Models;
 
 namespace TravelPackageManagementSystem.Repository.Models
 {
@@ -30,11 +31,10 @@ namespace TravelPackageManagementSystem.Repository.Models
         [Required]
         public PaymentStatus Status { get; set; } = PaymentStatus.PENDING;
 
-        // Navigation Property
-        // Fix: Add '?' to make it nullable, resolving the constructor warning
-        public int BookingId { get; set; } // Added foreign key property for clarity
-
+        [Required]
+        public int BookingId { get; set; }
+        //Navigation Property
         [ForeignKey("BookingId")]
-        public virtual Booking? Booking { get; set; }
+        public virtual Booking Booking { get; set; }
     }
 }
