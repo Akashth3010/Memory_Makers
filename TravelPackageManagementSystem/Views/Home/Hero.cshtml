@@ -73,7 +73,7 @@
     </div>
 </header>
 
-@* Search Panel *@
+@* Search Panel
 <section class="search-panel" style="width: 100%">
     <div class="container">
         <div class="search-box shadow-lg">
@@ -110,7 +110,53 @@
             </div>
         </div>
     </div>
-</section>
+</section> *@
+
+<form asp-controller="Home" asp-action="Search" method="get" class="w-100">
+    <div class="search-panel shadow-lg rounded-4 p-3 bg-white mx-auto" style="max-width: 1000px; margin-top: -50px; position: relative; z-index: 100;">
+        <div class="row g-2 align-items-end">
+
+            @* Destination Input with Dynamic Options *@
+            <div class="col-md-3">
+                <label class="form-label fw-bold text-muted mb-1 ms-2" style="font-size: 0.75rem;">Destination</label>
+                <input type="text"
+                       id="destinationSearch"
+                       name="destination"
+                       class="form-control border-0 bg-light py-1 px-3 rounded-pill"
+                       style="font-size: 0.85rem;"
+                       placeholder="Where are you going?"
+                       list="destinationOptions"
+                       autocomplete="off"
+                       required>
+
+                @* This list will be filled by the JavaScript below *@
+                <datalist id="destinationOptions"></datalist>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-bold text-muted mb-1 ms-2" style="font-size: 0.75rem;">Departure - Return</label>
+                <input type="date" id="departureDate" name="departureDate"
+                       class="form-control border-0 bg-light py-1 px-3 rounded-pill"
+                       style="font-size: 0.85rem;">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-bold text-muted mb-1 ms-2" style="font-size: 0.75rem;">Travellers</label>
+                <select name="travellers" class="form-select border-0 bg-light py-1 px-3 rounded-pill" style="font-size: 0.85rem;">
+                    <option value="1">1 Adult</option>
+                    <option value="2">2 Adults</option>
+                    <option value="4">Family (4)</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-info text-white w-100 py-2 fw-bold rounded-pill shadow-sm" style="font-size: 0.9rem;">
+                    Search Packages
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
 
 @* Auth Modal *@
 <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
