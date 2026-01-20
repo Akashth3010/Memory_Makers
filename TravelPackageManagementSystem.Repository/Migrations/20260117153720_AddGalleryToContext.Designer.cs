@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelPackageManagementSystem.Repository.Data;
 
@@ -11,9 +12,11 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260117153720_AddGalleryToContext")]
+    partial class AddGalleryToContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,6 +243,16 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Exclusions = "Airfare;Lunch;Personal Expenses",
                             Inclusions = "Resort Stay;Daily Breakfast;Private SUV",
                             PackageId = 3
+                        },
+                        new
+                        {
+                            ItineraryId = 2,
+                            ActivityDescription = "Breathtaking views...",
+                            ActivityTitle = "Laitlum Canyons",
+                            DayNumber = 2,
+                            Exclusions = "Airfare;Lunch;Personal Expenses",
+                            Inclusions = "Resort Stay;Daily Breakfast;Private SUV",
+                            PackageId = 3
                         });
                 });
 
@@ -357,8 +370,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             DestinationId = 2,
                             Duration = "48 Days",
                             ImageUrl = "/lib/Image/Tamilnadu.jpg",
-                            IsTrending = true,
-                            Location = "Madurai",
+                            IsTrending = false,
                             PackageName = "Temple Trail",
                             Price = 18500.00m,
                             Status = 0
@@ -369,8 +381,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             DestinationId = 3,
                             Duration = "36 Days",
                             ImageUrl = "/lib/Image/Kerala.jpg",
-                            IsTrending = true,
-                            Location = "Alleppey",
+                            IsTrending = false,
                             PackageName = "Backwater Bliss",
                             Price = 22000.00m,
                             Status = 0
@@ -381,83 +392,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             DestinationId = 4,
                             Duration = "40 Days",
                             ImageUrl = "/lib/Image/goa.jpg",
-                            IsTrending = true,
-                            Location = "Calangute",
+                            IsTrending = false,
                             PackageName = "Sun & Sand",
                             Price = 15000.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 7,
-                            Description = "A bustling metropolis blending colonial heritage and Bollywood glamour.",
-                            DestinationId = 2,
-                            Duration = "5 Days",
-                            ImageUrl = "/lib/TrendingImage/Mumbai.jpg",
-                            IsTrending = true,
-                            Location = "Gateway of India",
-                            PackageName = "Mumbai Heritage",
-                            Price = 35000.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 8,
-                            DestinationId = 2,
-                            Duration = "6 Days",
-                            ImageUrl = "/lib/TrendingImage/Hawa Mahal Jaipur.jpg",
-                            IsTrending = true,
-                            Location = "Jaipur",
-                            PackageName = "Pink City Tour",
-                            Price = 65000.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 9,
-                            DestinationId = 1,
-                            Duration = "8 Days",
-                            ImageUrl = "/lib/TrendingImage/Gangtok.jpg",
-                            IsTrending = true,
-                            Location = "Gangtok",
-                            PackageName = "Sikkim Adventure",
-                            Price = 70000.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 10,
-                            DestinationId = 1,
-                            Duration = "4 Days",
-                            ImageUrl = "/lib/TrendingImage/Darjiling.jpg",
-                            IsTrending = true,
-                            Location = "Darjeeling",
-                            PackageName = "Darjeeling Tea",
-                            Price = 5500.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 11,
-                            DestinationId = 2,
-                            Duration = "5 Days",
-                            ImageUrl = "/lib/TrendingImage/Ooty.jpg",
-                            IsTrending = true,
-                            Location = "Ooty",
-                            PackageName = "Ooty Gardens",
-                            Price = 52000.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 12,
-                            DestinationId = 2,
-                            Duration = "3 Days",
-                            ImageUrl = "/lib/TrendingImage/Banaras.jpg",
-                            IsTrending = true,
-                            Location = "Varanasi",
-                            PackageName = "Varanasi Spiritual",
-                            Price = 83000.00m,
                             Status = 0
                         });
                 });

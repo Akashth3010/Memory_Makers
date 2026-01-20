@@ -14,9 +14,18 @@ namespace TravelPackageManagementSystem.Controllers
         {
             _context = context;
         }
+        public async Task<IActionResult> Index()
+        {
+            // Pull the 4 main state cards for the top section
+            var destinations = await _context.Destinations.ToListAsync();
 
-        public IActionResult Index() => View();
+            // Pull exactly the 12 packages marked as 'IsTrending = true'
+            ViewBag.TrendingPackages = await _context.TravelPackages
+                .Where(p => p.IsTrending == true)
+                .ToListAsync();
 
+            return View(destinations);
+        }
         public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -24,11 +33,28 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        // Update your search or filter logic in HomeController
+        public async Task<IActionResult> Destination(string state)
+        {
+            // Fix: Only pull packages for this state that are NOT marked as trending
+            var packages = await _context.TravelPackages
+                .Include(p => p.ParentDestination)
+                    .ThenInclude(d => d.GalleryImages)
+                .Where(p => p.ParentDestination.StateName.ToLower() == state.ToLower()
+                         && p.IsTrending == false) // This is the fix
+                .ToListAsync();
+
+            ViewBag.StateName = state;
+            return View("TopDestination/DestinationTD", packages);
+        }
 
         // --- DYNAMIC BACKEND FETCHING ---
         public async Task<IActionResult> MeghalayaTD(string searchTerm, decimal? maxPrice)
         {
-            var query = _context.TravelPackages.Where(p => p.Destination == "Meghalaya");
+            // Fix: Include ParentDestination to access StateName
+            var query = _context.TravelPackages
+                .Include(p => p.ParentDestination)
+                .Where(p => p.ParentDestination != null && p.ParentDestination.StateName == "Meghalaya");
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
@@ -40,7 +66,7 @@ namespace TravelPackageManagementSystem.Controllers
                 query = query.Where(p => p.Price <= maxPrice.Value);
             }
 
-            // Fix: Add the subfolder path "TopDestination/" before the view name
+            // Ensure the view path is correct for your project structure
             return View("TopDestination/MeghalayaTD", await query.ToListAsync());
         }
         // --- BOOKING LOGIC ---
@@ -86,12 +112,22 @@ namespace TravelPackageManagementSystem.Controllers
 
         // --- DYNAMIC BOOKINGS VIEW ---
 
+        //public async Task<IActionResult> MyBookings()
+        //{
+        //    // This fetches the data and passes it to the View
+        //    var bookings = await _context.Bookings
+        //                                 .Include(b => b.TravelPackage)
+        //                                 .ToListAsync();
+
+        //    return View(bookings);
+        //}
+
         public async Task<IActionResult> MyBookings()
         {
-            // This fetches the data and passes it to the View
             var bookings = await _context.Bookings
-                                         .Include(b => b.TravelPackage)
-                                         .ToListAsync();
+                .AsNoTracking() // Improves performance for read-only views
+                .Include(b => b.TravelPackage)
+                .ToListAsync();
 
             return View(bookings);
         }
@@ -153,5 +189,47 @@ namespace TravelPackageManagementSystem.Controllers
 
         public IActionResult TravelGuide() => View();
         public IActionResult CustomerSupport() => View();
+        // Action 1: Returns JSON list for the autocomplete dropdown
+        //[HttpGet]
+        [HttpGet]
+        public async Task<JsonResult> GetSuggestions(string term)
+        {
+            if (string.IsNullOrEmpty(term)) return Json(new List<string>());
+
+            // Fetches State names directly from your database
+            var suggestions = await _context.Destinations
+                .Where(d => d.StateName.Contains(term))
+                .Select(d => d.StateName)
+                .Take(5) // Keep the list short for better UI
+                .ToListAsync();
+
+            return Json(suggestions);
+        }
+
+        // Action 2: Processes the search and redirects to the correct page
+        public async Task<IActionResult> Search(string destination)
+        {
+            if (string.IsNullOrEmpty(destination)) return RedirectToAction("Index");
+
+            // Check if the user searched for a State (e.g., "Meghalaya")
+            var stateMatch = await _context.Destinations
+                .FirstOrDefaultAsync(d => d.StateName.ToLower() == destination.ToLower());
+
+            if (stateMatch != null)
+            {
+                // Redirect to your existing Destination action with the state parameter
+                return RedirectToAction("Destination", new { state = stateMatch.StateName });
+            }
+
+            // If not a state, find specific packages
+            var results = await _context.TravelPackages
+                .Include(p => p.ParentDestination)
+                .Where(p => p.PackageName.Contains(destination) || p.Location.Contains(destination))
+                .Where(p => !p.IsTrending) // Ensure we show standard results
+                .ToListAsync();
+
+            ViewBag.SearchTerm = destination;
+            return View("TopDestination/DestinationTD", results);
+        }
     }
 }

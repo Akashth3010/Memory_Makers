@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelPackageManagementSystem.Repository.Data;
 
@@ -11,9 +12,11 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260117071818_AddMissingStates")]
+    partial class AddMissingStates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,137 +63,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
-                });
-
-            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Destination", b =>
-                {
-                    b.Property<int>("DestinationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DestinationId"));
-
-                    b.Property<int>("HolidayCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HotelCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StateName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("DestinationId");
-
-                    b.ToTable("Destinations");
-
-                    b.HasData(
-                        new
-                        {
-                            DestinationId = 1,
-                            HolidayCount = 29,
-                            HotelCount = 18,
-                            ImageUrl = "/lib/Image/meghalaya.jpg",
-                            StateName = "Meghalaya"
-                        },
-                        new
-                        {
-                            DestinationId = 2,
-                            HolidayCount = 48,
-                            HotelCount = 30,
-                            ImageUrl = "/lib/Image/Tamilnadu.jpg",
-                            StateName = "Tamil Nadu"
-                        },
-                        new
-                        {
-                            DestinationId = 3,
-                            HolidayCount = 36,
-                            HotelCount = 22,
-                            ImageUrl = "/lib/Image/Kerala.jpg",
-                            StateName = "Kerala"
-                        },
-                        new
-                        {
-                            DestinationId = 4,
-                            HolidayCount = 40,
-                            HotelCount = 25,
-                            ImageUrl = "/lib/Image/goa.jpg",
-                            StateName = "Goa"
-                        });
-                });
-
-            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.GalleryImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Caption")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DestinationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DestinationId");
-
-                    b.ToTable("GalleryImages");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Caption = "Krang Suri Falls",
-                            DestinationId = 1,
-                            ImageUrl = "/lib/Image/meg1.jpg"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Caption = "Root Bridges",
-                            DestinationId = 1,
-                            ImageUrl = "/lib/Image/meg2.jpg"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Caption = "Dawki River",
-                            DestinationId = 1,
-                            ImageUrl = "/lib/Image/meg3.jpg"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Caption = "Meenakshi Temple",
-                            DestinationId = 2,
-                            ImageUrl = "/lib/Image/Tamil1.jpg"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Caption = "Munnar Hills",
-                            DestinationId = 3,
-                            ImageUrl = "/lib/Image/Kerala1.jpg"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Caption = "Baga Beach",
-                            DestinationId = 4,
-                            ImageUrl = "/lib/Image/Goa1.jpg"
-                        });
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Itinerary", b =>
@@ -240,6 +112,16 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Exclusions = "Airfare;Lunch;Personal Expenses",
                             Inclusions = "Resort Stay;Daily Breakfast;Private SUV",
                             PackageId = 3
+                        },
+                        new
+                        {
+                            ItineraryId = 2,
+                            ActivityDescription = "Breathtaking views...",
+                            ActivityTitle = "Laitlum Canyons",
+                            DayNumber = 2,
+                            Exclusions = "Airfare;Lunch;Personal Expenses",
+                            Inclusions = "Resort Stay;Daily Breakfast;Private SUV",
+                            PackageId = 3
                         });
                 });
 
@@ -281,8 +163,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DestinationId")
-                        .HasColumnType("int");
+                    b.Property<string>("Destination")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Duration")
                         .IsRequired()
@@ -310,15 +193,13 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     b.HasKey("PackageId");
 
-                    b.HasIndex("DestinationId");
-
                     b.ToTable("TravelPackages");
 
                     b.HasData(
                         new
                         {
                             PackageId = 1,
-                            DestinationId = 1,
+                            Destination = "Meghalaya",
                             Duration = "3 Days",
                             ImageUrl = "/lib/Image/meghalaya.jpg",
                             IsTrending = false,
@@ -330,7 +211,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         new
                         {
                             PackageId = 2,
-                            DestinationId = 1,
+                            Destination = "Meghalaya",
                             Duration = "5 Days",
                             ImageUrl = "/lib/Image/Waterfall.jpg",
                             IsTrending = true,
@@ -342,7 +223,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         new
                         {
                             PackageId = 3,
-                            DestinationId = 1,
+                            Destination = "Meghalaya",
                             Duration = "7 Days",
                             ImageUrl = "/lib/Image/meghbg.jpg",
                             IsTrending = false,
@@ -354,110 +235,34 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         new
                         {
                             PackageId = 4,
-                            DestinationId = 2,
+                            Destination = "Tamil Nadu",
                             Duration = "48 Days",
                             ImageUrl = "/lib/Image/Tamilnadu.jpg",
-                            IsTrending = true,
-                            Location = "Madurai",
+                            IsTrending = false,
                             PackageName = "Temple Trail",
-                            Price = 18500.00m,
+                            Price = 18500m,
                             Status = 0
                         },
                         new
                         {
                             PackageId = 5,
-                            DestinationId = 3,
+                            Destination = "Kerala",
                             Duration = "36 Days",
                             ImageUrl = "/lib/Image/Kerala.jpg",
-                            IsTrending = true,
-                            Location = "Alleppey",
+                            IsTrending = false,
                             PackageName = "Backwater Bliss",
-                            Price = 22000.00m,
+                            Price = 22000m,
                             Status = 0
                         },
                         new
                         {
                             PackageId = 6,
-                            DestinationId = 4,
+                            Destination = "Goa",
                             Duration = "40 Days",
                             ImageUrl = "/lib/Image/goa.jpg",
-                            IsTrending = true,
-                            Location = "Calangute",
+                            IsTrending = false,
                             PackageName = "Sun & Sand",
-                            Price = 15000.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 7,
-                            Description = "A bustling metropolis blending colonial heritage and Bollywood glamour.",
-                            DestinationId = 2,
-                            Duration = "5 Days",
-                            ImageUrl = "/lib/TrendingImage/Mumbai.jpg",
-                            IsTrending = true,
-                            Location = "Gateway of India",
-                            PackageName = "Mumbai Heritage",
-                            Price = 35000.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 8,
-                            DestinationId = 2,
-                            Duration = "6 Days",
-                            ImageUrl = "/lib/TrendingImage/Hawa Mahal Jaipur.jpg",
-                            IsTrending = true,
-                            Location = "Jaipur",
-                            PackageName = "Pink City Tour",
-                            Price = 65000.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 9,
-                            DestinationId = 1,
-                            Duration = "8 Days",
-                            ImageUrl = "/lib/TrendingImage/Gangtok.jpg",
-                            IsTrending = true,
-                            Location = "Gangtok",
-                            PackageName = "Sikkim Adventure",
-                            Price = 70000.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 10,
-                            DestinationId = 1,
-                            Duration = "4 Days",
-                            ImageUrl = "/lib/TrendingImage/Darjiling.jpg",
-                            IsTrending = true,
-                            Location = "Darjeeling",
-                            PackageName = "Darjeeling Tea",
-                            Price = 5500.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 11,
-                            DestinationId = 2,
-                            Duration = "5 Days",
-                            ImageUrl = "/lib/TrendingImage/Ooty.jpg",
-                            IsTrending = true,
-                            Location = "Ooty",
-                            PackageName = "Ooty Gardens",
-                            Price = 52000.00m,
-                            Status = 0
-                        },
-                        new
-                        {
-                            PackageId = 12,
-                            DestinationId = 2,
-                            Duration = "3 Days",
-                            ImageUrl = "/lib/TrendingImage/Banaras.jpg",
-                            IsTrending = true,
-                            Location = "Varanasi",
-                            PackageName = "Varanasi Spiritual",
-                            Price = 83000.00m,
+                            Price = 15000m,
                             Status = 0
                         });
                 });
@@ -521,17 +326,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Navigation("TravelPackage");
                 });
 
-            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.GalleryImage", b =>
-                {
-                    b.HasOne("TravelPackageManagementSystem.Repository.Models.Destination", "ParentDestination")
-                        .WithMany("GalleryImages")
-                        .HasForeignKey("DestinationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ParentDestination");
-                });
-
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Itinerary", b =>
                 {
                     b.HasOne("TravelPackageManagementSystem.Repository.Models.TravelPackage", "TravelPackage")
@@ -552,24 +346,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Booking");
-                });
-
-            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.TravelPackage", b =>
-                {
-                    b.HasOne("TravelPackageManagementSystem.Repository.Models.Destination", "ParentDestination")
-                        .WithMany("TravelPackages")
-                        .HasForeignKey("DestinationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ParentDestination");
-                });
-
-            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Destination", b =>
-                {
-                    b.Navigation("GalleryImages");
-
-                    b.Navigation("TravelPackages");
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.TravelPackage", b =>

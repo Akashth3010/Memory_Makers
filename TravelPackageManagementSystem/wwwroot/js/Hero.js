@@ -1,21 +1,28 @@
-﻿// --- 1. Search Logic ---
-function handleFullSearch() {
-    const destination = document.getElementById('destInput').value.toLowerCase().trim();
-    const travelDate = document.getElementById('dateInput').value;
-    const travellers = document.getElementById('travellerInput').value;
+﻿    // 1. Lock the calendar to today
+    const dateInput = document.getElementById('departureDate');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+    dateInput.value = today;
 
-    if (destination === "") {
-        alert("Please enter a destination to search.");
-        return;
-    }
+    // 2. Fetch Destination Options from Backend
+    document.getElementById('destinationSearch').addEventListener('input', function () {
+        var input = this.value;
+    if (input.length < 1) return; // Trigger after first character
 
-    if (destination.includes("meghalaya")) {
-        window.location.href = `/Home/MeghalayaTD?date=${travelDate}&guests=${travellers}`;
-    } else {
-        alert("We currently only have packages available for 'Meghalaya'.");
-    }
-}
+    fetch('/Home/GetSuggestions?term=' + encodeURIComponent(input))
+            .then(response => response.json())
+            .then(data => {
+                var dataList = document.getElementById('destinationOptions');
+    dataList.innerHTML = ''; // Clear old options
 
+    data.forEach(function (item) {
+                    var option = document.createElement('option');
+    option.value = item;
+    dataList.appendChild(option);
+                });
+            })
+            .catch(err => console.error('Error fetching destinations:', err));
+    });
 // --- 2. Auth Toggle Logic ---
 function handleAuthToggle() {
     const signupFields = document.querySelectorAll('.signup-only');

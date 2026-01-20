@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,36 +17,27 @@ namespace TravelPackageManagementSystem.Repository.Models
         public int PackageId { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public string PackageName { get; set; }
+        public string PackageName { get; set; } = string.Empty;
 
+        // NEW: Foreign Key linking to the Destination Table
         [Required]
-        [StringLength(100)]
-        public string Destination { get; set; } // e.g., "Meghalaya"
+        public int DestinationId { get; set; }
 
-        [StringLength(100)]
-        public string Location { get; set; }    // e.g., "Shillong Peak"
+        [ForeignKey("DestinationId")]
+        public virtual Destination? ParentDestination { get; set; }
 
-        [Required]
+        public string? Location { get; set; }
+
         [Column(TypeName = "decimal(18,2)")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
         public decimal Price { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Duration { get; set; } // e.g., "3 Days / 2 Nights"
-
-        public string Description { get; set; }
-
-        [Required]
-        public string ImageUrl { get; set; } // Path to the main image
-
+        public string Duration { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
         public bool IsTrending { get; set; }
+        public string? Description { get; set; }
 
-        [Required]
         public PackageStatus Status { get; set; } = PackageStatus.AVAILABLE;
 
-        // Relationship with Itinerary
-        public virtual ICollection<Itinerary> Itineraries { get; set; }
+        public virtual ICollection<Itinerary> Itineraries { get; set; } = new List<Itinerary>();
     }
 }
