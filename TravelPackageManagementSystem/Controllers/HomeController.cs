@@ -4,7 +4,6 @@ using System.Diagnostics;
 using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Models;
 //using TravelPackageManagementSystem.Application.Data;
-using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Application.Models;
 
 namespace TravelPackageManagementSystem.Controllers
@@ -116,16 +115,38 @@ namespace TravelPackageManagementSystem.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         // Update your search or filter logic in HomeController
+        //    public async Task<IActionResult> Destination(string state)
+        //    {
+        //        // Fix: Only pull packages for this state that are NOT marked as trending
+        //        var packages = await _context.TravelPackages
+        //.Where(p => p.ParentDestination.StateName.ToLower() == state.ToLower()
+        //         && p.IsTrending == false
+        //         && p.ApprovalStatus == ApprovalStatus.Approved) // Add status check
+        //.ToListAsync();
+
+        //        ViewBag.StateName = state;
+        //        return View("TopDestination/DestinationTD", packages);
+        //    }
         public async Task<IActionResult> Destination(string state)
         {
-            // Fix: Only pull packages for this state that are NOT marked as trending
+            // Fix: We navigate from Package -> ParentDestination -> GalleryImages
             var packages = await _context.TravelPackages
-    .Where(p => p.ParentDestination.StateName.ToLower() == state.ToLower()
-             && p.IsTrending == false
-             && p.ApprovalStatus == ApprovalStatus.Approved) // Add status check
-    .ToListAsync();
+                .Include(p => p.ParentDestination)
+                    .ThenInclude(d => d.GalleryImages)
+                .Where(p => p.ParentDestination.StateName.ToLower() == state.ToLower()
+                         && p.IsTrending == false
+                         && p.ApprovalStatus == ApprovalStatus.Approved)
+                .ToListAsync();
 
             ViewBag.StateName = state;
+
+            // Check if we found any packages to avoid errors in the view
+            if (packages == null || !packages.Any())
+            {
+                // Optionally fetch just the Destination if no packages exist to still show gems
+                return View("TopDestination/DestinationTD", new List<TravelPackage>());
+            }
+
             return View("TopDestination/DestinationTD", packages);
         }
 

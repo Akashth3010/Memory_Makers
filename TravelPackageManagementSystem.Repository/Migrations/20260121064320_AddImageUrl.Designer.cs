@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelPackageManagementSystem.Repository.Data;
 
@@ -11,9 +12,11 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260121064320_AddImageUrl")]
+    partial class AddImageUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,21 +220,21 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Id = 4,
                             Caption = "Meenakshi Temple",
                             DestinationId = 2,
-                            ImageUrl = "/lib/Image/t2.jpg"
+                            ImageUrl = "/lib/Image/Tamil1.jpg"
                         },
                         new
                         {
                             Id = 5,
                             Caption = "Munnar Hills",
                             DestinationId = 3,
-                            ImageUrl = "/lib/Image/k1.jpg"
+                            ImageUrl = "/lib/Image/Kerala1.jpg"
                         },
                         new
                         {
                             Id = 6,
                             Caption = "Baga Beach",
                             DestinationId = 4,
-                            ImageUrl = "/lib/Image/goa3.jpg"
+                            ImageUrl = "/lib/Image/Goa1.jpg"
                         });
                 });
 
