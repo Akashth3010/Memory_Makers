@@ -103,12 +103,15 @@
 
         <div class="auto-scroll-container">
             <div class="scroll-track">
-                @if (Model.Any() && Model.First().ParentDestination?.GalleryImages != null)
-                {
-                    var gems = Model.First().ParentDestination.GalleryImages.ToList();
+                @{
+                    // Safely extract the gallery images from the first package's destination
+                    var galleryGems = Model.FirstOrDefault()?.ParentDestination?.GalleryImages?.ToList();
+                }
 
+                @if (galleryGems != null && galleryGems.Any())
+                {
                     @* LOOP 1: Original Set *@
-                    foreach (var gem in gems)
+                    foreach (var gem in galleryGems)
                     {
                         <div class="gem-item">
                             <img src="@gem.ImageUrl" alt="@gem.Caption">
@@ -116,8 +119,8 @@
                         </div>
                     }
 
-                    @* LOOP 2: Identical Clone Set (Removes the blank space) *@
-                    foreach (var gem in gems)
+                    @* LOOP 2: Identical Clone Set for Seamless Loop *@
+                    foreach (var gem in galleryGems)
                     {
                         <div class="gem-item">
                             <img src="@gem.ImageUrl" alt="@gem.Caption">
@@ -128,7 +131,7 @@
                 else
                 {
                     <div class="text-center w-100 py-4">
-                        <p class="text-muted">No hidden gems available for this destination.</p>
+                        <p class="text-muted">No hidden gems available for @ViewBag.StateName yet.</p>
                     </div>
                 }
             </div>

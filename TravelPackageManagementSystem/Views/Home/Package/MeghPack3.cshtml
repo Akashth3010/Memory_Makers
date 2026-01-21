@@ -83,11 +83,24 @@
             <div class="mb-4">
                 <img id="mainDisplay" src="@Model.ImageUrl" class="rounded-4 shadow-sm w-100" style="height: 400px; object-fit: cover;">
             </div>
-
-            <div class="d-flex gap-2 mb-4">
+            @* Images are here *@
+            @* <div class="d-flex gap-2 mb-4">
                 <img src="@Model.ImageUrl" class="thumb-nail active" onclick="swap(this)">
                 <img src="/lib/Image/meg3.jpg" class="thumb-nail" onclick="swap(this)">
                 <img src="/lib/Image/meg4.jpg" class="thumb-nail" onclick="swap(this)">
+            </div> *@
+            <div class="d-flex gap-2 mb-4">
+                <img src="@Model.ImageUrl" class="thumb-nail active" onclick="swap(this)">
+
+                @if (!string.IsNullOrEmpty(Model.ThumbnailUrl1))
+                {
+                    <img src="@Model.ThumbnailUrl1" class="thumb-nail" onclick="swap(this)">
+                }
+
+                @if (!string.IsNullOrEmpty(Model.ThumbnailUrl2))
+                {
+                    <img src="@Model.ThumbnailUrl2" class="thumb-nail" onclick="swap(this)">
+                }
             </div>
 
             <h4 class="fw-bold mb-3">Trip Itinerary</h4>

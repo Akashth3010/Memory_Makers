@@ -35,17 +35,19 @@ namespace TravelPackageManagementSystem.Repository.Data
 
             // 2. Seed Travel Packages
             modelBuilder.Entity<TravelPackage>().HasData(
-                // Standard Packages (FIXED: Added missing 'Destination' property)
                 new TravelPackage
                 {
                     PackageId = 1,
                     PackageName = "Quick Escape",
-                    Destination = "Meghalaya", // Required property fixed
+                    Destination = "Meghalaya",
                     DestinationId = 1,
                     Location = "Shillong Peak",
                     Price = 9999.00m,
                     Duration = "3 Days",
                     ImageUrl = "/lib/Image/meghalaya.jpg",
+                    ThumbnailUrl1 = "/lib/Image/meg4.jpg",
+                    ThumbnailUrl2 = "/lib/Image/meghbg.jpg",
+                    ThumbnailUrl3 = "/lib/Image/meg3.jpg",
                     IsTrending = false,
                     ApprovalStatus = ApprovalStatus.Approved,
                     AvailabilityStatus = PackageStatus.AVAILABLE
@@ -54,12 +56,15 @@ namespace TravelPackageManagementSystem.Repository.Data
                 {
                     PackageId = 2,
                     PackageName = "Temple Trail",
-                    Destination = "Tamil Nadu", // Required property fixed
+                    Destination = "Tamil Nadu",
                     DestinationId = 2,
                     Location = "Madurai",
                     Price = 18500.00m,
                     Duration = "8 Days",
                     ImageUrl = "/lib/Image/Tamilnadu.jpg",
+                    ThumbnailUrl1 = "/lib/Image/t4.jpg",
+                    ThumbnailUrl2 = "/lib/Image/t25.jpg",
+                    ThumbnailUrl3 = "/lib/Image/t3.jpg",
                     IsTrending = false,
                     ApprovalStatus = ApprovalStatus.Approved,
                     AvailabilityStatus = PackageStatus.AVAILABLE
@@ -68,18 +73,19 @@ namespace TravelPackageManagementSystem.Repository.Data
                 {
                     PackageId = 3,
                     PackageName = "Backwater Bliss",
-                    Destination = "Kerala", // Required property fixed
+                    Destination = "Kerala",
                     DestinationId = 3,
                     Location = "Alleppey",
                     Price = 22000.00m,
                     Duration = "6 Days",
                     ImageUrl = "/lib/Image/Kerala.jpg",
+                    ThumbnailUrl1 = "/lib/Image/k32.jpg",
+                    ThumbnailUrl2 = "/lib/Image/k35.jpg",
+                    ThumbnailUrl3 = "/lib/Image/k3.jpg",
                     IsTrending = false,
                     ApprovalStatus = ApprovalStatus.Approved,
                     AvailabilityStatus = PackageStatus.AVAILABLE
                 },
-
-                // Trending Packages
                 new TravelPackage
                 {
                     PackageId = 4,
@@ -90,8 +96,12 @@ namespace TravelPackageManagementSystem.Repository.Data
                     Price = 35000.00m,
                     Duration = "5 Days",
                     ImageUrl = "/lib/TrendingImage/Mumbai.jpg",
+                    ThumbnailUrl1 = "/lib/Image/mumbai1.jpg",
+                    ThumbnailUrl2 = "/lib/Image/mumbai2.jpg",
+                    ThumbnailUrl3 = "/lib/Image/mumbai3.jpg",
                     IsTrending = true,
                     ApprovalStatus = ApprovalStatus.Approved,
+                    AvailabilityStatus = PackageStatus.AVAILABLE,
                     Description = "A bustling metropolis blending colonial heritage and Bollywood glamour."
                 },
                 new TravelPackage
@@ -104,8 +114,12 @@ namespace TravelPackageManagementSystem.Repository.Data
                     Price = 65000.00m,
                     Duration = "6 Days",
                     ImageUrl = "/lib/TrendingImage/Hawa Mahal Jaipur.jpg",
+                    ThumbnailUrl1 = "/lib/Image/jaipur1.jpg",
+                    ThumbnailUrl2 = "/lib/Image/jaipur2.jpg",
+                    ThumbnailUrl3 = "/lib/Image/jaipur3.jpg",
                     IsTrending = true,
-                    ApprovalStatus = ApprovalStatus.Approved
+                    ApprovalStatus = ApprovalStatus.Approved,
+                    AvailabilityStatus = PackageStatus.AVAILABLE
                 },
                 new TravelPackage
                 {
@@ -117,8 +131,12 @@ namespace TravelPackageManagementSystem.Repository.Data
                     Price = 70000.00m,
                     Duration = "8 Days",
                     ImageUrl = "/lib/TrendingImage/Gangtok.jpg",
+                    ThumbnailUrl1 = "/lib/Image/gangtok1.jpg",
+                    ThumbnailUrl2 = "/lib/Image/gangtok2.jpg",
+                    ThumbnailUrl3 = "/lib/Image/gangtok3.jpg",
                     IsTrending = true,
-                    ApprovalStatus = ApprovalStatus.Approved
+                    ApprovalStatus = ApprovalStatus.Approved,
+                    AvailabilityStatus = PackageStatus.AVAILABLE
                 },
                 new TravelPackage
                 {
@@ -130,8 +148,12 @@ namespace TravelPackageManagementSystem.Repository.Data
                     Price = 5500.00m,
                     Duration = "4 Days",
                     ImageUrl = "/lib/TrendingImage/Darjiling.jpg",
+                    ThumbnailUrl1 = "/lib/Image/darjiling1.jpg",
+                    ThumbnailUrl2 = "/lib/Image/darjiling2.jpg",
+                    ThumbnailUrl3 = "/lib/Image/darjiling3.jpg",
                     IsTrending = true,
-                    ApprovalStatus = ApprovalStatus.Approved
+                    ApprovalStatus = ApprovalStatus.Approved,
+                    AvailabilityStatus = PackageStatus.AVAILABLE
                 },
                 new TravelPackage
                 {
@@ -143,8 +165,12 @@ namespace TravelPackageManagementSystem.Repository.Data
                     Price = 83000.00m,
                     Duration = "3 Days",
                     ImageUrl = "/lib/TrendingImage/Banaras.jpg",
+                    ThumbnailUrl1 = "/lib/Image/banaras1.jpg",
+                    ThumbnailUrl2 = "/lib/Image/banaras2.jpg",
+                    ThumbnailUrl3 = "/lib/Image/banaras3.jpg",
                     IsTrending = true,
-                    ApprovalStatus = ApprovalStatus.Approved
+                    ApprovalStatus = ApprovalStatus.Approved,
+                    AvailabilityStatus = PackageStatus.AVAILABLE
                 },
                 new TravelPackage
                 {
@@ -156,8 +182,12 @@ namespace TravelPackageManagementSystem.Repository.Data
                     Price = 50000.00m,
                     Duration = "5 Days",
                     ImageUrl = "/lib/TrendingImage/Munnar.jpg",
+                    ThumbnailUrl1 = " /lib/Image/munnar1.jpg",
+                    ThumbnailUrl2 = "/lib/Image/munnar2.jpg",
+                    ThumbnailUrl3 = "/lib/Image/munnar4.jpg",
                     IsTrending = true,
-                    ApprovalStatus = ApprovalStatus.Approved
+                    ApprovalStatus = ApprovalStatus.Approved,
+                    AvailabilityStatus = PackageStatus.AVAILABLE
                 },
                 new TravelPackage
                 {
@@ -169,8 +199,12 @@ namespace TravelPackageManagementSystem.Repository.Data
                     Price = 12500.00m,
                     Duration = "3 Days",
                     ImageUrl = "/lib/TrendingImage/Goa.jpg",
+                    ThumbnailUrl1 = " /lib/Image/goa1.jpg",
+                    ThumbnailUrl2 = "/lib/Image/goa2.jpg",
+                    ThumbnailUrl3 = "/lib/Image/goa3.jpg",
                     IsTrending = true,
-                    ApprovalStatus = ApprovalStatus.Approved
+                    ApprovalStatus = ApprovalStatus.Approved,
+                    AvailabilityStatus = PackageStatus.AVAILABLE
                 },
                 new TravelPackage
                 {
@@ -182,8 +216,12 @@ namespace TravelPackageManagementSystem.Repository.Data
                     Price = 52000.00m,
                     Duration = "5 Days",
                     ImageUrl = "/lib/TrendingImage/Ooty.jpg",
+                    ThumbnailUrl1 = "/lib/Image/ooty.jpg",
+                    ThumbnailUrl2 = "/lib/Image/ooty2.jpg",
+                    ThumbnailUrl3 = "/lib/Image/ooty3.jpg",
                     IsTrending = true,
-                    ApprovalStatus = ApprovalStatus.Approved
+                    ApprovalStatus = ApprovalStatus.Approved,
+                    AvailabilityStatus = PackageStatus.AVAILABLE
                 },
                 new TravelPackage
                 {
@@ -194,9 +232,13 @@ namespace TravelPackageManagementSystem.Repository.Data
                     Location = "Vrindavan",
                     Price = 67000.00m,
                     Duration = "3 Days",
-                    ImageUrl = "/lib/TrendingImage/Banaras.jpg",
+                    ImageUrl = "/lib/TrendingImage/Vrindavan.jpg",
+                    ThumbnailUrl1 = "/lib/Image/vrindavan5.jpg",
+                    ThumbnailUrl2 = "/lib/Image/vrindavan3.jpg",
+                    ThumbnailUrl3 = "/lib/Image/vrindavan2.jpg",
                     IsTrending = true,
-                    ApprovalStatus = ApprovalStatus.Approved
+                    ApprovalStatus = ApprovalStatus.Approved,
+                    AvailabilityStatus = PackageStatus.AVAILABLE
                 }
             );
 
@@ -205,9 +247,9 @@ namespace TravelPackageManagementSystem.Repository.Data
                 new GalleryImage { Id = 1, DestinationId = 1, ImageUrl = "/lib/Image/meg1.jpg", Caption = "Krang Suri Falls" },
                 new GalleryImage { Id = 2, DestinationId = 1, ImageUrl = "/lib/Image/meg2.jpg", Caption = "Root Bridges" },
                 new GalleryImage { Id = 3, DestinationId = 1, ImageUrl = "/lib/Image/meg3.jpg", Caption = "Dawki River" },
-                new GalleryImage { Id = 4, DestinationId = 2, ImageUrl = "/lib/Image/Tamil1.jpg", Caption = "Meenakshi Temple" },
-                new GalleryImage { Id = 5, DestinationId = 3, ImageUrl = "/lib/Image/Kerala1.jpg", Caption = "Munnar Hills" },
-                new GalleryImage { Id = 6, DestinationId = 4, ImageUrl = "/lib/Image/Goa1.jpg", Caption = "Baga Beach" }
+                new GalleryImage { Id = 4, DestinationId = 2, ImageUrl = "/lib/Image/t2.jpg", Caption = "Meenakshi Temple" },
+                new GalleryImage { Id = 5, DestinationId = 3, ImageUrl = "/lib/Image/k1.jpg", Caption = "Munnar Hills" },
+                new GalleryImage { Id = 6, DestinationId = 4, ImageUrl = "/lib/Image/goa3.jpg", Caption = "Baga Beach" }
             );
 
             // 4. Seed User

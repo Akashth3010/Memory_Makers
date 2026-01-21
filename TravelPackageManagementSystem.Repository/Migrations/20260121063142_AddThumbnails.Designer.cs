@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelPackageManagementSystem.Repository.Data;
 
@@ -11,9 +12,11 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260121063142_AddThumbnails")]
+    partial class AddThumbnails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,21 +220,21 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Id = 4,
                             Caption = "Meenakshi Temple",
                             DestinationId = 2,
-                            ImageUrl = "/lib/Image/t2.jpg"
+                            ImageUrl = "/lib/Image/Tamil1.jpg"
                         },
                         new
                         {
                             Id = 5,
                             Caption = "Munnar Hills",
                             DestinationId = 3,
-                            ImageUrl = "/lib/Image/k1.jpg"
+                            ImageUrl = "/lib/Image/Kerala1.jpg"
                         },
                         new
                         {
                             Id = 6,
                             Caption = "Baga Beach",
                             DestinationId = 4,
-                            ImageUrl = "/lib/Image/goa3.jpg"
+                            ImageUrl = "/lib/Image/Goa1.jpg"
                         });
                 });
 
@@ -478,9 +481,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             PackageName = "Mumbai Heritage",
                             PackageType = "",
                             Price = 35000.00m,
-                            ThumbnailUrl1 = "/lib/Image/mumbai1.jpg",
-                            ThumbnailUrl2 = "/lib/Image/mumbai2.jpg",
-                            ThumbnailUrl3 = "/lib/Image/mumbai3.jpg"
+                            ThumbnailUrl1 = "/lib/TrendingImage/mumbai1.jpg",
+                            ThumbnailUrl2 = "/lib/TrendingImage/mumbai2.jpg",
+                            ThumbnailUrl3 = "/lib/TrendingImage/mumbai3.jpg"
                         },
                         new
                         {
@@ -496,9 +499,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             PackageName = "Pink City Tour",
                             PackageType = "",
                             Price = 65000.00m,
-                            ThumbnailUrl1 = "/lib/Image/jaipur1.jpg",
-                            ThumbnailUrl2 = "/lib/Image/jaipur2.jpg",
-                            ThumbnailUrl3 = "/lib/Image/jaipur3.jpg"
+                            ThumbnailUrl1 = "/lib/TrendingImage/jaipur1.jpg",
+                            ThumbnailUrl2 = "/lib/TrendingImage/jaipur2.jpg",
+                            ThumbnailUrl3 = "/lib/TrendingImage/jaipur3.jpg"
                         },
                         new
                         {
@@ -514,9 +517,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             PackageName = "Sikkim Adventure",
                             PackageType = "",
                             Price = 70000.00m,
-                            ThumbnailUrl1 = "/lib/Image/gangtok1.jpg",
-                            ThumbnailUrl2 = "/lib/Image/gangtok2.jpg",
-                            ThumbnailUrl3 = "/lib/Image/gangtok3.jpg"
+                            ThumbnailUrl1 = "/lib/TrendingImage/gangtok1.jpg",
+                            ThumbnailUrl2 = "/lib/TrendingImage/gangtok2.jpg",
+                            ThumbnailUrl3 = "/lib/TrendingImage/gangtok3.jpg"
                         },
                         new
                         {
@@ -551,7 +554,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             PackageType = "",
                             Price = 83000.00m,
                             ThumbnailUrl1 = "/lib/Image/banaras1.jpg",
-                            ThumbnailUrl2 = "/lib/Image/banaras2.jpg",
+                            ThumbnailUrl2 = "/lib/Image/banarsi2.jpg",
                             ThumbnailUrl3 = "/lib/Image/banaras3.jpg"
                         },
                         new
@@ -622,9 +625,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             PackageName = "Sacred Vrindavan",
                             PackageType = "",
                             Price = 67000.00m,
-                            ThumbnailUrl1 = "/lib/Image/vrindavan5.jpg",
-                            ThumbnailUrl2 = "/lib/Image/vrindavan3.jpg",
-                            ThumbnailUrl3 = "/lib/Image/vrindavan2.jpg"
+                            ThumbnailUrl1 = "/lib/Image/vrindavan1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/vrindavan2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/vrindavan3.jpg"
                         });
                 });
 

@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260120095653_AprajitaUpdate")]
-    partial class AprajitaUpdate
+    [Migration("20260120124106_FixPackageTypeMapping")]
+    partial class FixPackageTypeMapping
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -357,7 +357,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Destination")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -379,7 +378,6 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -390,13 +388,11 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     b.Property<string>("PackageType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("status")
-                        .HasColumnType("int");
 
                     b.HasKey("PackageId");
 
@@ -420,8 +416,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Shillong Peak",
                             PackageName = "Quick Escape",
                             PackageType = "",
-                            Price = 9999.00m,
-                            status = 0
+                            Price = 9999.00m
                         },
                         new
                         {
@@ -436,8 +431,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Madurai",
                             PackageName = "Temple Trail",
                             PackageType = "",
-                            Price = 18500.00m,
-                            status = 0
+                            Price = 18500.00m
                         },
                         new
                         {
@@ -452,8 +446,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Alleppey",
                             PackageName = "Backwater Bliss",
                             PackageType = "",
-                            Price = 22000.00m,
-                            status = 0
+                            Price = 22000.00m
                         },
                         new
                         {
@@ -469,8 +462,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Gateway of India",
                             PackageName = "Mumbai Heritage",
                             PackageType = "",
-                            Price = 35000.00m,
-                            status = 0
+                            Price = 35000.00m
                         },
                         new
                         {
@@ -485,8 +477,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Jaipur",
                             PackageName = "Pink City Tour",
                             PackageType = "",
-                            Price = 65000.00m,
-                            status = 0
+                            Price = 65000.00m
                         },
                         new
                         {
@@ -501,8 +492,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Gangtok",
                             PackageName = "Sikkim Adventure",
                             PackageType = "",
-                            Price = 70000.00m,
-                            status = 0
+                            Price = 70000.00m
                         },
                         new
                         {
@@ -517,8 +507,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Darjeeling",
                             PackageName = "Darjeeling Tea",
                             PackageType = "",
-                            Price = 5500.00m,
-                            status = 0
+                            Price = 5500.00m
                         },
                         new
                         {
@@ -533,8 +522,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Varanasi",
                             PackageName = "Varanasi Spiritual",
                             PackageType = "",
-                            Price = 83000.00m,
-                            status = 0
+                            Price = 83000.00m
                         },
                         new
                         {
@@ -549,8 +537,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Munnar",
                             PackageName = "Misty Munnar",
                             PackageType = "",
-                            Price = 50000.00m,
-                            status = 0
+                            Price = 50000.00m
                         },
                         new
                         {
@@ -565,8 +552,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Calangute",
                             PackageName = "Goa Sundowner",
                             PackageType = "",
-                            Price = 12500.00m,
-                            status = 0
+                            Price = 12500.00m
                         },
                         new
                         {
@@ -581,8 +567,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Ooty",
                             PackageName = "Ooty Gardens",
                             PackageType = "",
-                            Price = 52000.00m,
-                            status = 0
+                            Price = 52000.00m
                         },
                         new
                         {
@@ -597,8 +582,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Vrindavan",
                             PackageName = "Sacred Vrindavan",
                             PackageType = "",
-                            Price = 67000.00m,
-                            status = 0
+                            Price = 67000.00m
                         });
                 });
 

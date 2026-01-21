@@ -44,7 +44,7 @@ html, body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    animation: bgSlider 10s infinite;
+    animation: bgSlider 20s infinite;
     margin: 0;
     padding: 0;
     left: 0;
@@ -61,23 +61,23 @@ html, body {
 @keyframes bgSlider {
 
     0% {
-        background-image: url(/lib/images/des1.jpg);
+        background-image: url(/lib/Image/he3.jpg);
     }
 
     25% {
-        background-image: url(/lib/images/des2.jpg);
+        background-image: url(/lib/Image/he2.jpg);
     }
 
     50% {
-        background-image: url(/lib/images/des4.jpg);
+        background-image: url(/lib/Image/he5.jpg);
     }
 
     75% {
-        background-image: url(/lib/images/des5.jpg);
+        background-image: url(/lib/Image/he4.jpg);
     }
 
     100% {
-        background-image: url(/lib/images/des4.jpg);
+        background-image: url(/lib/Image/he1.jpg);
     }
 }
 
