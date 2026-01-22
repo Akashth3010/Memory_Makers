@@ -7,53 +7,53 @@
 
     <h2 class="page-heading">Package Approvals</h2>
     <p class="page-subtext">
-        Review host submitted travel packages and take action
+        Review host submitted travel packages and take action ✨
     </p>
 
-    <!-- ================= STATUS TABS ================= -->
     <div class="approval-tabs">
         <div class="tab active" data-status="pending">Pending</div>
         <div class="tab" data-status="approved">Approved</div>
         <div class="tab" data-status="rejected">Rejected</div>
     </div>
 
-    <!-- ================= LIST ================= -->
     <div id="approvalList" class="approval-grid"></div>
 
-    <!-- ================= DETAILS PANEL ================= -->
-    <div id="approvalDetails" class="approval-details">
+    <div id="approvalDetails" class="approval-details" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 90%; max-width: 600px;">
 
-        <h4>Host Package Details</h4>
+        <h4 style="border-bottom: 2px solid #f1f1f1; padding-bottom: 10px; margin-bottom: 20px;">Host Package Details</h4>
 
-        <div class="details-grid">
-            <div><b>Host Name:</b> <span id="dHost"></span></div>
-            <div><b>Email:</b> <span id="dEmail"></span></div>
-            <div><b>Phone:</b> <span id="dPhone"></span></div>
-            <div><b>City:</b> <span id="dCity"></span></div>
+        <div class="details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.95rem;">
+            <div><b class="text-primary">Host Name:</b> <span id="dHost"></span></div>
+            <div><b class="text-primary">Email:</b> <span id="dEmail"></span></div>
+            <div><b class="text-primary">Phone:</b> <span id="dPhone"></span></div>
+            <div><b class="text-primary">City:</b> <span id="dCity"></span></div>
 
-            <div><b>Package Name:</b> <span id="dPackage"></span></div>
+            <div style="grid-column: span 2; border-top: 1px solid #eee; padding-top: 10px; margin-top: 5px;">
+                <b class="text-primary">Package Name:</b> <span id="dPackage" style="font-weight:bold;"></span>
+            </div>
             <div><b>Destination:</b> <span id="dDestination"></span></div>
             <div><b>Package Type:</b> <span id="dType"></span></div>
-            <div><b>Duration:</b> <span id="dDuration"></span></div>
-            <div><b>Price:</b> ₹<span id="dPrice"></span></div>
+            <div><b>Duration:</b> <span id="dDuration"></span> Days</div>
+            <div><b>Price:</b> <span class="text-success" style="font-weight:bold;">₹<span id="dPrice"></span></span></div>
         </div>
 
-        <div class="desc-box">
-            <b>Description</b>
-            <p id="dDesc"></p>
+        <div class="desc-box" style="margin-top: 20px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+            <b class="text-primary">Description</b>
+            <p id="dDesc" style="font-size: 0.9rem; margin-top: 5px; color: #555; line-height: 1.5;"></p>
         </div>
 
-        <div class="details-actions">
-            <button class="btn-approve">Accept</button>
-            <button class="btn-reject">Reject</button>
-            <button class="btn-close">Close</button>
+        <div class="details-actions" style="margin-top: 25px; display: flex; gap: 10px; justify-content: flex-end;">
+            <button id="btnAccept" class="btn btn-success btn-approve">Accept Package</button>
+            <button id="btnReject" class="btn btn-danger btn-reject">Reject Request</button>
+            <button class="btn btn-secondary btn-close">Close</button>
         </div>
 
     </div>
 
+    <div id="detailsOverlay" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;"></div>
+
 </div>
 
-<!-- ================= jQuery ================= -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -61,10 +61,9 @@
     let selectedId = null;
 
     $(document).ready(function () {
-        // Load the initial list from the database
         renderList();
 
-        // Handle Tab switching (Pending, Approved, Rejected)
+        // Handle Tab switching
         $(".tab").click(function () {
             $(".tab").removeClass("active");
             $(this).addClass("active");
@@ -72,32 +71,35 @@
             renderList();
         });
 
-        // Set up action buttons
+        // Action buttons
         $(".btn-approve").click(() => updateStatus("Approved"));
         $(".btn-reject").click(() => updateStatus("Rejected"));
-        $(".btn-close").click(() => $("#approvalDetails").fadeOut());
+        $(".btn-close, #detailsOverlay").click(function() {
+            $("#approvalDetails, #detailsOverlay").fadeOut();
+        });
     });
 
-    // FETCH LIVE DATA FROM THE CONTROLLER
     function renderList() {
         $("#approvalList").html("<p class='loading-text'>Fetching requests from database...</p>");
 
-        // Calls the GetApprovals method in AdminController.cs
         $.get(`/Admin/GetApprovals?status=${currentStatus}`, function (data) {
-            $("#approvalList").html("");
+            $("#approvalList").empty();
 
             if (data.length === 0) {
-                $("#approvalList").html(`<p class="empty-text">No ${currentStatus} requests found.</p>`);
+                $("#approvalList").html(`<div class="empty-state" style="grid-column: 1/-1; text-align:center; padding: 50px;"><p class="empty-text">No ${currentStatus} requests found.</p></div>`);
                 return;
             }
 
             data.forEach(a => {
                 $("#approvalList").append(`
-                    <div class="approval-card glow-card">
-                        <h5>${a.package}</h5>
-                        <p><b>Host:</b> ${a.host}</p>
-                        <p><b>Type:</b> ${a.type}</p>
-                        <button onclick='viewDetails(${JSON.stringify(a)})'>View Details</button>
+                    <div class="approval-card glow-card" style="border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 15px; background: white; transition: 0.3s;">
+                        <h5 style="color: #2c3e50; margin-bottom: 10px;">${a.package}</h5>
+                        <p style="margin: 0; font-size: 0.9rem;"><b>Host:</b> ${a.host}</p>
+                        <p style="margin: 5px 0; font-size: 0.9rem;"><b>Destination:</b> ${a.destination}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                            <span style="font-weight:bold; color: #27ae60;">₹${a.price}</span>
+                            <button class="btn btn-sm btn-outline-primary" onclick='viewDetails(${JSON.stringify(a)})'>Review Details</button>
+                        </div>
                     </div>
                 `);
             });
@@ -107,7 +109,7 @@
     function viewDetails(data) {
         selectedId = data.id;
 
-        // Populate the details panel with real database values
+        // Populate details
         $("#dHost").text(data.host);
         $("#dEmail").text(data.email);
         $("#dPhone").text(data.phone);
@@ -119,15 +121,25 @@
         $("#dPrice").text(data.price);
         $("#dDesc").text(data.desc);
 
-        $("#approvalDetails").fadeIn();
+        // Hide action buttons if not pending
+        if (currentStatus !== "pending") {
+            $("#btnAccept, #btnReject").hide();
+        } else {
+            $("#btnAccept, #btnReject").show();
+        }
+
+        $("#approvalDetails, #detailsOverlay").fadeIn();
     }
 
-    // UPDATE DATABASE STATUS (Accept/Reject)
     function updateStatus(newStatus) {
+        if (!confirm(`Are you sure you want to set this package to ${newStatus}?`)) return;
+
         $.post('/Admin/UpdateStatus', { id: selectedId, status: newStatus }, function (res) {
             if (res.success) {
-                $("#approvalDetails").fadeOut();
-                renderList(); // Refresh list to move item to the new tab
+                $("#approvalDetails, #detailsOverlay").fadeOut();
+                // Visual feedback
+                renderList();
+                alert(`Package ${newStatus} successfully! It will now reflect on the Host Dashboard.`);
             } else {
                 alert("Error updating status: " + res.message);
             }

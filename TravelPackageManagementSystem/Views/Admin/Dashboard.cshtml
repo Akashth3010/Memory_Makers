@@ -10,7 +10,6 @@
         Overview of your travel platform performance ✨
     </p>
 
-    <!-- ===== STATS GRID ===== -->
     <div class="stats-grid">
 
         <div class="stat-card glow-card" data-count="24">
@@ -43,7 +42,8 @@
             </div>
         </div>
 
-        <div class="stat-card glow-card" data-count="52">
+        @* FIXED: Registered Users Card *@
+        <div class="stat-card glow-card" data-count="@(ViewBag.TotalAccounts ?? 0)">
             <div class="stat-icon bg-purple">
                 <i class="fa-solid fa-users"></i>
             </div>
@@ -53,29 +53,37 @@
             </div>
         </div>
 
+        @* FIXED: Users Online Card *@
+        <div class="stat-card glow-card" data-count="@(ViewBag.OnlineUsers ?? 0)">
+            <div class="stat-icon bg-green">
+                <i class="fa-solid fa-signal"></i>
+            </div>
+            <div class="stat-info">
+                <h3 class="stat-number">0</h3>
+                <p>Users Online</p>
+            </div>
+        </div>
+
     </div>
 
-    <!-- ===== WELCOME MESSAGE ===== -->
     <div class="dashboard-message">
         <h4>Welcome back, Admin 👋</h4>
         <p>
-            You have <b>6 package requests</b> waiting for approval.
+            Currently, there are <b>@(ViewBag.OnlineUsers ?? 0)</b> users active on the platform.
             Let’s keep the platform updated and engaging!
         </p>
     </div>
 
 </div>
 
-<!-- ===== DASHBOARD JS (jQuery ONLY) ===== -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     $(document).ready(function () {
-
-        // Number counter animation
+        // Animation for numbers
         $('.stat-card').each(function () {
             let card = $(this);
-            let target = card.data('count');
+            let target = parseInt(card.attr('data-count')) || 0; // Ensure it's a number
             let numberEl = card.find('.stat-number');
 
             $({ count: 0 }).animate(
@@ -93,7 +101,7 @@
             );
         });
 
-        // Hover glow pulse
+        // Hover glow pulse logic
         $('.stat-card').hover(
             function () {
                 $(this).addClass('active-glow');
@@ -102,6 +110,5 @@
                 $(this).removeClass('active-glow');
             }
         );
-
     });
 </script>

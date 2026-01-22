@@ -26,9 +26,9 @@ function handleAuthToggle() {
     const emailLabel = document.getElementById('emailLabel');
     const emailInput = document.getElementById('authEmail');
 
+    // Check current state based on button text
     const isCurrentlySignup = submitBtn.innerText.includes("Sign Up");
 
-    // IMPORTANT: Clear all error messages when switching
     document.querySelectorAll('.err-msg').forEach(el => el.innerText = "");
 
     if (isCurrentlySignup) {
@@ -36,7 +36,7 @@ function handleAuthToggle() {
         signupFields.forEach(f => f.style.setProperty('display', 'none', 'important'));
         modalTitle.innerText = "Welcome Back";
         emailLabel.innerText = "Username or Email";
-        emailInput.placeholder = "Enter your username or email"; // Login Placeholder
+        emailInput.placeholder = "Enter your username or email";
         submitBtn.innerText = "Login →";
         toggleText.innerText = "Don't have an account? ";
         toggleLink.innerText = "Sign Up";
@@ -45,15 +45,15 @@ function handleAuthToggle() {
         signupFields.forEach(f => f.style.setProperty('display', 'block', 'important'));
         modalTitle.innerText = "Create an Account";
         emailLabel.innerText = "Email Address";
-        emailInput.placeholder = "Enter your email"; // Register Placeholder
+        emailInput.placeholder = "Enter your email";
         submitBtn.innerText = "Sign Up →";
         toggleText.innerText = "Already have an account? ";
         toggleLink.innerText = "Login";
     }
 }
+
 // --- 3. Form Submission & Global Event Listeners ---
 document.addEventListener("DOMContentLoaded", function () {
-    // A. Setup Date Input
     const dateInput = document.getElementById('dateInput');
     if (dateInput) {
         const today = new Date().toISOString().split('T')[0];
@@ -61,14 +61,16 @@ document.addEventListener("DOMContentLoaded", function () {
         dateInput.value = today;
     }
 
-    // B. Handle Form Submission
     const authForm = document.getElementById('authForm');
+    const submitBtn = document.getElementById('submitBtn'); // Re-defined here for scope
+
     if (authForm) {
         authForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
+            // Correctly determine if we are logging in or registering
             const isLogin = submitBtn.innerText.includes("Login");
-            const sharedValue = document.getElementById('authEmail').value; // The input field
+            const sharedValue = document.getElementById('authEmail').value;
             const passwordValue = document.getElementById('authPassword').value;
 
             let payload = {};
@@ -76,17 +78,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (isLogin) {
                 payload = {
-                    Username: sharedValue, // Login uses 'Username' property
+                    Username: sharedValue,
                     Password: passwordValue
                 };
             } else {
-                // REGISTER: We need Username, Email, and Password
                 const regUsername = document.getElementById('regUsername').value;
                 const confirmPassword = document.getElementById('authConfirmPassword').value;
 
                 payload = {
                     Username: regUsername,
-                    Email: sharedValue,    // Register uses 'Email' property
+                    Email: sharedValue,
                     Password: passwordValue,
                     ConfirmPassword: confirmPassword
                 };
@@ -101,21 +102,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const result = await response.json();
 
-                if (response.ok) {
+                if (response.ok && result.success) {
+                    // Redirect to home on success
                     window.location.href = "/";
                 } else {
-                    // This is the CRITICAL fix: 
-                    // If the server returns 400 (Validation Error), display them!
+                    // Display validation or logic errors
                     displayErrors(result);
                 }
             } catch (error) {
-                // Only alert if the fetch actually fails (network down)
                 console.error("Fetch error:", error);
+                alert("Connection lost. Please try again.");
             }
         });
     }
 
-    // C. Glow Effect Logic
+    // Glow Effect Logic
     document.addEventListener('mousemove', (e) => {
         const authModal = document.getElementById('authModal');
         if (!authModal || !authModal.classList.contains('show')) return;
@@ -131,24 +132,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // --- 4. Error Display ---
 function displayErrors(errors) {
-    // Clear all previous errors
     document.querySelectorAll('.err-msg').forEach(el => el.innerText = "");
 
     if (!errors) return;
 
+    // Handle string errors (like "Invalid Username") or Object errors (Modelstate)
+    if (typeof errors === 'string') {
+        const passErr = document.getElementById('err-Password');
+        if (passErr) passErr.innerText = errors;
+        return;
+    }
+
     Object.keys(errors).forEach(key => {
-        // Try various ID formats used in your HTML
-        const span = document.getElementById(`err-${key}`) || document.getElementById(`err-${key}-Reg`);
+        // Handle C# Capitalization or Javascript lowercase
+        const span = document.getElementById(`err-${key}`) ||
+            document.getElementById(`err-${key.charAt(0).toUpperCase() + key.slice(1)}`);
+
         if (span) {
-            //span.innerText = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
             const errorData = errors[key];
             span.innerText = Array.isArray(errorData) ? errorData[0] : errorData;
-
             span.style.display = "block";
-            Console.log(`Setting error for ${key}: ${message}`);
-        }
-        else {
-            console.warn(`Could not find span with id: err-${key}`);
         }
     });
 }
@@ -163,7 +166,6 @@ async function handleLogout() {
             }
         } catch (error) {
             console.error("Logout error:", error);
-            // Fallback: Force refresh
             window.location.reload();
         }
     }

@@ -8,10 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Implementation\**" />
+    <Compile Remove="Interfaces\Data\**" />
     <Compile Remove="Interface\**" />
     <EmbeddedResource Remove="Implementation\**" />
+    <EmbeddedResource Remove="Interfaces\Data\**" />
     <EmbeddedResource Remove="Interface\**" />
     <None Remove="Implementation\**" />
+    <None Remove="Interfaces\Data\**" />
     <None Remove="Interface\**" />
   </ItemGroup>
 
@@ -23,10 +26,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

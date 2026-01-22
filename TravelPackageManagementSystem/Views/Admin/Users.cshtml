@@ -1,219 +1,229 @@
-﻿@{
+﻿@using TravelPackageManagementSystem.Repository.Models
+@model IEnumerable<TravelPackageManagementSystem.Repository.Models.User>
+@{
     ViewData["Title"] = "Users";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    // Retrieve the Host Contact Details and Package Counts passed from AdminController
+    var hostAgencies = ViewBag.HostAgencies as List<HostContactDetail> ?? new List<HostContactDetail>();
+
+    // FIX: Match the Dictionary type (int, int) from the controller
+    var approvedCounts = ViewBag.ApprovedPackageCounts as Dictionary<int, int> ?? new Dictionary<int, int>();
 }
 
+<style>
+    .badge-online {
+        background-color: #2ecc71;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .badge-offline {
+        background-color: #95a5a6;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .badge-approved {
+        background-color: #3498db;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+
+    .tab-content {
+        display: none;
+        padding-top: 20px;
+    }
+
+        .tab-content.active {
+            display: block;
+        }
+
+    .table th {
+        background-color: #f8f9fa;
+    }
+</style>
+
 <div class="admin-page users-page">
-
     <h2 class="page-heading">User Management</h2>
-    <p class="page-subtitle">Manage customers and travel hosts on the platform</p>
+    <p class="page-subtitle">Manage customers and verified travel host agencies</p>
 
-    <!-- STATS -->
+    @* Statistics Grid *@
     <div class="stats-grid">
         <div class="stat-card glow">
-            <h4>Total Users</h4>
-            <p id="totalUsers">18</p>
+            <h4>Total Login Accounts</h4>
+            <p>@Model.Count()</p>
         </div>
         <div class="stat-card glow">
-            <h4>Customers</h4>
-            <p>14</p>
+            <h4>Online Now</h4>
+            <p>@Model.Count(u => u.IsLoggedIn)</p>
         </div>
         <div class="stat-card glow">
-            <h4>Travel Hosts</h4>
-            <p>4</p>
-        </div>
-        <div class="stat-card glow danger">
-            <h4>Blocked Users</h4>
-            <p id="blockedCount">2</p>
+            <h4>Verified Agencies</h4>
+            <p>@hostAgencies.Count</p>
         </div>
     </div>
 
-    <!-- TABS -->
-    <div class="user-tabs">
+    @* Tab Navigation *@
+    <div class="user-tabs mt-4">
         <button class="tab-btn active" data-tab="customers">Customers</button>
-        <button class="tab-btn" data-tab="hosts">Travel Hosts</button>
+        <button class="tab-btn" data-tab="hosts">Travel Host Agencies</button>
+        <button class="tab-btn" data-tab="all-users">System Login Logs</button>
     </div>
 
-    <!-- FILTER -->
-    <div class="user-filter">
-        <select id="statusFilter">
-            <option value="all">All Status</option>
-        </select>
-    </div>
-
-    <!-- CUSTOMERS -->
+    @* --- CUSTOMERS TAB --- *@
     <div class="user-table tab-content active" id="customers">
-
-        <table>
+        <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Username</th>
                     <th>Email</th>
-                    <th>Phone</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="customerBody">
-
-                @for (int i = 1; i <= 12; i++)
-                {
-                    <tr class="hover-glow" data-status="active">
-                        <td>Customer @i</td>
-                        <td>customer@i@mail.com</td>
-                        <td>98765432@i</td>
-                        <td><span class="badge active">Active</span></td>
-                        <td>
-                            <button class="btn-view" onclick="viewUser('Customer @i','customer@i@mail.com','98765432@i','Customer')">View</button>
-                            <button class="btn-block" onclick="blockCustomer(this)">Block</button>
-                        </td>
-                    </tr>
-                }
-
-            </tbody>
-        </table>
-
-        <div class="blocked-section">
-            <h4>Blocked Customers</h4>
-            <ul id="blockedList"></ul>
-        </div>
-    </div>
-
-    <!-- HOSTS -->
-    <div class="user-table tab-content" id="hosts">
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Agency</th>
-                    <th>Email</th>
-                    <th>Packages</th>
+                    <th>Last Login</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-
-                <tr class="hover-glow" data-status="approved">
-                    <td>Goa Travels</td>
-                    <td>goa@host.com</td>
-                    <td>6</td>
-                    <td><span class="badge active">Approved</span></td>
-                    <td><button class="btn-view">View</button></td>
-                </tr>
-
-                <tr class="hover-glow" data-status="pending">
-                    <td>Himalaya Trips</td>
-                    <td>himalaya@host.com</td>
-                    <td>4</td>
-                    <td><span class="badge pending">Pending</span></td>
-                    <td><button class="btn-view">View</button></td>
-                </tr>
-
-                <tr class="hover-glow" data-status="approved">
-                    <td>Royal Rajasthan</td>
-                    <td>royal@host.com</td>
-                    <td>8</td>
-                    <td><span class="badge active">Approved</span></td>
-                    <td><button class="btn-view">View</button></td>
-                </tr>
-
-                <tr class="hover-glow" data-status="blocked">
-                    <td>Kerala Escape</td>
-                    <td>kerala@host.com</td>
-                    <td>3</td>
-                    <td><span class="badge blocked">Blocked</span></td>
-                    <td><button class="btn-view">View</button></td>
-                </tr>
-
+                @foreach (var user in Model.Where(u => (int)u.Role == 0 || u.Role.ToString().Contains("Customer")))
+                {
+                    <tr data-status="@(user.IsLoggedIn ? "active" : "offline")">
+                        <td>@user.Username</td>
+                        <td>@user.Email</td>
+                        <td>@(user.LastLogin?.ToString("g") ?? "Never")</td>
+                        <td><span class="@(user.IsLoggedIn ? "badge-online" : "badge-offline")">@(user.IsLoggedIn ? "Online" : "Offline")</span></td>
+                        <td><button class="btn btn-sm btn-outline-primary" onclick="viewUser('@user.Username','@user.Email','Customer')">View</button></td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
 
+    @* --- TRAVEL HOSTS TAB --- *@
+    <div class="user-table tab-content" id="hosts">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Agency Name</th>
+                    <th>Contact Email</th>
+                    <th>Phone</th>
+                    <th>Location</th>
+                    <th>Approved Packages</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (hostAgencies.Any())
+                {
+                    foreach (var host in hostAgencies)
+                    {
+                        // SAFE CHECK: Use TryGetValue to avoid KeyNotFound exceptions
+                        int count = 0;
+                        approvedCounts.TryGetValue(host.Id, out count);
+
+                        <tr>
+                            <td><strong>@host.HostAgencyName</strong></td>
+                            <td>@host.EmailAddress</td>
+                            <td>@host.PhoneNumber</td>
+                            <td>@host.CityCountry</td>
+                            <td>
+                                <span class="badge-approved">@count Approved</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="viewUser('@host.HostAgencyName', '@host.EmailAddress', 'Travel Host Agency')">Details</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">No Host Agencies found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @* --- SYSTEM LOGIN LOGS --- *@
+    <div class="user-table tab-content" id="all-users">
+        <div class="alert alert-info py-2">System overview of all registered login credentials.</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Database Role</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Username</td>
+                        <td><code class="text-primary">@user.Role</code></td>
+                        <td>@user.Email</td>
+                        <td><span class="@(user.IsLoggedIn ? "badge-online" : "badge-offline")">@(user.IsLoggedIn ? "Online" : "Offline")</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<!-- USER MODAL -->
-<div class="custom-modal" id="userModal">
-    <div class="modal-box">
-        <h4 id="userName"></h4>
-        <p><b>Email:</b> <span id="userEmail"></span></p>
-        <p><b>Phone:</b> <span id="userPhone"></span></p>
-        <p><b>Role:</b> <span id="userRole"></span></p>
-        <div class="modal-actions">
-            <button class="btn-cancel" onclick="closeUserModal()">Close</button>
+@* User Detail Modal *@
+<div id="userModal" class="modal" tabindex="-1" style="background: rgba(0,0,0,0.5); display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mName">Details</h5>
+                <button type="button" class="btn-close" onclick="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Identity/Email:</strong> <span id="mEmail"></span></p>
+                <p><strong>Type:</strong> <span id="mRole"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    let blockedCount = 2;
-
-    // TAB SWITCH
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-        btn.onclick = function () {
-            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-            document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-
-            this.classList.add("active");
-            document.getElementById(this.dataset.tab).classList.add("active");
-
-            loadFilterOptions(this.dataset.tab);
-        };
+    // Tab Logic
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.tab).classList.add('active');
+        });
     });
 
-    // FILTER OPTIONS
-    function loadFilterOptions(tab) {
-        const filter = document.getElementById("statusFilter");
-        filter.innerHTML = `<option value="all">All Status</option>`;
+    // Modal Logic
+    function viewUser(name, email, role) {
+        document.getElementById('userModal').style.display = 'block';
+        document.getElementById('mName').innerText = name;
+        document.getElementById('mEmail').innerText = email;
+        document.getElementById('mRole').innerText = role;
+    }
 
-        if (tab === "customers") {
-            filter.innerHTML += `
-                <option value="active">Active</option>
-                <option value="blocked">Blocked</option>`;
-        } else {
-            filter.innerHTML += `
-                <option value="approved">Approved</option>
-                <option value="pending">Pending</option>
-                <option value="blocked">Blocked</option>`;
+    function closeModal() {
+        document.getElementById('userModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('userModal')) {
+            closeModal();
         }
-    }
-
-    loadFilterOptions("customers");
-
-    document.getElementById("statusFilter").onchange = function () {
-        document.querySelectorAll(".tab-content.active tbody tr").forEach(row => {
-            row.style.display =
-                this.value === "all" || row.dataset.status === this.value
-                    ? ""
-                    : "none";
-        });
-    };
-
-    // BLOCK CUSTOMER
-    function blockCustomer(btn) {
-        const row = btn.closest("tr");
-        const name = row.children[0].innerText;
-
-        row.remove();
-
-        blockedCount++;
-        document.getElementById("blockedCount").innerText = blockedCount;
-
-        const li = document.createElement("li");
-        li.innerText = name;
-        document.getElementById("blockedList").appendChild(li);
-    }
-
-    // VIEW USER
-    function viewUser(name, email, phone, role) {
-        userModal.classList.add("show");
-        userName.innerText = name;
-        userEmail.innerText = email;
-        userPhone.innerText = phone;
-        userRole.innerText = role;
-    }
-
-    function closeUserModal() {
-        userModal.classList.remove("show");
     }
 </script>

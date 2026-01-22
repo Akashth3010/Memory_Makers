@@ -9,5 +9,9 @@ namespace TravelPackageManagementSystem.Repository.Interface
     {
         Task<User?> GetUserByUsernameOrEmailAsync(string identifier);
         Task<bool> AddUserAsync(User user);
+        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<User> GetUserByIdAsync(int userId);
+        Task UpdateUserAsync(User user);
+
     }
 }

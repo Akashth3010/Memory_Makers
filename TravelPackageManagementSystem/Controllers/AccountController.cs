@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelPackageManagementSystem.Repository.Models;
-using TravelPackageManagementSystem.Services.Interfaces; 
+using TravelPackageManagementSystem.Services.Interfaces;
 
 namespace TravelPackageManagementSystem.Application.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IAuthModelService _authService;
+        private readonly IUserService _userService; // NEW: Added User Service
 
-        // Inject the Service, not the DbContext
-        public AccountController(IAuthModelService authService)
+        // Inject both the Auth Service and the User Service
+        public AccountController(IAuthModelService authService, IUserService userService)
         {
             _authService = authService;
+            _userService = userService;
         }
 
         [HttpPost]
@@ -19,18 +21,17 @@ namespace TravelPackageManagementSystem.Application.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // Logic is moved to Service. RegisterUserAsync should return a result object.
             var result = await _authService.RegisterUserAsync(model);
 
             if (!result.Success)
             {
-                // result.Message would contain "Username or Email already taken"
                 return BadRequest(new { Username = result.Message });
             }
 
-            // Set Session using the User object returned from the service
-            SetUserSession(result.User);
+            // TRIGGER: Set online status to true upon registration
+            await _userService.UpdateLoginStatusAsync(result.User.UserId, true);
 
+            SetUserSession(result.User);
             return Ok(new { success = true });
         }
 
@@ -39,7 +40,6 @@ namespace TravelPackageManagementSystem.Application.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // Pass the username/password to the service to verify
             var user = await _authService.AuthenticateUserAsync(model.Username, model.Password);
 
             if (user == null)
@@ -47,20 +47,29 @@ namespace TravelPackageManagementSystem.Application.Controllers
                 return BadRequest(new { Password = "Invalid Username or Password" });
             }
 
-            // Set Session
-            SetUserSession(user);
+            // TRIGGER: Set online status to true upon successful login
+            await _userService.UpdateLoginStatusAsync(user.UserId, true);
 
+            SetUserSession(user);
             return Ok(new { success = true, username = user.Username });
         }
 
         [HttpPost]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
+            // Get the UserId from session before clearing it
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId.HasValue)
+            {
+                // TRIGGER: Set online status to false upon logout
+                await _userService.UpdateLoginStatusAsync(userId.Value, false);
+            }
+
             HttpContext.Session.Clear();
             return Ok(new { message = "Logged out successfully" });
         }
 
-        // Helper method to keep Session keys consistent
         private void SetUserSession(User user)
         {
             HttpContext.Session.SetString("UserName", user.Username);

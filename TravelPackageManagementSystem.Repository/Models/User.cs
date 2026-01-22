@@ -38,5 +38,8 @@ namespace TravelPackageManagementSystem.Repository.Models
 
         // Navigation Property initialized to prevent null errors
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public bool IsLoggedIn { get; set; } = false; // Add this
+        public DateTime? LastLogin { get; set; }     // Optional: To track history
+
     }
 }

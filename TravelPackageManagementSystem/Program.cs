@@ -46,6 +46,8 @@ builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppD
 // 3. Register Services
 builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
