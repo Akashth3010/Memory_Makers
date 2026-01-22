@@ -8,12 +8,11 @@
     <meta charset="utf-8" />
     <title>@ViewBag.Title</title>
 
-    <link rel="stylesheet" href="@(Url.Content("~/css/Darjiling.css"))" />
+    <link rel="stylesheet" href="@(Url.Content("~/css/Banaras.css"))" />
 </head>
 
 <body>
 
-    <!-- HERO IMAGE -->
     <section class="hero" style="background-image: url('@Url.Content("~/lib/image/darjiling1.jpg")');">
         <div class="hero-content">
             <h1>Darjeeling Hill Experience</h1>
@@ -21,16 +20,14 @@
         </div>
     </section>
 
-    <!-- PACKAGE + BOOKING -->
     <div class="container">
         <div class="flex">
 
-            <!-- LEFT / DETAILS -->
             <div class="left-col">
 
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Darjeeling: Tea, Hills & Toy Train</h2>
+                        <h2 id="packageName" >Darjeeling: Tea, Hills & Toy Train</h2>
                         <div class="rating">★ 4.7 (2,300 reviews)</div>
                     </div>
 
@@ -40,7 +37,6 @@
                     </div>
                 </div>
 
-                <!-- IMAGE GALLERY -->
                 <div class="gallery" aria-label="Image gallery">
                     <div id="mainImage" class="main-image" role="img" aria-label="Main image" style="background-image: url('@Url.Content("~/lib/image/darjiling1.jpg")');"></div>
 
@@ -52,12 +48,10 @@
                     </div>
                 </div>
 
-                <!-- LIGHTBOX -->
                 <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
                     <img id="lightboxImg" src="" alt="Large view" />
                 </div>
 
-                <!-- PACKAGE DESCRIPTION -->
                 <div class="overview">
                     <h3>Overview</h3>
                     <p>
@@ -67,7 +61,6 @@
                     </p>
                 </div>
 
-                <!-- ITINERARY -->
                 <div class="itinerary" aria-label="Day by day itinerary">
                     <h3>Day-by-Day Itinerary</h3>
 
@@ -113,7 +106,6 @@
 
                 </div>
 
-                <!-- PRICING & INCLUSIONS -->
                 <div class="price-card" aria-label="Pricing and inclusions">
                     <div class="price-row">
                         <div>Base Price (per person)</div>
@@ -158,7 +150,6 @@
                     </div>
                 </div>
             </div>
-            <!-- RIGHT / BOOKING -->
             <div class="right-col">
                 <aside class="booking-box" aria-labelledby="bookingHeading">
                     <h3 id="bookingHeading">Book This Package</h3>
@@ -168,7 +159,7 @@
                         <input id="travelDate" name="TravelDate" type="date" required />
 
                         <label for="guests">Guests</label>
-                        <select id="guests" name="Guests" required>
+                        <select id="guests" name="Guests" required onchange="updateDarjeelingPrice()">
                             <option value="1" selected>1 person</option>
                             <option value="2">2 persons</option>
                             <option value="3">3 persons</option>
@@ -182,7 +173,8 @@
                         <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" />
 
                         <div class="booking-cta" style="margin-top:8px;">
-                            <button type="submit" class="btn btn-primary" id="bookNowBtn">Book Now</button>
+                            <button type="submit" class="btn btn-primary" id="bookNowBtn" onclick="saveBookingData()">Book Now</button>
+                           
                         </div>
 
                     </form>
@@ -193,5 +185,43 @@
     </div>
 
     <script src="@(Url.Content("~/js/Darjiling.js"))" defer></script>
+
+    <script>
+        function saveBookingData() {
+            // 1. Get the Package Name
+            // Use querySelector to find the h2 inside package-title if you don't want to change IDs
+            const nameElement = document.querySelector('.package-title h2');
+            const name = nameElement ? nameElement.innerText : "Unknown Package";
+
+            // 2. Get the Total Price
+            const priceElement = document.getElementById('totalPayable');
+            const price = priceElement ? priceElement.innerText : "₹0";
+
+            // 3. Save to Local Storage
+            localStorage.setItem('selectedPackageName', name);
+            localStorage.setItem('selectedPackagePrice', price);
+
+            // Optional: Debugging to see if it works before the page redirects
+            console.log("Saving Package:", name);
+            console.log("Saving Price:", price);
+        }
+         // Date Restriction (Grey out past dates)
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('travelDate').setAttribute('min', today);
+
+        // Keep your price calculation logic so the 'totalPayable' updates when guests change
+        function calculatePrice() {
+            const guests = document.getElementById('guests').value;
+            const basePrice = 16500;
+            const taxPrice = 1485;
+            const total = guests * (basePrice + taxPrice);
+
+            document.getElementById('totalPayable').innerText = "₹" + total.toLocaleString('en-IN');
+            document.getElementById('priceSummary').innerText = guests + (guests > 1 ? " persons" : " person");
+        }
+
+        // Attach listener to update price automatically
+        document.getElementById('guests').addEventListener('change', calculatePrice);
+    </script>
 </body>
 </html>

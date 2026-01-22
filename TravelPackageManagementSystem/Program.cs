@@ -1,33 +1,48 @@
 using Microsoft.EntityFrameworkCore;
-//using TravelPackageManagementSystem.Application.Data;
-using TravelPackageManagementSystem.Repository.Data;
-using TravelPackageManagementSystem.Repository.Models;
-//using TravelPackageManagementSystem.Application.Models;
+using TravelPackageManagementSystem.Repository.Implementation;
+using TravelPackageManagementSystem.Repository.Interface;
+using TravelPackageManagementSystem.Services.Implementation;
+using TravelPackageManagementSystem.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 1. Add Controllers (API capability)
+builder.Services.AddControllersWithViews();
 
-builder.Services.AddSession(options =>
+// 2. Database Configuration (CRITICAL STEP)
+// This must happen BEFORE adding the Repository
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+// 3. Register your Custom Services
+// The app needs the Database (Step 2) to build these:
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+// 1. Tell the app to use Cookies for login
+builder.Services.AddAuthentication("MyCookieAuth")
+    .AddCookie("MyCookieAuth", options =>
+    {
+        options.Cookie.Name = "MyUserCookie";
+        options.LoginPath = "/Account/Login"; // Where to go if not logged in
+    });
+
+// 2. Make sure Authorization is also enabled
+builder.Services.AddAuthorization();
+
+// 4. Enable CORS (So your browser JS can talk to this backend)
+builder.Services.AddCors(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // session expires after 30mins
-    options.Cookie.HttpOnly = true; // security: prevents JS Access to session cookie
-    options.Cookie.IsEssential = true; // necessary for the app to function
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
 });
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// 5. Build the App
+var app = builder.Build(); // <--- The error was happening here!
 
-builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
-
-// Register the Database Context
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
+// --- PIPELINE SETUP ---
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -35,18 +50,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-// Note: In .NET 9, MapStaticAssets replaces UseStaticFiles for better performance
+app.UseStaticFiles();
 app.UseRouting();
-
-app.UseSession();
-
+app.UseAuthentication(); // Who are you?
+app.UseAuthorization();  // Are you allowed to be here?
+app.UseCors(); // Enable CORS
 app.UseAuthorization();
-
-app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

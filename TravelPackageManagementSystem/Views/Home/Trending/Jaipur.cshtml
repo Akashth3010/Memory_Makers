@@ -1,6 +1,10 @@
-﻿@{
+﻿
+@{
+
     ViewBag.Title = "Jaipur Travel Package";
+
     Layout = null;   // remove if you are using _Layout.cshtml
+
 }
 
 <!DOCTYPE html>
@@ -9,7 +13,7 @@
     <meta charset="utf-8" />
     <title>Jaipur Travel Package</title>
 
-    <link rel="stylesheet" href="/css/Jaipur.css" />
+    <link rel="stylesheet" href="/css/Banaras.css" />
 </head>
 
 <body>
@@ -32,7 +36,7 @@
 
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Jaipur Highlights — Amer Fort, City Palace & Local Markets</h2>
+                        <h2 id="packageName">Jaipur Highlights — Amer Fort, City Palace & Local Markets</h2>
                         <div class="rating">★ 4.7 (2,300 reviews)</div>
                     </div>
 
@@ -62,8 +66,11 @@
                 <div style="margin-top:16px;">
                     <h3>Overview</h3>
                     <p>
+
                         Explore Jaipur — the Pink City — with guided visits to Amer Fort, the City Palace complex,
+
                         and the iconic Hawa Mahal. Enjoy curated walks through vibrant bazaars, traditional Rajasthani cuisine,
+
                         and comfortable heritage-style accommodations.
                     </p>
                 </div>
@@ -154,7 +161,7 @@
                 <aside class="booking-box" aria-labelledby="bookingHeading">
                     <h3 id="bookingHeading">Book This Package</h3>
 
-                    <form id="bookingForm" method="post" action="/Booking/Start">
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
                         <label for="travelDate">Travel Date</label>
                         <input id="travelDate" name="TravelDate" type="date" required />
 
@@ -173,7 +180,8 @@
                         <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" />
 
                         <div class="booking-cta" style="margin-top:8px;">
-                            <button type="submit" class="btn btn-primary" id="bookNowBtn" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
+                            <button type="submit" class="btn btn-primary" id="bookNowBtn" onclick="saveBookingData()">Book Now</button>
+                           
                         </div>
 
                     </form>
@@ -183,6 +191,47 @@
         </div>
     </div>
 
+
+
+
     <script src="/js/Jaipur.js"></script>
+    <script>
+        // 1. Calculate price dynamically
+        function saveBookingData() {
+            // 1. Get the Package Name
+            // Use querySelector to find the h2 inside package-title if you don't want to change IDs
+            const nameElement = document.querySelector('.package-title h2');
+            const name = nameElement ? nameElement.innerText : "Unknown Package";
+
+            // 2. Get the Total Price
+            const priceElement = document.getElementById('totalPayable');
+            const price = priceElement ? priceElement.innerText : "₹0";
+
+            // 3. Save to Local Storage
+            localStorage.setItem('selectedPackageName', name);
+            localStorage.setItem('selectedPackagePrice', price);
+
+            // Optional: Debugging to see if it works before the page redirects
+            console.log("Saving Package:", name);
+            console.log("Saving Price:", price);
+        }
+         // Date Restriction (Grey out past dates)
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('travelDate').setAttribute('min', today);
+
+        // Keep your price calculation logic so the 'totalPayable' updates when guests change
+        function calculatePrice() {
+            const guests = document.getElementById('guests').value;
+            const basePrice = 18000;
+            const taxPrice = 1800;
+            const total = guests * (basePrice + taxPrice);
+
+            document.getElementById('totalPayable').innerText = "₹" + total.toLocaleString('en-IN');
+            document.getElementById('priceSummary').innerText = guests + (guests > 1 ? " persons" : " person");
+        }
+
+        // Attach listener to update price automatically
+        document.getElementById('guests').addEventListener('change', calculatePrice);
+    </script>
 </body>
 </html>

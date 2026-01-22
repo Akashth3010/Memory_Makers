@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdatedProject : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -116,7 +116,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         principalColumn: "BookingId",
                         onDelete: ReferentialAction.Cascade);
                 });
-
+          
             migrationBuilder.InsertData(
                 table: "TravelPackages",
                 columns: new[] { "PackageId", "Destination", "Duration", "PackageName", "Price", "Status" },

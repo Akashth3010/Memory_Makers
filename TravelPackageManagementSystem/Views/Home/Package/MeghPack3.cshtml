@@ -24,7 +24,7 @@
             <div class="left-col">
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Abode of Clouds: Extended Exploration</h2>
+                        <h2 id="packageName">Abode of Clouds: Extended Exploration</h2>
                         <div class="rating">★ 4.8 (210 reviews)</div>
                     </div>
                     <div style="text-align: right;">
@@ -41,12 +41,11 @@
                         <div class="thumb" data-src="/lib/Image/meg4.jpg" style="background-image: url('/lib/Image/meg4.jpg');"></div>
                         <div class="thumb" data-src="/lib/Image/meg5.jpg" style="background-image: url('/lib/Image/meg5.jpg');"></div>
                         <div class="thumb" data-src="/lib/Image/meg2.jpg" style="background-image: url('/lib/Image/meg2.jpg');"></div>
-
                     </div>
                 </div>
 
                 <div id="lightbox" class="lightbox">
-                    <img id="lightboxImg" src="" alt="Large view" />
+                    <img id="lightboxImg" src="/lib/Image/meghalaya.jpg" alt="Large view" />
                 </div>
 
                 <div style="margin-top:16px;">
@@ -84,7 +83,7 @@
                             <div class="toggle">+</div>
                         </div>
                         <div class="day-body">
-                            <p>Extended exploration of Cherrapunji's caves, root bridges, and the clear waters of Shnongpdeng.</p>
+                            <p>Extended exploration of Cherrapunji's caves, root bridges, and the clear waters of Shnongpdeng. Includes specialized village tours and offbeat waterfall hikes.</p>
                         </div>
                     </div>
                 </div>
@@ -92,7 +91,7 @@
                 <div class="price-card">
                     <div class="price-row">
                         <div>Base Price (per person)</div>
-                        <div class="price-total" id="pricePerPerson">₹25,999</div>
+                        <div class="price-total">₹25,999</div>
                     </div>
                     <div class="price-row">
                         <div>Selected Guests</div>
@@ -119,12 +118,12 @@
             <div class="right-col">
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
-                    <form id="bookingForm">
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
                         <label for="travelDate">Travel Date</label>
-                        <input id="travelDate" type="date" required />
+                        <input id="travelDate" name="TravelDate" type="date" required />
 
                         <label for="guests">Guests</label>
-                        <select id="guests">
+                        <select id="guests" name="Guests">
                             <option value="1">1 person</option>
                             <option value="2">2 persons</option>
                             <option value="3">3 persons</option>
@@ -132,13 +131,12 @@
                         </select>
 
                         <label for="contactEmail">Contact Email</label>
-                        <input id="contactEmail" type="email" placeholder="you@example.com" required />
+                        <input id="contactEmail" name="Email" type="email" placeholder="you@example.com" required />
 
                         <label for="phone">Phone</label>
-                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
+                        <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" required />
 
-                        <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
-                        
+                        <button type="submit" class="btn btn-primary" onclick="saveExplorerData()">Book Now</button>
                     </form>
                 </aside>
             </div>
@@ -147,7 +145,11 @@
 
     <script>
         (function () {
-            // Gallery Logic
+            // 1. DATE RESTRICTION
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('travelDate').setAttribute('min', today);
+
+            // 2. GALLERY LOGIC
             const main = document.getElementById('mainImage');
             const thumbs = document.querySelectorAll('.thumb');
             const lightbox = document.getElementById('lightbox');
@@ -166,11 +168,11 @@
             main.addEventListener('click', () => { lightbox.style.display = 'flex'; });
             lightbox.addEventListener('click', () => { lightbox.style.display = 'none'; });
 
-            // Itinerary Accordion
+            // 3. ITINERARY ACCORDION
             document.querySelectorAll('.day-header').forEach(h => {
                 h.addEventListener('click', () => {
                     const body = h.nextElementSibling;
-                    const isOpen = body.style.display === 'block';
+                    const isOpen = (body.style.display === 'block');
                     document.querySelectorAll('.day-body').forEach(db => db.style.display = 'none');
                     document.querySelectorAll('.toggle').forEach(tg => tg.textContent = '+');
                     if (!isOpen) {
@@ -180,21 +182,24 @@
                 });
             });
 
-            // Price Logic
+            // 4. PRICE CALCULATION
             const guestsSelect = document.getElementById('guests');
             const basePrice = 25999;
             guestsSelect.addEventListener('change', () => {
                 const count = parseInt(guestsSelect.value);
                 const total = basePrice * count;
-                document.getElementById('totalPayable').textContent = `₹${total.toLocaleString()}`;
+                document.getElementById('totalPayable').textContent = `₹${total.toLocaleString('en-IN')}`;
                 document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
             });
         })();
-            // Get today's date in YYYY-MM-DD format
-        const today = new Date().toISOString().split('T')[0];
 
-        // Set the 'min' attribute so back dates are greyed out
-        document.getElementById('travelDate').setAttribute('min', today);
+        // 5. PERSISTENCE FOR PAYMENT PAGE
+        function saveExplorerData() {
+            const name = document.getElementById('packageName').innerText;
+            const price = document.getElementById('totalPayable').innerText;
+            localStorage.setItem('selectedPackageName', name);
+            localStorage.setItem('selectedPackagePrice', price);
+        }
     </script>
 </body>
 </html>

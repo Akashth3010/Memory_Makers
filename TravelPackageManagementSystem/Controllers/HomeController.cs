@@ -1,5 +1,6 @@
-using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using TravelPackageManagementSystem.Repository.Models;
 
 namespace TravelPackageManagementSystem.Controllers
@@ -31,6 +32,19 @@ namespace TravelPackageManagementSystem.Controllers
         public IActionResult Vrindavan()
         {
             return View("Trending/Vrindavan");
+        }
+        public IActionResult Goa()
+        {
+            return View("Trending/Goa");
+
+        }
+        public IActionResult Munnar()
+        {
+            return View("Trending/Munnar");
+        }
+        public IActionResult Mumbai()
+        {
+            return View("Trending/Mumbai");
         }
         public IActionResult Rameshwaram()
         {
@@ -149,12 +163,20 @@ namespace TravelPackageManagementSystem.Controllers
         public IActionResult Host() {
             
             return View(); }
+
+
         public IActionResult PaymentPage()
         {
             return View();
         }
-
-     
+        public IActionResult Failure()
+        {
+            return View("Trending/Failure");
+        }
+        public IActionResult Success()
+        {
+            return View("Trending/Success");
+        }
 
         public IActionResult Dashboard()
         {

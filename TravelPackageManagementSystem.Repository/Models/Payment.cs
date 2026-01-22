@@ -1,38 +1,28 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using TravelPackageManagementSystem.Repository.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TravelPackageManagementSystem.Repository.Models
 {
-    public enum PaymentStatus
-    {
-        SUCCESS,
-        FAILED,
-        PENDING
-    }
     public class Payment
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PaymentId { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(10,2)")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be greater than 0")]
-        [Display(Name = "Amount")]
-        public decimal PaymentAmount { get; set; }
+        public decimal Amount { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-        [Display(Name = "Payment Date")]
-        public DateTime PaymentDate { get; set; } = DateTime.Now;
+        public DateTime PaymentDate { get; set; }
 
         [Required]
-        public PaymentStatus Status { get; set; } = PaymentStatus.PENDING;
+        public string PaymentMethod { get; set; } // e.g., "Credit Card", "PayPal"
 
-        //Navigation Property
-        [ForeignKey("BookingId")]
-        public virtual Booking Booking { get; set; }
+        public string TransactionId { get; set; }
+
+        public string Status { get; set; } // e.g., "Pending", "Completed", "Failed"
+
+        // Foreign Key example - linking to a Booking or Package
+        // public int BookingId { get; set; }
+        // public Booking Booking { get; set; }
+       
     }
 }

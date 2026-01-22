@@ -27,7 +27,7 @@
 
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Discover Tamil Nadu: Pondicherry & Mahabalipuram</h2>
+                        <h2 id="packageName">Discover Tamil Nadu: Pondicherry & Mahabalipuram</h2>
                         <div class="rating">★ 4.7 (689 reviews)</div>
                     </div>
                     <div style="text-align:right;">
@@ -120,8 +120,10 @@
             <div class="right-col">
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
-                    <form method="post" action="/Home/PaymentPage">
-                        <label>Travel Date</label><input type="date" required />
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
+                        <label>Travel Date</label>
+                        <input id="travelDate" type="date" required />
+
                         <label>Guests</label>
                         <select id="guestSelect">
                             <option value="1">1 person</option>
@@ -129,11 +131,13 @@
                             <option value="3">3 persons</option>
                             <option value="4">4 persons</option>
                         </select>
+
                         <label for="contactEmail">Contact Email</label>
                         <input id="contactEmail" type="email" placeholder="you@example.com" required />
 
                         <label for="phone">Phone</label>
                         <input id="phone" type="tel" placeholder="+91 98765 43210" required />
+
                         <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Book Now</button>
                     </form>
                 </aside>
@@ -201,6 +205,26 @@
                 summaryDisplay.textContent = count + (count > 1 ? " persons" : " person");
                 totalDisplay.textContent = "₹" + total.toLocaleString('en-IN');
             });
+
+            // 4. DATE RESTRICTION
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('travelDate');
+            if(dateInput) {
+                dateInput.setAttribute('min', today);
+            }
+
+            // 5. STORAGE & SUBMISSION LOGIC
+            const bookingForm = document.getElementById('bookingForm');
+            bookingForm.onsubmit = function() {
+                const name = document.getElementById('packageName').innerText;
+                const price = document.getElementById('totalPayable').innerText;
+
+                // Save to local storage for use on the payment/confirmation page
+                localStorage.setItem('selectedPackageName', name);
+                localStorage.setItem('selectedPackagePrice', price);
+
+                return true;
+            };
         });
     </script>
 </body>

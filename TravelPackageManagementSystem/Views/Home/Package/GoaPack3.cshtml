@@ -6,6 +6,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/css/pack-details.css" />
 </head>
 <body>
@@ -21,7 +22,7 @@
             <div class="left-col">
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Tropical Paradise: Coastal & Jungle Trek</h2>
+                        <h2 id="packageName">Tropical Paradise: Coastal & Jungle Trek</h2>
                         <div class="rating">★ 4.9 (310 reviews)</div>
                     </div>
                     <div style="text-align: right;">
@@ -65,7 +66,11 @@
                 <div class="price-card">
                     <div class="price-row">
                         <div>Base Price (per person)</div>
-                        <div class="price-total" id="pricePerPerson">₹22,500</div>
+                        <div class="price-total">₹20,455</div>
+                    </div>
+                    <div class="price-row">
+                        <div>Taxes & Fees (10%)</div>
+                        <div id="taxDisplay">₹2,045</div>
                     </div>
                     <div class="price-row">
                         <div>Selected Guests</div>
@@ -76,54 +81,45 @@
                         <div>Total Payable</div>
                         <div class="price-total" id="totalPayable">₹22,500</div>
                     </div>
-                    <div style="margin-top:12px;">
-                        <h4 style="font-size:15px; margin-bottom:6px;">What's Included</h4>
-                        <div class="list-inline">
-                            <div class="included">4* Beach Resort</div>
-                            <div class="included">Scuba/Snorkeling</div>
-                            <div class="included">Private AC Cab</div>
-                            <div class="included">Dudhsagar Jeep Safari</div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             <div class="right-col">
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
-                    <form id="bookingForm">
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
                         <label for="travelDate">Travel Date</label>
-                        <input id="travelDate" type="date" required />                        <label>Guests</label>
-                        <select id="guests">
-                            <option value="1">1 person</option>
+                        <input id="travelDate" name="TravelDate" type="date" required />
+
+                        <label for="guests">Guests</label>
+                        <select id="guests" name="Guests">
+                            <option value="1" selected>1 person</option>
                             <option value="2">2 persons</option>
                             <option value="3">3 persons</option>
                             <option value="4">4 persons</option>
                         </select>
+
                         <label for="contactEmail">Contact Email</label>
-                        <input id="contactEmail" type="email" placeholder="you@example.com" required />
+                        <input id="contactEmail" name="Email" type="email" placeholder="you@example.com" required />
 
                         <label for="phone">Phone</label>
-                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
-                        <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
+                        <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" required />
+
+                        <button type="submit" class="btn btn-primary" onclick="saveDeepExplorerData()">Book Now</button>
                     </form>
                 </aside>
             </div>
         </div>
     </div>
-    <script>
-            // Get today's date in YYYY-MM-DD format
-        const today = new Date().toISOString().split('T')[0];
 
-        // Set the 'min' attribute so back dates are greyed out
-        document.getElementById('travelDate').setAttribute('min', today);
-        // Exact replica logic for all 9 files
+    <script>
         (function () {
             const main = document.getElementById('mainImage');
             const thumbs = document.querySelectorAll('.thumb');
-            const guests = document.getElementById('guests');
-            const basePrice = 22500; // Update this per file (7499, 14999, 8999, etc.)
+            const guestsSelect = document.getElementById('guests');
+            const basePriceTotal = 22500;
 
+            // Gallery logic
             thumbs.forEach(t => {
                 t.addEventListener('click', () => {
                     thumbs.forEach(x => x.classList.remove('active'));
@@ -132,6 +128,7 @@
                 });
             });
 
+            // Accordion logic
             document.querySelectorAll('.day-header').forEach(h => {
                 h.addEventListener('click', () => {
                     const body = h.nextElementSibling;
@@ -141,12 +138,30 @@
                 });
             });
 
-            guests.addEventListener('change', () => {
-                const count = parseInt(guests.value);
-                document.getElementById('totalPayable').textContent = `₹${(basePrice * count).toLocaleString()}`;
+            // Dynamic Price Calculation
+            guestsSelect.addEventListener('change', () => {
+                const count = parseInt(guestsSelect.value);
+                const total = count * basePriceTotal;
+                const tax = count * 2045;
+
+                document.getElementById('totalPayable').textContent = `₹${total.toLocaleString('en-IN')}`;
+                document.getElementById('taxDisplay').textContent = `₹${tax.toLocaleString('en-IN')}`;
                 document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
             });
+
+            // Set Min Date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('travelDate').setAttribute('min', today);
         })();
+
+        // Data persistence for Payment Page
+        function saveDeepExplorerData() {
+            const name = document.getElementById('packageName').innerText;
+            const price = document.getElementById('totalPayable').innerText;
+
+            localStorage.setItem('selectedPackageName', name);
+            localStorage.setItem('selectedPackagePrice', price);
+        }
     </script>
 </body>
 </html>
