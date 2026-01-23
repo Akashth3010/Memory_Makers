@@ -29,7 +29,7 @@
             <div class="left-col">
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Discover Mizoram: Aizawl & Surroundings</h2>
+                        <h2 id="packageName">Discover Mizoram: Aizawl & Surroundings</h2>
                         <div class="rating">★ 4.6 (412 reviews)</div>
                     </div>
                     <div style="text-align:right;">
@@ -66,7 +66,7 @@
                             <h4>Day 1 — Arrival & City Tour</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Arrival at Lengpui Airport. Transfer to hotel. Afternoon visit to Solomon’s Temple and a walking tour of Bara Bazar for local shopping.</p>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                             <h4>Day 2 — Durtlang Hills</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Scenic morning drive to Durtlang Hills. Visit the Mizoram State Museum to learn about Mizo culture and visit the KV Paradise memorial.</p>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                             <h4>Day 3 — Departure</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Final morning breakfast. Last-minute souvenir shopping at the local markets before transfer to the airport for departure.</p>
                         </div>
                     </div>
@@ -247,22 +247,22 @@
 
             });
 
-        });
-
-                document.addEventListener("DOMContentLoaded", function () {
-
-            // ... your gallery & itinerary logic ...
-
-            // Get today's date in YYYY-MM-DD format
-
+            // 4. DATE RESTRICTION
             const today = new Date().toISOString().split('T')[0];
-
-            // Set the 'min' attribute on the input so past dates are disabled
-
             document.getElementById('travelDate').setAttribute('min', today);
 
-        });
+            // 5. DATA PERSISTENCE (SAVE TO LOCAL STORAGE ON SUBMIT)
+            const bookingForm = document.getElementById('bookingForm');
+            bookingForm.onsubmit = function() {
+                const name = document.getElementById('packageName').innerText;
+                const price = document.getElementById('totalPayable').innerText;
 
+                localStorage.setItem('selectedPackageName', name);
+                localStorage.setItem('selectedPackagePrice', price);
+
+                return true; // Allows the form to proceed to /Home/PaymentPage
+            };
+        });
     </script>
 </body>
 </html>

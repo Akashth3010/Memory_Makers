@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -327,6 +330,23 @@ namespace TravelPackageManagementSystem.Controllers
         {
             if (string.IsNullOrEmpty(destination)) return RedirectToAction("Index");
 
+        public IActionResult Host() {
+            
+            return View(); }
+
+
+        public IActionResult PaymentPage()
+        {
+            return View();
+        }
+        public IActionResult Failure()
+        {
+            return View("Trending/Failure");
+        }
+        public IActionResult Success()
+        {
+            return View("Trending/Success");
+        }
             // Check if the user searched for a State (e.g., "Meghalaya")
             var stateMatch = await _context.Destinations
                 .FirstOrDefaultAsync(d => d.StateName.ToLower() == destination.ToLower());

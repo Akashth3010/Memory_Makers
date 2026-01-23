@@ -1,6 +1,11 @@
-﻿@{
+﻿Manali
+
+@{
+
     ViewBag.Title = "Manali Travel Package";
+
     Layout = null;   // remove if you are using _Layout.cshtml
+
 }
 
 <!DOCTYPE html>
@@ -9,7 +14,7 @@
     <meta charset="utf-8" />
     <title>Manali Travel Package</title>
 
-    <link rel="stylesheet" href="/css/Manali.css" />
+    <link rel="stylesheet" href="/css/Banaras.css" />
 </head>
 
 <body>
@@ -32,7 +37,7 @@
 
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Manali & Surrounds — Solang, Rohtang, Hadimba & Vashisht</h2>
+                        <h2 id="packageName">Manali & Surrounds — Solang, Rohtang, Hadimba & Vashisht</h2>
                         <div class="rating">★ 4.8 (1,120 reviews)</div>
                     </div>
 
@@ -65,8 +70,11 @@
                 <div style="margin-top:16px;">
                     <h3>Overview</h3>
                     <p>
+
                         Experience the best of Manali — adventure at Solang Valley, scenic drives to Rohtang Pass (subject to permits),
+
                         spiritual stops at Hadimba Temple and relaxed walks in Old Manali & Vashisht. Comfortable mountain stays,
+
                         private transfers and guided local sightseeing included.
                     </p>
                 </div>
@@ -186,7 +194,7 @@
                         <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" />
 
                         <div class="booking-cta" style="margin-top:8px;">
-                            <button type="submit" class="btn btn-primary" id="bookNowBtn" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
+                            <button type="submit" class="btn btn-primary" id="bookNowBtn" onclick="saveBookingData()">Book Now</button>
                         </div>
 
                     </form>
@@ -196,6 +204,45 @@
         </div>
     </div>
 
+
+
     <script src="/js/Manali.js"></script>
+    <script>
+        function saveBookingData() {
+            // 1. Get the Package Name
+            // Use querySelector to find the h2 inside package-title if you don't want to change IDs
+            const nameElement = document.querySelector('.package-title h2');
+            const name = nameElement ? nameElement.innerText : "Unknown Package";
+
+            // 2. Get the Total Price
+            const priceElement = document.getElementById('totalPayable');
+            const price = priceElement ? priceElement.innerText : "₹0";
+
+            // 3. Save to Local Storage
+            localStorage.setItem('selectedPackageName', name);
+            localStorage.setItem('selectedPackagePrice', price);
+
+            // Optional: Debugging to see if it works before the page redirects
+            console.log("Saving Package:", name);
+            console.log("Saving Price:", price);
+        }
+         // Date Restriction (Grey out past dates)
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('travelDate').setAttribute('min', today);
+
+        // Keep your price calculation logic so the 'totalPayable' updates when guests change
+        function calculatePrice() {
+            const guests = document.getElementById('guests').value;
+            const basePrice = 22000;
+            const taxPrice = 2200;
+            const total = guests * (basePrice + taxPrice);
+
+            document.getElementById('totalPayable').innerText = "₹" + total.toLocaleString('en-IN');
+            document.getElementById('priceSummary').innerText = guests + (guests > 1 ? " persons" : " person");
+        }
+
+        // Attach listener to update price automatically
+        document.getElementById('guests').addEventListener('change', calculatePrice);
+    </script>
 </body>
 </html>

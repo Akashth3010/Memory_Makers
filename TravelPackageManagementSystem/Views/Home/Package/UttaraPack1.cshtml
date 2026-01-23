@@ -21,7 +21,7 @@
             <div class="left-col">
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Yoga Capital: Adventure & Soul</h2>
+                        <h2 id="packageName">Yoga Capital: Adventure & Soul</h2>
                         <div class="rating">★ 4.7 (185 reviews)</div>
                     </div>
                     <div style="text-align: right;">
@@ -86,27 +86,38 @@
             <div class="right-col">
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
-                    <form id="bookingForm">
-                        <label>Travel Date</label><input type="date" required />
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
+                        <label for="travelDate">Travel Date</label>
+                        <input id="travelDate" type="date" required />
+
                         <label>Guests</label>
                         <select id="guests">
                             <option value="1">1 person</option>
                             <option value="2">2 persons</option>
                         </select>
-                        <label>Email</label><input type="email" required />
-                        <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
+
+                        <label for="contactEmail">Contact Email</label>
+                        <input id="contactEmail" type="email" placeholder="you@example.com" required />
+
+                        <label for="phone">Phone</label>
+                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
+
+                        <button type="submit" class="btn btn-primary">Book Now</button>
                     </form>
                 </aside>
             </div>
         </div>
     </div>
-    <partial name="_Footer" />
+
     <script>
         (function () {
             const main = document.getElementById('mainImage');
             const thumbs = document.querySelectorAll('.thumb');
-            const guests = document.getElementById('guests');
+            const guestsSelect = document.getElementById('guests');
+            const bookingForm = document.getElementById('bookingForm');
             const basePrice = 8999;
+
+            // 1. Gallery Functionality
             thumbs.forEach(t => {
                 t.addEventListener('click', () => {
                     thumbs.forEach(x => x.classList.remove('active'));
@@ -114,6 +125,8 @@
                     main.style.backgroundImage = `url('${t.dataset.src}')`;
                 });
             });
+
+            // 2. Accordion Functionality
             document.querySelectorAll('.day-header').forEach(h => {
                 h.addEventListener('click', () => {
                     const body = h.nextElementSibling;
@@ -122,10 +135,28 @@
                     if (!isOpen) { body.style.display = 'block'; }
                 });
             });
-            guests.addEventListener('change', () => {
-                const count = parseInt(guests.value);
+
+            // 3. Dynamic Price Calculation
+            guestsSelect.addEventListener('change', () => {
+                const count = parseInt(guestsSelect.value);
                 document.getElementById('totalPayable').textContent = `₹${(basePrice * count).toLocaleString()}`;
                 document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
+            });
+
+            // 4. Date Restriction (Past Dates Blocked)
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('travelDate').setAttribute('min', today);
+
+            // 5. Data Persistence for Checkout
+            bookingForm.addEventListener('submit', function (e) {
+                const name = document.getElementById('packageName').innerText;
+                const finalPrice = document.getElementById('totalPayable').innerText;
+
+                // Save to storage to display on the next page
+                localStorage.setItem('selectedPackageName', name);
+                localStorage.setItem('selectedPackagePrice', finalPrice);
+
+                // Form proceeds to /Home/PaymentPage
             });
         })();
     </script>

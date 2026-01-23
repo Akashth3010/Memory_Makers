@@ -197,6 +197,62 @@
 
 @section Scripts {
     <script>
+        (function () {
+            // 1. DATE RESTRICTION
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('travelDate').setAttribute('min', today);
+
+            // 2. GALLERY LOGIC
+            const main = document.getElementById('mainImage');
+            const thumbs = document.querySelectorAll('.thumb');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+
+            thumbs.forEach(t => {
+                t.addEventListener('click', () => {
+                    thumbs.forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                    const src = t.dataset.src;
+                    main.style.backgroundImage = `url('${src}')`;
+                    lightboxImg.src = src;
+                });
+            });
+
+            main.addEventListener('click', () => { lightbox.style.display = 'flex'; });
+            lightbox.addEventListener('click', () => { lightbox.style.display = 'none'; });
+
+            // 3. ITINERARY ACCORDION
+            document.querySelectorAll('.day-header').forEach(h => {
+                h.addEventListener('click', () => {
+                    const body = h.nextElementSibling;
+                    const isOpen = (body.style.display === 'block');
+                    document.querySelectorAll('.day-body').forEach(db => db.style.display = 'none');
+                    document.querySelectorAll('.toggle').forEach(tg => tg.textContent = '+');
+                    if (!isOpen) {
+                        body.style.display = 'block';
+                        h.querySelector('.toggle').textContent = '−';
+                    }
+                });
+            });
+
+            // 4. PRICE CALCULATION
+            const guestsSelect = document.getElementById('guests');
+            const basePrice = 25999;
+            guestsSelect.addEventListener('change', () => {
+                const count = parseInt(guestsSelect.value);
+                const total = basePrice * count;
+                document.getElementById('totalPayable').textContent = `₹${total.toLocaleString('en-IN')}`;
+                document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
+            });
+        })();
+
+        // 5. PERSISTENCE FOR PAYMENT PAGE
+        function saveExplorerData() {
+            const name = document.getElementById('packageName').innerText;
+            const price = document.getElementById('totalPayable').innerText;
+            localStorage.setItem('selectedPackageName', name);
+            localStorage.setItem('selectedPackagePrice', price);
+        }
         function swap(el) {
             document.getElementById('mainDisplay').src = el.src;
             document.querySelectorAll('.thumb-nail').forEach(t => t.classList.remove('active'));

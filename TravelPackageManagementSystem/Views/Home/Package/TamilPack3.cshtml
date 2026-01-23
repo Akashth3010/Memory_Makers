@@ -27,7 +27,7 @@
 
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Discover Tamil Nadu: Ooty & Coonoor</h2>
+                        <h2 id="packageName">Discover Tamil Nadu: Ooty & Coonoor</h2>
                         <div class="rating">★ 4.8 (912 reviews)</div>
                     </div>
                     <div style="text-align:right;">
@@ -130,9 +130,9 @@
             <div class="right-col">
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
-                    <form method="post" action="/Home/PaymentPage">
-                        <label for="travelDate">Travel Date</label>
-                        <input type="date" id="travelDate" name="travelDate" required />
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
+                        <label>Travel Date</label>
+                        <input id="travelDate" type="date" required />
 
                         <label>Guests</label>
                         <select id="guestSelect">
@@ -141,8 +141,13 @@
                             <option value="3">3 persons</option>
                             <option value="4">4 persons</option>
                         </select>
-                        <label>Email</label><input type="email" required />
-                        <label>Phone</label><input type="tel" />
+
+                        <label for="contactEmail">Contact Email</label>
+                        <input id="contactEmail" type="email" placeholder="you@example.com" required />
+
+                        <label for="phone">Phone</label>
+                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
+
                         <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Book Now</button>
                     </form>
                 </aside>
@@ -250,6 +255,23 @@
 
             });
 
+            // 4. DATE RESTRICTION (Block Past Dates)
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('travelDate');
+            if(dateInput) dateInput.setAttribute('min', today);
+
+            // 5. STORAGE & FORM SUBMISSION
+            const bookingForm = document.getElementById('bookingForm');
+            bookingForm.onsubmit = function() {
+                const name = document.getElementById('packageName').innerText;
+                const finalTotal = document.getElementById('totalPayable').innerText;
+
+                // Store details for the Payment Page
+                localStorage.setItem('selectedPackageName', name);
+                localStorage.setItem('selectedPackagePrice', finalTotal);
+
+                return true;
+            };
         });
 
                 document.addEventListener("DOMContentLoaded", function () {
