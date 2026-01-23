@@ -73,44 +73,7 @@
     </div>
 </header>
 
-@* Search Panel
-<section class="search-panel" style="width: 100%">
-    <div class="container">
-        <div class="search-box shadow-lg">
-            <div class="row g-3 align-items-center">
-                <div class="col-md-3">
-                    <label>Destination</label>
-                    <select id="destInput" class="form-control">
-                        <option value="">Where are you going?</option>
-                        <option value="meghalaya">Meghalaya</option>
-                        <option value="sikkim">Sikkim</option>
-                        <option value="arunachal">Arunachal Pradesh</option>
-                        <option value="assam">Assam</option>
-                    </select>
-                </div>
 
-                <div class="col-md-3">
-                    <label>Departure - Return</label>
-                    <input type="date" id="dateInput" class="form-control">
-                </div>
-
-                <div class="col-md-3">
-                    <label>Travellers</label>
-                    <select id="travellerInput" class="form-control">
-                        <option value="1">1 Adult</option>
-                        <option value="2">2 Adults</option>
-                        <option value="3">2 Adults, 1 Child</option>
-                        <option value="4">Family Pack (4+)</option>
-                    </select>
-                </div>
-
-                <div class="col-md-3 d-grid">
-                    <button class="btn btn-primary btn-lg mt-4" onclick="handleFullSearch()">Search Packages</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> *@
 
 <form asp-controller="Home" asp-action="Search" method="get" class="w-100">
     <div class="search-panel shadow-lg rounded-4 p-3 bg-white mx-auto" style="max-width: 1000px; margin-top: -50px; position: relative; z-index: 100;">

@@ -6,7 +6,6 @@
         background-color: #ffffff;
     }
 
-        /* Section Heading with Underline */
         #trending-section h2 {
             position: relative;
             display: inline-block;
@@ -22,7 +21,7 @@
                 transform: translateX(-50%);
                 width: 70px;
                 height: 3px;
-                background-color: #0dcaf0; /* Cyan underline to match Top Destinations */
+                background-color: #0dcaf0;
                 border-radius: 2px;
             }
 
@@ -40,7 +39,7 @@
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         cursor: pointer;
         position: relative;
-        text-align: left; /* Ensures text stays left-aligned */
+        text-align: left;
     }
 
         .trending-card:hover {
@@ -48,7 +47,6 @@
             box-shadow: 0 12px 24px rgba(0,0,0,0.06);
         }
 
-    /* Wishlist Heart */
     .wishlist-heart {
         position: absolute;
         top: 12px;
@@ -66,12 +64,6 @@
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
-        .wishlist-heart:hover {
-            background: #ff4d4d;
-            color: #fff;
-            transform: scale(1.1);
-        }
-
     .trending-media {
         height: 190px;
         position: relative;
@@ -85,11 +77,6 @@
             transition: transform 0.6s ease;
         }
 
-    .trending-card:hover .trending-media img {
-        transform: scale(1.08);
-    }
-
-    /* Bottom-Aligned Badges */
     .badge-float {
         position: absolute;
         bottom: 12px;
@@ -135,29 +122,39 @@
     .trending-price {
         font-size: 1rem;
         font-weight: 800;
-        color: #10b981; /* Emerald Green */
-    }
-
-    .meta-small {
-        font-size: 0.72rem;
-        color: #999;
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
-    }
-
-    .category-tag {
-        color: #6366f1; /* Indigo */
-        font-weight: 700;
+        color: #10b981;
     }
 
     .stars-container {
         color: #fbbf24;
         font-size: 0.75rem;
     }
+
+    .btn-view-details {
+        background-color: #0dcaf0;
+        color: white;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .trending-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        padding-top: 10px;
+        border-top: 1px solid #f0f0f0;
+    }
 </style>
 
-<section id="trending-section" class="text-center">
-    <div class="container">
+<section id="trending-section">
+    <div class="container text-center">
         <h2 class="fw-bold">Trending <span style="color: #6366f1;">Experiences</span></h2>
 
         <div class="trending-grid">
@@ -167,36 +164,39 @@
                 {
                     <div class="trending-card" onclick="location.href='@Url.Action("MeghPack3", "Home", new { id = item.PackageId })'">
 
-                        <div class="wishlist-heart" onclick="toggleWishlist(@item.PackageId, event)">
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-
                         <div class="trending-media">
+                            <div class="wishlist-heart" onclick="toggleWishlist(@item.PackageId, event)">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+
                             <div class="badge-float">
                                 <span class="badge-premium text-success shadow-sm">Featured</span>
                                 <span class="badge-premium text-danger shadow-sm">25% OFF</span>
-                                <span class="badge-premium text-primary shadow-sm">Family Pack</span>
+
+                                @if (item != null && !string.IsNullOrEmpty(item.PackageType))
+                                {
+                                    <span class="badge-premium text-primary shadow-sm">@item.PackageType</span>
+                                }
                             </div>
                             <img src="@item.ImageUrl" alt="@item.PackageName">
                         </div>
 
                         <div class="trending-body">
-                            <div class="d-flex justify-content-between meta-small mb-2">
-                                <span><i class="fas fa-location-dot me-1"></i> @item.Location</span>
-                                <span class="category-tag">Attraction Tickets</span>
-                            </div>
-
                             <div class="trending-title">@item.PackageName</div>
                             <p class="trending-desc">@item.Description</p>
 
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <div class="trending-price">₹@item.Price.ToString("N0")</div>
-                                <div class="d-flex align-items-center">
-                                    <div class="stars-container me-2">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                    <small class="text-muted" style="font-size: 0.7rem;">48 Reviews</small>
+                            <div class="d-flex align-items-center mt-2">
+                                <div class="stars-container me-2">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                                 </div>
+                                <small class="text-muted" style="font-size: 0.7rem;">48 Reviews</small>
+                            </div>
+
+                            <div class="trending-footer">
+                                <div class="trending-price">₹@item.Price.ToString("N0")</div>
+                                <a href="@Url.Action("MeghPack3", "Home", new { id = item.PackageId })" class="btn-view-details">
+                                    View Details
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -206,18 +206,16 @@
     </div>
 </section>
 
-
-
 <script>
     function toggleWishlist(id, event) {
-        event.stopPropagation(); // Prevents navigating to the details page
+        event.stopPropagation();
         const heart = event.currentTarget.querySelector('i');
-
         if (heart.classList.contains('fa-regular')) {
             heart.classList.replace('fa-regular', 'fa-solid');
             heart.style.color = '#ff4d4d';
         } else {
             heart.classList.replace('fa-solid', 'fa-regular');
+            heart.style.color = '';
         }
     }
 </script>
