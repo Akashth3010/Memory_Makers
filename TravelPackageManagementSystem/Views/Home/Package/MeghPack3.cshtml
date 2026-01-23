@@ -8,6 +8,7 @@
 <style>
     /* Professional Hero Section */
     /* .hero-section {
+        height: 350px;
             height: 350px;
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('@Model.ImageUrl ');
     background-size: cover;
@@ -21,6 +22,19 @@
     }
 
     */
+    /* Updated Hero Section with reduced height */
+    .hero-section {
+        height: 180px; /* Changed from 350px to reduce the size */
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('@Model.ImageUrl');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-bottom: 30px;
+        border-radius: 0 0 20px 20px;
+    } */
     /* Updated Hero Section with reduced height */
     .hero-section {
         height: 180px; /* Changed from 350px to reduce the size */
@@ -114,6 +128,7 @@
             <div class="mb-4">
                 <img id="mainDisplay" src="@Model.ImageUrl" class="rounded-4 shadow-sm w-100" style="height: 400px; object-fit: cover;">
             </div>
+           
 
             <div class="d-flex gap-2 mb-4">
                 <img src="@Model.ImageUrl" class="thumb-nail active" onclick="swap(this)">
