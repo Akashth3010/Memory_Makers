@@ -1,38 +1,32 @@
 ﻿@{
     ViewBag.Title = "Kerala Travel Package";
-    Layout = null;   // remove if you are using _Layout.cshtml
+    Layout = null;
 }
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Kerala Travel Package</title>
-
+    <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="/css/PackTD.css" />
 </head>
-
 <body>
 
-    <!-- HERO IMAGE -->
     <section class="hero">
-        <img class="hero-img" src="/lib/Image//k1.jpg" alt="Kerala Backwaters" />
+        <img class="hero-img" src="/lib/Image/k1.jpg" alt="Kerala Backwaters" />
         <div class="hero-content">
             <h1>Kerala: Alleppey & Kumarakom Backwaters</h1>
             <p>3 Days • Houseboat Stay • Village Life • Scenic Lagoons</p>
         </div>
     </section>
 
-    <!-- PACKAGE + BOOKING -->
     <div class="container">
         <div class="flex">
 
-            <!-- LEFT / DETAILS -->
             <div class="left-col">
-
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Discover Kerala: Alleppey Houseboats & Kumarakom Bird Sanctuary</h2>
+                        <h2 id="packageName">Discover Kerala: Alleppey Houseboats & Kumarakom</h2>
                         <div class="rating">★ 4.7 (856 reviews)</div>
                     </div>
 
@@ -42,37 +36,25 @@
                     </div>
                 </div>
 
-                <!-- IMAGE GALLERY -->
-                <div class="gallery" aria-label="Image gallery">
-                    <div id="mainImage" class="main-image" role="img" aria-label="Main image" style="background-image: url('/lib/Image/k2.jpg');"></div>
-
-                    <div class="thumbs" role="list">
-                        <button class="thumb active" role="listitem" type="button" data-src="/lib/Image/k2.jpg" style="background-image: url('/lib/Image/k2.jpg');" aria-label="Alleppey Houseboat"></button>
-                        <button class="thumb" role="listitem" type="button" data-src="/lib/Image/k3.jpg" style="background-image: url('/lib/Image/k3.jpg');" aria-label="Kumarakom Backwaters"></button>
-                        <button class="thumb" role="listitem" type="button" data-src="/lib/Image/k4.jpg" style="background-image: url('/lib/Image/k4.jpg');" aria-label="Village Life"></button>
-                        <button class="thumb" role="listitem" type="button" data-src="/lib/Image/k5.jpg" style="background-image: url('/lib/Image/k5.jpg');" aria-label="Bird Sanctuary"></button>
+                <div class="gallery">
+                    <div id="mainImage" class="main-image" style="background-image: url('/lib/Image/k2.jpg');"></div>
+                    <div class="thumbs">
+                        <button class="thumb active" type="button" data-src="/lib/Image/k2.jpg" style="background-image: url('/lib/Image/k2.jpg');"></button>
+                        <button class="thumb" type="button" data-src="/lib/Image/k3.jpg" style="background-image: url('/lib/Image/k3.jpg');"></button>
+                        <button class="thumb" type="button" data-src="/lib/Image/k4.jpg" style="background-image: url('/lib/Image/k4.jpg');"></button>
+                        <button class="thumb" type="button" data-src="/lib/Image/k5.jpg" style="background-image: url('/lib/Image/k5.jpg');"></button>
                     </div>
                 </div>
 
-                <!-- LIGHTBOX -->
-                <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-                    <img id="lightboxImg" src="" alt="Large view" />
-                </div>
-
-                <!-- PACKAGE DESCRIPTION -->
                 <div style="margin-top:16px;">
                     <h3>Overview</h3>
-                    <p>
-                        Experience Kerala’s serene backwaters. Cruise Alleppey in a traditional houseboat, explore Kumarakom’s lush lagoons and bird sanctuary, and enjoy authentic village life. Comfortable stays, guided tours, and private transfers are included.
-                    </p>
+                    <p>Experience Kerala’s serene backwaters. Cruise Alleppey in a traditional houseboat, explore Kumarakom’s lush lagoons, and enjoy authentic village life.</p>
                 </div>
 
-                <!-- ITINERARY -->
-                <div class="itinerary" aria-label="Day by day itinerary">
-                    <h3 style="margin-bottom:10px;">Day-by-Day Itinerary</h3>
-
+                <div class="itinerary">
+                    <h3>Day-by-Day Itinerary</h3>
                     <div class="day">
-                        <div class="day-header" data-day="1">
+                        <div class="day-header">
                             <h4>Day 1 — Arrival & Alleppey Houseboat</h4>
                             <div class="toggle">+</div>
                         </div>
@@ -82,17 +64,17 @@
                     </div>
 
                     <div class="day">
-                        <div class="day-header" data-day="2">
+                        <div class="day-header">
                             <h4>Day 2 — Kumarakom & Village Life</h4>
                             <div class="toggle">+</div>
                         </div>
                         <div class="day-body">
-                            <p>Disembark and transfer to Kumarakom. Visit the bird sanctuary, explore village life, and relax by the Vembanad Lake.</p>
+                            <p>Disembark and transfer to Kumarakom. Visit the bird sanctuary and relax by the Vembanad Lake.</p>
                         </div>
                     </div>
 
                     <div class="day">
-                        <div class="day-header" data-day="3">
+                        <div class="day-header">
                             <h4>Day 3 — Sunrise & Departure</h4>
                             <div class="toggle">+</div>
                         </div>
@@ -102,59 +84,40 @@
                     </div>
                 </div>
 
-                <!-- PRICING & INCLUSIONS -->
-                <div class="price-card" aria-label="Pricing and inclusions">
+                <div class="price-card">
                     <div class="price-row">
                         <div>Base Price (per person)</div>
-                        <div class="price-total" id="pricePerPerson">₹14,500</div>
+                        <div class="price-total">₹14,500</div>
                     </div>
-
                     <div class="price-row">
-                        <div>Taxes & Fees</div>
-                        <div>₹1,450</div>
+                        <div>Taxes & Fees (10%)</div>
+                        <div id="taxDisplay">₹1,450</div>
                     </div>
-
                     <div class="price-row">
                         <div>Selected Guests</div>
                         <div id="priceSummary">1 person</div>
                     </div>
-
                     <hr style="margin:10px 0; border:none; border-top:1px solid #e6e9ef;" />
-
-                    <div style="font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="font-weight:700; display:flex; justify-content:space-between;">
                         <div>Total Payable</div>
                         <div class="price-total" id="totalPayable">₹15,950</div>
                     </div>
-
                     <div style="margin-top:12px;">
                         <h4 style="font-size:15px; margin-bottom:6px;">What's Included</h4>
                         <div class="list-inline">
-                            <div class="included">Houseboat stay (1 night)</div>
-                            <div class="included">Resort stay in Kumarakom (1 night)</div>
-                            <div class="included">Daily breakfast & onboard meals</div>
-                            <div class="included">Private transfers & sightseeing</div>
-                            <div class="included">Canoe ride in backwaters</div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:12px;">
-                        <h4 style="font-size:15px; margin-bottom:6px;">What's Excluded</h4>
-                        <div class="list-inline">
-                            <div class="excluded">Airfare / Train fare</div>
-                            <div class="excluded">Sanctuary entry fees</div>
-                            <div class="excluded">Meals not specified</div>
-                            <div class="excluded">Personal expenses</div>
+                            <div class="included">Houseboat stay</div>
+                            <div class="included">Daily breakfast</div>
+                            <div class="included">Private transfers</div>
+                            <div class="included">Canoe ride</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- RIGHT / BOOKING -->
             <div class="right-col">
-                <aside class="booking-box" aria-labelledby="bookingHeading">
-                    <h3 id="bookingHeading">Book This Package</h3>
-
-                    <form id="bookingForm" method="post" action="/Booking/Start">
+                <aside class="booking-box">
+                    <h3>Book This Package</h3>
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
                         <label for="travelDate">Travel Date</label>
                         <input id="travelDate" name="TravelDate" type="date" required />
 
@@ -170,78 +133,75 @@
                         <input id="contactEmail" name="Email" type="email" placeholder="you@example.com" required />
 
                         <label for="phone">Phone</label>
-                        <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" />
+                        <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" required />
 
-                        <div class="booking-cta" style="margin-top:8px;">
-                            <button type="submit" class="btn btn-primary" id="bookNowBtn" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
-                            
-                        </div>
-
-                       
+                        <button type="submit" class="btn btn-primary" onclick="saveKeralaData()">Book Now</button>
                     </form>
                 </aside>
             </div>
-
         </div>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-
-            // --- 1. IMAGE GALLERY LOGIC ---
+            // 1. Gallery Logic
             const mainImage = document.getElementById('mainImage');
             const thumbnails = document.querySelectorAll('.thumb');
 
             thumbnails.forEach(thumb => {
                 thumb.addEventListener('click', function () {
                     const newSrc = this.getAttribute('data-src');
-                    if (mainImage && newSrc) {
-                        mainImage.style.backgroundImage = `url('${newSrc}')`;
-                    }
+                    mainImage.style.backgroundImage = `url('${newSrc}')`;
                     thumbnails.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
                 });
             });
 
-            // --- 2. ITINERARY DROPDOWN LOGIC ---
+            // 2. Itinerary Accordion
             const dayHeaders = document.querySelectorAll('.day-header');
-
             dayHeaders.forEach(header => {
                 header.addEventListener('click', function () {
-                    // Find the content div (day-body) directly after the header
                     const body = this.nextElementSibling;
                     const toggleSign = this.querySelector('.toggle');
+                    const isOpen = body.style.display === "block";
 
-                    // Toggle visibility
-                    if (body.style.display === "block") {
-                        body.style.display = "none";
-                        if (toggleSign) toggleSign.textContent = "+";
-                    } else {
+                    document.querySelectorAll('.day-body').forEach(b => b.style.display = "none");
+                    document.querySelectorAll('.toggle').forEach(s => s.textContent = "+");
+
+                    if (!isOpen) {
                         body.style.display = "block";
-                        if (toggleSign) toggleSign.textContent = "-";
+                        toggleSign.textContent = "-";
                     }
                 });
             });
 
-            // --- 3. PRICE UPDATE LOGIC (Optional but recommended) ---
+            // 3. Price Calculation
             const guestSelect = document.getElementById('guests');
-            const priceSummary = document.getElementById('priceSummary');
-            const totalPayableDisplay = document.getElementById('totalPayable');
             const basePrice = 14500;
-            const taxPerPerson = 1450;
+            const taxRate = 1450;
 
-            if(guestSelect) {
-                guestSelect.addEventListener('change', function() {
-                    const count = parseInt(this.value);
-                    const total = (basePrice + taxPerPerson) * count;
+            guestSelect.addEventListener('change', function() {
+                const count = parseInt(this.value);
+                const total = (basePrice + taxRate) * count;
+                const taxTotal = taxRate * count;
 
-                    // Update text
-                    if (priceSummary) priceSummary.textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
-                    if (totalPayableDisplay) totalPayableDisplay.textContent = `₹${total.toLocaleString('en-IN')}`;
-                });
-            }
+                document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
+                document.getElementById('taxDisplay').textContent = `₹${taxTotal.toLocaleString('en-IN')}`;
+                document.getElementById('totalPayable').textContent = `₹${total.toLocaleString('en-IN')}`;
+            });
+
+            // 4. Date Validation
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('travelDate').setAttribute('min', today);
         });
+
+        // 5. Data Persistence
+        function saveKeralaData() {
+            const name = document.getElementById('packageName').innerText;
+            const price = document.getElementById('totalPayable').innerText;
+            localStorage.setItem('selectedPackageName', name);
+            localStorage.setItem('selectedPackagePrice', price);
+        }
     </script>
 </body>
 </html>
-

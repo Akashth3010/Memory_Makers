@@ -9,6 +9,22 @@
     /* Professional Hero Section */
     /* .hero-section {
         height: 350px;
+            height: 350px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('@Model.ImageUrl ');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-bottom: 30px;
+    border-radius: 0 0 20px 20px;
+    }
+
+    */
+    /* Updated Hero Section with reduced height */
+    .hero-section {
+        height: 180px; /* Changed from 350px to reduce the size */
         background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('@Model.ImageUrl');
         background-size: cover;
         background-position: center;
@@ -113,6 +129,7 @@
                 <img id="mainDisplay" src="@Model.ImageUrl" class="rounded-4 shadow-sm w-100" style="height: 400px; object-fit: cover;">
             </div>
            
+
             <div class="d-flex gap-2 mb-4">
                 <img src="@Model.ImageUrl" class="thumb-nail active" onclick="swap(this)">
 
@@ -218,7 +235,74 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        // 1. GLOBAL FUNCTIONS (Accessible from HTML attributes like onclick)
+        function swap(el) {
+            const mainDisplay = document.getElementById('mainDisplay');
+            if (mainDisplay && el) {
+                mainDisplay.src = el.src;
+                // Update active state for thumbnails
+                document.querySelectorAll('.thumb-nail').forEach(t => t.classList.remove('active'));
+                el.classList.add('active');
+            }
+        }
 
+        // 2. INITIALIZATION (Runs once the page is ready)
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get data from C# Model
+            const basePrice = @(Model?.Price ?? 0);
+
+            // Get HTML Elements
+            const guestInput = document.getElementById('gCount');
+            const totalDisplay = document.getElementById('liveTotal');
+            const travelDateInput = document.getElementById('tDate');
+
+            // --- DATE LOGIC ---
+            if (travelDateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                travelDateInput.min = today; // Prevents booking in the past
+            }
+
+            // --- PRICE CALCULATION LOGIC ---
+            function updatePrice() {
+                if (!guestInput || !totalDisplay) return;
+
+                let count = parseInt(guestInput.value) || 1;
+
+                // Safety: Minimum 1 guest, Maximum 20
+                if (count < 1) { count = 1; guestInput.value = 1; }
+                if (count > 20) { count = 20; guestInput.value = 20; }
+
+                const total = basePrice * count;
+                totalDisplay.innerText = '₹' + total.toLocaleString('en-IN');
+
+                // Store data for the Payment Page
+                localStorage.setItem('selectedPackagePrice', totalDisplay.innerText);
+                localStorage.setItem('totalGuests', count);
+            }
+
+            // --- EVENT LISTENERS ---
+            if (guestInput) {
+                // Listen for typing and arrow clicks
+                guestInput.addEventListener('input', updatePrice);
+                guestInput.addEventListener('change', updatePrice);
+            }
+
+            // --- PERSISTENCE FOR PAYMENT PAGE ---
+            const bookingForm = document.querySelector('form');
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', function() {
+                    localStorage.setItem('selectedPackageName', "@Model.PackageName");
+                });
+            }
+
+            // Initial run to show correct price immediately
+            updatePrice();
+        });
+    </script>
+}
+@* 
 @section Scripts {
     <script>
         function swap(el) {
@@ -245,5 +329,5 @@
         guestInput.addEventListener('change', updatePrice);
 
         document.getElementById('tDate').min = new Date().toISOString().split('T')[0];
-    </script>
+    </script> *@
 }

@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Checkout";
     Layout = "_Layout";
-    // Retrieve the ID passed from CreateBooking
+    // Ensure the BookingId from CreateBooking is available
     var bookingId = ViewBag.BookingId;
 }
 
@@ -14,28 +14,15 @@
 
     body {
         background-color: #f4f7f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Glassmorphism Card Effect */
     .payment-card {
         background: white;
         border: none;
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
-
-    .method-selector {
-        border: 2px solid #f0f0f0;
-        border-radius: 12px;
-        padding: 15px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-        .method-selector:hover, .method-selector.selected {
-            border-color: var(--primary-orange);
-            background: #fff9f7;
-        }
 
     .summary-box {
         background: linear-gradient(135deg, var(--dark-bg) 0%, #000 100%);
@@ -53,118 +40,177 @@
         border-radius: 12px;
         font-weight: bold;
         width: 100%;
+        color: white;
         transition: transform 0.2s;
     }
 
-        .btn-checkout:hover {
+        .btn-checkout:hover:not(:disabled) {
             transform: scale(1.02);
             color: black;
         }
 </style>
-<head>
-    <link rel="stylesheet" href="@(Url.Content("~/css/PaymentPage.css"))" />
-</head>
 
 <div class="container py-5">
     <div class="row g-4">
         <div class="col-lg-8">
-            <div class="payment-card p-4">
-                <h4 class="fw-bold mb-4"><i class="fas fa-credit-card me-2 text-primary"></i>Payment Method</h4>
+            <h4 class="fw-bold mb-4"><i class="fas fa-credit-card me-2 text-primary"></i>Payment Method</h4>
 
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="method-selector selected" onclick="switchTab('card', this)">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="pay" id="cardRadio" checked>
-                                <label class="form-check-label fw-bold" for="cardRadio">Credit/Debit Card</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="method-selector" onclick="switchTab('upi', this)">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="pay" id="upiRadio">
-                                <label class="form-check-label fw-bold" for="upiRadio">UPI / QR Code</label>
-                            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="method-selector selected" onclick="switchTab('card', this)">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="pay" id="cardRadio" checked>
+                            <label class="form-check-label fw-bold" for="cardRadio">Credit/Debit Card</label>
                         </div>
                     </div>
                 </div>
-
-                <div id="cardDetails" class="mt-4">
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label class="form-label small fw-bold">CARDHOLDER NAME</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="Enter name">
+                <div class="col-md-6">
+                    <div class="method-selector" onclick="switchTab('upi', this)">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="pay" id="upiRadio">
+                            <label class="form-check-label fw-bold" for="upiRadio">UPI / QR Code</label>
                         </div>
-                        <div class="col-12">
-                            <label class="form-label small fw-bold">CARD NUMBER</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="0000 0000 0000 0000">
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label small fw-bold">EXPIRY</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="MM/YY">
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label small fw-bold">CVV</label>
-                            <input type="password" class="form-control form-control-lg" placeholder="***">
-                        </div>
-                    </div>
-                </div>
-
-                <div id="upiDetails" class="mt-4 text-center" style="display:none;">
-                    <div class="p-4 border rounded bg-light">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Booking_@bookingId" class="img-fluid mb-3 shadow">
-                        <p class="text-muted">Scan QR or enter UPI ID</p>
-                        <input type="text" class="form-control text-center mx-auto" style="max-width:300px" placeholder="user@upi">
                     </div>
                 </div>
             </div>
+
+            <div id="cardDetails" class="mt-4">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">CARDHOLDER NAME</label>
+                        <input type="text" class="form-control form-control-lg" placeholder="Enter name">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">CARD NUMBER</label>
+                        <input type="text" class="form-control form-control-lg" placeholder="0000 0000 0000 0000">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-bold">EXPIRY</label>
+                        <input type="text" class="form-control form-control-lg" placeholder="MM/YY">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-bold">CVV</label>
+                        <input type="password" class="form-control form-control-lg" placeholder="***">
+                    </div>
+                </div>
+            </div>
+
+            <div id="upiDetails" class="mt-4 text-center" style="display:none;">
+                <div class="p-4 border rounded bg-light">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Booking_@bookingId" class="img-fluid mb-3 shadow">
+                    <p class="text-muted">Scan QR or enter UPI ID</p>
+                    <input type="text" class="form-control text-center mx-auto" style="max-width:300px" placeholder="user@upi">
+                </div>
+            </div>
+        </div>
         </div>
 
         <div class="col-lg-4">
             <div class="summary-box shadow-lg">
-                <h5 class="mb-4 text-warning">Order Summary</h5>
-                <div class="d-flex justify-content-between mb-2"><span>Booking ID</span><span class="fw-bold">#@bookingId</span></div>
-                <div class="d-flex justify-content-between mb-2"><span>Package Price</span><span>₹35,000</span></div>
-                <div class="d-flex justify-content-between mb-2"><span>GST (18%)</span><span>₹6,300</span></div>
-                <hr>
+                <h5 class="mb-1">Booking Summary</h5>
+                <p id="packageNameDisplay" class="small mb-4" style="color: var(--secondary-yellow);">Selected Package</p>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary">Base Price</span>
+                    <span id="basePriceDisplay">₹0</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary">GST (18%)</span>
+                    <span id="gstDisplay">₹0</span>
+                </div>
+                <hr style="border-top: 1px dashed #555;">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <span class="h5">Total</span>
-                    <span class="h3 fw-bold text-warning">₹41,300</span>
+                    <span class="h5 mb-0">Total Amount</span>
+                    <span id="displayPrice" class="h4 mb-0 fw-bold" style="color: var(--primary-orange);">₹0</span>
                 </div>
 
-                @* Backend Connection: Submit to ConfirmPayment Action *@
-                <form id="payForm" asp-action="ConfirmPayment" asp-controller="Home" method="post">
-                    <input type="hidden" name="bookingId" value="@bookingId" />
-                    <button type="button" class="btn-checkout" id="payBtn" onclick="processPayment()">
-                        CONFIRM & PAY
-                    </button>
-                </form>
-
-                <div class="text-center mt-3 small text-white-50">
-                    <i class="fas fa-lock me-1"></i> Secure SSL Encryption
-                </div>
+                <button class="btn-checkout" id="payBtn" onclick="processPayment(this)">PAY NOW & CONFIRM</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    function processPayment() {
-        const btn = document.getElementById('payBtn');
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
-        btn.disabled = true;
-
-        // Simulate gateway delay then submit to backend
-        setTimeout(() => {
-            document.getElementById('payForm').submit();
-        }, 1500);
-    }
-
-    function switchTab(type, el) {
+        function switchTab(type, el) {
         document.querySelectorAll('.method-selector').forEach(m => m.classList.remove('selected'));
         el.classList.add('selected');
         document.getElementById('cardDetails').style.display = type === 'card' ? 'block' : 'none';
         document.getElementById('upiDetails').style.display = type === 'upi' ? 'block' : 'none';
+    }
+    // 1. Load Local Storage Data on Startup
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedPrice = localStorage.getItem('selectedPackagePrice') || "₹0";
+        const savedName = localStorage.getItem('selectedPackageName') || "No Package Selected";
+        document.getElementById('packageNameDisplay').innerText = savedName;
+
+        // Calculate Breakdown
+        const total = parseFloat(savedPrice.replace(/[^0-9.]/g, '')) || 0;
+        const base = total / 1.18;
+        const gst = total - base;
+
+        document.getElementById('displayPrice').innerText = "₹" + total.toLocaleString('en-IN');
+        document.getElementById('basePriceDisplay').innerText = "₹" + Math.round(base).toLocaleString('en-IN');
+        document.getElementById('gstDisplay').innerText = "₹" + Math.round(gst).toLocaleString('en-IN');
+    });
+                    async function processPayment(btn) {
+        const cardName = document.getElementById('cardHolderName').value.trim();
+        const cardNumber = document.getElementById('cardNumber').value.trim();
+        const expiry = document.getElementById('expiryInput').value.trim();
+        const cvv = document.getElementById('cvvInput').value.trim();
+
+        // 1. Mandatory Field Check
+        if (!cardName || !cardNumber || !expiry || !cvv) {
+            alert("Please fill in all payment details.");
+            return;
+        }
+
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+        btn.disabled = true;
+
+        // 2. Simulated Payment Rules
+        // Case A: All Zeros = Card Declined / Invalid Number
+        if (cardNumber === "0000000000000000") {
+            window.location.href = "/Home/Failure?reason=Invalid Card Number. Please check your details.";
+            return;
+        }
+
+        // Case B: All Ones = Insufficient Funds
+        if (cardNumber === "1111111111111111") {
+            window.location.href = "/Home/Failure?reason=Transaction Declined: Insufficient Funds in your account.";
+            return;
+        }
+
+        // Case C: Real-world Logic (e.g., must be 16 digits)
+        if (cardNumber.length < 16) {
+            window.location.href = "/Home/Failure?reason=Invalid Card Format. Card must be 16 digits.";
+            return;
+        }
+
+        // 3. Proceed to Server for "Valid" cards
+        const bId = parseInt("@ViewBag.BookingId");
+        const bookingData = {
+            BookingId: bId,
+            Amount: parseFloat(document.getElementById('displayPrice').innerText.replace(/[^0-9.]/g, '')),
+            PaymentMethod: "Credit Card",
+            TransactionId: "TXN-" + Date.now(),
+            Status: "Completed"
+        };
+
+        try {
+            const response = await fetch('/Payment/SavePayment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bookingData)
+            });
+
+            if (response.ok) {
+                window.location.href = "/Home/Success?txn=" + bookingData.TransactionId;
+            } else {
+                const errorMsg = await response.text();
+                window.location.href = "/Home/Failure?reason=" + encodeURIComponent(errorMsg);
+            }
+        } catch (error) {
+            window.location.href = "/Home/Failure?reason=Network Error: Payment could not be processed.";
+        }
     }
 </script>

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class FixPackageTypeMapping : Migration
+    public partial class PaymentUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -96,6 +96,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Duration = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ThumbnailUrl1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ThumbnailUrl2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ThumbnailUrl3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsTrending = table.Column<bool>(type: "bit", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AvailabilityStatus = table.Column<int>(type: "int", nullable: false),
@@ -181,9 +184,11 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                 {
                     PaymentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PaymentAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BookingId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -226,28 +231,28 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     { 1, "Krang Suri Falls", 1, "/lib/Image/meg1.jpg" },
                     { 2, "Root Bridges", 1, "/lib/Image/meg2.jpg" },
                     { 3, "Dawki River", 1, "/lib/Image/meg3.jpg" },
-                    { 4, "Meenakshi Temple", 2, "/lib/Image/Tamil1.jpg" },
-                    { 5, "Munnar Hills", 3, "/lib/Image/Kerala1.jpg" },
-                    { 6, "Baga Beach", 4, "/lib/Image/Goa1.jpg" }
+                    { 4, "Meenakshi Temple", 2, "/lib/Image/t2.jpg" },
+                    { 5, "Munnar Hills", 3, "/lib/Image/k1.jpg" },
+                    { 6, "Baga Beach", 4, "/lib/Image/goa3.jpg" }
                 });
 
             migrationBuilder.InsertData(
                 table: "TravelPackages",
-                columns: new[] { "PackageId", "ApprovalStatus", "AvailabilityStatus", "Description", "Destination", "DestinationId", "Duration", "HostId", "ImageUrl", "IsTrending", "Location", "PackageName", "PackageType", "Price" },
+                columns: new[] { "PackageId", "ApprovalStatus", "AvailabilityStatus", "Description", "Destination", "DestinationId", "Duration", "HostId", "ImageUrl", "IsTrending", "Location", "PackageName", "PackageType", "Price", "ThumbnailUrl1", "ThumbnailUrl2", "ThumbnailUrl3" },
                 values: new object[,]
                 {
-                    { 1, 1, 0, null, "Meghalaya", 1, "3 Days", null, "/lib/Image/meghalaya.jpg", false, "Shillong Peak", "Quick Escape", "", 9999.00m },
-                    { 2, 1, 0, null, "Tamil Nadu", 2, "8 Days", null, "/lib/Image/Tamilnadu.jpg", false, "Madurai", "Temple Trail", "", 18500.00m },
-                    { 3, 1, 0, null, "Kerala", 3, "6 Days", null, "/lib/Image/Kerala.jpg", false, "Alleppey", "Backwater Bliss", "", 22000.00m },
-                    { 4, 1, 0, "A bustling metropolis blending colonial heritage and Bollywood glamour.", "Maharashtra", 5, "5 Days", null, "/lib/TrendingImage/Mumbai.jpg", true, "Gateway of India", "Mumbai Heritage", "", 35000.00m },
-                    { 5, 1, 0, null, "Rajasthan", 6, "6 Days", null, "/lib/TrendingImage/Hawa Mahal Jaipur.jpg", true, "Jaipur", "Pink City Tour", "", 65000.00m },
-                    { 6, 1, 0, null, "Sikkim", 8, "8 Days", null, "/lib/TrendingImage/Gangtok.jpg", true, "Gangtok", "Sikkim Adventure", "", 70000.00m },
-                    { 7, 1, 0, null, "West Bengal", 7, "4 Days", null, "/lib/TrendingImage/Darjiling.jpg", true, "Darjeeling", "Darjeeling Tea", "", 5500.00m },
-                    { 8, 1, 0, null, "Uttar Pradesh", 9, "3 Days", null, "/lib/TrendingImage/Banaras.jpg", true, "Varanasi", "Varanasi Spiritual", "", 83000.00m },
-                    { 9, 1, 0, null, "Kerala", 3, "5 Days", null, "/lib/TrendingImage/Munnar.jpg", true, "Munnar", "Misty Munnar", "", 50000.00m },
-                    { 10, 1, 0, null, "Goa", 4, "3 Days", null, "/lib/TrendingImage/Goa.jpg", true, "Calangute", "Goa Sundowner", "", 12500.00m },
-                    { 11, 1, 0, null, "Tamil Nadu", 2, "5 Days", null, "/lib/TrendingImage/Ooty.jpg", true, "Ooty", "Ooty Gardens", "", 52000.00m },
-                    { 12, 1, 0, null, "Uttar Pradesh", 9, "3 Days", null, "/lib/TrendingImage/Banaras.jpg", true, "Vrindavan", "Sacred Vrindavan", "", 67000.00m }
+                    { 1, 1, 0, null, "Meghalaya", 1, "3 Days", null, "/lib/Image/meghalaya.jpg", false, "Shillong Peak", "Quick Escape", "", 9999.00m, "/lib/Image/meg4.jpg", "/lib/Image/meghbg.jpg", "/lib/Image/meg3.jpg" },
+                    { 2, 1, 0, null, "Tamil Nadu", 2, "8 Days", null, "/lib/Image/Tamilnadu.jpg", false, "Madurai", "Temple Trail", "", 18500.00m, "/lib/Image/t4.jpg", "/lib/Image/t25.jpg", "/lib/Image/t3.jpg" },
+                    { 3, 1, 0, null, "Kerala", 3, "6 Days", null, "/lib/Image/Kerala.jpg", false, "Alleppey", "Backwater Bliss", "", 22000.00m, "/lib/Image/k32.jpg", "/lib/Image/k35.jpg", "/lib/Image/k3.jpg" },
+                    { 4, 1, 0, "A bustling metropolis blending colonial heritage and Bollywood glamour.", "Maharashtra", 5, "5 Days", null, "/lib/TrendingImage/Mumbai.jpg", true, "Gateway of India", "Mumbai Heritage", "", 35000.00m, "/lib/Image/mumbai1.jpg", "/lib/Image/mumbai2.jpg", "/lib/Image/mumbai3.jpg" },
+                    { 5, 1, 0, null, "Rajasthan", 6, "6 Days", null, "/lib/TrendingImage/Hawa Mahal Jaipur.jpg", true, "Jaipur", "Pink City Tour", "", 65000.00m, "/lib/Image/jaipur1.jpg", "/lib/Image/jaipur2.jpg", "/lib/Image/jaipur3.jpg" },
+                    { 6, 1, 0, null, "Sikkim", 8, "8 Days", null, "/lib/TrendingImage/Gangtok.jpg", true, "Gangtok", "Sikkim Adventure", "", 70000.00m, "/lib/Image/gangtok1.jpg", "/lib/Image/gangtok2.jpg", "/lib/Image/gangtok3.jpg" },
+                    { 7, 1, 0, null, "West Bengal", 7, "4 Days", null, "/lib/TrendingImage/Darjiling.jpg", true, "Darjeeling", "Darjeeling Tea", "", 5500.00m, "/lib/Image/darjiling1.jpg", "/lib/Image/darjiling2.jpg", "/lib/Image/darjiling3.jpg" },
+                    { 8, 1, 0, null, "Uttar Pradesh", 9, "3 Days", null, "/lib/TrendingImage/Banaras.jpg", true, "Varanasi", "Varanasi Spiritual", "", 83000.00m, "/lib/Image/banaras1.jpg", "/lib/Image/banaras2.jpg", "/lib/Image/banaras3.jpg" },
+                    { 9, 1, 0, null, "Kerala", 3, "5 Days", null, "/lib/TrendingImage/Munnar.jpg", true, "Munnar", "Misty Munnar", "", 50000.00m, " /lib/Image/munnar1.jpg", "/lib/Image/munnar2.jpg", "/lib/Image/munnar4.jpg" },
+                    { 10, 1, 0, null, "Goa", 4, "3 Days", null, "/lib/TrendingImage/Goa.jpg", true, "Calangute", "Goa Sundowner", "", 12500.00m, " /lib/Image/goa1.jpg", "/lib/Image/goa2.jpg", "/lib/Image/goa3.jpg" },
+                    { 11, 1, 0, null, "Tamil Nadu", 2, "5 Days", null, "/lib/TrendingImage/Ooty.jpg", true, "Ooty", "Ooty Gardens", "", 52000.00m, "/lib/Image/ooty.jpg", "/lib/Image/ooty2.jpg", "/lib/Image/ooty3.jpg" },
+                    { 12, 1, 0, null, "Uttar Pradesh", 9, "3 Days", null, "/lib/TrendingImage/Vrindavan.jpg", true, "Vrindavan", "Sacred Vrindavan", "", 67000.00m, "/lib/Image/vrindavan5.jpg", "/lib/Image/vrindavan3.jpg", "/lib/Image/vrindavan2.jpg" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260121064320_AddImageUrl")]
-    partial class AddImageUrl
+    [Migration("20260123063137_FixedPayment")]
+    partial class FixedPayment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -220,21 +220,21 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Id = 4,
                             Caption = "Meenakshi Temple",
                             DestinationId = 2,
-                            ImageUrl = "/lib/Image/Tamil1.jpg"
+                            ImageUrl = "/lib/Image/t2.jpg"
                         },
                         new
                         {
                             Id = 5,
                             Caption = "Munnar Hills",
                             DestinationId = 3,
-                            ImageUrl = "/lib/Image/Kerala1.jpg"
+                            ImageUrl = "/lib/Image/k1.jpg"
                         },
                         new
                         {
                             Id = 6,
                             Caption = "Baga Beach",
                             DestinationId = 4,
-                            ImageUrl = "/lib/Image/Goa1.jpg"
+                            ImageUrl = "/lib/Image/goa3.jpg"
                         });
                 });
 
@@ -320,21 +320,38 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PaymentAmount")
-                        .HasColumnType("decimal(10,2)");
+                    b.Property<int?>("BookingId1")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("PaymentId");
 
                     b.HasIndex("BookingId");
+
+                    b.HasIndex("BookingId1");
 
                     b.ToTable("Payments");
                 });
@@ -716,10 +733,14 @@ namespace TravelPackageManagementSystem.Repository.Migrations
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Payment", b =>
                 {
                     b.HasOne("TravelPackageManagementSystem.Repository.Models.Booking", "Booking")
-                        .WithMany("Payments")
+                        .WithMany()
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.Booking", null)
+                        .WithMany("Payments")
+                        .HasForeignKey("BookingId1");
 
                     b.Navigation("Booking");
                 });

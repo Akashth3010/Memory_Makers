@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Quick Escape - 3 Days</title>
+    <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/css/pack-details.css" />
 </head>
 
@@ -24,7 +24,7 @@
             <div class="left-col">
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Shillong: The Scotland of the East</h2>
+                        <h2 id="packageName">Shillong: The Scotland of the East</h2>
                         <div class="rating">★ 4.6 (120 reviews)</div>
                     </div>
                     <div style="text-align: right;">
@@ -40,11 +40,12 @@
                         <div class="thumb" data-src="/lib/Image/meg3.jpg" style="background-image: url('/lib/Image/meg3.jpg');"></div>
                         <div class="thumb" data-src="/lib/Image/meg4.jpg" style="background-image: url('/lib/Image/meg4.jpg');"></div>
                         <div class="thumb" data-src="/lib/Image/meg5.jpg" style="background-image: url('/lib/Image/meg5.jpg');"></div>
-
                     </div>
                 </div>
 
-                <div id="lightbox" class="lightbox"><img id="lightboxImg" src="" alt="Large view" /></div>
+                <div id="lightbox" class="lightbox">
+                    <img id="lightboxImg" src="/lib/Image/meghalaya.jpg" alt="Large view" />
+                </div>
 
                 <div style="margin-top:16px;">
                     <h3>Overview</h3>
@@ -68,11 +69,18 @@
                 </div>
 
                 <div class="price-card">
-                    <div class="price-row"><div>Base Price</div><div class="price-total" id="pricePerPerson">₹9,999</div></div>
-                    <div class="price-row"><div>Guests</div><div id="priceSummary">1 person</div></div>
+                    <div class="price-row">
+                        <div>Base Price (per person)</div>
+                        <div class="price-total">₹9,999</div>
+                    </div>
+                    <div class="price-row">
+                        <div>Selected Guests</div>
+                        <div id="priceSummary">1 person</div>
+                    </div>
                     <hr style="margin:10px 0; border:none; border-top:1px solid #e6e9ef;" />
                     <div style="font-weight:700; display:flex; justify-content:space-between;">
-                        <div>Total Payable</div><div class="price-total" id="totalPayable">₹9,999</div>
+                        <div>Total Payable</div>
+                        <div class="price-total" id="totalPayable">₹9,999</div>
                     </div>
                     <div style="margin-top:12px;">
                         <h4 style="font-size:15px; margin-bottom:6px;">What's Included</h4>
@@ -88,35 +96,43 @@
             <div class="right-col">
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
-                    <form id="bookingForm">
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
                         <label for="travelDate">Travel Date</label>
-                        <input id="travelDate" type="date" required />                        <label>Guests</label>
-                        <select id="guests">
+                        <input id="travelDate" name="TravelDate" type="date" required />
+
+                        <label for="guests">Guests</label>
+                        <select id="guests" name="Guests">
                             <option value="1">1 person</option>
                             <option value="2">2 persons</option>
                             <option value="3">3 persons</option>
                             <option value="4">4 persons</option>
                         </select>
-                        <label>Email</label><input type="email" placeholder="you@example.com" required />
+
+                        <label for="email">Email</label>
+                        <input id="email" name="Email" type="email" placeholder="you@example.com" required />
+
                         <label for="phone">Phone</label>
-                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
-                        <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
+                        <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" required />
+
+                        <button type="submit" class="btn btn-primary" onclick="saveBookingData()">Book Now</button>
                     </form>
                 </aside>
             </div>
         </div>
     </div>
-    <script>
-        // Get today's date in YYYY-MM-DD format
-        const today = new Date().toISOString().split('T')[0];
 
-        // Set the 'min' attribute so back dates are greyed out
-        document.getElementById('travelDate').setAttribute('min', today);
+    <script>
         (function () {
+            // 1. DATE RESTRICTION
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('travelDate').setAttribute('min', today);
+
+            // 2. GALLERY & LIGHTBOX
             const main = document.getElementById('mainImage');
             const thumbs = document.querySelectorAll('.thumb');
             const lightbox = document.getElementById('lightbox');
             const lightboxImg = document.getElementById('lightboxImg');
+
             thumbs.forEach(t => {
                 t.addEventListener('click', () => {
                     thumbs.forEach(x => x.classList.remove('active'));
@@ -126,26 +142,43 @@
                     lightboxImg.src = src;
                 });
             });
+
             main.addEventListener('click', () => { lightbox.style.display = 'flex'; });
             lightbox.addEventListener('click', () => { lightbox.style.display = 'none'; });
+
+            // 3. ACCORDION (ITINERARY)
             document.querySelectorAll('.day-header').forEach(h => {
                 h.addEventListener('click', () => {
                     const body = h.nextElementSibling;
                     const isOpen = body.style.display === 'block';
                     document.querySelectorAll('.day-body').forEach(db => db.style.display = 'none');
                     document.querySelectorAll('.toggle').forEach(tg => tg.textContent = '+');
-                    if (!isOpen) { body.style.display = 'block'; h.querySelector('.toggle').textContent = '−'; }
+                    if (!isOpen) {
+                        body.style.display = 'block';
+                        h.querySelector('.toggle').textContent = '−';
+                    }
                 });
             });
+
+            // 4. PRICE CALCULATION (Matched to ₹9,999)
             const guestsSelect = document.getElementById('guests');
-            const basePrice = 17999;
+            const basePrice = 9999;
+
             guestsSelect.addEventListener('change', () => {
                 const count = parseInt(guestsSelect.value);
-                document.getElementById('totalPayable').textContent = `₹${(basePrice * count).toLocaleString()}`;
+                const total = basePrice * count;
+                document.getElementById('totalPayable').textContent = `₹${total.toLocaleString('en-IN')}`;
                 document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
             });
         })();
 
-    </script>          
+        // 5. SAVE DATA FOR PAYMENT PAGE
+        function saveBookingData() {
+            const name = document.getElementById('packageName').innerText;
+            const price = document.getElementById('totalPayable').innerText;
+            localStorage.setItem('selectedPackageName', name);
+            localStorage.setItem('selectedPackagePrice', price);
+        }
+    </script>
 </body>
 </html>

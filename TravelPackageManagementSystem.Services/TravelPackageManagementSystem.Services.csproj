@@ -19,5 +19,4 @@
   <ItemGroup>
     <ProjectReference Include="..\TravelPackageManagementSystem.Repository\TravelPackageManagementSystem.Repository.csproj" />
   </ItemGroup>
-
 </Project>

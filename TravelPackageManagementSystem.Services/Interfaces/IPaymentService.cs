@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using TravelPackageManagementSystem.Repository.Models;
 
-namespace TravelPackageManagementSystem.Services.Implementations
+namespace TravelPackageManagementSystem.Services.Interfaces
 {
-    internal class IPaymentService
+    public interface IPaymentService
     {
+        Task<bool> ProcessPaymentAsync(Payment payment);
+        Task<IEnumerable<Payment>> GetTransactionHistoryAsync();
     }
 }

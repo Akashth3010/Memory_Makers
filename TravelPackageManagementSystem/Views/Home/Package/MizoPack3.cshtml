@@ -26,7 +26,7 @@
             <div class="left-col">
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Discover Mizoram: Nature & Adventure</h2>
+                        <h2 id="packageName">Discover Mizoram: Nature & Adventure</h2>
                         <div class="rating">★ 4.9 (215 reviews)</div>
                     </div>
                     <div style="text-align:right;">
@@ -61,7 +61,7 @@
                             <h4>Day 1 — Arrival & Base Camp</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Arrival at Aizawl. Scenic drive to the southern base camp. Orientation and overnight stay in eco-lodges.</p>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                             <h4>Day 2 — Phawngpui Trek</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Guided trek to the peak of Phawngpui (Blue Mountain). Enjoy views of the Chhimtuipui River and Myanmar border.</p>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                             <h4>Day 3 — Wildlife Spotting</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Visit the Murlen National Park. Early morning bird watching and spotting rare flora and fauna.</p>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                             <h4>Day 4 — Vantawng Falls</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Excursion to Mizoram's highest waterfall, Vantawng Falls. Afternoon relaxation by the river.</p>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                             <h4>Day 5 — Departure</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Transfer back to Aizawl for local handicraft shopping before heading to Lengpui Airport.</p>
                         </div>
                     </div>
@@ -145,7 +145,8 @@
                         <label>Contact Email</label>
                         <input type="email" placeholder="you@example.com" required />
                         <label>Phone</label>
-                        <input type="tel" placeholder="+91 00000 00000" />
+                        <input type="tel" placeholder="+91 00000 00000" required />
+
                         <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Book Now</button>
                     </form>
                 </aside>
@@ -255,20 +256,24 @@
 
             });
 
-        });
-
-                document.addEventListener("DOMContentLoaded", function () {
-
-            // ... your gallery & itinerary logic ...
-
-            // Get today's date in YYYY-MM-DD format
-
+            // 4. DATE RESTRICTION
             const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('travelDate');
+            if(dateInput) {
+                dateInput.setAttribute('min', today);
+            }
 
-            // Set the 'min' attribute on the input so past dates are disabled
+            // 5. PERSISTENCE LOGIC
+            const bookingForm = document.getElementById('bookingForm');
+            bookingForm.onsubmit = function() {
+                const name = document.getElementById('packageName').innerText;
+                const price = document.getElementById('totalPayable').innerText;
 
-            document.getElementById('travelDate').setAttribute('min', today);
+                localStorage.setItem('selectedPackageName', name);
+                localStorage.setItem('selectedPackagePrice', price);
 
+                return true;
+            };
         });
     </script>
 </body>

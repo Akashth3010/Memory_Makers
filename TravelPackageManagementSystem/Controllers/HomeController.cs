@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -85,15 +88,6 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View(); // Create a simple view saying "Your package is under review"
         }
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
-        //public HomeController(AppDbContext context)
-        //{
-        //    _context = context;
-        //}
         public async Task<IActionResult> Index()
         {
             // Pull the 4 main state cards for the top section
@@ -114,19 +108,6 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        // Update your search or filter logic in HomeController
-        //    public async Task<IActionResult> Destination(string state)
-        //    {
-        //        // Fix: Only pull packages for this state that are NOT marked as trending
-        //        var packages = await _context.TravelPackages
-        //.Where(p => p.ParentDestination.StateName.ToLower() == state.ToLower()
-        //         && p.IsTrending == false
-        //         && p.ApprovalStatus == ApprovalStatus.Approved) // Add status check
-        //.ToListAsync();
-
-        //        ViewBag.StateName = state;
-        //        return View("TopDestination/DestinationTD", packages);
-        //    }
         public async Task<IActionResult> Destination(string state)
         {
             // Fix: We navigate from Package -> ParentDestination -> GalleryImages
@@ -226,18 +207,6 @@ namespace TravelPackageManagementSystem.Controllers
             return RedirectToAction("MyBookings");
         }
 
-        // --- DYNAMIC BOOKINGS VIEW ---
-
-        //public async Task<IActionResult> MyBookings()
-        //{
-        //    // This fetches the data and passes it to the View
-        //    var bookings = await _context.Bookings
-        //                                 .Include(b => b.TravelPackage)
-        //                                 .ToListAsync();
-
-        //    return View(bookings);
-        //}
-
         public async Task<IActionResult> MyBookings()
         {
             var bookings = await _context.Bookings
@@ -247,37 +216,6 @@ namespace TravelPackageManagementSystem.Controllers
 
             return View(bookings);
         }
-
-        // --- EXISTING ROUTES PRESERVED ---
-        public IActionResult Hero() => View();
-        public IActionResult Vrindavan() => View("Trending/Vrindavan");
-        public IActionResult Rameshwaram() => View("Trending/Rameshwaram");
-        public IActionResult Darjiling() => View("Trending/Darjiling");
-        public IActionResult Tamilnadu() => View();
-
-        public IActionResult TamilnaduTD(string id)
-        {
-            ViewBag.PackageId = id;
-            return View("TopDestination/TamilnaduTD");
-        }
-
-        public IActionResult KeralaTD(string id)
-        {
-            ViewBag.PackageId = id;
-            return View("TopDestination/KeralaTD");
-        }
-
-        public IActionResult MizoramTD(string id)
-        {
-            ViewBag.PackageId = id;
-            return View("TopDestination/MizoramTD");
-        }
-
-        public IActionResult GoaTD() => View("TopDestination/GoaTD");
-        public IActionResult UttarakhandTD() => View("TopDestination/uttarakhandTD");
-
-        public IActionResult MeghPack1() => View("Package/MeghPack1");
-        public IActionResult MeghPack2() => View("Package/MeghPack2");
         public async Task<IActionResult> MeghPack3(int id)
         {
             // Fix: Explicitly include the Itineraries collection
@@ -292,16 +230,19 @@ namespace TravelPackageManagementSystem.Controllers
 
             return View("Package/MeghPack3", package);
         }
-
-        public IActionResult GoaPack1() => View("Package/GoaPack1");
-        public IActionResult GoaPack2() => View("Package/GoaPack2");
-        public IActionResult GoaPack3() => View("Package/GoaPack3");
-
+        [HttpGet]
         public IActionResult PaymentPage(int? bookingId)
         {
+            // If the bookingId is missing, redirect back to index to avoid errors
+            if (bookingId == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             ViewBag.BookingId = bookingId;
             return View();
         }
+
 
         public IActionResult TravelGuide() => View();
         public IActionResult CustomerSupport() => View();
@@ -322,31 +263,38 @@ namespace TravelPackageManagementSystem.Controllers
             return Json(suggestions);
         }
 
-        // Action 2: Processes the search and redirects to the correct page
         public async Task<IActionResult> Search(string destination)
         {
             if (string.IsNullOrEmpty(destination)) return RedirectToAction("Index");
-
             // Check if the user searched for a State (e.g., "Meghalaya")
             var stateMatch = await _context.Destinations
                 .FirstOrDefaultAsync(d => d.StateName.ToLower() == destination.ToLower());
-
             if (stateMatch != null)
             {
                 // Redirect to your existing Destination action with the state parameter
                 return RedirectToAction("Destination", new { state = stateMatch.StateName });
             }
-
             // If not a state, find specific packages
             var results = await _context.TravelPackages
                 .Include(p => p.ParentDestination)
                 .Where(p => p.PackageName.Contains(destination) || p.Location.Contains(destination))
                 .Where(p => !p.IsTrending) // Ensure we show standard results
                 .ToListAsync();
-
             ViewBag.SearchTerm = destination;
             return View("TopDestination/DestinationTD", results);
         }
+
+        
+        public IActionResult Failure()
+        {
+            return View("Trending/Failure");
+        }
+        public IActionResult Success()
+        {
+            return View("Trending/Success");
+        }
+        // Check if the user searched for a State (e.g., "Meghalaya")
+
         //public IActionResult CustomerSupport()
         //{
         //    return View();

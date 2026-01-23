@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Goa Pack 2</title>
+    <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/css/pack-details.css" />
 </head>
 <body>
@@ -17,12 +17,13 @@
             <p>5 Days • Old Goa Churches • Water Sports • South Goa Relaxation</p>
         </div>
     </section>
+
     <div class="container">
         <div class="flex">
             <div class="left-col">
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Classic Goa: History & Adventure</h2>
+                        <h2 id="packageName">Classic Goa: History & Adventure</h2>
                         <div class="rating">★ 4.8 (520 reviews)</div>
                     </div>
                     <div style="text-align: right;">
@@ -76,7 +77,11 @@
                 <div class="price-card">
                     <div class="price-row">
                         <div>Base Price (per person)</div>
-                        <div class="price-total" id="pricePerPerson">₹14,999</div>
+                        <div class="price-total">₹13,635</div>
+                    </div>
+                    <div class="price-row">
+                        <div>Taxes & Fees (10%)</div>
+                        <div id="taxDisplay">₹1,364</div>
                     </div>
                     <div class="price-row">
                         <div>Selected Guests</div>
@@ -87,47 +92,44 @@
                         <div>Total Payable</div>
                         <div class="price-total" id="totalPayable">₹14,999</div>
                     </div>
-                    <div style="margin-top:12px;">
-                        <h4 style="font-size:15px; margin-bottom:6px;">What's Included</h4>
-                        <div class="list-inline">
-                            <div class="included">Deluxe Resort Stay</div>
-                            <div class="included">Breakfast & Dinner</div>
-                            <div class="included">Private AC Sedan</div>
-                            <div class="included">Old Goa Tour</div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="right-col">
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
-                    <form id="bookingForm">
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
                         <label for="travelDate">Travel Date</label>
-                        <input type="date" id="travelDate" name="travelDate" required />
-                        <label>Guests</label>
-                        <select id="guests">
-                            <option value="1">1 person</option>
+                        <input id="travelDate" name="TravelDate" type="date" required />
+
+                        <label for="guests">Guests</label>
+                        <select id="guests" name="Guests">
+                            <option value="1" selected>1 person</option>
                             <option value="2">2 persons</option>
                         </select>
-                        <label>Email</label><input type="email" required />
-                        <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
+
+                        <label for="contactEmail">Contact Email</label>
+                        <input id="contactEmail" name="Email" type="email" placeholder="you@example.com" required />
+
+                        <label for="phone">Phone</label>
+                        <input id="phone" name="Phone" type="tel" placeholder="+91 98765 43210" required />
+
+                        <button type="submit" class="btn btn-primary" onclick="saveClassicGoaData()">Book Now</button>
                     </form>
                 </aside>
             </div>
         </div>
     </div>
-    <partial name="_Footer" />
+
     <script>
         (function () {
 
             const main = document.getElementById('mainImage');
 
             const thumbs = document.querySelectorAll('.thumb');
+            const guestsSelect = document.getElementById('guests');
+            const totalPerPerson = 14999;
 
-            const guests = document.getElementById('guests');
-
-            const basePrice = 14999;
-
+            // Gallery logic
             thumbs.forEach(t => {
 
                 t.addEventListener('click', () => {
@@ -142,6 +144,7 @@
 
             });
 
+            // Accordion logic
             document.querySelectorAll('.day-header').forEach(h => {
 
                 h.addEventListener('click', () => {
@@ -158,32 +161,31 @@
 
             });
 
-            guests.addEventListener('change', () => {
+            // Dynamic Price Calculation
+            guestsSelect.addEventListener('change', () => {
+                const count = parseInt(guestsSelect.value);
+                const finalTotal = count * totalPerPerson;
+                const finalTax = count * 1364;
 
-                const count = parseInt(guests.value);
-
-                document.getElementById('totalPayable').textContent = `₹${(basePrice * count).toLocaleString()}`;
-
+                document.getElementById('totalPayable').textContent = `₹${finalTotal.toLocaleString('en-IN')}`;
+                document.getElementById('taxDisplay').textContent = `₹${finalTax.toLocaleString('en-IN')}`;
                 document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
 
             });
 
+            // Set Min Date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('travelDate').setAttribute('min', today);
         })();
 
-                document.addEventListener("DOMContentLoaded", function () {
+        // Save data for the Payment Page
+        function saveClassicGoaData() {
+            const name = document.getElementById('packageName').innerText;
+            const price = document.getElementById('totalPayable').innerText;
 
-            // ... your gallery & itinerary logic ...
-
-            // Get today's date in YYYY-MM-DD format
-
-            const today = new Date().toISOString().split('T')[0];
-
-            // Set the 'min' attribute on the input so past dates are disabled
-
-            document.getElementById('travelDate').setAttribute('min', today);
-
-        });
-
+            localStorage.setItem('selectedPackageName', name);
+            localStorage.setItem('selectedPackagePrice', price);
+        }
     </script>
 </body>
 </html>
