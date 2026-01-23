@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/css/PackTD.css" />
 </head>
 <body>
-
+    <partial name="_Navbar" />
     <section class="hero">
         <img class="hero-img" src="/lib/Image/nature_hero.jpg" alt="Mizoram Hills" />
         <div class="hero-content">
@@ -133,8 +133,8 @@
                     <h3>Book This Package</h3>
                     <form id="bookingForm" method="post" action="/Home/PaymentPage">
                         <label>Travel Date</label>
-                        <input id="travelDate" type="date" required />
-
+                        <label for="travelDate">Travel Date</label>
+                        <input type="date" id="travelDate" name="travelDate" required />
                         <label>Guests</label>
                         <select id="guests">
                             <option value="1">1 person</option>
@@ -142,10 +142,8 @@
                             <option value="3">3 persons</option>
                             <option value="4">4 persons</option>
                         </select>
-
                         <label>Contact Email</label>
                         <input type="email" placeholder="you@example.com" required />
-
                         <label>Phone</label>
                         <input type="tel" placeholder="+91 00000 00000" required />
 
@@ -155,67 +153,107 @@
             </div>
         </div>
     </div>
-
     <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; justify-content:center; align-items:center;">
         <img id="lightboxImg" src="" style="max-width:90%; max-height:80%;" />
     </div>
-
+    <partial name="_Footer" />
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+
             // 1. GALLERY & LIGHTBOX
+
             const main = document.getElementById('mainImage');
+
             const thumbs = document.querySelectorAll('.thumb');
+
             const lightbox = document.getElementById('lightbox');
+
             const lightboxImg = document.getElementById('lightboxImg');
 
             thumbs.forEach(t => {
+
                 t.addEventListener('click', () => {
+
                     thumbs.forEach(x => x.classList.remove('active'));
+
                     t.classList.add('active');
+
                     const src = t.getAttribute('data-src');
+
                     main.style.backgroundImage = `url('${src}')`;
+
                 });
+
             });
 
             main.addEventListener('click', () => {
+
                 const currentBg = main.style.backgroundImage.slice(5, -2).replace(/"/g, "");
+
                 lightboxImg.src = currentBg;
+
                 lightbox.style.display = 'flex';
+
             });
 
             lightbox.addEventListener('click', () => {
+
                 lightbox.style.display = 'none';
+
             });
 
             // 2. ITINERARY DROPDOWN
+
             const headers = document.querySelectorAll('.day-header');
+
             headers.forEach(h => {
+
                 h.addEventListener('click', () => {
+
                     const body = h.nextElementSibling;
+
                     const toggle = h.querySelector('.toggle');
 
                     if (body.style.display === "block") {
+
                         body.style.display = "none";
+
                         toggle.textContent = "+";
+
                     } else {
+
                         body.style.display = "block";
+
                         toggle.textContent = "-";
+
                     }
+
                 });
+
             });
 
             // 3. PRICE UPDATE (Base 13,999 + Tax 1,400)
+
             const guestSelect = document.getElementById('guests');
+
             const totalDisplay = document.getElementById('totalPayable');
+
             const summaryDisplay = document.getElementById('priceSummary');
+
             const basePrice = 13999;
+
             const taxes = 1400;
 
             guestSelect.addEventListener('change', function() {
+
                 const count = parseInt(this.value);
+
                 const total = (basePrice + taxes) * count;
+
                 summaryDisplay.textContent = count + (count > 1 ? " persons" : " person");
+
                 totalDisplay.textContent = "₹" + total.toLocaleString('en-IN');
+
             });
 
             // 4. DATE RESTRICTION

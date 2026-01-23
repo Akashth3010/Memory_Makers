@@ -1,390 +1,223 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TravelPackageManagementSystem</title>
-    <script type="importmap"></script>
+﻿@using TravelPackageManagementSystem.Repository.Models
 
-    <!-- Font Awesome (kept; stars do not depend on this anymore) -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer" />
+<style>
+    #trending-section {
+        padding: 60px 0;
+        background-color: #ffffff;
+    }
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/trending.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/TravelPackageManagementSystem.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <section class="trending" id="trending">
-        <div class="container">
-            <h2 class="section-title">Trending</h2>
+        /* Section Heading with Underline */
+        #trending-section h2 {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+            margin-bottom: 50px;
+        }
 
-            <!-- Tabs -->
-            @* <div class="tabs" role="tablist" aria-label="Trending categories">
-                <button class="tab active" data-tab="flights" role="tab" aria-selected="true">Flights</button>
-                <button class="tab" data-tab="hotels" role="tab" aria-selected="false">Hotels</button>
-                <button class="tab" data-tab="holidays" role="tab" aria-selected="false">Holidays</button>
-            </div> *@
+            #trending-section h2::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 70px;
+                height: 3px;
+                background-color: #0dcaf0; /* Cyan underline to match Top Destinations */
+                border-radius: 2px;
+            }
 
-            <!-- Panels -->
-            <div class="tab-panels">
+    .trending-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+    }
 
-                <!-- Flights -->
-                <div class="panel active" id="panel-flights" role="tabpanel">
-                    <div class="card-grid">
-                        <!-- Card -->
-                        <article class="card">
+    .trending-card {
+        background: #f1f5f9;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #f0f0f0;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        cursor: pointer;
+        position: relative;
+        text-align: left; /* Ensures text stays left-aligned */
+    }
 
-                            <div class="card-media" onclick="location.href='@Url.Action("Mumbai", "Home")'" style="cursor:pointer;">
-                                <img src="~/lib/TrendingImage/Mumbai.jpg"
-                                     asp-append-version="true"
-                                     alt="Istanbul flight deal"
-                                     class="img-fluid" />
+        .trending-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+        }
 
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
+    /* Wishlist Heart */
+    .wishlist-heart {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 20;
+        background: rgba(255, 255, 255, 0.9);
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: #ff4d4d;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+        .wishlist-heart:hover {
+            background: #ff4d4d;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+    .trending-media {
+        height: 190px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .trending-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+    .trending-card:hover .trending-media img {
+        transform: scale(1.08);
+    }
+
+    /* Bottom-Aligned Badges */
+    .badge-float {
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .badge-premium {
+        font-size: 0.6rem;
+        padding: 4px 10px;
+        font-weight: 700;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.95);
+        text-transform: uppercase;
+        width: fit-content;
+    }
+
+    .trending-body {
+        padding: 16px;
+    }
+
+    .trending-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #1a1a1a;
+    }
+
+    .trending-desc {
+        font-size: 0.82rem;
+        color: #717171;
+        line-height: 1.5;
+        margin-bottom: 14px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .trending-price {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #10b981; /* Emerald Green */
+    }
+
+    .meta-small {
+        font-size: 0.72rem;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+
+    .category-tag {
+        color: #6366f1; /* Indigo */
+        font-weight: 700;
+    }
+
+    .stars-container {
+        color: #fbbf24;
+        font-size: 0.75rem;
+    }
+</style>
+
+<section id="trending-section" class="text-center">
+    <div class="container">
+        <h2 class="fw-bold">Trending <span style="color: #6366f1;">Experiences</span></h2>
+
+        <div class="trending-grid">
+            @if (ViewBag.TrendingPackages != null)
+            {
+                foreach (var item in (List<TravelPackage>)ViewBag.TrendingPackages)
+                {
+                    <div class="trending-card" onclick="location.href='@Url.Action("MeghPack3", "Home", new { id = item.PackageId })'">
+
+                        <div class="wishlist-heart" onclick="toggleWishlist(@item.PackageId, event)">
+                            <i class="fa-regular fa-heart"></i>
+                        </div>
+
+                        <div class="trending-media">
+                            <div class="badge-float">
+                                <span class="badge-premium text-success shadow-sm">Featured</span>
+                                <span class="badge-premium text-danger shadow-sm">25% OFF</span>
+                                <span class="badge-premium text-primary shadow-sm">Family Pack</span>
+                            </div>
+                            <img src="@item.ImageUrl" alt="@item.PackageName">
+                        </div>
+
+                        <div class="trending-body">
+                            <div class="d-flex justify-content-between meta-small mb-2">
+                                <span><i class="fas fa-location-dot me-1"></i> @item.Location</span>
+                                <span class="category-tag">Attraction Tickets</span>
+                            </div>
+
+                            <div class="trending-title">@item.PackageName</div>
+                            <p class="trending-desc">@item.Description</p>
+
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="trending-price">₹@item.Price.ToString("N0")</div>
+                                <div class="d-flex align-items-center">
+                                    <div class="stars-container me-2">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <small class="text-muted" style="font-size: 0.7rem;">48 Reviews</small>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i> Mumbai</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs.35000.00</strong></div>
-                                <h3 class="card-title">A bustling metropolis blending colonial heritage, Bollywood glamour, and vibrant beaches.</h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.6; --max: 5" aria-label="4.6 out of 5"></span>
-                                    <span class="reviews">48 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <!-- Duplicate and modify cards as needed -->
-                        <article class="card">
-
-                            
-
-                            <div class="card-media" onclick="location.href='@Url.Action("Munnar", "Home")'" style="cursor:pointer;">
-                                <img src="~/lib/TrendingImage/Munnar.jpg"
-                                     asp-append-version="true"
-                                     alt="Istanbul flight deal"
-                                     class="img-fluid" />
-
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Munnar</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs 50,000.00</strong></div>
-                                <h3 class="card-title">A serene hill station in Kerala famed for tea gardens and misty landscapes.</h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.9; --max: 5" aria-label="4.9 out of 5"></span>
-                                    <span class="reviews">48 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="card">
-
-
-                            <div class="card-media" onclick="location.href='@Url.Action("Darjiling", "Home")'" style="cursor:pointer;">
-
-                                <img src="~/lib/TrendingImage/Darjiling.jpg"
-                                     asp-append-version="true"
-                                     alt="Darjiling"
-                                     class="img-fluid" />
-                                </a>
-                                     
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Darjeeling</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs.5500.00</strong></div>
-                                <h3 class="card-title"> Himalayan gem known for tea plantations and stunning Kanchenjunga views.</h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.4; --max: 5" aria-label="4.4 out of 5"></span>
-                                    <span class="reviews">48 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="card">
-                            <div class="card-media" onclick="location.href='@Url.Action("Gangtok", "Home")'" style="cursor:pointer;">
-                                <img src="~/lib/TrendingImage/Gangtok.jpg"
-                                     asp-append-version="true"
-                                     alt="Istanbul flight deal"
-                                     class="img-fluid" />
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Gangtok</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs.70000.00</strong></div>
-                                <h3 class="card-title">Sikkim’s capital offering monasteries, mountain vistas, and adventure trails.</h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.3; --max: 5" aria-label="4.3 out of 5"></span>
-                                    <span class="reviews">62 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="card">
-                            <div class="card-media" onclick="location.href='@Url.Action("Ooty", "Home")'" style="cursor:pointer;">
-                                <img src="~/lib/TrendingImage/Ooty.jpg"
-                                     asp-append-version="true"
-                                     alt="Istanbul flight deal"
-                                     class="img-fluid" />
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i> Ooty</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs.52000.00</strong></div>
-                                <h3 class="card-title">The “Queen of Hill Stations” with lush gardens and scenic Nilgiri hills.</h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.7; --max: 5" aria-label="4.7 out of 5"></span>
-                                    <span class="reviews">72 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="card">
-                            <div class="card-media" onclick="location.href='@Url.Action("Jaipur", "Home")'" style="cursor:pointer;">
-                                <img src="~/lib/TrendingImage/Hawa Mahal Jaipur.jpg"
-                                     asp-append-version="true"
-                                     alt="Jaipur"
-                                     class="img-fluid" />
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i> Jaipur</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs 65000.00</strong></div>
-                                <h3 class="card-title">The Pink City rich in royal forts, palaces, and colorful bazaars.</h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.8; --max: 5" aria-label="4.8 out of 5"></span>
-                                    <span class="reviews">90 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="card">
-
-                            
-
-                            <div class="card-media" onclick="location.href='@Url.Action("Goa", "Home")'" style="cursor:pointer;">
-
-                                <img src="~/lib/TrendingImage/Goa.jpg"
-                                     asp-append-version="true"
-                                     alt="Goa"
-                                     class="img-fluid" />
-                                     </a>
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta">
-                                        <i class="fa-solid fa-location-dot"></i>Goa
-                                    </span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs 78000.00</strong></div>
-                                <h3 class="card-title">India’s beach paradise with Portuguese heritage and vibrant nightlife.</h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.2; --max: 5" aria-label="4.2 out of 5"></span>
-                                    <span class="reviews">89 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="card">
-
-                            
-
-                            <div class="card-media" onclick="location.href='@Url.Action("Vrindavan", "Home")'" style="cursor:pointer;">
-
-                                <img src="~/lib/TrendingImage/Vrindavan (2).jpg"
-                                     asp-append-version="true"
-                                     alt="Vrindavan"
-                                     class="img-fluid" />
-                                     </a>
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Vrindavan</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs.67000.00</strong></div>
-                                <h3 class="card-title">Sacred town of Lord Krishna, dotted with temples and devotional charm.</h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.5; --max: 5" aria-label="4.5 out of 5"></span>
-                                    <span class="reviews">100 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                      
-
-                        <article class="card">
-
-                            
-
-                            <div class="card-media" onclick="location.href='@Url.Action("Rameshwaram", "Home")'" style="cursor:pointer;">
-
-                                <img src="~/lib/TrendingImage/Rameshwaram.jpg"
-                                     asp-append-version="true"
-                                     alt="Rameshwaram"
-                                     class="img-fluid" />
-                                     </a>
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Rameshwaram</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs.55000.00</strong></div>
-                                <h3 class="card-title">
-                                    A coastal pilgrimage site famed for Ramanathaswamy Temple and sea bridges.
-                                </h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.6; --max: 5" aria-label="4.6 out of 5"></span>
-                                    <span class="reviews">48 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="card">
-                            <div class="card-media" onclick="location.href='@Url.Action("Manali", "Home")'" style="cursor:pointer;">
-
-                                <img src="~/lib/TrendingImage/Manali.jpg"
-                                     asp-append-version="true"
-                                     alt="Manali"
-                                     class="img-fluid" />
-                                     </a>
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Manali</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs 78000.00</strong></div>
-                                <h3 class="card-title">
-                                    A Himalayan retreat offering snow-capped peaks, adventure sports, and scenic valleys.
-                                </h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.6; --max: 5" aria-label="4.6 out of 5"></span>
-                                    <span class="reviews">78 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="card">
-                            <div class="card-media" onclick="location.href='@Url.Action("Banaras", "Home")'" style="cursor:pointer;">
-                                <img src="~/lib/TrendingImage/Banaras.jpg"
-                                     asp-append-version="true"
-                                     alt="Istanbul flight deal"
-                                     class="img-fluid" />
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Banaras</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs 83000.00</strong></div>
-                                <h3 class="card-title">Spiritual heart of India on the Ganges, steeped in ancient traditions.</h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.4; --max: 5" aria-label="4.4 out of 5"></span>
-                                    <span class="reviews">74 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="card">
-                            <div class="card-media" onclick="location.href='@Url.Action("TajMahal", "Home")'" style="cursor:pointer;">
-                                <img src="~/lib/TrendingImage/download (6).jpg"
-                                     asp-append-version="true"
-                                     alt="Istanbul flight deal"
-                                     class="img-fluid" />
-                                <div class="badges">
-                                    <span class="badge feature">Featured</span>
-                                    <span class="badge sale">25%</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="meta-top">
-                                    <span class="meta"><i class="fa-solid fa-location-dot"></i>Taj Mahal,Agra</span>
-                                    <span class="category">Attraction Tickets</span>
-                                </div>
-                                <div class="price">From <strong>Rs 72000.00</strong></div>
-                                <h3 class="card-title">
-                                    The world-famous marble mausoleum symbolizing eternal love.
-                                </h3>
-                                <div class="ratings">
-                                    <span class="stars" style="--rating: 4.1; --max: 5" aria-label="4.1 out of 5"></span>
-                                    <span class="reviews">48 Reviews</span>
-                                </div>
-                            </div>
-                        </article>
-
-                        <!-- Add more cards (6–8 like the screenshot) -->
+                        </div>
                     </div>
-                </div>
-
-                <!-- Hotels (future panels as needed) -->
-
-            </div>
+                }
+            }
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Your previous JS for fractional stars is no longer needed,
-         but if you keep it, it won't break anything. -->
-</body>
-</html>
+
+
+<script>
+    function toggleWishlist(id, event) {
+        event.stopPropagation(); // Prevents navigating to the details page
+        const heart = event.currentTarget.querySelector('i');
+
+        if (heart.classList.contains('fa-regular')) {
+            heart.classList.replace('fa-regular', 'fa-solid');
+            heart.style.color = '#ff4d4d';
+        } else {
+            heart.classList.replace('fa-solid', 'fa-regular');
+        }
+    }
+</script>

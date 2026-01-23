@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/css/pack-details.css" />
 </head>
 <body>
+    <partial name="_Navbar" />
     <section class="hero" style="background-image: url('/lib/Image/uttar4.jpg');">
         <div class="hero-content">
             <h1>Nainital & Mussoorie Special</h1>
@@ -93,7 +94,7 @@
                     <h3>Book This Package</h3>
                     <form id="bookingForm" method="post" action="/Home/PaymentPage">
                         <label for="travelDate">Travel Date</label>
-                        <input id="travelDate" type="date" required />
+                        <input type="date" id="travelDate" name="travelDate" required />
 
                         <label>Guests</label>
                         <select id="guests">
@@ -115,7 +116,7 @@
             </div>
         </div>
     </div>
-
+    <partial name="_Footer" />
     <script>
         (function () {
             const main = document.getElementById('mainImage');

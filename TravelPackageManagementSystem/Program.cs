@@ -3,6 +3,18 @@ using TravelPackageManagementSystem.Repository.Implementation;
 using TravelPackageManagementSystem.Repository.Interface;
 using TravelPackageManagementSystem.Services.Implementation;
 using TravelPackageManagementSystem.Services.Interface;
+//using TravelPackageManagementSystem.Repository.Interface;
+using TravelPackageManagementSystem.Repository.Implementations;
+using TravelPackageManagementSystem.Services.Interfaces;
+//using TravelPackageManagementSystem.Application.Data;
+using TravelPackageManagementSystem.Repository.Data;
+//using TravelPackageManagementSystem.Repository.Implementations;
+using TravelPackageManagementSystem.Repository.Interfaces;
+using TravelPackageManagementSystem.Repository.Models;
+using TravelPackageManagementSystem.Services.Implementations;
+using TravelPackageManagementSystem.Repository.Interface;
+//using TravelPackageManagementSystem.Services.Interfaces;
+//using TravelPackageManagementSystem.Application.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +41,24 @@ builder.Services.AddAuthentication("MyCookieAuth")
 
 // 2. Make sure Authorization is also enabled
 builder.Services.AddAuthorization();
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
+
+builder.Services.AddDbContext<TravelPackageManagementSystem.Repository.Data.AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
+
+// 1. Database Connection
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
+
+// 2. Register Repositories
+builder.Services.AddScoped<IPackageRepository, PackageRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthModelService, AuthModelService>();
 
 // 4. Enable CORS (So your browser JS can talk to this backend)
 builder.Services.AddCors(options =>
@@ -39,8 +69,10 @@ builder.Services.AddCors(options =>
     });
 });
 
-// 5. Build the App
-var app = builder.Build(); // <--- The error was happening here!
+// 3. Register Services
+builder.Services.AddScoped<IPackageService, PackageService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+var app = builder.Build();
 
 // --- PIPELINE SETUP ---
 if (!app.Environment.IsDevelopment())

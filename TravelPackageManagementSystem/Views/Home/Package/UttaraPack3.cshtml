@@ -1,6 +1,9 @@
 ﻿@{
+
     ViewBag.Title = "Himalayan Grand Explorer";
+
     Layout = null;
+
 }
 <!DOCTYPE html>
 <html>
@@ -10,6 +13,7 @@
     <link rel="stylesheet" href="~/css/pack-details.css" />
 </head>
 <body>
+    <partial name="_Navbar" />
     <section class="hero" style="background-image: url('/lib/Image/uttar5.jpg');">
         <div class="hero-content">
             <h1>Himalayan Grand Explorer</h1>
@@ -116,10 +120,13 @@
             </div>
         </div>
     </div>
-
+    <partial name="_Footer" />
     <script>
+
         (function () {
+
             const main = document.getElementById('mainImage');
+
             const thumbs = document.querySelectorAll('.thumb');
             const guestsSelect = document.getElementById('guests');
             const bookingForm = document.getElementById('bookingForm');
@@ -127,28 +134,43 @@
 
             // Image Gallery Logic
             thumbs.forEach(t => {
+
                 t.addEventListener('click', () => {
+
                     thumbs.forEach(x => x.classList.remove('active'));
+
                     t.classList.add('active');
+
                     main.style.backgroundImage = `url('${t.dataset.src}')`;
+
                 });
+
             });
 
             // Itinerary Accordion Logic
             document.querySelectorAll('.day-header').forEach(h => {
+
                 h.addEventListener('click', () => {
+
                     const body = h.nextElementSibling;
+
                     const isOpen = body.style.display === 'block';
+
                     document.querySelectorAll('.day-body').forEach(db => db.style.display = 'none');
+
                     if (!isOpen) { body.style.display = 'block'; }
+
                 });
+
             });
 
             // Price Calculation Logic
             guestsSelect.addEventListener('change', () => {
                 const count = parseInt(guestsSelect.value);
                 document.getElementById('totalPayable').textContent = `₹${(basePrice * count).toLocaleString()}`;
+
                 document.getElementById('priceSummary').textContent = `${count} ${count > 1 ? 'persons' : 'person'}`;
+
             });
 
             // Date Restriction (Grey out past dates)

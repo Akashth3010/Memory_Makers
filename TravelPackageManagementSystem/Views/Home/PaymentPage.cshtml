@@ -1,70 +1,27 @@
 ﻿@{
     ViewData["Title"] = "Checkout";
     Layout = "_Layout";
+    // Retrieve the ID passed from CreateBooking
+    var bookingId = ViewBag.BookingId;
 }
 
 <style>
     :root {
         --primary-orange: #ff7b54;
         --secondary-yellow: #ffd56b;
-        --glass-bg: rgba(255, 255, 255, 0.95);
+        --dark-bg: #2d3436;
     }
 
     body {
-        background: #f4f7f9;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7f9;
     }
 
-    .checkout-container {
-        padding-top: 40px;
-        padding-bottom: 80px;
-    }
-
-    /* Stepper UI */
-    .stepper {
-        display: flex;
-        justify-content: space-between;
-        max-width: 600px;
-        margin: 0 auto 40px;
-    }
-
-    .step {
-        text-align: center;
-        flex: 1;
-        position: relative;
-    }
-
-    .step-circle {
-        width: 35px;
-        height: 35px;
-        background: #e0e0e0;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 10px;
-        color: white;
-        font-weight: bold;
-        z-index: 2;
-        position: relative;
-    }
-
-    .step.active .step-circle {
-        background: var(--primary-orange);
-        box-shadow: 0 0 15px rgba(255, 123, 84, 0.4);
-    }
-
-    .step.completed .step-circle {
-        background: #28a745;
-    }
-
-    /* Card Styling */
+    /* Glassmorphism Card Effect */
     .payment-card {
         background: white;
         border: none;
         border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
 
     .method-selector {
@@ -73,9 +30,6 @@
         padding: 15px;
         cursor: pointer;
         transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
     }
 
         .method-selector:hover, .method-selector.selected {
@@ -85,28 +39,27 @@
 
     /* Price Summary */
     .summary-box {
-        background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+        background: linear-gradient(135deg, var(--dark-bg) 0%, #000 100%);
         color: white;
         border-radius: 20px;
-        padding: 30px;
+        padding: 25px;
         position: sticky;
-        top: 100px;
+        top: 20px;
     }
 
     .btn-checkout {
         background: linear-gradient(135deg, var(--primary-orange), var(--secondary-yellow));
         border: none;
-        padding: 15px;
+        padding: 14px;
         border-radius: 12px;
         font-weight: bold;
-        color: #000;
         width: 100%;
-        margin-top: 20px;
         transition: transform 0.2s;
     }
 
         .btn-checkout:hover:not(:disabled) {
             transform: scale(1.02);
+            color: black;
         }
 
         .btn-checkout:disabled {
@@ -138,29 +91,17 @@
         }
     }
 </style>
+<head>
+    <link rel="stylesheet" href="@(Url.Content("~/css/PaymentPage.css"))" />
+</head>
 
-<div class="container checkout-container">
-    <div class="stepper">
-        <div class="step completed">
-            <div class="step-circle"><i class="fa fa-check"></i></div>
-            <small>Details</small>
-        </div>
-        <div class="step active">
-            <div class="step-circle">2</div>
-            <small>Payment</small>
-        </div>
-        <div class="step">
-            <div class="step-circle">3</div>
-            <small>Confirm</small>
-        </div>
-    </div>
-
+<div class="container py-5">
     <div class="row g-4">
         <div class="col-lg-8">
-            <div class="payment-card p-4 p-md-5">
-                <h4 class="fw-bold mb-4">Choose Payment Method</h4>
+            <div class="payment-card p-4">
+                <h4 class="fw-bold mb-4"><i class="fas fa-credit-card me-2 text-primary"></i>Payment Method</h4>
 
-                <div class="row">
+                <div class="row g-3">
                     <div class="col-md-6">
                         <div class="method-selector selected" onclick="switchTab('card', this)">
                             <input type="radio" id="radioCard" name="pay" checked class="me-3">
@@ -181,7 +122,7 @@
                     </div>
                 </div>
 
-                <div id="cardDetails" class="mt-4 animate-fade-in">
+                <div id="cardDetails" class="mt-4">
                     <div class="row g-3">
                         <div class="col-12" id="container-name">
                             <label class="form-label small fw-bold">CARDHOLDER NAME</label>

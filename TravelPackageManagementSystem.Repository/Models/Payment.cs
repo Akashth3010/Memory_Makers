@@ -24,5 +24,10 @@ namespace TravelPackageManagementSystem.Repository.Models
         // public int BookingId { get; set; }
         // public Booking Booking { get; set; }
        
+        [Required]
+        public int BookingId { get; set; }
+        //Navigation Property
+        [ForeignKey("BookingId")]
+        public virtual Booking Booking { get; set; }
     }
 }
