@@ -8,16 +8,28 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="~/css/admin.css" rel="stylesheet" />
+
+    <style>
+        /* Small CSS for the Notification Badge */
+        .approval-badge {
+            background: #e74c3c;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: auto;
+            display: none; /* Hidden by default if 0 */
+        }
+    </style>
 </head>
 
 <body>
 
     <div class="admin-wrapper">
 
-        <!-- SIDEBAR -->
         <aside class="admin-sidebar" id="sidebar">
 
-            <!-- BRAND -->
             <div class="sidebar-header">
                 <div class="logo-circle">
                     <i class="fa-solid fa-compass"></i>
@@ -28,7 +40,6 @@
                 </div>
             </div>
 
-            <!-- MENU -->
             <ul class="sidebar-menu">
 
                 <li class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")">
@@ -42,6 +53,7 @@
                     <a asp-controller="Admin" asp-action="Approvals">
                         <i class="fa-solid fa-circle-check"></i>
                         <span>Approvals</span>
+                        <span id="pendingBadge" class="approval-badge">0</span>
                     </a>
                 </li>
 
@@ -68,7 +80,6 @@
 
             </ul>
 
-            <!-- ACCOUNT -->
             <div class="sidebar-account">
                 <div class="account-info">
                     <div class="avatar">A</div>
@@ -86,7 +97,6 @@
 
         </aside>
 
-        <!-- MAIN -->
         <main class="admin-main" id="main">
 
             <header class="admin-topbar">
@@ -110,7 +120,6 @@
         </main>
     </div>
 
-    <!-- LOGOUT MODAL -->
     <div class="custom-modal" id="logoutModal">
         <div class="modal-box">
             <h4>Confirm Logout</h4>
@@ -123,6 +132,7 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function toggleSidebar() {
             sidebar.classList.toggle("collapsed");
@@ -141,6 +151,24 @@
             alert("Session logged out successfully");
             window.location.href = '/Home/Index';
         }
+
+        // ✅ NEW: Update Notification Badge Count
+        function updatePendingBadge() {
+            $.get("/Admin/GetPendingCount", function (data) {
+                const badge = $("#pendingBadge");
+                if (data.count > 0) {
+                    badge.text(data.count).show();
+                } else {
+                    badge.hide();
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            updatePendingBadge();
+            // Optional: Refresh count every 30 seconds
+            setInterval(updatePendingBadge, 30000);
+        });
     </script>
 
 </body>

@@ -1,8 +1,11 @@
 ﻿/* ================= GLOBAL ================= */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     background: #f4f7fb;
+    color: #2d3748;
 }
 
 /* ================= STICKY NAV ================= */
@@ -16,25 +19,25 @@ body {
 .top-info-bar {
     display: flex;
     justify-content: space-between;
-    padding: 6px 70px;
+    padding: 8px 70px;
     font-size: 13px;
-    background: rgba(0,0,0,0.7);
+    background: #1a202c;
     color: white;
 }
 
 .info-left span {
-    margin-right: 18px;
+    margin-right: 20px;
 }
 
 .info-right a {
     color: white;
-    margin-left: 14px;
+    margin-left: 15px;
     text-decoration: none;
     transition: 0.3s;
 }
 
     .info-right a:hover {
-        color: #5dade2;
+        color: #3498db;
     }
 
 /* ================= MAIN NAVBAR ================= */
@@ -42,36 +45,41 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 70px;
-    background: linear-gradient( rgba(0,0,0,0.55), rgba(0,0,0,0.55) );
-    backdrop-filter: blur(6px);
+    padding: 15px 70px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .brand {
-    color: white;
-    font-size: 22px;
-    font-weight: 600;
+    color: #1a202c;
+    font-size: 24px;
+    font-weight: 800;
 }
 
     .brand i {
-        color: #5dade2;
-        margin-right: 8px;
+        color: #3498db;
+        margin-right: 10px;
     }
 
 .menu a {
-    color: white;
+    color: #2d3748;
     text-decoration: none;
     font-size: 15px;
+    font-weight: 600;
+    transition: 0.3s;
 }
 
     .menu a:hover {
-        color: #5dade2;
+        color: #3498db;
     }
+
 
 /* ================= HERO SLIDER ================= */
 .hero-slider {
     position: relative;
-    height: 420px;
+    height: 450px;
     overflow: hidden;
 }
 
@@ -81,13 +89,18 @@ body {
         background-size: cover;
         background-position: center;
         opacity: 0;
-        transform: translateX(100%);
-        transition: all 1s ease;
+        transition: opacity 1.2s ease-in-out;
     }
 
         .hero-slider .slides.active {
             opacity: 1;
-            transform: translateX(0);
+        }
+
+        .hero-slider .slides::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
         }
 
     .hero-slider .hero-content {
@@ -99,274 +112,230 @@ body {
         flex-direction: column;
         text-align: center;
         color: white;
-        animation: slideFade 1s ease;
+        z-index: 2;
     }
 
-@keyframes slideFade {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.hero-title {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 10px;
 }
 
-/* ================= WHY BECOME A HOST ================= */
+.hero-subtitle {
+    font-size: 20px;
+    opacity: 0.9;
+}
+
+/* ================= WHY HOST ================= */
 .why-host {
-    padding: 40px 15px;
-    background: #ffffff;
+    padding: 60px 20px;
+    background: white;
     text-align: center;
 }
 
     .why-host h2 {
-        color: #3498db;
-        margin-bottom: 40px;
-        font-weight: 700;
+        font-weight: 800;
+        color: #1a202c;
+        margin-bottom: 45px;
     }
 
 .why-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
-    max-width: 1100px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
     margin: auto;
 }
 
 .why-card {
-    background: #f9fbfd;
-    padding: 25px;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    transition: 0.3s;
+    padding: 35px 20px;
+    background: #f8fafc;
+    border-radius: 20px;
+    transition: 0.4s;
+    border: 1px solid #edf2f7;
 }
 
     .why-card:hover {
-        transform: translateY(-6px);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     }
 
     .why-card i {
-        font-size: 32px;
+        font-size: 36px;
         color: #3498db;
-        margin-bottom: 12px;
+        margin-bottom: 15px;
     }
 
-/* ================= APPROVAL PROCESS ================= */
+    .why-card h5 {
+        font-weight: 700;
+        margin: 0;
+    }
+
+/* ================= APPROVAL FLOW ================= */
 .approval-flow {
-    padding: 60px 15px;
-    background: #f4f7fb;
+    padding: 80px 20px;
     text-align: center;
 }
-
-    .approval-flow h2 {
-        color: #3498db;
-        margin-bottom: 35px;
-    }
 
 .flow-steps {
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 50px;
     flex-wrap: wrap;
+    margin-top: 40px;
 }
 
 .step {
-    text-align: center;
+    max-width: 200px;
     opacity: 0;
-    transform: translateY(30px);
-    transition: all 1s ease;
+    transform: translateY(40px);
+    transition: all 0.8s ease;
 }
 
     .step.show {
         opacity: 1;
         transform: translateY(0);
     }
-    /* Step-by-step delay for approval animation */
-    .step:nth-child(1) {
-        transition-delay: 0.2s;
-    }
 
-    .step:nth-child(2) {
-        transition-delay: 0.5s;
-    }
+        .step.show:nth-child(1) {
+            transition-delay: 0s;
+        }
 
-    .step:nth-child(3) {
-        transition-delay: 0.8s;
-    }
+        .step.show:nth-child(2) {
+            transition-delay: 1s;
+        }
+
+        .step.show:nth-child(3) {
+            transition-delay: 2s;
+        }
 
     .step span {
         display: inline-block;
-        width: 45px;
-        height: 45px;
+        width: 60px;
+        height: 60px;
         background: #3498db;
         color: white;
         border-radius: 50%;
-        line-height: 45px;
-        font-weight: bold;
-        margin-bottom: 10px;
+        line-height: 60px;
+        font-weight: 800;
+        font-size: 24px;
+        margin-bottom: 15px;
+        box-shadow: 0 10px 15px rgba(52, 152, 219, 0.3);
     }
 
 /* ================= FORM SECTION ================= */
 .form-section {
-    padding: 80px 15px;
+    padding: 80px 20px;
 }
 
 .form-card {
-    background: linear-gradient(180deg, #ffffff, #f9fbfd);
-    max-width: 900px;
+    background: white;
+    max-width: 1000px;
     margin: auto;
-    padding: 45px;
-    border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    padding: 50px;
+    border-radius: 30px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
 }
 
-/* ================= FORM TITLES ================= */
-.form-title {
-    text-align: center;
-    color: #3498db;
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 8px;
+.form-group-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 30px;
+    border-radius: 20px;
+    margin-bottom: 30px;
 }
 
-.form-subtitle {
-    text-align: center;
-    color: #000;
-    font-size: 14px;
-    margin-bottom: 35px;
-}
-
-/* ================= SECTION HEADINGS ================= */
 .section-title {
-    color: #3498db;
-    font-weight: 700;
-    margin-top: 25px;
-    margin-bottom: 18px;
+    color: #1a202c;
+    font-weight: 800;
+    font-size: 18px;
+    margin-bottom: 25px !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* ================= INPUTS ================= */
-.form-card input,
-.form-card textarea,
-.form-card select {
-    width: 100%;
-    padding: 13px;
-    margin-bottom: 18px;
-    border-radius: 8px;
-    border: 1px solid rgba(52,152,219,0.4);
-    transition: all 0.3s ease;
-    font-size: 14px;
-}
-
-    .form-card input:hover,
-    .form-card textarea:hover,
-    .form-card select:hover {
-        transform: translateY(-2px);
+    .section-title i {
+        color: #3498db;
     }
 
-    .form-card input:focus,
-    .form-card textarea:focus,
-    .form-card select:focus {
-        border-color: #5dade2;
-        box-shadow: 0 0 10px rgba(93,173,226,.35);
-        outline: none;
-    }
-
-/* ================= IMAGE UPLOAD ================= */
-.upload-box label {
-    font-size: 14px;
-    margin-bottom: 6px;
+/* ================= LABELS & INPUTS ================= */
+.field-label {
     display: block;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
+    color: #4a5568;
+    margin-bottom: 8px;
+    text-align: left;
 }
 
-.upload-box input {
-    border: none;
+.form-card input, .form-card select, .form-card textarea {
+    width: 100%;
+    padding: 14px 18px; /* Balanced Symmetrical Padding */
+    margin-bottom: 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-size: 14px;
+    font-weight: 500;
+    background: #ffffff;
+    box-sizing: border-box; /* Ensures padding doesn't break width */
 }
 
-/* ================= SUBMIT BUTTON ================= */
+/* ================= ITINERARY ================= */
+.itinerary-item {
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.day-badge {
+    background: #ebf8ff;
+    color: #2b6cb0;
+    padding: 5px 15px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+/* ================= BUTTONS ================= */
 .submit-btn {
     width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #3498db, #1f618d);
-    border: none;
+    padding: 18px;
+    background: #3498db;
     color: white;
+    border: none;
+    border-radius: 15px;
     font-size: 16px;
-    border-radius: 30px;
-    transition: all 0.35s ease;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 15px rgba(52, 152, 219, 0.2);
+    transition: 0.3s;
 }
 
     .submit-btn:hover {
-        background: linear-gradient(135deg, #5dade2, #2874a6);
-        box-shadow: 0 15px 25px rgba(0,0,0,0.3);
-        transform: translateY(-3px);
+        background: #2980b9;
+        transform: translateY(-2px);
     }
-
-/* ================= STATUS TEXT ================= */
-.status-text {
-    margin-top: 16px;
-    text-align: center;
-    font-size: 14px;
-}
-
-    .status-text a {
-        color: #3498db;
-        font-weight: 600;
-        text-decoration: none;
-    }
-
-        .status-text a:hover {
-            text-decoration: underline;
-        }
-
-/* ================= TRUST & WARNING ================= */
-.trust-box {
-    margin-top: 25px;
-    padding: 12px;
-    background: #eaf4fc;
-    border-left: 4px solid #3498db;
-    font-size: 14px;
-}
-
-.warning-box {
-    margin-top: 12px;
-    padding: 12px;
-    background: #fff3cd;
-    border-left: 4px solid #f39c12;
-    font-size: 14px;
-}
 
 /* ================= POPUP ================= */
 .popup-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
     justify-content: center;
     align-items: center;
 }
 
-.popup-box.success {
+.popup-box {
     background: white;
-    padding: 35px;
-    border-radius: 14px;
+    padding: 40px;
+    border-radius: 25px;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
 }
-
-    .popup-box.success i {
-        font-size: 44px;
-        color: #2ecc71;
-        margin-bottom: 12px;
-    }
-
-    .popup-box.success button {
-        margin-top: 15px;
-        padding: 8px 28px;
-        border: none;
-        background: #3498db;
-        color: white;
-        border-radius: 6px;
-        font-size: 14px;
-    }
