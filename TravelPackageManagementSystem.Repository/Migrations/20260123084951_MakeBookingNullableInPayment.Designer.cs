@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260121084548_galleryImages")]
-    partial class galleryImages
+    [Migration("20260123084951_MakeBookingNullableInPayment")]
+    partial class MakeBookingNullableInPayment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -320,21 +320,38 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PaymentAmount")
-                        .HasColumnType("decimal(10,2)");
+                    b.Property<int?>("BookingId1")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("PaymentId");
 
                     b.HasIndex("BookingId");
+
+                    b.HasIndex("BookingId1");
 
                     b.ToTable("Payments");
                 });
@@ -716,10 +733,14 @@ namespace TravelPackageManagementSystem.Repository.Migrations
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Payment", b =>
                 {
                     b.HasOne("TravelPackageManagementSystem.Repository.Models.Booking", "Booking")
-                        .WithMany("Payments")
+                        .WithMany()
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.Booking", null)
+                        .WithMany("Payments")
+                        .HasForeignKey("BookingId1");
 
                     b.Navigation("Booking");
                 });

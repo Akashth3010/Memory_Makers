@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260121063142_AddThumbnails")]
-    partial class AddThumbnails
+    [Migration("20260123053630_PaymentUpdate")]
+    partial class PaymentUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -220,21 +220,21 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Id = 4,
                             Caption = "Meenakshi Temple",
                             DestinationId = 2,
-                            ImageUrl = "/lib/Image/Tamil1.jpg"
+                            ImageUrl = "/lib/Image/t2.jpg"
                         },
                         new
                         {
                             Id = 5,
                             Caption = "Munnar Hills",
                             DestinationId = 3,
-                            ImageUrl = "/lib/Image/Kerala1.jpg"
+                            ImageUrl = "/lib/Image/k1.jpg"
                         },
                         new
                         {
                             Id = 6,
                             Caption = "Baga Beach",
                             DestinationId = 4,
-                            ImageUrl = "/lib/Image/Goa1.jpg"
+                            ImageUrl = "/lib/Image/goa3.jpg"
                         });
                 });
 
@@ -320,17 +320,26 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("PaymentAmount")
-                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PaymentId");
 
@@ -481,9 +490,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             PackageName = "Mumbai Heritage",
                             PackageType = "",
                             Price = 35000.00m,
-                            ThumbnailUrl1 = "/lib/TrendingImage/mumbai1.jpg",
-                            ThumbnailUrl2 = "/lib/TrendingImage/mumbai2.jpg",
-                            ThumbnailUrl3 = "/lib/TrendingImage/mumbai3.jpg"
+                            ThumbnailUrl1 = "/lib/Image/mumbai1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/mumbai2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/mumbai3.jpg"
                         },
                         new
                         {
@@ -499,9 +508,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             PackageName = "Pink City Tour",
                             PackageType = "",
                             Price = 65000.00m,
-                            ThumbnailUrl1 = "/lib/TrendingImage/jaipur1.jpg",
-                            ThumbnailUrl2 = "/lib/TrendingImage/jaipur2.jpg",
-                            ThumbnailUrl3 = "/lib/TrendingImage/jaipur3.jpg"
+                            ThumbnailUrl1 = "/lib/Image/jaipur1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/jaipur2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/jaipur3.jpg"
                         },
                         new
                         {
@@ -517,9 +526,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             PackageName = "Sikkim Adventure",
                             PackageType = "",
                             Price = 70000.00m,
-                            ThumbnailUrl1 = "/lib/TrendingImage/gangtok1.jpg",
-                            ThumbnailUrl2 = "/lib/TrendingImage/gangtok2.jpg",
-                            ThumbnailUrl3 = "/lib/TrendingImage/gangtok3.jpg"
+                            ThumbnailUrl1 = "/lib/Image/gangtok1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/gangtok2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/gangtok3.jpg"
                         },
                         new
                         {
@@ -554,7 +563,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             PackageType = "",
                             Price = 83000.00m,
                             ThumbnailUrl1 = "/lib/Image/banaras1.jpg",
-                            ThumbnailUrl2 = "/lib/Image/banarsi2.jpg",
+                            ThumbnailUrl2 = "/lib/Image/banaras2.jpg",
                             ThumbnailUrl3 = "/lib/Image/banaras3.jpg"
                         },
                         new
@@ -625,9 +634,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             PackageName = "Sacred Vrindavan",
                             PackageType = "",
                             Price = 67000.00m,
-                            ThumbnailUrl1 = "/lib/Image/vrindavan1.jpg",
-                            ThumbnailUrl2 = "/lib/Image/vrindavan2.jpg",
-                            ThumbnailUrl3 = "/lib/Image/vrindavan3.jpg"
+                            ThumbnailUrl1 = "/lib/Image/vrindavan5.jpg",
+                            ThumbnailUrl2 = "/lib/Image/vrindavan3.jpg",
+                            ThumbnailUrl3 = "/lib/Image/vrindavan2.jpg"
                         });
                 });
 

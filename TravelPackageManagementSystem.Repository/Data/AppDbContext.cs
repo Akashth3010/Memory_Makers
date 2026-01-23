@@ -19,6 +19,15 @@ namespace TravelPackageManagementSystem.Repository.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            // Configure Decimal Precision for Payment Amount
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.Amount)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Payment>()
+    .HasOne(p => p.Booking)
+    .WithMany() // Or .WithOne() depending on your design
+    .HasForeignKey(p => p.BookingId);
 
             // 1. Seed Destinations
             modelBuilder.Entity<Destination>().HasData(

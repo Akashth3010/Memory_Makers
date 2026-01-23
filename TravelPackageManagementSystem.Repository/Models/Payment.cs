@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TravelPackageManagementSystem.Repository.Models
 {
@@ -8,26 +10,30 @@ namespace TravelPackageManagementSystem.Repository.Models
         public int PaymentId { get; set; }
 
         [Required]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
 
         [Required]
-        public DateTime PaymentDate { get; set; }
+        public DateTime PaymentDate { get; set; } = DateTime.Now;
 
         [Required]
-        public string PaymentMethod { get; set; } // e.g., "Credit Card", "PayPal"
+        [StringLength(50)]
+        public string PaymentMethod { get; set; }
 
+        [Required]
+        [StringLength(100)]
         public string TransactionId { get; set; }
 
-        public string Status { get; set; } // e.g., "Pending", "Completed", "Failed"
+        [Required]
+        [StringLength(20)]
+        public string Status { get; set; }
 
-        // Foreign Key example - linking to a Booking or Package
-        // public int BookingId { get; set; }
-        // public Booking Booking { get; set; }
-       
         [Required]
         public int BookingId { get; set; }
-        //Navigation Property
+
+        // FIX: Add the '?' to make it nullable. 
+        // This prevents the "Booking field is required" validation error.
         [ForeignKey("BookingId")]
-        public virtual Booking Booking { get; set; }
+        public virtual Booking? Booking { get; set; }
     }
 }

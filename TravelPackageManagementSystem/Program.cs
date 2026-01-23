@@ -1,30 +1,33 @@
 using Microsoft.EntityFrameworkCore;
-using TravelPackageManagementSystem.Repository.Implementation;
+
 using TravelPackageManagementSystem.Repository.Interface;
-using TravelPackageManagementSystem.Services.Implementation;
-using TravelPackageManagementSystem.Services.Interface;
-//using TravelPackageManagementSystem.Repository.Interface;
 using TravelPackageManagementSystem.Repository.Implementations;
-using TravelPackageManagementSystem.Services.Interfaces;
-//using TravelPackageManagementSystem.Application.Data;
 using TravelPackageManagementSystem.Repository.Data;
-//using TravelPackageManagementSystem.Repository.Implementations;
 using TravelPackageManagementSystem.Repository.Interfaces;
 using TravelPackageManagementSystem.Repository.Models;
+
+using TravelPackageManagementSystem.Services.Interfaces;
 using TravelPackageManagementSystem.Services.Implementations;
-using TravelPackageManagementSystem.Repository.Interface;
-//using TravelPackageManagementSystem.Services.Interfaces;
-//using TravelPackageManagementSystem.Application.Models;
+//using TravelPackageManagementSystem.Repository.Implementation;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Add Controllers (API capability)
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 // 2. Database Configuration (CRITICAL STEP)
 // This must happen BEFORE adding the Repository
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+var connectionString = builder.Configuration.GetConnectionString("DbConnection");
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 // 3. Register your Custom Services
@@ -84,6 +87,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication(); // Who are you?
 app.UseAuthorization();  // Are you allowed to be here?
 app.UseCors(); // Enable CORS

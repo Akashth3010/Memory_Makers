@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260120124106_FixPackageTypeMapping")]
-    partial class FixPackageTypeMapping
+    [Migration("20260123060517_UpdatePaymentModel")]
+    partial class UpdatePaymentModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -220,21 +220,21 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Id = 4,
                             Caption = "Meenakshi Temple",
                             DestinationId = 2,
-                            ImageUrl = "/lib/Image/Tamil1.jpg"
+                            ImageUrl = "/lib/Image/t2.jpg"
                         },
                         new
                         {
                             Id = 5,
                             Caption = "Munnar Hills",
                             DestinationId = 3,
-                            ImageUrl = "/lib/Image/Kerala1.jpg"
+                            ImageUrl = "/lib/Image/k1.jpg"
                         },
                         new
                         {
                             Id = 6,
                             Caption = "Baga Beach",
                             DestinationId = 4,
-                            ImageUrl = "/lib/Image/Goa1.jpg"
+                            ImageUrl = "/lib/Image/goa3.jpg"
                         });
                 });
 
@@ -320,17 +320,29 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("PaymentAmount")
-                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("PaymentId");
 
@@ -394,6 +406,15 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("ThumbnailUrl1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThumbnailUrl2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThumbnailUrl3")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("PackageId");
 
                     b.HasIndex("DestinationId");
@@ -416,7 +437,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Shillong Peak",
                             PackageName = "Quick Escape",
                             PackageType = "",
-                            Price = 9999.00m
+                            Price = 9999.00m,
+                            ThumbnailUrl1 = "/lib/Image/meg4.jpg",
+                            ThumbnailUrl2 = "/lib/Image/meghbg.jpg",
+                            ThumbnailUrl3 = "/lib/Image/meg3.jpg"
                         },
                         new
                         {
@@ -431,7 +455,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Madurai",
                             PackageName = "Temple Trail",
                             PackageType = "",
-                            Price = 18500.00m
+                            Price = 18500.00m,
+                            ThumbnailUrl1 = "/lib/Image/t4.jpg",
+                            ThumbnailUrl2 = "/lib/Image/t25.jpg",
+                            ThumbnailUrl3 = "/lib/Image/t3.jpg"
                         },
                         new
                         {
@@ -446,7 +473,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Alleppey",
                             PackageName = "Backwater Bliss",
                             PackageType = "",
-                            Price = 22000.00m
+                            Price = 22000.00m,
+                            ThumbnailUrl1 = "/lib/Image/k32.jpg",
+                            ThumbnailUrl2 = "/lib/Image/k35.jpg",
+                            ThumbnailUrl3 = "/lib/Image/k3.jpg"
                         },
                         new
                         {
@@ -462,7 +492,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Gateway of India",
                             PackageName = "Mumbai Heritage",
                             PackageType = "",
-                            Price = 35000.00m
+                            Price = 35000.00m,
+                            ThumbnailUrl1 = "/lib/Image/mumbai1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/mumbai2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/mumbai3.jpg"
                         },
                         new
                         {
@@ -477,7 +510,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Jaipur",
                             PackageName = "Pink City Tour",
                             PackageType = "",
-                            Price = 65000.00m
+                            Price = 65000.00m,
+                            ThumbnailUrl1 = "/lib/Image/jaipur1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/jaipur2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/jaipur3.jpg"
                         },
                         new
                         {
@@ -492,7 +528,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Gangtok",
                             PackageName = "Sikkim Adventure",
                             PackageType = "",
-                            Price = 70000.00m
+                            Price = 70000.00m,
+                            ThumbnailUrl1 = "/lib/Image/gangtok1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/gangtok2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/gangtok3.jpg"
                         },
                         new
                         {
@@ -507,7 +546,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Darjeeling",
                             PackageName = "Darjeeling Tea",
                             PackageType = "",
-                            Price = 5500.00m
+                            Price = 5500.00m,
+                            ThumbnailUrl1 = "/lib/Image/darjiling1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/darjiling2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/darjiling3.jpg"
                         },
                         new
                         {
@@ -522,7 +564,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Varanasi",
                             PackageName = "Varanasi Spiritual",
                             PackageType = "",
-                            Price = 83000.00m
+                            Price = 83000.00m,
+                            ThumbnailUrl1 = "/lib/Image/banaras1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/banaras2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/banaras3.jpg"
                         },
                         new
                         {
@@ -537,7 +582,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Munnar",
                             PackageName = "Misty Munnar",
                             PackageType = "",
-                            Price = 50000.00m
+                            Price = 50000.00m,
+                            ThumbnailUrl1 = " /lib/Image/munnar1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/munnar2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/munnar4.jpg"
                         },
                         new
                         {
@@ -552,7 +600,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Calangute",
                             PackageName = "Goa Sundowner",
                             PackageType = "",
-                            Price = 12500.00m
+                            Price = 12500.00m,
+                            ThumbnailUrl1 = " /lib/Image/goa1.jpg",
+                            ThumbnailUrl2 = "/lib/Image/goa2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/goa3.jpg"
                         },
                         new
                         {
@@ -567,7 +618,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Location = "Ooty",
                             PackageName = "Ooty Gardens",
                             PackageType = "",
-                            Price = 52000.00m
+                            Price = 52000.00m,
+                            ThumbnailUrl1 = "/lib/Image/ooty.jpg",
+                            ThumbnailUrl2 = "/lib/Image/ooty2.jpg",
+                            ThumbnailUrl3 = "/lib/Image/ooty3.jpg"
                         },
                         new
                         {
@@ -577,12 +631,15 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Destination = "Uttar Pradesh",
                             DestinationId = 9,
                             Duration = "3 Days",
-                            ImageUrl = "/lib/TrendingImage/Banaras.jpg",
+                            ImageUrl = "/lib/TrendingImage/Vrindavan.jpg",
                             IsTrending = true,
                             Location = "Vrindavan",
                             PackageName = "Sacred Vrindavan",
                             PackageType = "",
-                            Price = 67000.00m
+                            Price = 67000.00m,
+                            ThumbnailUrl1 = "/lib/Image/vrindavan5.jpg",
+                            ThumbnailUrl2 = "/lib/Image/vrindavan3.jpg",
+                            ThumbnailUrl3 = "/lib/Image/vrindavan2.jpg"
                         });
                 });
 
