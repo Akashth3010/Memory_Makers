@@ -1,13 +1,8 @@
-﻿document.querySelectorAll('.card').forEach(card => {
+﻿//document.querySelectorAll('.card').forEach(card => {
 
-    card.addEventListener('click', () => {
+//    card.addEventListener('click', () => {
 
-        alert("Booking feature coming soon!");
+//        alert("Booking feature coming soon!");
 
-    });
-
-});
-    card.addEventListener('click', () => {
-        alert("Booking feature coming soon!");
-    });
-});
+//    });
+//});

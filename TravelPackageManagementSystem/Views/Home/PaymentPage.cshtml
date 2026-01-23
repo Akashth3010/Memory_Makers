@@ -1,70 +1,27 @@
 ﻿@{
     ViewData["Title"] = "Checkout";
     Layout = "_Layout";
+    // Retrieve the ID passed from CreateBooking
+    var bookingId = ViewBag.BookingId;
 }
 
 <style>
     :root {
         --primary-orange: #ff7b54;
         --secondary-yellow: #ffd56b;
-        --glass-bg: rgba(255, 255, 255, 0.95);
+        --dark-bg: #2d3436;
     }
 
     body {
-        background: #f4f7f9;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7f9;
     }
 
-    .checkout-container {
-        padding-top: 40px;
-        padding-bottom: 80px;
-    }
-
-    /* Stepper UI */
-    .stepper {
-        display: flex;
-        justify-content: space-between;
-        max-width: 600px;
-        margin: 0 auto 40px;
-    }
-
-    .step {
-        text-align: center;
-        flex: 1;
-        position: relative;
-    }
-
-    .step-circle {
-        width: 35px;
-        height: 35px;
-        background: #e0e0e0;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 10px;
-        color: white;
-        font-weight: bold;
-        z-index: 2;
-        position: relative;
-    }
-
-    .step.active .step-circle {
-        background: var(--primary-orange);
-        box-shadow: 0 0 15px rgba(255, 123, 84, 0.4);
-    }
-
-    .step.completed .step-circle {
-        background: #28a745;
-    }
-
-    /* Card Styling */
+    /* Glassmorphism Card Effect */
     .payment-card {
         background: white;
         border: none;
         border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
 
     .method-selector {
@@ -73,54 +30,49 @@
         padding: 15px;
         cursor: pointer;
         transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
     }
 
-        .method-selector:hover {
+        .method-selector:hover, .method-selector.selected {
             border-color: var(--primary-orange);
             background: #fff9f7;
         }
 
-        .method-selector.selected {
-            border-color: var(--primary-orange);
-            background: #fff9f7;
-        }
-
-    /* Price Summary Floating Card */
+    /* Price Summary */
     .summary-box {
-        background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+        background: linear-gradient(135deg, var(--dark-bg) 0%, #000 100%);
         color: white;
         border-radius: 20px;
-        padding: 30px;
+        padding: 25px;
         position: sticky;
-        top: 100px;
+        top: 20px;
     }
 
     .btn-checkout {
         background: linear-gradient(135deg, var(--primary-orange), var(--secondary-yellow));
         border: none;
-        padding: 15px;
+        padding: 14px;
         border-radius: 12px;
         font-weight: bold;
-        color: #000;
         width: 100%;
-        margin-top: 20px;
         transition: transform 0.2s;
     }
 
-        .btn-checkout:hover {
+        .btn-checkout:hover:not(:disabled) {
             transform: scale(1.02);
+            color: black;
         }
 
-    .secure-badge {
-        font-size: 0.8rem;
-        color: #888;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 15px;
+        .btn-checkout:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+    /* Error Text Style */
+    .error-msg {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 4px;
+        font-weight: 500;
     }
 
     .animate-fade-in {
@@ -139,32 +91,20 @@
         }
     }
 </style>
+<head>
+    <link rel="stylesheet" href="@(Url.Content("~/css/PaymentPage.css"))" />
+</head>
 
-<div class="container checkout-container">
-    <div class="stepper">
-        <div class="step completed">
-            <div class="step-circle"><i class="fa fa-check"></i></div>
-            <small>Details</small>
-        </div>
-        <div class="step active">
-            <div class="step-circle">2</div>
-            <small>Payment</small>
-        </div>
-        <div class="step">
-            <div class="step-circle">3</div>
-            <small>Confirm</small>
-        </div>
-    </div>
-
+<div class="container py-5">
     <div class="row g-4">
         <div class="col-lg-8">
-            <div class="payment-card p-4 p-md-5">
-                <h4 class="fw-bold mb-4">Choose Payment Method</h4>
+            <div class="payment-card p-4">
+                <h4 class="fw-bold mb-4"><i class="fas fa-credit-card me-2 text-primary"></i>Payment Method</h4>
 
-                <div class="row">
+                <div class="row g-3">
                     <div class="col-md-6">
                         <div class="method-selector selected" onclick="switchTab('card', this)">
-                            <input type="radio" name="pay" checked class="me-3">
+                            <input type="radio" id="radioCard" name="pay" checked class="me-3">
                             <div>
                                 <h6 class="mb-0 fw-bold">Credit/Debit Card</h6>
                                 <small class="text-muted">Visa, Mastercard, RuPay</small>
@@ -173,7 +113,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="method-selector" onclick="switchTab('upi', this)">
-                            <input type="radio" name="pay" class="me-3">
+                            <input type="radio" id="radioUpi" name="pay" class="me-3">
                             <div>
                                 <h6 class="mb-0 fw-bold">UPI / QR Code</h6>
                                 <small class="text-muted">PhonePe, GPay, Paytm</small>
@@ -182,23 +122,23 @@
                     </div>
                 </div>
 
-                <div id="cardDetails" class="mt-4 animate-fade-in">
+                <div id="cardDetails" class="mt-4">
                     <div class="row g-3">
-                        <div class="col-12">
+                        <div class="col-12" id="container-name">
                             <label class="form-label small fw-bold">CARDHOLDER NAME</label>
-                            <input type="text" class="form-control" placeholder="John Doe">
+                            <input type="text" id="cardHolderName" class="form-control" placeholder="John Doe">
                         </div>
-                        <div class="col-12">
+                        <div class="col-12" id="container-number">
                             <label class="form-label small fw-bold">CARD NUMBER</label>
-                            <input type="text" class="form-control" placeholder="0000 0000 0000 0000">
+                            <input type="text" id="cardNumber" class="form-control" placeholder="0000 0000 0000 0000" maxlength="16">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" id="container-expiry">
                             <label class="form-label small fw-bold">EXPIRY</label>
-                            <input type="text" class="form-control" placeholder="MM/YY">
+                            <input type="text" id="expiryInput" class="form-control" placeholder="MM/YY" maxlength="5">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" id="container-cvv">
                             <label class="form-label small fw-bold">CVV</label>
-                            <input type="password" class="form-control" placeholder="***">
+                            <input type="password" id="cvvInput" class="form-control" placeholder="***" maxlength="3">
                         </div>
                     </div>
                 </div>
@@ -206,12 +146,10 @@
                 <div id="upiDetails" class="mt-4 text-center animate-fade-in" style="display: none;">
                     <div class="p-4 border rounded-3 bg-light">
                         <h6 class="fw-bold mb-3">Scan QR Code to Pay</h6>
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=EasySafarPayment"
-                             alt="QR Code" class="img-fluid mb-3 shadow-sm p-2 bg-white">
-                        <p class="small text-muted mb-3">Or enter your UPI ID</p>
-                        <div class="input-group mb-2" style="max-width: 300px; margin: 0 auto;">
-                            <input type="text" class="form-control" placeholder="username@okaxis">
-                            <button class="btn btn-dark">Verify</button>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=EasySafarPayment" alt="QR" class="img-fluid mb-3 shadow-sm bg-white p-2">
+                        <div class="input-group" style="max-width: 300px; margin: 0 auto;" id="container-upi">
+                            <input type="text" id="upiId" class="form-control" placeholder="username@okaxis">
+                            <button class="btn btn-dark" type="button">Verify</button>
                         </div>
                     </div>
                 </div>
@@ -220,82 +158,196 @@
 
         <div class="col-lg-4">
             <div class="summary-box shadow-lg">
-                <h5 class="mb-4">Booking Summary</h5>
+                <h5 class="mb-1">Booking Summary</h5>
+                <p id="packageNameDisplay" class="small mb-4" style="color: var(--secondary-yellow);">Selected Package</p>
+
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="text-secondary">Package Base Price</span>
-                    <span>₹35,000</span>
+                    <span class="text-secondary">Base Price</span>
+                    <span id="basePriceDisplay">₹0</span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
                     <span class="text-secondary">GST (18%)</span>
-                    <span>₹6,300</span>
+                    <span id="gstDisplay">₹0</span>
                 </div>
-                <div class="d-flex justify-content-between mb-4">
-                    <span class="text-secondary">Platform Fee</span>
-                    <span>₹200</span>
-                </div>
-
                 <hr style="border-top: 1px dashed #555;">
-
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <span class="h5 mb-0">Total Amount</span>
-                    <span class="h4 mb-0 fw-bold" style="color: var(--primary-orange);">₹41,500</span>
+                    <span id="displayPrice" class="h4 mb-0 fw-bold" style="color: var(--primary-orange);">₹0</span>
                 </div>
 
-                <button class="btn-checkout" onclick="startLoading(this)">
-                    PAY NOW & CONFIRM
-                </button>
+                <button class="btn-checkout" id="payBtn" onclick="processPayment(this)">PAY NOW & CONFIRM</button>
 
-                <div class="secure-badge">
-                    <i class="fa fa-shield-halved me-2"></i> 256-bit SSL Secure Payment
+                <div class="text-center mt-3 small opacity-50">
+                    <i class="fa fa-lock"></i> SSL Secure Transaction
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    function selectMethod(el) {
-        document.querySelectorAll('.method-selector').forEach(m => m.classList.remove('selected'));
-        el.classList.add('selected');
-        el.querySelector('input').checked = true;
+
+  <script>
+    // 1. Initial Setup
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedPrice = localStorage.getItem('selectedPackagePrice') || "₹0";
+        const savedName = localStorage.getItem('selectedPackageName') || "No Package Selected";
+        document.getElementById('packageNameDisplay').innerText = savedName;
+        updateSummary(savedPrice);
+    });
+
+    function updateSummary(priceStr) {
+        const total = parseFloat(priceStr.replace(/[^0-9.]/g, '')) || 0;
+        const base = total / 1.18;
+        const gst = total - base;
+        document.getElementById('displayPrice').innerText = "₹" + total.toLocaleString('en-IN');
+        document.getElementById('basePriceDisplay').innerText = "₹" + Math.round(base).toLocaleString('en-IN');
+        document.getElementById('gstDisplay').innerText = "₹" + Math.round(gst).toLocaleString('en-IN');
     }
 
-        function startLoading(btn) {
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
-        btn.disabled = true;
-
-        // Mock success - simulating a payment gateway response
-        setTimeout(() => {
-            const steps = document.querySelectorAll('.step');
-        steps[1].classList.remove('active');
-        steps[1].classList.add('completed');
-        steps[1].querySelector('.step-circle').innerHTML = '<i class="fa fa-check"></i>';
-        steps[2].classList.add('active');
-            // Option 1: Using the standard URL path (e.g., /Home/MyBookings)
-            window.location.href = "/Home/MyBookings";
-
-            /* Note: If your MyBookings page is in a different controller,
-               use "/ControllerName/MyBookings".
-            */
-        }, 2500);
-    }
-
+    // 2. Tab Switching
     function switchTab(type, element) {
-        // 1. Update visual selection state
         document.querySelectorAll('.method-selector').forEach(m => m.classList.remove('selected'));
         element.classList.add('selected');
         element.querySelector('input').checked = true;
+        document.getElementById('cardDetails').style.display = (type === 'card' ? 'block' : 'none');
+        document.getElementById('upiDetails').style.display = (type === 'upi' ? 'block' : 'none');
+        clearErrors();
+    }
 
-        // 2. Toggle the forms
-        const cardForm = document.getElementById('cardDetails');
-        const upiForm = document.getElementById('upiDetails');
+    // 3. Basic Field Validation (Returns true/false only)
+    function validateInputsOnly() {
+        clearErrors();
+        let isValid = true;
+        const isCard = document.getElementById('radioCard').checked;
 
-        if (type === 'card') {
-            cardForm.style.display = 'block';
-            upiForm.style.display = 'none';
+        if (isCard) {
+            const name = document.getElementById('cardHolderName').value.trim();
+            const num = document.getElementById('cardNumber').value.trim();
+            const exp = document.getElementById('expiryInput').value.trim();
+            const cvv = document.getElementById('cvvInput').value.trim();
+
+            if (!/^[a-zA-Z\s]+$/.test(name)) {
+                showError('container-name', "Enter a valid name", 'cardHolderName');
+                isValid = false;
+            }
+            if (!/^\d{16}$/.test(num)) {
+                showError('container-number', "Enter 16-digit card number", 'cardNumber');
+                isValid = false;
+            }
+            // Note: The "Same Digit" check is moved to processPayment so we can save it to DB!
+
+            // Expiry Check
+            const parts = exp.split('/');
+            if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(exp)) {
+                showError('container-expiry', "Format: MM/YY", 'expiryInput');
+                isValid = false;
+            } else {
+                const expMonth = parseInt(parts[0], 10);
+                const expYear = parseInt("20" + parts[1], 10);
+                const now = new Date();
+                if (expYear < now.getFullYear() || (expYear === now.getFullYear() && expMonth < (now.getMonth() + 1))) {
+                    showError('container-expiry', "Card has expired", 'expiryInput');
+                    isValid = false;
+                }
+            }
+
+            if (!/^\d{3}$/.test(cvv)) {
+                showError('container-cvv', "3-digit CVV", 'cvvInput');
+                isValid = false;
+            }
         } else {
-            cardForm.style.display = 'none';
-            upiForm.style.display = 'block';
+            const upi = document.getElementById('upiId').value.trim();
+            if (!upi.includes('@@')) {
+                showError('container-upi', "Invalid UPI ID", 'upiId');
+                isValid = false;
+            }
         }
+        return isValid;
+    }
+
+    // 4. Helper Function: Save to Database
+    async function savePaymentToDB(data) {
+        try {
+            const response = await fetch('/Payment/SavePayment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            return response.ok;
+        } catch (error) {
+            console.error("DB Error:", error);
+            return false;
+        }
+    }
+
+    // 5. Main Processing Function
+    async function processPayment(btn) {
+        // A. Run basic validation first (Empty fields, wrong format)
+        // We usually don't save "empty field" errors to DB, just show red text.
+        if (!validateInputsOnly()) return;
+
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+        btn.disabled = true;
+
+        // B. Prepare Data Object
+        const txnId = "TXN-" + Date.now();
+        const rawPrice = document.getElementById('displayPrice').innerText;
+        const amount = parseFloat(rawPrice.replace(/[^0-9.]/g, ''));
+        const method = document.getElementById('radioCard').checked ? "Credit Card" : "UPI";
+        const cardNumber = document.getElementById('cardNumber').value.trim();
+
+        let bookingData = {
+            TransactionId: txnId,
+            Amount: amount,
+            PaymentMethod: method,
+            Status: "Pending", // Default start status
+            PaymentDate: new Date().toISOString()
+        };
+
+        // C. CHECK: The "Same Digit" Logic (Security Block)
+        // If this is true, we want to SAVE "Failed" to DB, then Redirect.
+        if (method === "Credit Card" && /^(\d)\1+$/.test(cardNumber)) {
+            
+            bookingData.Status = "Failed"; // Set status to Failed
+            
+            // 1. Save failure to DB
+            await savePaymentToDB(bookingData); 
+            
+            // 2. Redirect to Failure Page
+            window.location.href = "/Home/Failure?reason=" + encodeURIComponent("Security Block: Invalid card sequence (all same digits).");
+            return; // Stop here
+        }
+
+        // D. Success Path
+        try {
+            // Simulate processing success...
+            bookingData.Status = "Completed";
+            
+            const saved = await savePaymentToDB(bookingData);
+
+            if (saved) {
+                localStorage.setItem('lastPaidAmount', "₹" + amount.toLocaleString('en-IN'));
+                window.location.href = "/Home/Success?txn=" + txnId;
+            } else {
+                // If DB save failed (Server Error)
+                window.location.href = "/Home/Failure?reason=System Error: Could not save payment.";
+            }
+        } catch (error) {
+            window.location.href = "/Home/Failure?reason=Network Error";
+        }
+    }
+
+    // UI Helpers
+    function showError(containerId, message, inputId) {
+        const container = document.getElementById(containerId);
+        document.getElementById(inputId).style.borderColor = '#dc3545';
+        const error = document.createElement('div');
+        error.className = 'error-msg animate-fade-in';
+        error.innerText = message;
+        container.appendChild(error);
+    }
+    function clearErrors() {
+        document.querySelectorAll('.error-msg').forEach(e => e.remove());
+        document.querySelectorAll('.form-control').forEach(i => i.style.borderColor = '#ced4da');
     }
 </script>
