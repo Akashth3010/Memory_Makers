@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class PaymentUpdate : Migration
+    public partial class SyncAfterPull : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -186,10 +186,11 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BookingId = table.Column<int>(type: "int", nullable: false)
+                    PaymentMethod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    TransactionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: false),
+                    BookingId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -200,6 +201,11 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         principalTable: "Bookings",
                         principalColumn: "BookingId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Payments_Bookings_BookingId1",
+                        column: x => x.BookingId1,
+                        principalTable: "Bookings",
+                        principalColumn: "BookingId");
                 });
 
             migrationBuilder.InsertData(
@@ -279,6 +285,11 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                 name: "IX_Payments_BookingId",
                 table: "Payments",
                 column: "BookingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_BookingId1",
+                table: "Payments",
+                column: "BookingId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TravelPackages_DestinationId",

@@ -46,5 +46,18 @@ namespace TravelPackageManagementSystem.Controllers
 
             return View(bookings);
         }
+        //[HttpGet]
+        //public async Task<IActionResult> GetPackagePrice(int bookingId)
+        //{
+        //    // Find the booking and its associated package
+        //    var booking = await _context.Bookings
+        //        .Include(b => b.Package)
+        //        .FirstOrDefaultAsync(b => b.BookingId == bookingId);
+
+        //    if (booking == null) return NotFound();
+
+        //    // Return the real price from the database
+        //    return Ok(new { dbPrice = booking.Package.Price });
+        //}
     }
 }

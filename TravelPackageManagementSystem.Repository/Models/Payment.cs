@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TravelPackageManagementSystem.Repository.Models
@@ -28,11 +27,12 @@ namespace TravelPackageManagementSystem.Repository.Models
         [StringLength(20)]
         public string Status { get; set; }
 
+        // Foreign Key (Yeh zaroori hai)
         [Required]
         public int BookingId { get; set; }
 
-        // FIX: Add the '?' to make it nullable. 
-        // This prevents the "Booking field is required" validation error.
+        // Navigation Property (Yeh OPTIONAL honi chahiye validation ke liye)
+        // "? " ka matlab hai: Agar frontend se Booking ka pura data nahi aaya, to error mat do.
         [ForeignKey("BookingId")]
         public virtual Booking? Booking { get; set; }
     }

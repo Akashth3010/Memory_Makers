@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260123060517_UpdatePaymentModel")]
-    partial class UpdatePaymentModel
+    [Migration("20260126081050_FixPackageMapping")]
+    partial class FixPackageMapping
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -326,6 +326,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BookingId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
@@ -347,6 +350,8 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.HasKey("PaymentId");
 
                     b.HasIndex("BookingId");
+
+                    b.HasIndex("BookingId1");
 
                     b.ToTable("Payments");
                 });
@@ -728,10 +733,14 @@ namespace TravelPackageManagementSystem.Repository.Migrations
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Payment", b =>
                 {
                     b.HasOne("TravelPackageManagementSystem.Repository.Models.Booking", "Booking")
-                        .WithMany("Payments")
+                        .WithMany()
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.Booking", null)
+                        .WithMany("Payments")
+                        .HasForeignKey("BookingId1");
 
                     b.Navigation("Booking");
                 });
