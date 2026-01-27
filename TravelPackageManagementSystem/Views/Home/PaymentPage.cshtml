@@ -1,8 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Checkout";
     Layout = "_Layout";
-    // Ensure the BookingId from CreateBooking is available
-    var bookingId = ViewBag.BookingId;
+
+    // 1. SAFE BACKEND LOGIC: Konstruksi URL di C# blok mencegah Error CS1501
+    int safeId = ViewBag.BookingId != null ? (int)ViewBag.BookingId : 0;
+    string qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TravelBooking_" + safeId;
 }
 
 <style>
@@ -14,18 +16,31 @@
 
     body {
         background-color: #f4f7f9;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
+    /* Glassmorphism Card Effect */
     .payment-card {
         background: white;
-        border: none;
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
 
+    .method-selector {
+        border: 2px solid #f0f0f0;
+        border-radius: 12px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .method-selector.selected {
+            border-color: var(--primary-orange);
+            background: #fff9f7;
+        }
+
+    /* Dark Summary Card as per your Target UI */
     .summary-box {
-        background: linear-gradient(135deg, var(--dark-bg) 0%, #000 100%);
+        background: #1a1a1a;
         color: white;
         border-radius: 20px;
         padding: 25px;
@@ -44,173 +59,206 @@
         transition: transform 0.2s;
     }
 
-        .btn-checkout:hover:not(:disabled) {
+        .btn-checkout:hover {
             transform: scale(1.02);
             color: black;
         }
+
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+
+    .error-msg {
+        color: #dc3545;
+        font-size: 0.85em;
+        display: none;
+        margin-top: 5px;
+    }
 </style>
+
+<input type="hidden" id="bookingIdStore" value="@safeId" />
 
 <div class="container py-5">
     <div class="row g-4">
         <div class="col-lg-8">
-            <h4 class="fw-bold mb-4"><i class="fas fa-credit-card me-2 text-primary"></i>Payment Method</h4>
+            <div class="payment-card p-4">
+                <h4 class="fw-bold mb-4"><i class="fas fa-credit-card me-2 text-primary"></i>Payment Method</h4>
 
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <div class="method-selector selected" onclick="switchTab('card', this)">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="pay" id="cardRadio" checked>
-                            <label class="form-check-label fw-bold" for="cardRadio">Credit/Debit Card</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="method-selector" onclick="switchTab('upi', this)">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="pay" id="upiRadio">
-                            <label class="form-check-label fw-bold" for="upiRadio">UPI / QR Code</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="cardDetails" class="mt-4">
                 <div class="row g-3">
-                    <div class="col-12">
-                        <label class="form-label small fw-bold">CARDHOLDER NAME</label>
-                        <input type="text" class="form-control form-control-lg" placeholder="Enter name">
+                    <div class="col-md-6" onclick="switchTab('card')">
+                        <div class="method-selector selected" id="tab-card">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="pay" id="cardRadio" checked>
+                                <label class="form-check-label fw-bold">Credit/Debit Card</label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-12">
-                        <label class="form-label small fw-bold">CARD NUMBER</label>
-                        <input type="text" class="form-control form-control-lg" placeholder="0000 0000 0000 0000">
-                    </div>
-                    <div class="col-6">
-                        <label class="form-label small fw-bold">EXPIRY</label>
-                        <input type="text" class="form-control form-control-lg" placeholder="MM/YY">
-                    </div>
-                    <div class="col-6">
-                        <label class="form-label small fw-bold">CVV</label>
-                        <input type="password" class="form-control form-control-lg" placeholder="***">
+                    <div class="col-md-6" onclick="switchTab('upi')">
+                        <div class="method-selector" id="tab-upi">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="pay" id="upiRadio">
+                                <label class="form-check-label fw-bold">UPI / QR Code</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="upiDetails" class="mt-4 text-center" style="display:none;">
-                <div class="p-4 border rounded bg-light">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Booking_@bookingId" class="img-fluid mb-3 shadow">
-                    <p class="text-muted">Scan QR or enter UPI ID</p>
-                    <input type="text" class="form-control text-center mx-auto" style="max-width:300px" placeholder="user@upi">
+                <div id="cardSection" class="mt-4">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">CARDHOLDER NAME</label>
+                            <input type="text" id="cardHolderName" class="form-control" placeholder="Enter name">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">CARD NUMBER</label>
+                            <input type="text" id="cardNumber" class="form-control" placeholder="0000 0000 0000 0000" maxlength="16">
+                            <div id="cardError" class="error-msg">Invalid card number.</div>
+                        </div>
+                        <div class="col-6"><label class="form-label small fw-bold">EXPIRY</label><input type="text" class="form-control" placeholder="MM/YY" maxlength="5"></div>
+                        <div class="col-6"><label class="form-label small fw-bold">CVV</label><input type="password" class="form-control" placeholder="***" maxlength="3"></div>
+                    </div>
+                </div>
+
+                <div id="upiSection" style="display:none;" class="mt-4 text-center">
+                    <div class="p-4 border rounded bg-light">
+                        <h6 class="fw-bold mb-3">Scan QR Code</h6>
+                        <img src="@qrUrl" class="img-fluid mb-3 shadow p-2 bg-white" style="width:150px">
+
+                        <p class="text-muted small">Enter UPI ID to verify</p>
+                        <div class="input-group mb-2 mx-auto" style="max-width:300px">
+                            <input type="text" id="upiId" class="form-control text-center" placeholder="user@upi">
+                            <button class="btn btn-outline-primary" type="button" onclick="validateUPI()">Verify</button>
+                        </div>
+                        <div id="upiError" class="error-msg">Invalid UPI ID. (Gmail/Email not allowed)</div>
+                        <div id="upiSuccess" class="text-success small fw-bold" style="display:none;">Verified!</div>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
 
         <div class="col-lg-4">
             <div class="summary-box shadow-lg">
-                <h5 class="mb-1">Booking Summary</h5>
-                <p id="packageNameDisplay" class="small mb-4" style="color: var(--secondary-yellow);">Selected Package</p>
+                <h5 class="fw-bold mb-4" style="color: var(--secondary-yellow);">Order Summary</h5>
+                <p id="packageNameDisplay" class="small mb-3 text-white-50">Loading Package...</p>
 
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="text-secondary">Base Price</span>
+                    <span class="text-secondary small">Booking ID</span>
+                    <span class="fw-bold">#@safeId</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary small">Base Price</span>
                     <span id="basePriceDisplay">₹0</span>
                 </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <span class="text-secondary">GST (18%)</span>
+
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="text-secondary small">GST (18%)</span>
                     <span id="gstDisplay">₹0</span>
                 </div>
+
                 <hr style="border-top: 1px dashed #555;">
+
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <span class="h5 mb-0">Total Amount</span>
-                    <span id="displayPrice" class="h4 mb-0 fw-bold" style="color: var(--primary-orange);">₹0</span>
+                    <span class="h5 mb-0">Total</span>
+                    <span id="displayPrice" class="h3 mb-0 fw-bold" style="color: var(--primary-orange);">₹0</span>
                 </div>
 
-                <button class="btn-checkout" id="payBtn" onclick="processPayment(this)">PAY NOW & CONFIRM</button>
+                <button type="button" class="btn-checkout" id="payBtn" onclick="processPayment()">
+                    PAY NOW & CONFIRM
+                </button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-        function switchTab(type, el) {
-        document.querySelectorAll('.method-selector').forEach(m => m.classList.remove('selected'));
-        el.classList.add('selected');
-        document.getElementById('cardDetails').style.display = type === 'card' ? 'block' : 'none';
-        document.getElementById('upiDetails').style.display = type === 'upi' ? 'block' : 'none';
-    }
-    // 1. Load Local Storage Data on Startup
-    document.addEventListener('DOMContentLoaded', function() {
-        const savedPrice = localStorage.getItem('selectedPackagePrice') || "₹0";
-        const savedName = localStorage.getItem('selectedPackageName') || "No Package Selected";
+    let activeMethod = 'Credit Card';
+    let upiVerified = false;
+
+    // Load Data
+    document.addEventListener('DOMContentLoaded', () => {
+        const rawPrice = localStorage.getItem('selectedPackagePrice') || "0";
+        const savedName = localStorage.getItem('selectedPackageName') || "Travel Package";
+
+        const totalAmount = parseFloat(rawPrice.replace(/[^0-9.]/g, ''));
+        const base = totalAmount / 1.18;
+        const gst = totalAmount - base;
+
         document.getElementById('packageNameDisplay').innerText = savedName;
-
-        // Calculate Breakdown
-        const total = parseFloat(savedPrice.replace(/[^0-9.]/g, '')) || 0;
-        const base = total / 1.18;
-        const gst = total - base;
-
-        document.getElementById('displayPrice').innerText = "₹" + total.toLocaleString('en-IN');
+        document.getElementById('displayPrice').innerText = "₹" + totalAmount.toLocaleString('en-IN');
         document.getElementById('basePriceDisplay').innerText = "₹" + Math.round(base).toLocaleString('en-IN');
         document.getElementById('gstDisplay').innerText = "₹" + Math.round(gst).toLocaleString('en-IN');
     });
-                    async function processPayment(btn) {
-        const cardName = document.getElementById('cardHolderName').value.trim();
-        const cardNumber = document.getElementById('cardNumber').value.trim();
-        const expiry = document.getElementById('expiryInput').value.trim();
-        const cvv = document.getElementById('cvvInput').value.trim();
 
-        // 1. Mandatory Field Check
-        if (!cardName || !cardNumber || !expiry || !cvv) {
-            alert("Please fill in all payment details.");
-            return;
+    function switchTab(type) {
+        activeMethod = type === 'card' ? 'Credit Card' : 'UPI';
+        document.getElementById('cardSection').style.display = type === 'card' ? 'block' : 'none';
+        document.getElementById('upiSection').style.display = type === 'upi' ? 'block' : 'none';
+        document.getElementById('tab-card').classList.toggle('selected', type === 'card');
+        document.getElementById('tab-upi').classList.toggle('selected', type === 'upi');
+        upiVerified = (type === 'card');
+    }
+
+    // FIX: Using Unicode \u0040 to prevent Razor syntax error
+    function validateUPI() {
+        const val = document.getElementById('upiId').value.trim().toLowerCase();
+        const blocklist = ['gmail.com', 'yahoo.com', 'hotmail.com'];
+        const domain = val.split('\u0040')[1];
+
+        if (val.includes('\u0040') && !blocklist.includes(domain)) {
+            document.getElementById('upiSuccess').style.display = 'block';
+            document.getElementById('upiError').style.display = 'none';
+            upiVerified = true;
+        } else {
+            document.getElementById('upiError').style.display = 'block';
+            document.getElementById('upiSuccess').style.display = 'none';
+            upiVerified = false;
+        }
+    }
+
+    // Luhn Logic for real card validation
+    function luhnCheck(v) {
+        let sum = 0;
+        for (let i = 0; i < v.length; i++) {
+            let n = parseInt(v.substr(i, 1));
+            if (i % 2 === 0) { n *= 2; if (n > 9) n -= 9; }
+            sum += n;
+        }
+        return (sum % 10) === 0;
+    }
+
+    async function processPayment() {
+        if (activeMethod === 'UPI' && !upiVerified) { alert("Please verify your UPI ID first!"); return; }
+
+        if (activeMethod === 'Credit Card') {
+            const v = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            if (v.length !== 16 || /^(\d)\1+$/.test(v) || !luhnCheck(v)) {
+                alert("Invalid Card Details!"); return;
+            }
         }
 
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+        const btn = document.getElementById('payBtn');
         btn.disabled = true;
+        btn.innerText = "Processing...";
 
-        // 2. Simulated Payment Rules
-        // Case A: All Zeros = Card Declined / Invalid Number
-        if (cardNumber === "0000000000000000") {
-            window.location.href = "/Home/Failure?reason=Invalid Card Number. Please check your details.";
-            return;
-        }
-
-        // Case B: All Ones = Insufficient Funds
-        if (cardNumber === "1111111111111111") {
-            window.location.href = "/Home/Failure?reason=Transaction Declined: Insufficient Funds in your account.";
-            return;
-        }
-
-        // Case C: Real-world Logic (e.g., must be 16 digits)
-        if (cardNumber.length < 16) {
-            window.location.href = "/Home/Failure?reason=Invalid Card Format. Card must be 16 digits.";
-            return;
-        }
-
-        // 3. Proceed to Server for "Valid" cards
-        const bId = parseInt("@ViewBag.BookingId");
-        const bookingData = {
-            BookingId: bId,
+        const payload = {
+            BookingId: parseInt(document.getElementById('bookingIdStore').value),
             Amount: parseFloat(document.getElementById('displayPrice').innerText.replace(/[^0-9.]/g, '')),
-            PaymentMethod: "Credit Card",
+            PaymentMethod: activeMethod,
             TransactionId: "TXN-" + Date.now(),
             Status: "Completed"
         };
 
-        try {
-            const response = await fetch('/Payment/SavePayment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(bookingData)
-            });
+        const res = await fetch('/Payment/SavePayment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-            if (response.ok) {
-                window.location.href = "/Home/Success?txn=" + bookingData.TransactionId;
-            } else {
-                const errorMsg = await response.text();
-                window.location.href = "/Home/Failure?reason=" + encodeURIComponent(errorMsg);
-            }
-        } catch (error) {
-            window.location.href = "/Home/Failure?reason=Network Error: Payment could not be processed.";
+        if (res.ok) {
+            window.location.href = `/Home/Success?txn=${payload.TransactionId}&amt=${payload.Amount}`;
+        } else {
+            window.location.href = "/Home/Failure?reason=Database Error";
         }
     }
 </script>

@@ -5,7 +5,7 @@
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class MakeBookingNullableInPayment : Migration
+    public partial class FixPackageMapping : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
