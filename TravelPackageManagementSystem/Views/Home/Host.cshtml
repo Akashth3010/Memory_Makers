@@ -1,223 +1,337 @@
 ﻿@{
-	ViewData["Title"] = "Become a Host";
-	Layout = null;
+    ViewData["Title"] = "Become a Host";
+    Layout = null;
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<title>easy Safar | Become a Host</title>
+    <meta charset="utf-8" />
+    <title>easy Safar | Become a Host</title>
 
-	<link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-	<link href="~/css/host.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/host.css" rel="stylesheet" />
 </head>
 
 <body>
 
-	<!-- ================= STICKY NAV ================= -->
-	<div class="sticky-nav">
+    <div class="sticky-nav">
+        <div class="top-info-bar">
+            <div class="info-left">
+                <span><i class="fa fa-phone"></i> (+91) 9512535115</span>
+                <span><i class="fa fa-envelope"></i> memorymakers@gmail.com</span>
+            </div>
+            <div class="info-right">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#">Sign in / Sign up</a>
+            </div>
+        </div>
 
-		<div class="top-info-bar">
-			<div class="info-left">
-				<span><i class="fa fa-phone"></i> (+91) 9512535115</span>
-				<span><i class="fa fa-envelope"></i> memorymakers@gmail.com</span>
-			</div>
+        <div class="main-navbar">
+            <div class="brand">
+                <i class="fa-solid fa-location-arrow"></i>
+                <span>easy Safar</span>
+            </div>
+            <div class="menu">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+            </div>
+        </div>
+    </div>
 
-			<div class="info-right">
-				<a href="#"><i class="fab fa-facebook-f"></i></a>
-				<a href="#"><i class="fab fa-linkedin-in"></i></a>
-				<a href="#">Sign in / Sign up</a>
-			</div>
-		</div>
+    <section class="hero-slider">
+        <div class="slides active" style="background-image:url('/lib/Image/Adventure.jpeg')">
+            <div class="hero-content">
+                <h1 class="hero-title">Become a Travel Host</h1>
+                <p class="hero-subtitle">Share your packages. Create memories.</p>
+            </div>
+        </div>
+        <div class="slides" style="background-image:url('/lib/Image/city.jpeg')">
+            <div class="hero-content">
+                <h1 class="hero-title">Share Your Packages</h1>
+                <p class="hero-subtitle">Reach thousands of travelers easily.</p>
+            </div>
+        </div>
+        <div class="slides" style="background-image:url('/lib/Image/travel.jpeg')">
+            <div class="hero-content">
+                <h1 class="hero-title">Grow Your Travel Business</h1>
+                <p class="hero-subtitle">Partner with easy Safar today.</p>
+            </div>
+        </div>
+    </section>
 
-		<div class="main-navbar">
-			<div class="brand">
-				<i class="fa-solid fa-location-arrow"></i>
-				<span>easy Safar</span>
-			</div>
+    <section class="why-host">
+        <h2>Why Become a Host?</h2>
+        <div class="why-cards">
+            <div class="why-card"><i class="fa fa-wallet"></i><h5>Earn More</h5></div>
+            <div class="why-card"><i class="fa fa-globe"></i><h5>Wide Reach</h5></div>
+            <div class="why-card"><i class="fa fa-shield-halved"></i><h5>Trusted Platform</h5></div>
+            <div class="why-card"><i class="fa fa-bolt"></i><h5>Easy Approval</h5></div>
+        </div>
+    </section>
 
-			<div class="menu">
-				<a asp-controller="Home" asp-action="Index">Home</a>
-			</div>
-		</div>
-	</div>
+    <section class="approval-flow" id="approvalFlow">
+        <h2>How Approval Works</h2>
+        <div class="flow-steps">
+            <div class="step"><span>1</span><p>Submit Package Details</p></div>
+            <div class="step"><span>2</span><p>Admin Reviews Information</p></div>
+            <div class="step"><span>3</span><p>Package Goes Live</p></div>
+        </div>
+    </section>
 
-	<!-- ================= HERO SLIDER ================= -->
-	<section class="hero-slider">
+    <section class="form-section">
+        <div class="form-card">
+            <h3 class="form-title">Host Package Submission</h3>
+            <p class="form-subtitle">Please provide accurate details for faster approval</p>
 
-		<div class="slides active" style="background-image:url('/lib/Image/Adventure.jpeg')">
-			<div class="hero-content">
-				<h1 class="hero-title">Become a Travel Host</h1>
-				<p class="hero-subtitle">Share your packages. Create memories.</p>
-			</div>
-		</div>
+            <form id="hostForm" novalidate>
+                <div class="form-group-box">
+                    <h5 class="section-title"><i class="fa fa-address-book"></i> Contact Details</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="field-label">Host / Agency Name *</label>
+                            <input type="text" name="HostAgencyName" placeholder="Enter Agency Name" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Email Address *</label>
+                            <input type="email" name="EmailAddress" placeholder="Enter Email" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Phone Number *</label>
+                            <input type="tel" name="PhoneNumber" placeholder="10 Digit Mobile Number" pattern="[0-9]{10}" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">City / Country *</label>
+                            <input type="text" name="CityCountry" placeholder="e.g. Mumbai, India" required />
+                        </div>
+                    </div>
+                </div>
 
-		<div class="slides" style="background-image:url('/lib/Image/city.jpeg')">
-			<div class="hero-content">
-				<h1 class="hero-title">Share Your Packages</h1>
-				<p class="hero-subtitle">Reach thousands of travelers easily.</p>
-			</div>
-		</div>
+                <div class="form-group-box">
+                    <h5 class="section-title"><i class="fa fa-box"></i> Package Information</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="field-label">Package Name *</label>
+                            <input type="text" name="PackageName" placeholder="e.g. Divine Meghalaya" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Destination *</label>
+                            <input type="text" name="Destination" placeholder="e.g. Shillong" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Specific Location *</label>
+                            <input type="text" name="Location" placeholder="e.g. East Khasi Hills" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Package Type *</label>
+                            <select name="PackageType" required>
+                                <option value="">Select Type</option>
+                                <option>Family</option>
+                                <option>Honeymoon</option>
+                                <option>Friends Trip</option>
+                                <option>Adventure</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Duration *</label>
+                            <input type="text" name="Duration" placeholder="e.g. 5 Days / 4 Nights" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Total Price (INR) *</label>
+                            <input type="number" name="Price" placeholder="Enter total cost" required />
+                        </div>
+                    </div>
+                    <label class="field-label">Package Description *</label>
+                    <textarea name="Description" rows="3" placeholder="Summarize your package details" required></textarea>
+                </div>
 
-		<div class="slides" style="background-image:url('/lib/Image/travel.jpeg')">
-			<div class="hero-content">
-				<h1 class="hero-title">Grow Your Travel Business</h1>
-				<p class="hero-subtitle">Partner with easy Safar today.</p>
-			</div>
-		</div>
+                <div class="form-group-box">
+                    <h5 class="section-title"><i class="fa fa-image"></i> Media & Gallery (Optional)</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="field-label">Main Image URL</label>
+                            <input type="text" name="ImageUrl" placeholder="Link to main photo" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Thumbnail 1 URL</label>
+                            <input type="text" name="ThumbnailUrl1" placeholder="Small image link 1" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Thumbnail 2 URL</label>
+                            <input type="text" name="ThumbnailUrl2" placeholder="Small image link 2" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Thumbnail 3 URL</label>
+                            <input type="text" name="ThumbnailUrl3" placeholder="Small image link 3" />
+                        </div>
+                    </div>
+                </div>
 
-	</section>
+                <div class="form-group-box">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="section-title m-0"><i class="fa fa-calendar-alt"></i> Day-by-Day Itinerary</h5>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="addDay()"><i class="fa fa-plus"></i> Add Day</button>
+                    </div>
+                    <div id="itineraryContainer">
+                        <div class="itinerary-item">
+                            <div class="day-badge">Day 1</div>
+                            <label class="field-label">Activity Title *</label>
+                            <input type="text" class="it-title" placeholder="e.g. Arrival & Hotel Check-in" required />
+                            <label class="field-label">Activity Description *</label>
+                            <textarea class="it-desc" placeholder="Describe the day's events" required></textarea>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="field-label">Inclusions</label>
+                                    <input type="text" class="it-inc" placeholder="Breakfast; SUV; Guide" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="field-label">Exclusions</label>
+                                    <input type="text" class="it-exc" placeholder="Lunch; Personal Tips" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-	<!-- ================= WHY HOST ================= -->
-	<section class="why-host">
-		<h2>Why Become a Host?</h2>
-		<div class="why-cards">
-			<div class="why-card"><i class="fa fa-wallet"></i><h5>Earn More</h5></div>
-			<div class="why-card"><i class="fa fa-globe"></i><h5>Wide Reach</h5></div>
-			<div class="why-card"><i class="fa fa-shield-halved"></i><h5>Trusted Platform</h5></div>
-			<div class="why-card"><i class="fa fa-bolt"></i><h5>Easy Approval</h5></div>
-		</div>
-	</section>
+                <button type="submit" class="submit-btn">Submit Package for Review</button>
+                <div class="trust-box">🔒 Your details are encrypted and manually reviewed by the admin.</div>
+            </form>
+        </div>
+    </section>
 
-	<!-- ================= APPROVAL PROCESS ================= -->
-	<section class="approval-flow" id="approvalFlow">
-		<h2>How Approval Works</h2>
+    <div class="popup-overlay" id="successPopup">
+        <div class="popup-box">
+            <i class="fa-solid fa-circle-check" style="color: #48bb78; font-size: 50px; margin-bottom: 20px;"></i>
+            <h4 style="font-weight: 800; margin-bottom: 10px;">Submission Successful!</h4>
+            <p>Your package has been sent to the admin for approval. You will hear from us soon.</p>
+            <button onclick="closePopup()" style="background: #3498db; color: white; border: none; padding: 12px 40px; border-radius: 10px; font-weight: 700; margin-top: 20px; cursor: pointer;">OK</button>
+        </div>
+    </div>
 
-		<div class="flow-steps">
-			<div class="step"><span>1</span><p>Submit Package Details</p></div>
-			<div class="step"><span>2</span><p>Admin Reviews Information</p></div>
-			<div class="step"><span>3</span><p>Package Goes Live</p></div>
-		</div>
-	</section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        /* HERO SLIDER */
+        const slides = document.querySelectorAll('.slides');
+        let slideIndex = 0;
+        setInterval(() => {
+            slides[slideIndex].classList.remove('active');
+            slideIndex = (slideIndex + 1) % slides.length;
+            slides[slideIndex].classList.add('active');
+        }, 3000);
 
-	<!-- ================= FORM ================= -->
-	<section class="form-section">
-		<div class="form-card">
+        /* DYNAMIC ITINERARY */
+        function addDay() {
+            const container = document.getElementById("itineraryContainer");
+            const dayCount = container.getElementsByClassName("itinerary-item").length + 1;
+            const dayHtml = `
+                <div class="itinerary-item mt-3">
+                    <div class="d-flex justify-content-between">
+                        <div class="day-badge">Day ${dayCount}</div>
+                        <button type="button" class="btn-close btn-sm" onclick="this.parentElement.parentElement.remove()"></button>
+                    </div>
+                    <label class="field-label">Activity Title *</label>
+                    <input type="text" class="it-title" placeholder="What happens on Day ${dayCount}?" required />
+                    <label class="field-label">Activity Description *</label>
+                    <textarea class="it-desc" placeholder="Describe the day's events" required></textarea>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="field-label">Inclusions</label>
+                            <input type="text" class="it-inc" placeholder="e.g. Dinner; Camping" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Exclusions</label>
+                            <input type="text" class="it-exc" placeholder="e.g. Alcohol; Camera Fees" />
+                        </div>
+                    </div>
+                </div>`;
+            container.insertAdjacentHTML('beforeend', dayHtml);
+        }
 
-			<h3 class="form-title">Host Package Submission</h3>
-			<p class="form-subtitle">Please provide accurate details for faster approval</p>
+        /* RE-ANIMATING APPROVAL FLOW */
+        const stepObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const steps = entry.target.querySelectorAll('.step');
+                if (entry.isIntersecting) {
+                    steps.forEach(step => step.classList.add('show'));
+                } else {
+                    steps.forEach(step => step.classList.remove('show'));
+                }
+            });
+        }, { threshold: 0.2 });
 
-			<form id="hostForm">
+        stepObserver.observe(document.querySelector('.flow-steps'));
 
-				<h5 class="section-title">Contact Details</h5>
+        /* FORM SUBMISSION & AUTO-CLEAR */
+        document.getElementById("hostForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            if(!this.checkValidity()) {
+                alert("Please fill all required (*) fields.");
+                return;
+            }
 
-				<input type="text" placeholder="Host / Agency Name *" required />
-				<input type="email" placeholder="Email Address *" required />
-				<input type="tel" placeholder="Phone Number *"
-					   pattern="[0-9]{10}" maxlength="10" required />
-				<input type="text" placeholder="City / Country *" required />
+            let itineraries = [];
+            document.querySelectorAll(".itinerary-item").forEach((item, index) => {
+                itineraries.push({
+                    dayNumber: index + 1,
+                    title: item.querySelector(".it-title").value,
+                    desc: item.querySelector(".it-desc").value,
+                    inclusions: item.querySelector(".it-inc").value,
+                    exclusions: item.querySelector(".it-exc").value
+                });
+            });
 
-				<hr />
+            let data = {
+                HostAgencyName: this.querySelector('[name="HostAgencyName"]').value,
+                EmailAddress: this.querySelector('[name="EmailAddress"]').value,
+                PhoneNumber: this.querySelector('[name="PhoneNumber"]').value,
+                CityCountry: this.querySelector('[name="CityCountry"]').value,
+                PackageName: this.querySelector('[name="PackageName"]').value,
+                Destination: this.querySelector('[name="Destination"]').value,
+                Location: this.querySelector('[name="Location"]').value,
+                PackageType: this.querySelector('[name="PackageType"]').value,
+                Duration: this.querySelector('[name="Duration"]').value,
+                Price: this.querySelector('[name="Price"]').value,
+                Description: this.querySelector('[name="Description"]').value,
+                ImageUrl: this.querySelector('[name="ImageUrl"]').value,
+                ThumbnailUrl1: this.querySelector('[name="ThumbnailUrl1"]').value,
+                ThumbnailUrl2: this.querySelector('[name="ThumbnailUrl2"]').value,
+                ThumbnailUrl3: this.querySelector('[name="ThumbnailUrl3"]').value,
+                Itineraries: itineraries
+            };
 
-				<h5 class="section-title">Package Details</h5>
+            $.ajax({
+                url: '/Home/SubmitPackage',
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    // Always clear and show popup on success
+                    document.getElementById("successPopup").style.display = "flex";
+                    document.getElementById("hostForm").reset();
 
-				<input type="text" placeholder="Package Name *" required />
-				<input type="text" id="destinationInput" placeholder="Destination *" required />
+                    // Reset itinerary to just Day 1
+                    document.getElementById("itineraryContainer").innerHTML = `
+                        <div class="itinerary-item">
+                            <div class="day-badge">Day 1</div>
+                            <label class="field-label">Activity Title *</label>
+                            <input type="text" class="it-title" placeholder="e.g. Arrival & Hotel Check-in" required />
+                            <label class="field-label">Activity Description *</label>
+                            <textarea class="it-desc" placeholder="Describe the day's events" required></textarea>
+                            <div class="row">
+                                <div class="col-md-6"><label class="field-label">Inclusions</label><input type="text" class="it-inc" placeholder="Inclusions" /></div>
+                                <div class="col-md-6"><label class="field-label">Exclusions</label><input type="text" class="it-exc" placeholder="Exclusions" /></div>
+                            </div>
+                        </div>`;
+                },
+                error: function() {
+                    alert("Submission failed. Please try again.");
+                }
+            });
+        });
 
-				<select required>
-					<option value="">Select Package Type *</option>
-					<option>Family</option>
-					<option>Honeymoon</option>
-					<option>Friends Trip</option>
-					<option>Adventure</option>
-				</select>
-
-				<input type="number" placeholder="Duration (Days) *" required />
-				<input type="number" placeholder="Price *" required />
-
-				<textarea rows="4" placeholder="Package Description *" required></textarea>
-
-				<div class="upload-box">
-					<label>Upload Package Image</label>
-					<input type="file" />
-				</div>
-
-				<button type="submit" class="submit-btn">Submit for Approval</button>
-
-				<p class="status-text">
-					✨ We’ve received your request!
-					<a href="#">Track your status here</a>
-				</p>
-
-				<div class="trust-box">🔒 Your details are safe and reviewed manually.</div>
-				<div class="warning-box">⚠️ Please ensure all information is accurate.</div>
-
-			</form>
-		</div>
-	</section>
-
-	<!-- ================= POPUP ================= -->
-	<div class="popup-overlay" id="successPopup">
-		<div class="popup-box success">
-			<i class="fa-solid fa-circle-check"></i>
-			<h4>Details Sent!</h4>
-			<p>Your package has been sent for admin approval.</p>
-			<button onclick="closePopup()">OK</button>
-		</div>
-	</div>
-
-	<script>
-		/* HERO SLIDER */
-		const slides = document.querySelectorAll('.slides');
-		let index = 0;
-		setInterval(() => {
-			slides[index].classList.remove('active');
-			index = (index + 1) % slides.length;
-			slides[index].classList.add('active');
-		}, 2000);
-
-		/* FORM SUBMIT */
-		document.getElementById("hostForm").addEventListener("submit", function (e) {
-			e.preventDefault();
-
-			let formData = new FormData();
-			formData.append("HostAgencyName", this.querySelector('input[placeholder*="Agency"]').value);
-			formData.append("EmailAddress", this.querySelector('input[type="email"]').value);
-			formData.append("PhoneNumber", this.querySelector('input[type="tel"]').value);
-			formData.append("CityCountry", this.querySelector('input[placeholder*="City"]').value);
-			formData.append("PackageName", this.querySelector('input[placeholder="Package Name *"]').value);
-			formData.append("Destination", document.getElementById("destinationInput").value);
-			formData.append("PackageType", this.querySelector('select').value);
-			formData.append("Duration", this.querySelector('input[placeholder*="Duration"]').value);
-			formData.append("Price", this.querySelector('input[placeholder="Price *"]').value);
-			formData.append("Description", this.querySelector('textarea').value);
-
-			fetch('/Home/SubmitPackage', {
-				method: 'POST',
-				body: formData
-			})
-			.then(res => res.json())
-			.then(data => {
-				if (data.success || data.Success) {
-					document.getElementById("successPopup").style.display = "flex";
-					this.reset();
-				} else {
-					alert(data.message);
-				}
-			});
-		});
-
-		/* APPROVAL FLOW ANIMATION - RESTORED & FIXED */
-		const stepObserver = new IntersectionObserver(entries => {
-			entries.forEach(entry => {
-				if (entry.isIntersecting) {
-					entry.target.classList.add("show");
-				} else {
-					entry.target.classList.remove("show");
-				}
-			});
-		}, {
-			threshold: 0.3
-		});
-
-		// This single line triggers the observation for all steps
-		document.querySelectorAll(".step").forEach(step => stepObserver.observe(step));
-
-		function closePopup() {
-			document.getElementById("successPopup").style.display = "none";
-		}
-	</script>
+        function closePopup() {
+            document.getElementById("successPopup").style.display = "none";
+        }
+    </script>
 </body>
 </html>
