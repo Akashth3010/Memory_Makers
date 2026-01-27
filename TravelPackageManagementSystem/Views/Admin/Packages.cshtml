@@ -130,7 +130,7 @@
         <p>Are you sure you want to delete this package? This action cannot be undone.</p>
         <div class="confirm-btns">
             <button class="no-btn" onclick="hideDeleteConfirm()">No, Keep it</button>
-            <button class="yes-btn" id="confirmDeleteBtn" style="background: #e74c3c;">Yes, Delete</button>
+            <button class="yes-btn" id="confirmDeleteBtn" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer;">Yes, Delete</button>
         </div>
     </div>
 </div>
@@ -247,6 +247,7 @@
             $("#pThumb2").val(data.thumb2);
             $("#pThumb3").val(data.thumb3);
 
+            // Re-render Itinerary from database
             $("#itineraryContainerAdmin").html("");
             if(data.itineraries && data.itineraries.length > 0) {
                 data.itineraries.forEach(it => addDayRow(it));
@@ -309,7 +310,6 @@
         });
     }
 
-    // --- DELETE WITH CONFIRMATION ---
     function prepareDelete(id) {
         packageToDeleteId = id;
         $("#deleteConfirmBox").css("display", "flex");

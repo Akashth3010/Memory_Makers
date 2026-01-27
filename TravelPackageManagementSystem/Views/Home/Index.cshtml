@@ -47,8 +47,10 @@
 
 @* STEP 2: TOP DESTINATIONS *@
 <div id="destination-section" class="py-5">
-    <partial name="Destination" model="Model" />
+    @* <partial name="Destination" model="Model" /> *@
+    <partial name="Destination" model="Model ?? Enumerable.Empty<TravelPackageManagementSystem.Repository.Models.Destination>()" />
 </div>
+@* Views/Home/Index.cshtml *@
 
 @* STEP 3: TRENDING SECTION (FIXED GRID) *@
 <div id="trending-section" class="py-5">

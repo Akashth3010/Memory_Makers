@@ -6,7 +6,6 @@
     int safeId = ViewBag.BookingId != null ? (int)ViewBag.BookingId : 0;
     string qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TravelBooking_" + safeId;
 }
-
 <style>
     :root {
         --primary-orange: #ff7b54;

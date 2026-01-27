@@ -5,7 +5,7 @@
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class FixPaymentSchema : Migration
+    public partial class SyncFinalStructure : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
