@@ -156,43 +156,43 @@ namespace TravelPackageManagementSystem.Controllers
         }
 
         // ---------------- BOOKING & PAYMENT ----------------
-        [HttpPost]
-        public async Task<IActionResult> CreateBooking(int PackageId, DateTime TravelDate, int Guests, string ContactPhone)
-        {
-            var package = await _context.TravelPackages.FindAsync(PackageId);
-            if (package == null) return NotFound();
+        //[HttpPost]
+        //public async Task<IActionResult> CreateBooking(int PackageId, DateTime TravelDate, int Guests, string ContactPhone)
+        //{
+        //    var package = await _context.TravelPackages.FindAsync(PackageId);
+        //    if (package == null) return NotFound();
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name) ?? await _context.Users.FirstOrDefaultAsync();
-            if (user == null) return Unauthorized();
+        //    var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name) ?? await _context.Users.FirstOrDefaultAsync();
+        //    if (user == null) return Unauthorized();
 
-            var booking = new Booking
-            {
-                PackageId = PackageId,
-                UserId = user.UserId,
-                BookingDate = DateTime.Now,
-                TravelDate = TravelDate,
-                Guests = Guests,
-                ContactPhone = ContactPhone,
-                TotalAmount = package.Price * Guests,
-                Status = BookingStatus.PENDING
-            };
+        //    var booking = new Booking
+        //    {
+        //        PackageId = PackageId,
+        //        UserId = user.UserId,
+        //        BookingDate = DateTime.Now,
+        //        TravelDate = TravelDate,
+        //        Guests = Guests,
+        //        ContactPhone = ContactPhone,
+        //        TotalAmount = package.Price * Guests,
+        //        Status = BookingStatus.PENDING
+        //    };
 
-            _context.Bookings.Add(booking);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("PaymentPage", new { bookingId = booking.BookingId });
-        }
+        //    _context.Bookings.Add(booking);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction("PaymentPage", new { bookingId = booking.BookingId });
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> ConfirmPayment(int bookingId)
-        {
-            var booking = await _context.Bookings.FindAsync(bookingId);
-            if (booking != null)
-            {
-                booking.Status = BookingStatus.CONFIRMED;
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction("MyBookings");
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> ConfirmPayment(int bookingId)
+        //{
+        //    var booking = await _context.Bookings.FindAsync(bookingId);
+        //    if (booking != null)
+        //    {
+        //        booking.Status = BookingStatus.CONFIRMED;
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    return RedirectToAction("MyBookings");
+        //}
 
         public async Task<IActionResult> MyBookings()
         {

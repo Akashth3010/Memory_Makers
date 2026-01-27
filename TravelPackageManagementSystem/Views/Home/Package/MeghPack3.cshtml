@@ -4,6 +4,7 @@
     ViewBag.Title = Model.PackageName;
     Layout = "_Layout";
 }
+<link rel="stylesheet" href="~/css/MeghPack.css" asp-append-version="true" />
 <style>
     
     .hero-section {
@@ -30,56 +31,7 @@
         color: white;
         margin-bottom: 30px;
         border-radius: 0 0 20px 20px;
-    }
-
-    /* Sticky Sidebar with specific visibility fixes */
-    .booking-sidebar-compact {
-        position: sticky;
-        top: 20px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        border: 1px solid #eee;
-        padding: 15px;
-        z-index: 100;
-    }
-
-    .compact-label {
-        font-size: 10px;
-        font-weight: 700;
-        color: #7f8c8d;
-        text-transform: uppercase;
-        margin-bottom: 2px;
-        display: block;
-    }
-
-    .compact-input {
-        font-size: 13px !important;
-        height: 34px !important;
-        background-color: #f8f9fa !important;
-        border: none !important;
-        margin-bottom: 8px;
-    }
-
-    .price-box-ui {
-        background: #eef7ff;
-        border-radius: 8px;
-        padding: 10px;
-        margin-bottom: 12px;
-    }
-
-    .thumb-nail {
-        width: 75px;
-        height: 55px;
-        object-fit: cover;
-        border-radius: 6px;
-        cursor: pointer;
-        border: 2px solid transparent;
-    }
-
-        .thumb-nail.active {
-            border-color: #007bff;
-        }
+    }    
 </style>
 
 @* <div class="hero-section shadow">
@@ -208,7 +160,7 @@
             <div class="booking-sidebar-compact">
                 <h6 class="fw-bold mb-3">Book This Package</h6>
 
-                <form asp-action="CreateBooking" method="post">
+                <form asp-action="Create" asp-controller="Bookings" method="post">
                     <input type="hidden" name="PackageId" value="@Model.PackageId" />
 
                     <span class="compact-label">Travel Date</span>

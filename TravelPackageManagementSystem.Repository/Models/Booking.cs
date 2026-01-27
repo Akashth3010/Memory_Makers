@@ -28,6 +28,10 @@ namespace TravelPackageManagementSystem.Repository.Models
         public string ContactPhone { get; set; } = string.Empty; // Fixed: Initialized
 
         [Required]
+        [EmailAddress] // Adds validation to ensure it's a valid email format
+        public string ContactEmail { get; set; } = string.Empty;
+
+        [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
 

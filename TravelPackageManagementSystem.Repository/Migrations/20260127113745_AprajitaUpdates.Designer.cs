@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260127094658_SyncFinalStructure")]
-    partial class SyncFinalStructure
+    [Migration("20260127113745_AprajitaUpdates")]
+    partial class AprajitaUpdates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

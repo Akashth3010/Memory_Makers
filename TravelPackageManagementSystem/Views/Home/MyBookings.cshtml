@@ -112,10 +112,12 @@
                                         <button class="btn btn-sm btn-outline-primary"
                                                 onclick="generatePDF({
                                                     packageName: '@(booking.TravelPackage?.PackageName?.Replace("'", "\\'"))',
+                                                    userName: '@(booking.User?.Username ?? Context.Session.GetString("UserName") ?? "Guest")',
                                                     ref: 'BK-@booking.BookingId',
                                                     date: '@booking.TravelDate.ToString("dd MMM yyyy")',
                                                     amount: '@booking.TotalAmount.ToString("N0")',
                                                     phone: '@booking.ContactPhone',
+                                                    email: '@(string.IsNullOrEmpty(booking.ContactEmail) ? "missing-email@test.com" : booking.ContactEmail)',
                                                     guests: '@booking.Guests',
                                                     status: '@booking.Status'
                                             })">
@@ -146,7 +148,9 @@
 
         <div style="margin-top: 30px;">
             <p><strong>Package:</strong> <span id="pdfPackage"></span></p>
+            <p><strong>Name:</strong> <span id="pdfName"></span></p>
             <p><strong>Customer Phone:</strong> <span id="pdfPhone"></span></p>
+            <p><strong>Customer Email:</strong> <span id="pdfEmail"></span></p>
             <p><strong>Total Guests:</strong> <span id="pdfGuests"></span></p>
             <p><strong>Status:</strong> <span id="pdfStatus" style="color: green; font-weight: bold;"></span></p>
         </div>
@@ -224,12 +228,15 @@
     }
 
         function generatePDF(data) {
+
         // 1. Fill the hidden template with data
         document.getElementById('pdfPackage').innerText = data.packageName;
         document.getElementById('pdfRef').innerText = data.ref;
+        document.getElementById('pdfName').innerText = data.userName;
         document.getElementById('pdfDate').innerText = "Travel Date: " + data.date;
         document.getElementById('pdfAmount').innerText = "₹" + data.amount;
         document.getElementById('pdfPhone').innerText = data.phone;
+        document.getElementById('pdfEmail').innerText = data.email;
         document.getElementById('pdfGuests').innerText = data.guests;
         document.getElementById('pdfStatus').innerText = data.status;
 
