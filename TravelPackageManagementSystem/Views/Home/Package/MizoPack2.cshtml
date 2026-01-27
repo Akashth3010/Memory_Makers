@@ -1,6 +1,9 @@
 ﻿@{
+
     ViewBag.Title = "MizoPack2 - Local Festivals";
+
     Layout = null;
+
 }
 
 <!DOCTYPE html>
@@ -11,7 +14,7 @@
     <link rel="stylesheet" href="/css/PackTD.css" />
 </head>
 <body>
-
+    <partial name="_Navbar" />
     <section class="hero">
         <img class="hero-img" src="/lib/Image/m21.jpg" alt="Mizo Festival" />
         <div class="hero-content">
@@ -26,7 +29,7 @@
             <div class="left-col">
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Discover Mizoram: Local Festivals</h2>
+                        <h2 id="packageName">Discover Mizoram: Local Festivals</h2>
                         <div class="rating">★ 4.7 (528 reviews)</div>
                     </div>
                     <div style="text-align:right;">
@@ -53,7 +56,7 @@
                             <h4>Day 1 — Arrival</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Welcome dinner with cultural performance and orientation.</p>
                         </div>
                     </div>
@@ -63,7 +66,7 @@
                             <h4>Day 2 — Chapchar Kut</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Festival parade, bamboo dance (Cheraw), and traditional music showcases.</p>
                         </div>
                     </div>
@@ -73,7 +76,7 @@
                             <h4>Day 3 — Village Visit</h4>
                             <span class="toggle">+</span>
                         </div>
-                        <div class="day-body">
+                        <div class="day-body" style="display:none;">
                             <p>Explore local handicrafts, traditional cuisine, and interaction with village elders.</p>
                         </div>
                     </div>
@@ -103,24 +106,23 @@
             <div class="right-col">
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
-                    <form id="bookingForm">
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
                         <label>Travel Date</label>
-                        <input type="date" required />
+                        <label for="travelDate">Travel Date</label>
+                        <input type="date" id="travelDate" name="travelDate" required />
+
 
                         <label>Guests</label>
                         <select id="guests">
                             <option value="1">1 person</option>
                             <option value="2">2 persons</option>
                             <option value="3">3 persons</option>
-                            <option value="4">4 persons</option>
                         </select>
 
                         <label>Contact Email</label>
                         <input type="email" placeholder="you@example.com" required />
-                        <label for="phone">Phone</label>
-                        <input id="phone" type="tel" placeholder="+91 98765 43210" required />
 
-                        <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;" asp-controller="Home" asp-action="PaymentPage">Book Now</button>
+                        <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Book Now</button>
                     </form>
                 </aside>
             </div>
@@ -130,70 +132,124 @@
     <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; justify-content:center; align-items:center;">
         <img id="lightboxImg" src="" style="max-width:90%; max-height:80%;" />
     </div>
-
+    <partial name="_Footer" />
     <script>
+
         document.addEventListener("DOMContentLoaded", function () {
+
             // 1. GALLERY & LIGHTBOX
+
             const main = document.getElementById('mainImage');
+
             const thumbs = document.querySelectorAll('.thumb');
+
             const lightbox = document.getElementById('lightbox');
+
             const lightboxImg = document.getElementById('lightboxImg');
 
             thumbs.forEach(t => {
+
                 t.addEventListener('click', () => {
+
                     thumbs.forEach(x => x.classList.remove('active'));
+
                     t.classList.add('active');
+
                     const src = t.getAttribute('data-src');
+
                     main.style.backgroundImage = `url('${src}')`;
+
                 });
+
             });
 
             main.addEventListener('click', () => {
+
                 const currentBg = main.style.backgroundImage.slice(5, -2).replace(/"/g, "");
+
                 lightboxImg.src = currentBg;
+
                 lightbox.style.display = 'flex';
+
             });
 
             lightbox.addEventListener('click', () => {
+
                 lightbox.style.display = 'none';
+
             });
 
             // 2. ITINERARY DROPDOWN
+
             const headers = document.querySelectorAll('.day-header');
+
             headers.forEach(h => {
+
                 h.addEventListener('click', () => {
+
                     const body = h.nextElementSibling;
+
                     const toggle = h.querySelector('.toggle');
 
                     if (body.style.display === "block") {
+
                         body.style.display = "none";
+
                         toggle.textContent = "+";
+
                     } else {
+
                         body.style.display = "block";
+
                         toggle.textContent = "-";
+
                     }
+
                 });
+
             });
 
             // 3. PRICE UPDATE
+
             const guestSelect = document.getElementById('guests');
+
             const totalDisplay = document.getElementById('totalPayable');
+
             const summaryDisplay = document.getElementById('priceSummary');
+
             const basePrice = 12499;
+
             const taxes = 1250;
 
             guestSelect.addEventListener('change', function() {
-                const count = parseInt(this.value);
-                const total = (basePrice + taxes) * count;
-                summaryDisplay.textContent = count + (count > 1 ? " persons" : " person");
-                totalDisplay.textContent = "₹" + total.toLocaleString('en-IN');
-            });
-        });
-            // Get today's date in YYYY-MM-DD format
-        const today = new Date().toISOString().split('T')[0];
 
-        // Set the 'min' attribute so back dates are greyed out
-        document.getElementById('travelDate').setAttribute('min', today);
+                const count = parseInt(this.value);
+
+                const total = (basePrice + taxes) * count;
+
+                summaryDisplay.textContent = count + (count > 1 ? " persons" : " person");
+
+                totalDisplay.textContent = "₹" + total.toLocaleString('en-IN');
+
+            });
+
+            // 4. DATE RESTRICTION
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('travelDate');
+            if(dateInput) dateInput.setAttribute('min', today);
+
+            // 5. SAVE DATA ON SUBMIT
+            const bookingForm = document.getElementById('bookingForm');
+            bookingForm.onsubmit = function() {
+                const name = document.getElementById('packageName').innerText;
+                const price = document.getElementById('totalPayable').innerText;
+
+                localStorage.setItem('selectedPackageName', name);
+                localStorage.setItem('selectedPackagePrice', price);
+
+                return true;
+            };
+        });
     </script>
 </body>
 </html>

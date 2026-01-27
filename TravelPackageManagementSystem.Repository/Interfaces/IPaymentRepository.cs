@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using TravelPackageManagementSystem.Repository.Models;
 
-namespace TravelPackageManagementSystem.Repository.Interfaces
+public interface IPaymentRepository
 {
-    internal class IPaymentRepository
-    {
-    }
+    Task<IEnumerable<Payment>> GetAllPaymentsAsync();
+    Task<Payment> GetPaymentByIdAsync(int id);
+    Task AddPaymentAsync(Payment payment);
+    // Ensure this matches the implementation
+    Task<int> SaveChangesAsync();
 }

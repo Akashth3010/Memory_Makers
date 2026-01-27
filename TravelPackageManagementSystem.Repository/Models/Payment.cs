@@ -1,40 +1,39 @@
-﻿using System.ComponentModel;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TravelPackageManagementSystem.Repository.Models;
 
 namespace TravelPackageManagementSystem.Repository.Models
 {
-    public enum PaymentStatus
-    {
-        SUCCESS,
-        FAILED,
-        PENDING
-    }
     public class Payment
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PaymentId { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(10,2)")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be greater than 0")]
-        [Display(Name = "Amount")]
-        public decimal PaymentAmount { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Amount { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-        [Display(Name = "Payment Date")]
         public DateTime PaymentDate { get; set; } = DateTime.Now;
 
         [Required]
-        public PaymentStatus Status { get; set; } = PaymentStatus.PENDING;
+        [StringLength(50)]
+        public string PaymentMethod { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string TransactionId { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string Status { get; set; }
 
         [Required]
         public int BookingId { get; set; }
-        //Navigation Property
+
+        // FIX: Add the '?' to make it nullable. 
+        // This prevents the "Booking field is required" validation error.
         [ForeignKey("BookingId")]
-        public virtual Booking Booking { get; set; }
+        public virtual Booking? Booking { get; set; }
     }
 }

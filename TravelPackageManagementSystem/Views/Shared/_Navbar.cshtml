@@ -1,0 +1,31 @@
+﻿<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>@ViewData["Title"] - Easy Safar</title>
+ 
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+ 
+    <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
+ 
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+ 
+ 
+<nav class="safar-navbar">
+<div class="nav-container">
+<a class="nav-logo" asp-controller="Home" asp-action="Index">
+
+            Easy<span>Safar</span>
+</a>
+ 
+        <ul class="navbar-nav-row">
+<li><a class="nav-link" href="@Url.Action("Index", "Home")#top-destinations">Holidays</a></li>
+<li><a class="nav-link" asp-controller="Home" asp-action="TravelGuide">Travel Guide</a></li>
+<li><a class="nav-link" asp-controller="Home" asp-action="CustomerSupport">Support</a></li>
+<li><a class="nav-link" asp-controller="Home" asp-action="MyBookings">My Bookings</a></li>
+</ul>
+ 
+        <a asp-controller="Home" asp-action="Booking" class="nav-btn-slim">Book Now</a>
+</div>
+</nav>
+ 

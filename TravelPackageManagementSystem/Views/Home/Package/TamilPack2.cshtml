@@ -1,6 +1,9 @@
 ﻿@{
+
     ViewBag.Title = "TamilPack2 - Pondicherry & Mahabalipuram";
+
     Layout = null;
+
 }
 
 <!DOCTYPE html>
@@ -11,7 +14,7 @@
     <link rel="stylesheet" href="/css/PackTD.css" />
 </head>
 <body>
-
+    <partial name="_Navbar" />
     <section class="hero">
         <img class="hero-img" src="/lib/Image/t21.jpg" alt="Pondicherry Beach" />
         <div class="hero-content">
@@ -27,7 +30,7 @@
 
                 <div class="package-header">
                     <div class="package-title">
-                        <h2>Discover Tamil Nadu: Pondicherry & Mahabalipuram</h2>
+                        <h2 id="packageName">Discover Tamil Nadu: Pondicherry & Mahabalipuram</h2>
                         <div class="rating">★ 4.7 (689 reviews)</div>
                     </div>
                     <div style="text-align:right;">
@@ -49,6 +52,7 @@
                 <div style="margin-top:16px;">
                     <h3>Overview</h3>
                     <p>
+
                         Experience the charm of Pondicherry’s French Quarter, the spiritual calm of Auroville, and the UNESCO heritage temples of Mahabalipuram. Comfortable stays, guided tours, and private transfers are included.
                     </p>
                 </div>
@@ -120,8 +124,10 @@
             <div class="right-col">
                 <aside class="booking-box">
                     <h3>Book This Package</h3>
-                    <form method="post" action="/Home/PaymentPage">
-                        <label>Travel Date</label><input type="date" required />
+                    <form id="bookingForm" method="post" action="/Home/PaymentPage">
+                        <label>Travel Date</label>
+                        <input id="travelDate" type="date" required />
+
                         <label>Guests</label>
                         <select id="guestSelect">
                             <option value="1">1 person</option>
@@ -129,11 +135,13 @@
                             <option value="3">3 persons</option>
                             <option value="4">4 persons</option>
                         </select>
+
                         <label for="contactEmail">Contact Email</label>
                         <input id="contactEmail" type="email" placeholder="you@example.com" required />
 
                         <label for="phone">Phone</label>
                         <input id="phone" type="tel" placeholder="+91 98765 43210" required />
+
                         <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Book Now</button>
                     </form>
                 </aside>
@@ -144,64 +152,124 @@
     <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; justify-content:center; align-items:center;">
         <img id="lightboxImg" src="" style="max-width:90%; max-height:80%;" />
     </div>
-
+    <partial name="_Footer" />
     <script>
+
         document.addEventListener("DOMContentLoaded", function () {
+
             // 1. GALLERY LOGIC
+
             const mainImage = document.getElementById('mainImage');
+
             const thumbnails = document.querySelectorAll('.thumb');
+
             const lightbox = document.getElementById('lightbox');
+
             const lightboxImg = document.getElementById('lightboxImg');
 
             thumbnails.forEach(thumb => {
+
                 thumb.addEventListener('click', function () {
+
                     const newSrc = this.getAttribute('data-src');
+
                     mainImage.style.backgroundImage = `url('${newSrc}')`;
+
                     thumbnails.forEach(t => t.classList.remove('active'));
+
                     this.classList.add('active');
+
                 });
+
             });
 
             mainImage.addEventListener('click', () => {
+
                 const currentBg = mainImage.style.backgroundImage.slice(5, -2).replace(/"/g, "");
+
                 lightboxImg.src = currentBg;
+
                 lightbox.style.display = 'flex';
+
             });
 
             lightbox.addEventListener('click', () => { lightbox.style.display = 'none'; });
 
             // 2. ITINERARY DROPDOWN LOGIC
+
             const headers = document.querySelectorAll('.day-header');
+
             headers.forEach(header => {
+
                 header.addEventListener('click', function() {
+
                     const body = this.nextElementSibling;
+
                     const toggle = this.querySelector('.toggle');
 
                     if (body.style.display === "block") {
+
                         body.style.display = "none";
+
                         toggle.textContent = "+";
+
                     } else {
+
                         body.style.display = "block";
+
                         toggle.textContent = "-";
+
                     }
+
                 });
+
             });
 
             // 3. PRICE UPDATE LOGIC
+
             const guestSelect = document.getElementById('guestSelect');
+
             const totalDisplay = document.getElementById('totalPayable');
+
             const summaryDisplay = document.getElementById('priceSummary');
 
             const basePrice = 13499;
+
             const taxes = 1350;
 
             guestSelect.addEventListener('change', function() {
+
                 const count = parseInt(this.value);
+
                 const total = (basePrice + taxes) * count;
+
                 summaryDisplay.textContent = count + (count > 1 ? " persons" : " person");
+
                 totalDisplay.textContent = "₹" + total.toLocaleString('en-IN');
+
             });
+
+            // 4. DATE RESTRICTION
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('travelDate');
+            if(dateInput) {
+                dateInput.setAttribute('min', today);
+            }
+
+            // 5. STORAGE & SUBMISSION LOGIC
+            const bookingForm = document.getElementById('bookingForm');
+            bookingForm.onsubmit = function() {
+                const name = document.getElementById('packageName').innerText;
+                const price = document.getElementById('totalPayable').innerText;
+
+                // Save to local storage for use on the payment/confirmation page
+                localStorage.setItem('selectedPackageName', name);
+                localStorage.setItem('selectedPackagePrice', price);
+
+                return true;
+            };
         });
+
     </script>
 </body>
 </html>

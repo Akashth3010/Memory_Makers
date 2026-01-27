@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using TravelPackageManagementSystem.Application.Models;
 using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Models;
-using Microsoft.EntityFrameworkCore;
+//using TravelPackageManagementSystem.Application.Data;
+using TravelPackageManagementSystem.Application.Models;
 
 namespace TravelPackageManagementSystem.Controllers
 {
@@ -89,6 +94,28 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        public async Task<IActionResult> Destination(string state)
+        {
+            // Fix: We navigate from Package -> ParentDestination -> GalleryImages
+            var packages = await _context.TravelPackages
+                .Include(p => p.ParentDestination)
+                    .ThenInclude(d => d.GalleryImages)
+                .Where(p => p.ParentDestination.StateName.ToLower() == state.ToLower()
+                         && p.IsTrending == false
+                         && p.ApprovalStatus == ApprovalStatus.Approved)
+                .ToListAsync();
+
+            ViewBag.StateName = state;
+
+            // Check if we found any packages to avoid errors in the view
+            if (packages == null || !packages.Any())
+            {
+                // Optionally fetch just the Destination if no packages exist to still show gems
+                return View("TopDestination/DestinationTD", new List<TravelPackage>());
+            }
+
+            return View("TopDestination/DestinationTD", packages);
+        }
 
         public async Task<IActionResult> MeghalayaTD(string searchTerm, decimal? maxPrice)
         {
@@ -138,34 +165,97 @@ namespace TravelPackageManagementSystem.Controllers
 
         public async Task<IActionResult> MyBookings()
         {
-            var bookings = await _context.Bookings.Include(b => b.TravelPackage).ToListAsync();
+            var bookings = await _context.Bookings
+                .AsNoTracking() // Improves performance for read-only views
+                .Include(b => b.TravelPackage)
+                .ToListAsync();
+
             return View(bookings);
         }
-
-        public IActionResult Hero() => View();
-        public IActionResult Vrindavan() => View("Trending/Vrindavan");
-        public IActionResult Rameshwaram() => View("Trending/Rameshwaram");
-        public IActionResult Darjiling() => View("Trending/Darjiling");
-        public IActionResult Tamilnadu() => View();
-        public IActionResult TamilnaduTD(string id) { ViewBag.PackageId = id; return View("TopDestination/TamilnaduTD"); }
-        public IActionResult KeralaTD(string id) { ViewBag.PackageId = id; return View("TopDestination/KeralaTD"); }
-        public IActionResult MizoramTD(string id) { ViewBag.PackageId = id; return View("TopDestination/MizoramTD"); }
-        public IActionResult GoaTD() => View("TopDestination/GoaTD");
-        public IActionResult UttarakhandTD() => View("TopDestination/uttarakhandTD");
-
-        public IActionResult MeghPack1() => View("Package/MeghPack1");
-        public IActionResult MeghPack2() => View("Package/MeghPack2");
-
         public async Task<IActionResult> MeghPack3(int id)
         {
             var package = await _context.TravelPackages.Include(p => p.Itineraries).FirstOrDefaultAsync(p => p.PackageId == id);
             if (package == null) return NotFound();
             return View("Package/MeghPack3", package);
         }
+        [HttpGet]
+        public IActionResult PaymentPage(int? bookingId)
+        {
+            // If the bookingId is missing, redirect back to index to avoid errors
+            if (bookingId == null)
+            {
+                return RedirectToAction("Index");
+            }
 
-        public IActionResult GoaPack1() => View("Package/GoaPack1");
-        public IActionResult GoaPack2() => View("Package/GoaPack2");
-        public IActionResult GoaPack3() => View("Package/GoaPack3");
-        public IActionResult PaymentPage(int? bookingId) { ViewBag.BookingId = bookingId; return View(); }
+            ViewBag.BookingId = bookingId;
+            return View();
+        }
+
+
+        public IActionResult TravelGuide() => View();
+        public IActionResult CustomerSupport() => View();
+        // Action 1: Returns JSON list for the autocomplete dropdown
+        //[HttpGet]
+        [HttpGet]
+        public async Task<JsonResult> GetSuggestions(string term)
+        {
+            if (string.IsNullOrEmpty(term)) return Json(new List<string>());
+
+            // Fetches State names directly from your database
+            var suggestions = await _context.Destinations
+                .Where(d => d.StateName.Contains(term))
+                .Select(d => d.StateName)
+                .Take(5) // Keep the list short for better UI
+                .ToListAsync();
+
+            return Json(suggestions);
+        }
+
+        public async Task<IActionResult> Search(string destination)
+        {
+            if (string.IsNullOrEmpty(destination)) return RedirectToAction("Index");
+            // Check if the user searched for a State (e.g., "Meghalaya")
+            var stateMatch = await _context.Destinations
+                .FirstOrDefaultAsync(d => d.StateName.ToLower() == destination.ToLower());
+            if (stateMatch != null)
+            {
+                // Redirect to your existing Destination action with the state parameter
+                return RedirectToAction("Destination", new { state = stateMatch.StateName });
+            }
+            // If not a state, find specific packages
+            var results = await _context.TravelPackages
+                .Include(p => p.ParentDestination)
+                .Where(p => p.PackageName.Contains(destination) || p.Location.Contains(destination))
+                .Where(p => !p.IsTrending) // Ensure we show standard results
+                .ToListAsync();
+            ViewBag.SearchTerm = destination;
+            return View("TopDestination/DestinationTD", results);
+        }
+
+        
+        public IActionResult Failure()
+        {
+            return View("Trending/Failure");
+        }
+        public IActionResult Success()
+        {
+            return View("Trending/Success");
+        }
+        // Check if the user searched for a State (e.g., "Meghalaya")
+
+        //public IActionResult CustomerSupport()
+        //{
+        //    return View();
+        //}
+
+        //public IActionResult TravelGuide()
+        //{
+        //    return View();
+        //}
+
+        public IActionResult aboutus()
+        {
+            return View();
+        }
     }
 }
