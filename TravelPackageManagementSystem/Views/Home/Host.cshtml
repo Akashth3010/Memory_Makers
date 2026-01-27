@@ -262,7 +262,7 @@
 
         stepObserver.observe(document.querySelector('.flow-steps'));
 
-        /* FORM SUBMISSION & AUTO-CLEAR */
+        /* FORM SUBMISSION & AUTO-CLEAR (FIXED FOR JSON MAPPING) */
         document.getElementById("hostForm").addEventListener("submit", function (e) {
             e.preventDefault();
             if(!this.checkValidity()) {
@@ -281,6 +281,7 @@
                 });
             });
 
+            // FIXED DATA OBJECT
             let data = {
                 HostAgencyName: this.querySelector('[name="HostAgencyName"]').value,
                 EmailAddress: this.querySelector('[name="EmailAddress"]').value,
@@ -291,7 +292,7 @@
                 Location: this.querySelector('[name="Location"]').value,
                 PackageType: this.querySelector('[name="PackageType"]').value,
                 Duration: this.querySelector('[name="Duration"]').value,
-                Price: this.querySelector('[name="Price"]').value,
+                Price: parseFloat(this.querySelector('[name="Price"]').value),
                 Description: this.querySelector('[name="Description"]').value,
                 ImageUrl: this.querySelector('[name="ImageUrl"]').value,
                 ThumbnailUrl1: this.querySelector('[name="ThumbnailUrl1"]').value,
@@ -303,13 +304,11 @@
             $.ajax({
                 url: '/Home/SubmitPackage',
                 type: 'POST',
-                data: data,
+                contentType: 'application/json', // CRITICAL FOR HER NEW SYSTEM
+                data: JSON.stringify(data),      // CRITICAL FOR HER NEW SYSTEM
                 success: function(response) {
-                    // Always clear and show popup on success
                     document.getElementById("successPopup").style.display = "flex";
                     document.getElementById("hostForm").reset();
-
-                    // Reset itinerary to just Day 1
                     document.getElementById("itineraryContainer").innerHTML = `
                         <div class="itinerary-item">
                             <div class="day-badge">Day 1</div>
@@ -329,9 +328,7 @@
             });
         });
 
-        function closePopup() {
-            document.getElementById("successPopup").style.display = "none";
-        }
+        function closePopup() { document.getElementById("successPopup").style.display = "none"; }
     </script>
 </body>
 </html>

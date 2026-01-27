@@ -154,35 +154,23 @@
     function fetchAndShowDetails(id) {
         selectedId = id;
         $.get(`/Admin/GetPackageById/${id}`, function(data) {
-            $("#dHost").text(data.host || "Agency Host");
-            $("#dEmail").text(data.email || "Contact Host for email");
-            $("#dPhone").text(data.phone || "Contact Host for phone");
-            $("#dCity").text(data.location || "Not Provided");
+            // Mapping fix
+            $("#dHost").text(data.host);
+            $("#dEmail").text(data.email);
+            $("#dPhone").text(data.phone);
+            $("#dCity").text(data.city); // 'location' ki jagah 'city' use karein
             $("#dPackage").text(data.name);
             $("#dDestination").text(data.dest);
             $("#dType").text(data.type);
             $("#dDuration").text(data.duration);
-            $("#dPrice").text(data.price);
+            $("#dPrice").text(data.price.toLocaleString('en-IN'));
             $("#dDesc").text(data.description);
 
+            // Images display
             let thumbs = "";
             if(data.imgUrl) thumbs += `<img src="${data.imgUrl}" class="admin-preview-img">`;
             if(data.thumb1) thumbs += `<img src="${data.thumb1}" class="admin-preview-img">`;
-            if(data.thumb2) thumbs += `<img src="${data.thumb2}" class="admin-preview-img">`;
             $("#dThumbnails").html(thumbs || "No photos provided.");
-
-            let itHtml = "";
-            if(data.itineraries && data.itineraries.length > 0) {
-                data.itineraries.forEach(i => {
-                    itHtml += `
-                        <div class="itinerary-desc-item">
-                            <span class="day-indicator">Day ${i.dayNumber}</span>
-                            <h6>${i.title}</h6>
-                            <p>${i.desc}</p>
-                        </div>`;
-                });
-            } else { itHtml = "<p class='empty-text'>No itinerary provided.</p>"; }
-            $("#dItinerary").html(itHtml);
 
             $("#approvalModal").addClass("show");
         });

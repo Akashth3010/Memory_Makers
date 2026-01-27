@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TravelPackageManagementSystem.Application.Models;
 using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +14,14 @@ namespace TravelPackageManagementSystem.Application.Controllers
             _context = context;
         }
 
+        // ---------------- PAGES ----------------
         public IActionResult Dashboard() => View();
         public IActionResult Approvals() => View();
         public IActionResult Packages() => View();
         public IActionResult Bookings() => View();
         public IActionResult Users() => View();
+
+        // ---------------- APPROVAL LOGIC ----------------
 
         [HttpGet]
         public async Task<IActionResult> GetApprovals(string status)
@@ -76,6 +78,8 @@ namespace TravelPackageManagementSystem.Application.Controllers
             return Json(new { count });
         }
 
+        // ---------------- PACKAGES APIs ----------------
+
         [HttpGet]
         public async Task<IActionResult> GetPackages()
         {
@@ -122,7 +126,10 @@ namespace TravelPackageManagementSystem.Application.Controllers
                 thumb1 = p.ThumbnailUrl1,
                 thumb2 = p.ThumbnailUrl2,
                 thumb3 = p.ThumbnailUrl3,
-                host = p.Host != null ? p.Host.HostAgencyName : "Admin",
+                host = p.Host != null ? p.Host.HostAgencyName : "Self Hosted",
+                email = p.Host != null ? p.Host.EmailAddress : "N/A",
+                phone = p.Host != null ? p.Host.PhoneNumber : "N/A",
+                city = p.Host != null ? p.Host.CityCountry : "N/A",
                 itineraries = p.Itineraries.OrderBy(i => i.DayNumber).Select(i => new {
                     dayNumber = i.DayNumber,
                     title = i.ActivityTitle,
@@ -138,11 +145,19 @@ namespace TravelPackageManagementSystem.Application.Controllers
         {
             if (model == null) return BadRequest();
 
+            // Safety check for DestinationId to prevent Foreign Key Error
+            int? validDestId = model.destId;
+            if (validDestId.HasValue)
+            {
+                var exists = await _context.Destinations.AnyAsync(d => d.DestinationId == validDestId.Value);
+                if (!exists) validDestId = null; // Set to null if ID doesn't exist in DB
+            }
+
             var package = new TravelPackage
             {
                 PackageName = model.name,
                 Destination = model.dest,
-                DestinationId = model.destId,
+                DestinationId = validDestId,
                 PackageType = model.type,
                 Duration = model.duration,
                 Price = model.price,
@@ -190,9 +205,17 @@ namespace TravelPackageManagementSystem.Application.Controllers
 
             if (package == null) return Json(new { success = false });
 
+            // Safety check for DestinationId
+            int? validDestId = model.destId;
+            if (validDestId.HasValue)
+            {
+                var exists = await _context.Destinations.AnyAsync(d => d.DestinationId == validDestId.Value);
+                if (!exists) validDestId = null;
+            }
+
             package.PackageName = model.name;
             package.Destination = model.dest;
-            package.DestinationId = model.destId;
+            package.DestinationId = validDestId;
             package.PackageType = model.type;
             package.Duration = model.duration;
             package.Price = model.price;
@@ -203,7 +226,6 @@ namespace TravelPackageManagementSystem.Application.Controllers
             package.ThumbnailUrl2 = model.thumb2 ?? "";
             package.ThumbnailUrl3 = model.thumb3 ?? "";
 
-            // Clear old itineraries and replace with updated ones
             _context.Itineraries.RemoveRange(package.Itineraries);
 
             if (model.itineraries != null)

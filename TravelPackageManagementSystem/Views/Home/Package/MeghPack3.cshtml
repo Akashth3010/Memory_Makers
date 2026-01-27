@@ -4,7 +4,6 @@
     ViewBag.Title = Model.PackageName;
     Layout = "_Layout";
 }
-
 <style>
     
     .hero-section {
@@ -127,7 +126,6 @@
                     <img src="@Model.ThumbnailUrl2" class="thumb-nail" onclick="swap(this)">
                 }
             </div>
-
             <h4 class="fw-bold mb-3">Trip Itinerary</h4>
             <div class="accordion border rounded-3 mb-4" id="itineraryAcc">
                 @if (Model.Itineraries != null)
@@ -175,6 +173,33 @@
                             }
                         }
                     </ul>
+                </div>
+            </div>
+            <div class="host-profile-card mb-5">
+                <div class="row align-items-center g-0">
+                    <div class="col-auto px-4 py-3 border-end">
+                        <div class="host-avatar">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                    </div>
+                    <div class="col ps-4">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="host-label">Trusted Travel Partner</span>
+                            <span class="verified-tick"><i class="fas fa-check-circle"></i> Verified</span>
+                        </div>
+                        <h5 class="agency-name mb-0">
+                            @(Model.Host?.HostAgencyName ?? "Easy Safar Official")
+                        </h5>
+                        <p class="agency-location mb-0">
+                            <i class="fas fa-map-marker-alt"></i>
+                            @(Model.Host?.CityCountry ?? "Headquarters, India")
+                        </p>
+                    </div>
+                    <div class="col-auto pe-4">
+                        <a href="mailto:@(Model.Host?.EmailAddress ?? "support@easysafar.com")" class="contact-host-link">
+                            Ask a Question <i class="fas fa-chevron-right ms-1"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -285,34 +310,4 @@
             updatePrice();
         });
     </script>
-}
-
-@* 
-@section Scripts {
-    <script>
-        function swap(el) {
-            document.getElementById('mainDisplay').src = el.src;
-            document.querySelectorAll('.thumb-nail').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        const price = @(Model?.Price ?? 0);
-        const guestInput = document.getElementById('gCount');
-        const totalDisplay = document.getElementById('liveTotal');
-
-        // Logic to update price based on numerical input
-        function updatePrice() {
-            let count = parseInt(guestInput.value) || 1;
-            if (count < 1) count = 1;
-
-            const total = price * count;
-            totalDisplay.innerText = '₹' + total.toLocaleString('en-IN');
-        }
-
-        // Listen for both typing and arrow clicks
-        guestInput.addEventListener('input', updatePrice);
-        guestInput.addEventListener('change', updatePrice);
-
-        document.getElementById('tDate').min = new Date().toISOString().split('T')[0];
-    </script> *@
 }

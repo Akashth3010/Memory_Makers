@@ -1,14 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using TravelPackageManagementSystem.Application.Models;
 using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Models;
-//using TravelPackageManagementSystem.Application.Data;
-using TravelPackageManagementSystem.Application.Models;
 
 namespace TravelPackageManagementSystem.Controllers
 {
@@ -23,11 +18,15 @@ namespace TravelPackageManagementSystem.Controllers
 
         public IActionResult Host() => View();
 
+        // ---------------- HOST PACKAGE SUBMISSION (FIXED & MERGED) ----------------
         [HttpPost]
-        public async Task<IActionResult> SubmitPackage(HostSubmissionViewModel model)
+        public async Task<IActionResult> SubmitPackage([FromBody] HostSubmissionViewModel model)
         {
             try
             {
+                if (model == null) return Json(new { success = false, message = "Invalid data" });
+
+                // 1. Create Host Detail
                 var host = new HostContactDetail
                 {
                     HostAgencyName = model.HostAgencyName,
@@ -37,13 +36,14 @@ namespace TravelPackageManagementSystem.Controllers
                 };
 
                 _context.HostContactDetails.Add(host);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); // Generates host.Id
 
+                // 2. Create Package Detail linked to Host
                 var package = new TravelPackage
                 {
                     PackageName = model.PackageName,
                     Destination = model.Destination,
-                    DestinationId = model.DestinationId,
+                    DestinationId = model.DestinationId, // Handles int? properly
                     Location = model.Location ?? "Not Specified",
                     PackageType = model.PackageType,
                     Duration = model.Duration,
@@ -55,12 +55,13 @@ namespace TravelPackageManagementSystem.Controllers
                     ThumbnailUrl3 = model.ThumbnailUrl3 ?? "",
                     HostId = host.Id,
                     AvailabilityStatus = PackageStatus.AVAILABLE,
-                    ApprovalStatus = ApprovalStatus.Pending
+                    ApprovalStatus = ApprovalStatus.Pending // ✅ Set to Pending (0)
                 };
 
                 _context.TravelPackages.Add(package);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); // Generates package.PackageId
 
+                // 3. Save Itineraries submitted by Host
                 if (model.Itineraries != null && model.Itineraries.Count > 0)
                 {
                     foreach (var item in model.Itineraries)
@@ -80,13 +81,43 @@ namespace TravelPackageManagementSystem.Controllers
 
                 return Json(new { success = true });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return Json(new { success = false, message = "Internal error during submission." });
+                return Json(new { success = false, message = "Error: " + ex.Message });
             }
         }
+        public async Task<IActionResult> Details(int id)
+        {
+            var package = await _context.TravelPackages
+                .Include(p => p.Itineraries)
+                .Include(p => p.Host) // CRITICAL: This pulls data from HostContactDetails
+                .FirstOrDefaultAsync(m => m.PackageId == id);
 
-        public IActionResult Index() => View();
+            if (package == null) return NotFound();
+
+            return View(package);
+        }
+
+        // ---------------- TEAMMATE'S INDEX & TRENDING ----------------
+        public async Task<IActionResult> Index()
+        {
+            var destinations = await _context.Destinations
+                .AsNoTracking()
+                .ToListAsync();
+
+            var trendingPackages = await _context.TravelPackages
+                .Where(p => p.ApprovalStatus == ApprovalStatus.Approved &&
+                            p.AvailabilityStatus == PackageStatus.AVAILABLE &&
+                            p.IsTrending == true)
+                .OrderBy(p => p.PackageId)
+                .AsNoTracking()
+                .ToListAsync();
+
+            ViewBag.TrendingPackages = trendingPackages;
+
+            return View(destinations);
+        }
+
         public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -94,9 +125,10 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        // ---------------- TEAMMATE'S DESTINATION GALLERY ----------------
         public async Task<IActionResult> Destination(string state)
         {
-            // Fix: We navigate from Package -> ParentDestination -> GalleryImages
             var packages = await _context.TravelPackages
                 .Include(p => p.ParentDestination)
                     .ThenInclude(d => d.GalleryImages)
@@ -107,10 +139,8 @@ namespace TravelPackageManagementSystem.Controllers
 
             ViewBag.StateName = state;
 
-            // Check if we found any packages to avoid errors in the view
             if (packages == null || !packages.Any())
             {
-                // Optionally fetch just the Destination if no packages exist to still show gems
                 return View("TopDestination/DestinationTD", new List<TravelPackage>());
             }
 
@@ -125,6 +155,7 @@ namespace TravelPackageManagementSystem.Controllers
             return View("TopDestination/MeghalayaTD", await query.ToListAsync());
         }
 
+        // ---------------- BOOKING & PAYMENT ----------------
         [HttpPost]
         public async Task<IActionResult> CreateBooking(int PackageId, DateTime TravelDate, int Guests, string ContactPhone)
         {
@@ -166,46 +197,42 @@ namespace TravelPackageManagementSystem.Controllers
         public async Task<IActionResult> MyBookings()
         {
             var bookings = await _context.Bookings
-                .AsNoTracking() // Improves performance for read-only views
+                .AsNoTracking()
                 .Include(b => b.TravelPackage)
                 .ToListAsync();
 
             return View(bookings);
         }
+
+        // ---------------- PACKAGE DETAILS & ITINERARY ----------------
         public async Task<IActionResult> MeghPack3(int id)
         {
             var package = await _context.TravelPackages.Include(p => p.Itineraries).FirstOrDefaultAsync(p => p.PackageId == id);
             if (package == null) return NotFound();
             return View("Package/MeghPack3", package);
         }
+
         [HttpGet]
         public IActionResult PaymentPage(int? bookingId)
         {
-            // If the bookingId is missing, redirect back to index to avoid errors
-            if (bookingId == null)
-            {
-                return RedirectToAction("Index");
-            }
-
+            if (bookingId == null) return RedirectToAction("Index");
             ViewBag.BookingId = bookingId;
             return View();
         }
 
-
         public IActionResult TravelGuide() => View();
         public IActionResult CustomerSupport() => View();
-        // Action 1: Returns JSON list for the autocomplete dropdown
-        //[HttpGet]
+
+        // ---------------- TEAMMATE'S SEARCH SUGGESTIONS ----------------
         [HttpGet]
         public async Task<JsonResult> GetSuggestions(string term)
         {
             if (string.IsNullOrEmpty(term)) return Json(new List<string>());
 
-            // Fetches State names directly from your database
             var suggestions = await _context.Destinations
                 .Where(d => d.StateName.Contains(term))
                 .Select(d => d.StateName)
-                .Take(5) // Keep the list short for better UI
+                .Take(5)
                 .ToListAsync();
 
             return Json(suggestions);
@@ -214,48 +241,23 @@ namespace TravelPackageManagementSystem.Controllers
         public async Task<IActionResult> Search(string destination)
         {
             if (string.IsNullOrEmpty(destination)) return RedirectToAction("Index");
-            // Check if the user searched for a State (e.g., "Meghalaya")
             var stateMatch = await _context.Destinations
                 .FirstOrDefaultAsync(d => d.StateName.ToLower() == destination.ToLower());
             if (stateMatch != null)
             {
-                // Redirect to your existing Destination action with the state parameter
                 return RedirectToAction("Destination", new { state = stateMatch.StateName });
             }
-            // If not a state, find specific packages
             var results = await _context.TravelPackages
                 .Include(p => p.ParentDestination)
                 .Where(p => p.PackageName.Contains(destination) || p.Location.Contains(destination))
-                .Where(p => !p.IsTrending) // Ensure we show standard results
+                .Where(p => !p.IsTrending)
                 .ToListAsync();
             ViewBag.SearchTerm = destination;
             return View("TopDestination/DestinationTD", results);
         }
 
-        
-        public IActionResult Failure()
-        {
-            return View("Trending/Failure");
-        }
-        public IActionResult Success()
-        {
-            return View("Trending/Success");
-        }
-        // Check if the user searched for a State (e.g., "Meghalaya")
-
-        //public IActionResult CustomerSupport()
-        //{
-        //    return View();
-        //}
-
-        //public IActionResult TravelGuide()
-        //{
-        //    return View();
-        //}
-
-        public IActionResult aboutus()
-        {
-            return View();
-        }
+        public IActionResult Failure() => View("Trending/Failure");
+        public IActionResult Success() => View("Trending/Success");
+        public IActionResult aboutus() => View();
     }
 }

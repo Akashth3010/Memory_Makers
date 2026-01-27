@@ -19,17 +19,37 @@ namespace TravelPackageManagementSystem.Repository.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Configure Decimal Precision for Payment Amount
+
+            // 1. Configure Decimal Precision
             modelBuilder.Entity<Payment>()
                 .Property(p => p.Amount)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Payment>()
-    .HasOne(p => p.Booking)
-    .WithMany() // Or .WithOne() depending on your design
-    .HasForeignKey(p => p.BookingId);
+            modelBuilder.Entity<TravelPackage>()
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18,2)");
 
-            // 1. Seed Destinations
+            // 2. Define Relationships
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.Booking)
+                .WithMany()
+                .HasForeignKey(p => p.BookingId);
+
+            // Configure the One-to-Many relationship for Itineraries
+            modelBuilder.Entity<Itinerary>()
+                .HasOne(i => i.TravelPackage)
+                .WithMany(p => p.Itineraries)
+                .HasForeignKey(i => i.PackageId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure the relationship for Destination (ParentDestination)
+            modelBuilder.Entity<TravelPackage>()
+                .HasOne(p => p.ParentDestination)
+                .WithMany(d => d.TravelPackages)   // specify inverse navigation
+                .HasForeignKey(p => p.DestinationId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // 3. Seed Destinations
             modelBuilder.Entity<Destination>().HasData(
                 new Destination { DestinationId = 1, StateName = "Meghalaya", ImageUrl = "/lib/Image/meghalaya.jpg", HotelCount = 18, HolidayCount = 29 },
                 new Destination { DestinationId = 2, StateName = "Tamil Nadu", ImageUrl = "/lib/Image/Tamilnadu.jpg", HotelCount = 30, HolidayCount = 48 },
@@ -42,7 +62,7 @@ namespace TravelPackageManagementSystem.Repository.Data
                 new Destination { DestinationId = 9, StateName = "Uttar Pradesh", ImageUrl = "/lib/TrendingImage/Banaras.jpg", HotelCount = 40, HolidayCount = 55 }
             );
 
-            // 2. Seed Travel Packages
+            // 4. Seed Travel Packages
             modelBuilder.Entity<TravelPackage>().HasData(
                 new TravelPackage
                 {
@@ -251,7 +271,7 @@ namespace TravelPackageManagementSystem.Repository.Data
                 }
             );
 
-            // 3. Seed Gallery Images
+            // 5. Seed Gallery Images
             modelBuilder.Entity<GalleryImage>().HasData(
                 new GalleryImage { Id = 1, DestinationId = 1, ImageUrl = "/lib/Image/meg1.jpg", Caption = "Krang Suri Falls" },
                 new GalleryImage { Id = 2, DestinationId = 1, ImageUrl = "/lib/Image/meg2.jpg", Caption = "Root Bridges" },
@@ -261,7 +281,7 @@ namespace TravelPackageManagementSystem.Repository.Data
                 new GalleryImage { Id = 6, DestinationId = 4, ImageUrl = "/lib/Image/goa3.jpg", Caption = "Baga Beach" }
             );
 
-            // 4. Seed User
+            // 6. Seed User
             modelBuilder.Entity<User>().HasData(
                 new User { UserId = 1, Username = "Admin", Email = "admin@travel.com", Password = "HashedPassword", Role = UserRole.CUSTOMER }
             );

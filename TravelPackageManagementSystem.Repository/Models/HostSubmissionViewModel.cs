@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using TravelPackageManagementSystem.Repository.Models;
+﻿using System.Collections.Generic;
 
 namespace TravelPackageManagementSystem.Repository.Models
 {
@@ -15,7 +13,7 @@ namespace TravelPackageManagementSystem.Repository.Models
         // Package Info
         public string PackageName { get; set; } = string.Empty;
         public string Destination { get; set; } = string.Empty;
-        public int? DestinationId { get; set; } // Added for SQL sync
+        public int? DestinationId { get; set; }
         public string Location { get; set; } = string.Empty;
         public string PackageType { get; set; } = string.Empty;
         public string Duration { get; set; } = string.Empty;
@@ -28,7 +26,7 @@ namespace TravelPackageManagementSystem.Repository.Models
         public string ThumbnailUrl2 { get; set; } = string.Empty;
         public string ThumbnailUrl3 { get; set; } = string.Empty;
 
-        // ✅ New: Collection for Itinerary Days
+        // ✅ Collection for Itinerary Days
         public List<ItineraryDto> Itineraries { get; set; } = new List<ItineraryDto>();
     }
 }

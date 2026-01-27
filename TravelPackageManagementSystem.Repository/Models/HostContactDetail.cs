@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,29 +7,25 @@ namespace TravelPackageManagementSystem.Repository.Models
     public class HostContactDetail
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Host or Agency Name is required")]
-        [StringLength(200)]
-        [Display(Name = "Host / Agency Name")]
-        public string HostAgencyName { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string HostAgencyName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Email Address is required")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        [StringLength(200)]
-        public string EmailAddress { get; set; }
+        [Required]
+        [EmailAddress]
+        public string EmailAddress { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Phone Number is required")]
-        [Phone(ErrorMessage = "Invalid Phone Number")]
-        [StringLength(20)]
-        public string PhoneNumber { get; set; }
+        [Required]
+        [Phone]
+        public string PhoneNumber { get; set; } = string.Empty;
 
-        [Required(ErrorMessage ="City and Country are required")]
-        [StringLength (200)]
-        [Display(Name = "City / Country")]
-        public string CityCountry { get; set; }
+        [Required]
+        public string CityCountry { get; set; } = string.Empty;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
+        // Navigation property to see all packages submitted by this host
+        public virtual ICollection<TravelPackage> TravelPackages { get; set; } = new List<TravelPackage>();
     }
 }
