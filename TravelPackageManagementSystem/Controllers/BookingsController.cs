@@ -19,11 +19,15 @@ namespace TravelPackageManagementSystem.Controllers
         public async Task<IActionResult> Create(int PackageId, DateTime TravelDate, int Guests, string ContactPhone, string ContactEmail)
         {
             var sessionUserName = HttpContext.Session.GetString("UserName");
-            if (string.IsNullOrEmpty(sessionUserName)) return Unauthorized();
 
-            // Find the real User record
+            // IF SESSION IS EXPIRED, REDIRECT TO LOGIN INSTEAD OF JUST CRASHING
+            if (string.IsNullOrEmpty(sessionUserName))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == sessionUserName);
-            if (user == null) return BadRequest();
+            if (user == null) return BadRequest("User record not found.");
 
             var package = await _context.TravelPackages.FindAsync(PackageId);
 
@@ -36,32 +40,14 @@ namespace TravelPackageManagementSystem.Controllers
                 ContactEmail = ContactEmail,
                 TotalAmount = (package?.Price ?? 0) * Guests,
                 Status = BookingStatus.PENDING,
-                UserId = user.UserId // Save the REAL ID here
+                UserId = user.UserId
             };
 
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
+
+            // This will now send the generated ID to Home/PaymentPage
             return RedirectToAction("PaymentPage", "Home", new { bookingId = booking.BookingId });
-        }
-
-        public async Task<IActionResult> MyBookings()
-        {
-            // 1. Get the username from the Session (set during login)
-            var sessionUserName = HttpContext.Session.GetString("UserName");
-
-            if (string.IsNullOrEmpty(sessionUserName))
-            {
-                return RedirectToAction("Index", "Home"); // Redirect if not logged in
-            }
-
-            // 2. Fetch bookings where the linked User's Username matches the Session
-            var bookings = await _context.Bookings
-                .Include(b => b.TravelPackage)
-                .Include(b => b.User)
-                .Where(b => b.User.Username == sessionUserName) // Filter dynamically!
-                .ToListAsync();
-
-            return View(bookings);
         }
 
         [HttpPost]

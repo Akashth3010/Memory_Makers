@@ -168,6 +168,8 @@ async function handleLogout() {
         try {
             const response = await fetch('/Account/Logout', { method: 'POST' });
             if (response.ok) {
+                // CLEAR LOCAL STORAGE ON LOGOUT
+                localStorage.clear();
                 window.location.href = '/';
             }
         } catch (error) {
