@@ -1,112 +1,507 @@
 ﻿@{
-    ViewData["Title"] = "My Profile";
+    ViewData["Title"] = "Member Profile";
     Layout = "_Layout";
 }
 
-<div class="container mt-5 pt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white p-4">
-                    <h3 class="mb-0">User Profile</h3>
-                </div>
-                <div class="card-body p-4">
-                    <div class="text-center mb-4">
-                        <div class="display-1 text-primary">
-                            <i class="fa-solid fa-circle-user"></i>
-                        </div>
-                        <h2 id="profileName">Loading...</h2>
-                        <span class="badge bg-info text-dark">Travel Enthusiast</span>
-                    </div>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <label class="text-muted small uppercase fw-bold">First Name</label>
-                            <p id="profileFirstName" class="fs-5 border-bottom pb-2">--</p>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-muted small uppercase fw-bold">Last Name</label>
-                            <p id="profileLastName" class="fs-5 border-bottom pb-2">--</p>
-                        </div>
-                        <div class="col-12">
-                            <label class="text-muted small uppercase fw-bold">Email Address</label>
-                            <p id="profileEmail" class="fs-5 border-bottom pb-2 text-break">--</p>
-                        </div>
-                    </div>
+<style>
+    :root {
+        --primary: #4f46e5; /* Indigo */
+        --primary-dark: #4338ca;
+        --secondary: #06b6d4; /* Cyan */
+        --surface: #ffffff;
+        --bg-body: #f1f5f9;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --radius-lg: 24px;
+        --radius-md: 16px;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
 
-                    <div class="mt-4">
-                        <h5>Travel Statistics</h5>
-                        <div class="row text-center mt-3">
-                            <div class="col-4">
-                                <div class="p-3 border rounded shadow-sm">
-                                    <div class="h4 mb-0">0</div>
-                                    <small class="text-muted">Bookings</small>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="p-3 border rounded shadow-sm">
-                                    <div class="h4 mb-0">0</div>
-                                    <small class="text-muted">Reviews</small>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="p-3 border rounded shadow-sm">
-                                    <div class="h4 mb-0">0</div>
-                                    <small class="text-muted">Wishlist</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer bg-light p-3 text-end">
-                    <button class="btn btn-outline-primary" onclick="window.history.back()">Go Back</button>
-                    <button class="btn btn-primary">Edit Profile</button>
+    body {
+        background-color: var(--bg-body);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        color: var(--text-main);
+    }
+
+    /* --- Layout Cards --- */
+    .profile-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-top: 2rem;
+    }
+
+    .glass-card {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid white;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    /* --- Banner & Header --- */
+    .banner-area {
+        height: 220px;
+        background: linear-gradient(120deg, #4f46e5 0%, #06b6d4 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .banner-area::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+    .profile-header {
+        padding: 0 40px 30px 40px;
+        display: flex;
+        align-items: flex-end;
+        margin-top: -80px;
+        position: relative;
+        gap: 25px;
+    }
+
+    .avatar-container {
+        position: relative;
+    }
+
+    .avatar-box {
+        width: 150px;
+        height: 150px;
+        background: var(--surface);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: var(--primary);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 4px solid var(--surface);
+    }
+
+    .badge-verified {
+        position: absolute;
+        bottom: 10px;
+        right: -10px;
+        background: #10b981;
+        color: white;
+        border: 3px solid white;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .user-meta h2 {
+        font-size: 2rem;
+        letter-spacing: -0.5px;
+        color: #1e293b;
+    }
+
+    .action-btn {
+        background: white;
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        box-shadow: var(--shadow-sm);
+    }
+
+        .action-btn:hover {
+            background: #f8fafc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+            .action-btn.primary:hover {
+                background: var(--primary-dark);
+            }
+
+    /* --- Content Sections --- */
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .section-title i {
+            color: var(--secondary);
+        }
+
+    .info-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .info-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-main);
+    }
+
+    /* --- Stats Widgets --- */
+    .stat-widget {
+        background: white;
+        border-radius: var(--radius-md);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border: 1px solid var(--border-color);
+        transition: transform 0.2s;
+        margin-bottom: 1rem;
+    }
+
+        .stat-widget:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+        .stat-icon.blue {
+            background: #eff6ff;
+            color: #3b82f6;
+        }
+
+        .stat-icon.purple {
+            background: #f5f3ff;
+            color: #8b5cf6;
+        }
+
+        .stat-icon.orange {
+            background: #fff7ed;
+            color: #f97316;
+        }
+
+    /* --- Table Design --- */
+    .custom-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px; /* Gap between rows */
+    }
+
+        .custom-table thead th {
+            border: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+            padding: 0 15px 10px 15px;
+        }
+
+        .custom-table tbody tr {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
+        }
+
+            .custom-table tbody tr:hover {
+                transform: scale(1.01);
+            }
+
+        .custom-table td {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+            .custom-table td:first-child {
+                border-left: 1px solid var(--border-color);
+                border-top-left-radius: 12px;
+                border-bottom-left-radius: 12px;
+            }
+
+            .custom-table td:last-child {
+                border-right: 1px solid var(--border-color);
+                border-top-right-radius: 12px;
+                border-bottom-right-radius: 12px;
+            }
+
+    .status-pill {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .status-confirmed {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-pending {
+        background: #fef9c3;
+        color: #854d0e;
+    }
+
+    /* --- Responsive Adjustments --- */
+    @@media (max-width: 768px) {
+        .profile-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: -60px;
+        }
+
+        .header-actions {
+            margin-top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="container profile-container pb-5">
+
+    <div class="glass-card">
+        <div class="banner-area"></div>
+
+        <div class="profile-header">
+            <div class="avatar-container">
+                <div class="avatar-box" id="userInitials">--</div>
+                <div class="badge-verified" title="Verified Member">
+                    <i class="fa-solid fa-check"></i>
                 </div>
             </div>
+
+            <div class="user-meta flex-grow-1">
+                <h2 class="fw-800 m-0" id="topName">User Profile</h2>
+                <div class="d-flex align-items-center gap-3 mt-2 text-muted">
+                    <small><i class="fa-solid fa-envelope me-2"></i><span id="smallEmail">--</span></small>
+                    <span class="text-secondary">•</span>
+                    <small class="text-success fw-bold">Verified Member</small>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <a href="/User/Edit" class="action-btn primary text-decoration-none">
+                    <i class="fa-solid fa-pen-to-square me-2"></i>Edit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+
+            <div class="glass-card p-4">
+                <div class="section-title">
+                    <i class="fa-regular fa-id-card"></i> Account Information
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-4">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value" id="lblFullName">--</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-4">
+                            <div class="info-label">Mobile Number</div>
+                            <div class="info-value" id="lblPhone">--</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-3 bg-light rounded-4">
+                            <div class="info-label">Email Address</div>
+                            <div class="info-value" id="lblEmail">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="section-title mb-0">
+                        <i class="fa-solid fa-plane-departure"></i> Recent Bookings
+                    </div>
+                    <a href="#" class="text-primary fw-bold text-decoration-none small">View Full History <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="custom-table" id="bookingsTable">
+                        <thead>
+                            <tr>
+                                <th>Destination</th>
+                                <th>Dates</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="row g-3 mb-4">
+                <div class="col-12">
+                    <div class="stat-widget">
+                        <div class="stat-icon blue">
+                            <i class="fa-solid fa-suitcase-rolling"></i>
+                        </div>
+                        <div>
+                            <div class="h4 fw-800 m-0" id="statTrips">0</div>
+                            <div class="small text-muted fw-bold">Trips Completed</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="stat-widget">
+                        <div class="stat-icon purple">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div>
+                            <div class="h4 fw-800 m-0" id="statReviews">0</div>
+                            <div class="small text-muted fw-bold">Reviews Given</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="stat-widget">
+                        <div class="stat-icon orange">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <div>
+                            <div class="h4 fw-800 m-0" id="statSaved">0</div>
+                            <div class="small text-muted fw-bold">Items in Wishlist</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-4 text-center bg-white" style="border-top: 4px solid var(--secondary);">
+                <div class="mb-3">
+                    <i class="fa-solid fa-earth-americas fa-3x text-info opacity-50"></i>
+                </div>
+                <h5 class="fw-bold">Next Adventure?</h5>
+                <p class="small text-muted mb-4">Explore exclusive member-only deals for your next vacation.</p>
+                <a href="/" class="btn btn-outline-info w-100 rounded-pill fw-bold">Browse Packages</a>
+            </div>
+
+            <div class="mt-4">
+                <form asp-controller="User" asp-action="Logout" method="post" id="logoutForm">
+                    @Html.AntiForgeryToken()
+                    <button type="button" class="btn btn-white border w-100 py-3 rounded-4 fw-bold text-danger hover-danger" onclick="confirmLogout()">
+                        <i class="fa-solid fa-power-off me-2"></i>Sign Out
+                    </button>
+                </form>
+            </div>
+
         </div>
     </div>
 </div>
 
-@* <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const userJson = localStorage.getItem('user');
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-
-        if (!userJson || isLoggedIn !== 'true') {
-            window.location.href = '/';
-            return;
-        }
-
+<script>
+    async function loadProfile() {
         try {
-            const user = JSON.parse(userJson);
+            // Mocking data fetching for visual check - REMOVE THIS LINE IN PRODUCTION
+            // const data = { firstName: "John", lastName: "Doe", email: "john@example.com", phone: "+1 234 567 890", bookingsCount: 5, reviewsCount: 2, wishlistCount: 3, recentBookings: [{destination: "Paris, France", refNumber: "REF-8821", dateRange: "Oct 12 - Oct 18", status: "Confirmed"}, {destination: "Bali, Indonesia", refNumber: "REF-9932", dateRange: "Dec 05 - Dec 12", status: "Pending"}] };
 
-            // DEBUG: This will show you exactly what keys exist (e.g. lastName vs LastName)
-            console.log("LocalStorage User Object:", user);
+            // UNCOMMENT THIS IN PRODUCTION:
+             const response = await fetch('/User/GetProfileData');
+             if (!response.ok) throw new Error("Not logged in");
+             const data = await response.json();
 
-            // Mapping with fallbacks for Case-Sensitivity
-            const fName = user.firstName || user.FirstName || "N/A";
-            const lName = user.lastName || user.LastName || "--";
-            const email = user.email || user.Email || "N/A";
+            // Profile Header
+            const fullName = `${data.firstName} ${data.lastName}`;
+            document.getElementById('topName').innerText = fullName;
+            document.getElementById('lblFullName').innerText = fullName;
+            document.getElementById('lblEmail').innerText = data.email;
+            document.getElementById('smallEmail').innerText = data.email;
+            document.getElementById('lblPhone').innerText = data.phone || 'Not set';
 
-            // Update UI elements safely
-            const elements = {
-                'profileName': (fName + " " + (lName !== "--" ? lName : "")).trim(),
-                'profileFirstName': fName,
-                'profileLastName': lName,
-                'profileEmail': email
-            };
-
-            for (const [id, value] of Object.entries(elements)) {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.innerText = value;
-                } else {
-                    console.error("Could not find HTML element with ID:", id);
-                }
+            // Initials
+            if(data.firstName && data.lastName) {
+                document.getElementById('userInitials').innerText = (data.firstName[0] + data.lastName[0]).toUpperCase();
             }
 
+            // Statistics
+            document.getElementById('statTrips').innerText = data.bookingsCount;
+            document.getElementById('statReviews').innerText = data.reviewsCount;
+            document.getElementById('statSaved').innerText = data.wishlistCount;
+
+            // Bookings Table
+            const tbody = document.querySelector('#bookingsTable tbody');
+            tbody.innerHTML = '';
+
+            if (!data.recentBookings || data.recentBookings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-5 text-muted"><i class="fa-solid fa-ticket fa-2x mb-3 d-block opacity-25"></i>No bookings found yet.</td></tr>';
+            } else {
+                data.recentBookings.forEach(b => {
+                    const statusClass = b.status === 'Confirmed' ? 'status-confirmed' : 'status-pending';
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>
+                                <div class="fw-bold text-dark">${b.destination}</div>
+                                <small class="text-muted" style="font-size:0.7rem;">${b.refNumber}</small>
+                            </td>
+                            <td class="small fw-bold text-muted"><i class="fa-regular fa-calendar me-2"></i>${b.dateRange}</td>
+                            <td><span class="status-pill ${statusClass}">${b.status}</span></td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-light border rounded-pill px-3"><i class="fa-solid fa-ellipsis"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
         } catch (error) {
-            console.error("Error parsing user data:", error);
+            console.error(error);
         }
-    });
-</script> *@
+    }
+
+    function confirmLogout() {
+        if (confirm("Are you sure you want to log out safely?")) {
+            localStorage.clear();
+            sessionStorage.clear();
+            document.getElementById('logoutForm').submit();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadProfile);
+</script>

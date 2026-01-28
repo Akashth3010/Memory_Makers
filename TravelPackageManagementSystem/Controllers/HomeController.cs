@@ -102,9 +102,46 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View("Trending/Jaipur");
         }
-      
+        public IActionResult Profile()
+        {
+            return View("User/Profile");
+        }
 
-      
+        public IActionResult Edit()
+        {
+            return View("User/Edit");
+        }
+
+        public IActionResult Wishlist()
+        {
+            return View("User/Wishlist");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public IActionResult GoaPack1() => View("Package/GoaPack1");
         public IActionResult GoaPack2() => View("Package/GoaPack2");
         public IActionResult GoaPack3() => View("Package/GoaPack3");

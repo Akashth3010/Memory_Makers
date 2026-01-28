@@ -1,0 +1,126 @@
+﻿/* Auth / avatar styles */
+.pointer-cursor {
+    cursor: pointer;
+}
+
+.user-toggle-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.user-menu-compact {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    width: 320px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 34px rgba(2,6,23,0.14);
+    padding: 12px;
+    z-index: 1050;
+    display: none;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+    .user-menu-compact.show {
+        display: block;
+    }
+
+.user-menu-hint {
+    color: #0ea5e9;
+    font-size: 0.88rem;
+    margin-bottom: 8px;
+}
+
+.user-menu-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 8px;
+    align-items: flex-start;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+    .user-menu-item + .user-menu-item {
+        margin-top: 6px;
+    }
+
+    .user-menu-item:hover {
+        background: #f8fafc;
+    }
+
+.user-menu-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fbfdff;
+    color: #0f172a;
+    font-size: 18px;
+    box-shadow: 0 6px 14px rgba(2,6,23,0.04);
+    flex-shrink: 0;
+}
+
+.user-menu-title {
+    font-weight: 700;
+    margin: 0;
+    font-size: 15px;
+    color: #0f172a;
+}
+
+.user-menu-desc {
+    margin: 0;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.25;
+}
+
+.user-menu-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* Modal Helper */
+.modal-close-btn {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    z-index: 100;
+}
+
+/* Search panel styling */
+.search-panel {
+    background: rgba(255,255,255,0.03);
+    padding: 18px 0;
+}
+
+.search-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.auth-input {
+    width: 100%;
+}
+
+.submit-glow-btn {
+    background: #2563eb;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+}

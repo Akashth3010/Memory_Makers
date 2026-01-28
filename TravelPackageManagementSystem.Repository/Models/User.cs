@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TravelPackageManagementSystem.Repository.Models;
 
 namespace TravelPackageManagementSystem.Repository.Models
 {
@@ -21,22 +21,34 @@ namespace TravelPackageManagementSystem.Repository.Models
         [Required(ErrorMessage = "Username is Required")]
         [StringLength(50)]
         [Display(Name = "Username")]
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is Required")]
-        [StringLength(255)] // Matches VARCHAR(255) for hashed passwords
+        [StringLength(255)]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Email address is Required")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        [StringLength(100)] // Updated to 100 to match your SQL schema
-        public string Email { get; set; }
+        [StringLength(100)]
+        public string Email { get; set; } = string.Empty;
+
+        // Optional profile fields (add if needed)
+        [StringLength(50)]
+        public string? FirstName { get; set; }
+
+        [StringLength(50)]
+        public string? LastName { get; set; }
+
+        [Phone]
+        [StringLength(20)]
+        public string? Phone { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
         public UserRole Role { get; set; } = UserRole.CUSTOMER;
 
-        // Navigation Property initialized to prevent null errors
-        public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public virtual ICollection<Booking>? Bookings { get; set; } = new List<Booking>();
     }
 }
