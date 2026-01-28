@@ -12,19 +12,17 @@
     <div class="stats-grid">
         <div class="stat-card glow">
             <h4>Total Users</h4>
-            <p id="totalUsers">18</p>
+            @* Sum of Customers and unique Hosts *@
+            <p id="totalUsers">@((ViewBag.Customers?.Count ?? 0) + (ViewBag.Hosts?.Count ?? 0))</p>
         </div>
         <div class="stat-card glow">
             <h4>Customers</h4>
-            <p>14</p>
+            <p>@(ViewBag.Customers?.Count ?? 0)</p>
         </div>
         <div class="stat-card glow">
             <h4>Travel Hosts</h4>
-            <p>4</p>
-        </div>
-        <div class="stat-card glow danger">
-            <h4>Blocked Users</h4>
-            <p id="blockedCount">2</p>
+            @* This will now show 1 if the same host registered twice *@
+            <p>@(ViewBag.Hosts?.Count ?? 0)</p>
         </div>
     </div>
 
@@ -50,82 +48,49 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Status</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="customerBody">
-
-                @for (int i = 1; i <= 12; i++)
+                @foreach (var user in ViewBag.Customers)
                 {
                     <tr class="hover-glow" data-status="active">
-                        <td>Customer @i</td>
-                        <td>customer@i@mail.com</td>
-                        <td>98765432@i</td>
-                        <td><span class="badge active">Active</span></td>
-                        <td>
-                            <button class="btn-view" onclick="viewUser('Customer @i','customer@i@mail.com','98765432@i','Customer')">View</button>
-                            <button class="btn-block" onclick="blockCustomer(this)">Block</button>
-                        </td>
+                        <td>@user.Username</td>
+                        <td>@user.Email</td>
+                        <td>@(string.IsNullOrEmpty(user.PhoneNumber) ? "N/A" : user.PhoneNumber)</td>
                     </tr>
                 }
-
             </tbody>
         </table>
-
-        <div class="blocked-section">
-            <h4>Blocked Customers</h4>
-            <ul id="blockedList"></ul>
-        </div>
     </div>
 
     <!-- HOSTS -->
     <div class="user-table tab-content" id="hosts">
-
         <table>
             <thead>
                 <tr>
                     <th>Agency</th>
                     <th>Email</th>
                     <th>Packages</th>
-                    <th>Status</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-
-                <tr class="hover-glow" data-status="approved">
-                    <td>Goa Travels</td>
-                    <td>goa@host.com</td>
-                    <td>6</td>
-                    <td><span class="badge active">Approved</span></td>
-                    <td><button class="btn-view">View</button></td>
-                </tr>
-
-                <tr class="hover-glow" data-status="pending">
-                    <td>Himalaya Trips</td>
-                    <td>himalaya@host.com</td>
-                    <td>4</td>
-                    <td><span class="badge pending">Pending</span></td>
-                    <td><button class="btn-view">View</button></td>
-                </tr>
-
-                <tr class="hover-glow" data-status="approved">
-                    <td>Royal Rajasthan</td>
-                    <td>royal@host.com</td>
-                    <td>8</td>
-                    <td><span class="badge active">Approved</span></td>
-                    <td><button class="btn-view">View</button></td>
-                </tr>
-
-                <tr class="hover-glow" data-status="blocked">
-                    <td>Kerala Escape</td>
-                    <td>kerala@host.com</td>
-                    <td>3</td>
-                    <td><span class="badge blocked">Blocked</span></td>
-                    <td><button class="btn-view">View</button></td>
-                </tr>
-
+                @foreach (var host in ViewBag.Hosts)
+                {
+                    <tr class="hover-glow">
+                        <td>@host.HostAgencyName</td>
+                        <td>@host.EmailAddress</td>
+                        <td>
+                            @if (host.PackageNames != null && host.PackageNames.Count > 0)
+                            {
+                                @string.Join(", ", host.PackageNames)
+                            }
+                            else
+                            {
+                                <span>No Packages</span>
+                            }
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
@@ -189,31 +154,4 @@
         });
     };
 
-    // BLOCK CUSTOMER
-    function blockCustomer(btn) {
-        const row = btn.closest("tr");
-        const name = row.children[0].innerText;
-
-        row.remove();
-
-        blockedCount++;
-        document.getElementById("blockedCount").innerText = blockedCount;
-
-        const li = document.createElement("li");
-        li.innerText = name;
-        document.getElementById("blockedList").appendChild(li);
-    }
-
-    // VIEW USER
-    function viewUser(name, email, phone, role) {
-        userModal.classList.add("show");
-        userName.innerText = name;
-        userEmail.innerText = email;
-        userPhone.innerText = phone;
-        userRole.innerText = role;
-    }
-
-    function closeUserModal() {
-        userModal.classList.remove("show");
-    }
 </script>

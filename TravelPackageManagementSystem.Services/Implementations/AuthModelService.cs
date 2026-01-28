@@ -31,6 +31,7 @@ namespace TravelPackageManagementSystem.Services.Implementations
             {
                 Username = model.Username,
                 Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
                 Role = UserRole.CUSTOMER
             };
 
