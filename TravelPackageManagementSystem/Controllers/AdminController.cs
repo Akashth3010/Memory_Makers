@@ -16,6 +16,24 @@ namespace TravelPackageManagementSystem.Application.Controllers
 
         // ---------------- PAGES ----------------
         public IActionResult Dashboard() => View();
+        [HttpGet]
+        public async Task<IActionResult> GetDashboardStats()
+        {
+            // Fetch counts directly from the database
+            var totalPackages = await _context.TravelPackages.CountAsync();
+            var pendingApprovals = await _context.TravelPackages
+                .CountAsync(p => p.ApprovalStatus == ApprovalStatus.Pending);
+            var totalBookings = await _context.Bookings.CountAsync();
+            var registeredUsers = await _context.Users.CountAsync();
+
+            return Json(new
+            {
+                totalPackages,
+                pendingApprovals,
+                totalBookings,
+                registeredUsers
+            });
+        }
         public IActionResult Approvals() => View();
         public IActionResult Packages() => View();
         public IActionResult Bookings() => View();

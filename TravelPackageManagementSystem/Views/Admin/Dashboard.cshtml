@@ -4,104 +4,93 @@
 }
 
 <div class="admin-page dashboard-page">
-
     <h2 class="page-heading">Admin Dashboard</h2>
-    <p class="page-subtext">
-        Overview of your travel platform performance ✨
-    </p>
+    <p class="page-subtext">Overview of your travel platform performance ✨</p>
 
-    <!-- ===== STATS GRID ===== -->
     <div class="stats-grid">
-
-        <div class="stat-card glow-card" data-count="24">
-            <div class="stat-icon bg-blue">
-                <i class="fa-solid fa-box-archive"></i>
-            </div>
+        <div class="stat-card glow-card" id="cardTotalPackages">
+            <div class="stat-icon bg-blue"><i class="fa-solid fa-box-archive"></i></div>
             <div class="stat-info">
                 <h3 class="stat-number">0</h3>
                 <p>Total Packages</p>
             </div>
         </div>
 
-        <div class="stat-card glow-card" data-count="6">
-            <div class="stat-icon bg-orange">
-                <i class="fa-solid fa-clock"></i>
-            </div>
+        <div class="stat-card glow-card" id="cardPendingApprovals">
+            <div class="stat-icon bg-orange"><i class="fa-solid fa-clock"></i></div>
             <div class="stat-info">
                 <h3 class="stat-number">0</h3>
                 <p>Pending Approvals</p>
             </div>
         </div>
 
-        <div class="stat-card glow-card" data-count="128">
-            <div class="stat-icon bg-green">
-                <i class="fa-solid fa-calendar-check"></i>
-            </div>
+        <div class="stat-card glow-card" id="cardTotalBookings">
+            <div class="stat-icon bg-green"><i class="fa-solid fa-calendar-check"></i></div>
             <div class="stat-info">
                 <h3 class="stat-number">0</h3>
                 <p>Total Bookings</p>
             </div>
         </div>
 
-        <div class="stat-card glow-card" data-count="52">
-            <div class="stat-icon bg-purple">
-                <i class="fa-solid fa-users"></i>
-            </div>
+        <div class="stat-card glow-card" id="cardRegisteredUsers">
+            <div class="stat-icon bg-purple"><i class="fa-solid fa-users"></i></div>
             <div class="stat-info">
                 <h3 class="stat-number">0</h3>
                 <p>Registered Users</p>
             </div>
         </div>
-
     </div>
 
-    <!-- ===== WELCOME MESSAGE ===== -->
-    <div class="dashboard-message">
+    <div class="dashboard-message mt-4">
         <h4>Welcome back, Admin 👋</h4>
-        <p>
-            You have <b>6 package requests</b> waiting for approval.
-            Let’s keep the platform updated and engaging!
-        </p>
+        <p id="welcomeMsg">Checking for new requests...</p>
     </div>
-
 </div>
 
-<!-- ===== DASHBOARD JS (jQuery ONLY) ===== -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
-    $(document).ready(function () {
 
-        // Number counter animation
-        $('.stat-card').each(function () {
-            let card = $(this);
-            let target = card.data('count');
-            let numberEl = card.find('.stat-number');
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Load live data on page entry
+            fetchDashboardStats();
 
-            $({ count: 0 }).animate(
-                { count: target },
-                {
-                    duration: 1200,
-                    easing: 'swing',
-                    step: function () {
-                        numberEl.text(Math.floor(this.count));
-                    },
-                    complete: function () {
-                        numberEl.text(target);
-                    }
-                }
+            // Handle hover effects
+            $('.stat-card').hover(
+                function () { $(this).addClass('active-glow'); },
+                function () { $(this).removeClass('active-glow'); }
             );
         });
 
-        // Hover glow pulse
-        $('.stat-card').hover(
-            function () {
-                $(this).addClass('active-glow');
-            },
-            function () {
-                $(this).removeClass('active-glow');
-            }
-        );
+        function fetchDashboardStats() {
+            $.get("/Admin/GetDashboardStats", function (data) {
+                // Trigger counter animations with real SQL data
+                animateNumber($('#cardTotalPackages'), data.totalPackages);
+                animateNumber($('#cardPendingApprovals'), data.pendingApprovals);
+                animateNumber($('#cardTotalBookings'), data.totalBookings);
+                animateNumber($('#cardRegisteredUsers'), data.registeredUsers);
 
-    });
-</script>
+                // Update the blue welcome banner
+                $("#welcomeMsg").html(`You have <b>${data.pendingApprovals} package requests</b> waiting for approval. Let’s keep the platform updated!`);
+            });
+        }
+
+        function animateNumber(cardEl, targetValue) {
+            let numberDisplay = cardEl.find('.stat-number');
+            $({ count: 0 }).animate(
+                { count: targetValue },
+                {
+                    duration: 1500,
+                    easing: 'swing',
+                    step: function () {
+                        numberDisplay.text(Math.floor(this.count));
+                    },
+                    complete: function () {
+                        numberDisplay.text(targetValue);
+                    }
+                }
+            );
+        }
+    </script>
+}

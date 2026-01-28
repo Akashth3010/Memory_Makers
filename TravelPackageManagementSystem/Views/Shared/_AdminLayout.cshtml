@@ -170,6 +170,6 @@
             setInterval(updatePendingBadge, 30000);
         });
     </script>
-
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
