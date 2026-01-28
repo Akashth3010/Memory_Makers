@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Models;
 using TravelPackageManagementSystem.Repository.Interfaces;
 using TravelPackageManagementSystem.Services.Interfaces;
-using TravelPackageManagementSystem.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace TravelPackageManagementSystem.Services.Implementations
@@ -21,41 +19,24 @@ namespace TravelPackageManagementSystem.Services.Implementations
 
         public async Task<bool> ProcessPaymentAsync(Payment payment)
         {
-            // Transaction ensures both tables update or none do
-            using (var transaction = await _context.Database.BeginTransactionAsync())
+            // 1. Standardize Data
+            if (payment.PaymentDate == DateTime.MinValue) payment.PaymentDate = DateTime.Now;
+            if (string.IsNullOrEmpty(payment.Status)) payment.Status = "Completed";
+
+            // 2. Add Payment Record
+            await _paymentRepository.AddPaymentAsync(payment);
+
+            // 3. Update Booking Status
+            var booking = await _context.Bookings.FindAsync(payment.BookingId);
+            if (booking != null)
             {
-                try
-                {
-                    if (payment.PaymentDate == DateTime.MinValue)
-                    {
-                        payment.PaymentDate = DateTime.Now;
-                    }
-
-                    // 1. Save the Payment (This part is working based on your SQL results)
-                    await _paymentRepository.AddPaymentAsync(payment);
-                    await _paymentRepository.SaveChangesAsync();
-
-                    // 2. Find the Booking to update its status
-                    var booking = await _context.Bookings.FindAsync(payment.BookingId);
-                    if (booking != null)
-                    {
-                        // FIX: Use the Enum value instead of a string to resolve CS0029
-                        booking.Status = BookingStatus.CONFIRMED;
-
-                        _context.Bookings.Update(booking);
-                        await _context.SaveChangesAsync();
-                    }
-
-                    await transaction.CommitAsync();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    Console.WriteLine($"Payment/Booking Sync Error: {ex.Message}");
-                    return false;
-                }
+                // FIX: Used CONFIRMED (All Uppercase) to match your Enum definition
+                booking.Status = BookingStatus.CONFIRMED;
             }
+
+            // 4. Save Changes
+            int result = await _context.SaveChangesAsync();
+            return result > 0;
         }
 
         public async Task<IEnumerable<Payment>> GetTransactionHistoryAsync()

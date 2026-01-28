@@ -59,20 +59,28 @@
     <h2 class="section-title text-center mb-5"><span style="color: #6366f1;">Top</span> Destination</h2>
 
     <div class="destination-grid">
-        @* Loop through the unique Destinations instead of duplicate packages *@
-        @foreach (var item in Model)
+        @* Check if there are any destinations in the model *@
+        @if (Model != null && Model.Any())
         {
-            @* Use 'StateName' instead of 'Destination' *@
-            <div class="card" onclick="location.href='@Url.Action("Destination", "Home", new { state = item.StateName })'" style="cursor:pointer;">
-                <img src="@item.ImageUrl" alt="@item.StateName">
-                <div class="overlay">
-                    <h3>@item.StateName</h3>
+            @* Loop through the unique Destinations instead of duplicate packages *@
+            @foreach (var item in Model)
+            {
+                @* Use 'StateName' instead of 'Destination' *@
+                <div class="card" onclick="location.href='@Url.Action("Destination", "Home", new { state = item.StateName })'" style="cursor:pointer;">
+                    <img src="@item.ImageUrl" alt="@item.StateName">
+                    <div class="overlay">
+                        <h3>@item.StateName</h3>
 
-                    @* Now using the actual dynamic counts from your new table *@
-                    <p>@item.HotelCount Hotels</p>
-                    <p>@item.HolidayCount Holidays</p>
+                        @* Now using the actual dynamic counts from your new table *@
+                        <p>@item.HotelCount Hotels</p>
+                        <p>@item.HolidayCount Holidays</p>
+                    </div>
                 </div>
-            </div>
+            }
+        }
+        else
+        {
+            <p>No destinations available.</p>
         }
     </div>
 </section>

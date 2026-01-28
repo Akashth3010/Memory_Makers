@@ -71,7 +71,7 @@ namespace TravelPackageManagementSystem.Repository.Models
         [StringLength(100)]
         public string? Destination { get; set; }
 
-        public int DestinationId { get; set; }
+        public int? DestinationId { get; set; }
 
         [StringLength(100)]
         public string? Location { get; set; }

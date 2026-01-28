@@ -4,132 +4,197 @@
 }
 
 <div class="admin-page approvals-page">
+    <div class="packages-header">
+        <div>
+            <h2 class="page-heading">Package Approvals</h2>
+            <p class="page-subtext">Review host submitted travel packages and take action</p>
+        </div>
+    </div>
 
-    <h2 class="page-heading">Package Approvals</h2>
-    <p class="page-subtext">
-        Review host submitted travel packages and take action
-    </p>
-
-    <!-- ================= STATUS TABS ================= -->
     <div class="approval-tabs">
         <div class="tab active" data-status="pending">Pending</div>
         <div class="tab" data-status="approved">Approved</div>
         <div class="tab" data-status="rejected">Rejected</div>
     </div>
 
-    <!-- ================= LIST ================= -->
     <div id="approvalList" class="approval-grid"></div>
-
-    <!-- ================= DETAILS PANEL ================= -->
-    <div id="approvalDetails" class="approval-details">
-
-        <h4>Host Package Details</h4>
-
-        <div class="details-grid">
-            <div><b>Host Name:</b> <span id="dHost"></span></div>
-            <div><b>Email:</b> <span id="dEmail"></span></div>
-            <div><b>Phone:</b> <span id="dPhone"></span></div>
-            <div><b>City:</b> <span id="dCity"></span></div>
-
-            <div><b>Package Name:</b> <span id="dPackage"></span></div>
-            <div><b>Destination:</b> <span id="dDestination"></span></div>
-            <div><b>Package Type:</b> <span id="dType"></span></div>
-            <div><b>Duration:</b> <span id="dDuration"></span></div>
-            <div><b>Price:</b> ₹<span id="dPrice"></span></div>
-        </div>
-
-        <div class="desc-box">
-            <b>Description</b>
-            <p id="dDesc"></p>
-        </div>
-
-        <div class="details-actions">
-            <button class="btn-approve">Accept</button>
-            <button class="btn-reject">Reject</button>
-            <button class="btn-close">Close</button>
-        </div>
-
-    </div>
-
 </div>
 
-<!-- ================= jQuery ================= -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="custom-modal" id="approvalModal">
+    <div class="modal-box detailed-modal">
+        <div class="modal-header-custom">
+            <h4><i class="fa fa-file-invoice"></i> Submission Summary</h4>
+            <button class="close-modal-btn" onclick="closeModal()">×</button>
+        </div>
 
+        <div class="modal-body-scroll">
+            <div class="form-section-admin">
+                <h5 class="section-subtitle"><i class="fa fa-user-circle"></i> Host Information</h5>
+                <div class="admin-form-row">
+                    <div class="form-col">
+                        <label class="info-label-blue">Agency Name</label>
+                        <div class="read-only-text" id="dHost"></div>
+                    </div>
+                    <div class="form-col">
+                        <label class="info-label-blue">Email Address</label>
+                        <div class="read-only-text" id="dEmail"></div>
+                    </div>
+                </div>
+                <div class="admin-form-row">
+                    <div class="form-col">
+                        <label class="info-label-blue">Phone Number</label>
+                        <div class="read-only-text" id="dPhone"></div>
+                    </div>
+                    <div class="form-col">
+                        <label class="info-label-blue">Registered Location</label>
+                        <div class="read-only-text" id="dCity"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section-admin">
+                <h5 class="section-subtitle"><i class="fa fa-map-marked-alt"></i> Package Details</h5>
+                <div class="admin-form-row">
+                    <div class="form-col">
+                        <label class="info-label-blue">Package Name</label>
+                        <div class="read-only-text" id="dPackage"></div>
+                    </div>
+                    <div class="form-col">
+                        <label class="info-label-blue">Primary Destination</label>
+                        <div class="read-only-text" id="dDestination"></div>
+                    </div>
+                </div>
+                <div class="admin-form-row">
+                    <div class="form-col">
+                        <label class="info-label-blue">Category / Type</label>
+                        <div class="read-only-text" id="dType"></div>
+                    </div>
+                    <div class="form-col">
+                        <label class="info-label-blue">Trip Duration</label>
+                        <div class="read-only-text" id="dDuration"></div>
+                    </div>
+                    <div class="form-col">
+                        <label class="info-label-blue">Price per Person</label>
+                        <div class="read-only-text">₹<span id="dPrice"></span></div>
+                    </div>
+                </div>
+                <label class="info-label-blue">Detailed Overview</label>
+                <div class="read-only-text desc-area" id="dDesc"></div>
+            </div>
+
+            <div class="form-section-admin">
+                <h5 class="section-subtitle"><i class="fa fa-camera-retro"></i> Image Gallery</h5>
+                <div id="dThumbnails" class="thumbnail-display-grid"></div>
+            </div>
+
+            <div class="form-section-admin">
+                <h5 class="section-subtitle"><i class="fa fa-list-ol"></i> Planned Itinerary</h5>
+                <div id="dItinerary" class="itinerary-list-view"></div>
+            </div>
+        </div>
+
+        <div class="modal-actions-custom">
+            <button class="btn-cancel-admin" onclick="closeModal()">Close</button>
+            <button class="btn-reject-admin" onclick="confirmAction('Rejected')">Reject Submission</button>
+            <button class="btn-approve-admin" onclick="confirmAction('Approved')">Approve & Publish</button>
+        </div>
+    </div>
+</div>
+
+<div class="confirm-overlay" id="confirmBox">
+    <div class="confirm-box">
+        <i class="fa fa-question-circle"></i>
+        <h4>Are you sure?</h4>
+        <p id="confirmMsg">Do you want to proceed with this action?</p>
+        <div class="confirm-btns">
+            <button class="no-btn" onclick="hideConfirm()">No, Cancel</button>
+            <button class="yes-btn" id="confirmYesBtn">Yes, Proceed</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     let currentStatus = "pending";
     let selectedId = null;
+    let pendingAction = null;
 
     $(document).ready(function () {
-        // Load the initial list from the database
         renderList();
-
-        // Handle Tab switching (Pending, Approved, Rejected)
         $(".tab").click(function () {
             $(".tab").removeClass("active");
             $(this).addClass("active");
             currentStatus = $(this).data("status");
             renderList();
         });
-
-        // Set up action buttons
-        $(".btn-approve").click(() => updateStatus("Approved"));
-        $(".btn-reject").click(() => updateStatus("Rejected"));
-        $(".btn-close").click(() => $("#approvalDetails").fadeOut());
     });
 
-    // FETCH LIVE DATA FROM THE CONTROLLER
     function renderList() {
-        $("#approvalList").html("<p class='loading-text'>Fetching requests from database...</p>");
-
-        // Calls the GetApprovals method in AdminController.cs
+        $("#approvalList").html("<p class='empty-text'>Loading requests...</p>");
         $.get(`/Admin/GetApprovals?status=${currentStatus}`, function (data) {
             $("#approvalList").html("");
-
             if (data.length === 0) {
                 $("#approvalList").html(`<p class="empty-text">No ${currentStatus} requests found.</p>`);
                 return;
             }
-
             data.forEach(a => {
                 $("#approvalList").append(`
                     <div class="approval-card glow-card">
+                        <div class="pkg-badge-pending">NEW SUBMISSION</div>
                         <h5>${a.package}</h5>
-                        <p><b>Host:</b> ${a.host}</p>
-                        <p><b>Type:</b> ${a.type}</p>
-                        <button onclick='viewDetails(${JSON.stringify(a)})'>View Details</button>
+                        <p><b>Agency:</b> ${a.host}</p>
+                        <p><b>Region:</b> ${a.destination}</p>
+                        <button class="view-btn-admin" onclick='fetchAndShowDetails(${a.id})'>Review Details</button>
                     </div>
                 `);
             });
         });
     }
 
-    function viewDetails(data) {
-        selectedId = data.id;
+    function fetchAndShowDetails(id) {
+        selectedId = id;
+        $.get(`/Admin/GetPackageById/${id}`, function(data) {
+            // Mapping fix
+            $("#dHost").text(data.host);
+            $("#dEmail").text(data.email);
+            $("#dPhone").text(data.phone);
+            $("#dCity").text(data.city); // 'location' ki jagah 'city' use karein
+            $("#dPackage").text(data.name);
+            $("#dDestination").text(data.dest);
+            $("#dType").text(data.type);
+            $("#dDuration").text(data.duration);
+            $("#dPrice").text(data.price.toLocaleString('en-IN'));
+            $("#dDesc").text(data.description);
 
-        // Populate the details panel with real database values
-        $("#dHost").text(data.host);
-        $("#dEmail").text(data.email);
-        $("#dPhone").text(data.phone);
-        $("#dCity").text(data.city);
-        $("#dPackage").text(data.package);
-        $("#dDestination").text(data.destination);
-        $("#dType").text(data.type);
-        $("#dDuration").text(data.duration);
-        $("#dPrice").text(data.price);
-        $("#dDesc").text(data.desc);
+            // Images display
+            let thumbs = "";
+            if(data.imgUrl) thumbs += `<img src="${data.imgUrl}" class="admin-preview-img">`;
+            if(data.thumb1) thumbs += `<img src="${data.thumb1}" class="admin-preview-img">`;
+            $("#dThumbnails").html(thumbs || "No photos provided.");
 
-        $("#approvalDetails").fadeIn();
+            $("#approvalModal").addClass("show");
+        });
     }
 
-    // UPDATE DATABASE STATUS (Accept/Reject)
+    function confirmAction(status) {
+        pendingAction = status;
+        $("#confirmMsg").text(`Do you want to mark this package as ${status}?`);
+        $("#confirmBox").css("display", "flex");
+
+        $("#confirmYesBtn").off("click").on("click", function() {
+            updateStatus(pendingAction);
+            hideConfirm();
+        });
+    }
+
+    function hideConfirm() { $("#confirmBox").hide(); }
+    function closeModal() { $("#approvalModal").removeClass("show"); }
+
     function updateStatus(newStatus) {
         $.post('/Admin/UpdateStatus', { id: selectedId, status: newStatus }, function (res) {
             if (res.success) {
-                $("#approvalDetails").fadeOut();
-                renderList(); // Refresh list to move item to the new tab
-            } else {
-                alert("Error updating status: " + res.message);
+                closeModal();
+                renderList();
             }
         });
     }

@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260123124111_CreateDestinationsTable")]
-    partial class CreateDestinationsTable
+    [Migration("20260128122507_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContactPhone")
                         .IsRequired()
@@ -248,26 +252,20 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
                     b.Property<string>("CityCountry")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HostAgencyName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -377,7 +375,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("DestinationId")
+                    b.Property<int?>("DestinationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Duration")
@@ -750,11 +748,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.HasOne("TravelPackageManagementSystem.Repository.Models.Destination", "ParentDestination")
                         .WithMany("TravelPackages")
                         .HasForeignKey("DestinationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("TravelPackageManagementSystem.Repository.Models.HostContactDetail", "Host")
-                        .WithMany()
+                        .WithMany("TravelPackages")
                         .HasForeignKey("HostId");
 
                     b.Navigation("Host");
@@ -771,6 +768,11 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                 {
                     b.Navigation("GalleryImages");
 
+                    b.Navigation("TravelPackages");
+                });
+
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.HostContactDetail", b =>
+                {
                     b.Navigation("TravelPackages");
                 });
 
