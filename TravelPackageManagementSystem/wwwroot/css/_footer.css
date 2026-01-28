@@ -1,5 +1,8 @@
 ﻿/* 1. RESET: This kills the -50vw sliding effect from your Index page */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .footer-container-main {
     display: flex !important;
     justify-content: center !important;
@@ -14,22 +17,34 @@
 }
 
 /* 2. THE GLOWING CARD */
+<<<<<<< HEAD
 
 .footer-card {
     position: relative;
     width: 100% !important; /* This creates the attractive margins */
 
+=======
+.footer-card {
+    position: relative;
+    width: 100% !important; /* This creates the attractive margins */
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
     max-width: 1200px;
     background: #0b1d3a;
     border-radius: 30px;
     padding: 3px; /* The thickness of the glow border */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
     overflow: hidden;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
     /* 3. THE ANIMATED GLOW (Navy/Blue/Green Rotation) */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
     .footer-card::before {
         content: '';
         position: absolute;
@@ -44,7 +59,10 @@
     }
 
 @keyframes rotateGlow {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
     from {
         transform: rotate(0deg);
     }
@@ -55,7 +73,10 @@
 }
 
 /* 4. INNER CONTENT (Navy to Green Gradient) */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .footer-inner {
     position: relative;
     z-index: 1;
@@ -66,14 +87,20 @@
 }
 
 /* 5. HOVER EFFECTS */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .footer-card:hover {
     transform: translateY(-15px);
     box-shadow: 0 20px 40px rgba(46, 204, 113, 0.4);
 }
 
 /* 6. GRID LAYOUT */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .footer-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -103,7 +130,10 @@
     }
 
 /* 7. SOCIAL BUTTONS */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .social-btns {
     display: flex;
     gap: 15px;
@@ -127,7 +157,10 @@
     }
 
 /* 8. NEWSLETTER FORM */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .subscribe-group {
     display: flex;
     margin-top: 15px;
@@ -157,7 +190,10 @@
 }
 
 /* 9. BOTTOM SECTION */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .footer-hr {
     opacity: 0.1;
     margin: 30px 0;

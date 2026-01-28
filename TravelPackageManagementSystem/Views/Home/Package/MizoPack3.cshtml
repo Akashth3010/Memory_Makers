@@ -184,7 +184,6 @@
                 });
 
             });
-
             main.addEventListener('click', () => {
 
                 const currentBg = main.style.backgroundImage.slice(5, -2).replace(/"/g, "");
@@ -194,13 +193,11 @@
                 lightbox.style.display = 'flex';
 
             });
-
             lightbox.addEventListener('click', () => {
 
                 lightbox.style.display = 'none';
 
             });
-
             // 2. ITINERARY DROPDOWN
 
             const headers = document.querySelectorAll('.day-header');
@@ -212,7 +209,6 @@
                     const body = h.nextElementSibling;
 
                     const toggle = h.querySelector('.toggle');
-
                     if (body.style.display === "block") {
 
                         body.style.display = "none";
@@ -269,6 +265,13 @@
 
             document.getElementById('travelDate').setAttribute('min', today);
 
+        });
+                document.addEventListener("DOMContentLoaded", function () {
+            // ... your gallery & itinerary logic ...
+            // Get today's date in YYYY-MM-DD format
+            const today = new Date().toISOString().split('T')[0];
+            // Set the 'min' attribute on the input so past dates are disabled
+            document.getElementById('travelDate').setAttribute('min', today);
         });
     </script>
 </body>

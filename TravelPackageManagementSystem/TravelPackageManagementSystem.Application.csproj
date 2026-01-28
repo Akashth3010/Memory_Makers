@@ -36,6 +36,7 @@
     <Content Remove="Views\Home\Demo.cshtml" />
     <Content Remove="Views\Home\LandingPage.cshtml" />
     <Content Remove="Views\Home\SignUp.cshtml" />
+    <Content Remove="wwwroot\css\footer.css" />
     <Content Remove="wwwroot\lib\Image\Amritsar.jpg" />
     <Content Remove="wwwroot\lib\Image\Himachal Pradesh.jpg" />
     <Content Remove="wwwroot\lib\Image\Jaipur.jpg" />
@@ -45,6 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.1">
@@ -54,6 +56,8 @@
   </ItemGroup>
 
   <ItemGroup>
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
     <ProjectReference Include="..\TravelPackageManagementSystem.Repository\TravelPackageManagementSystem.Repository.csproj" />
     <ProjectReference Include="..\TravelPackageManagementSystem.Services\TravelPackageManagementSystem.Services.csproj" />
   </ItemGroup>

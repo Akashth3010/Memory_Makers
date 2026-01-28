@@ -219,5 +219,17 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }
+        public IActionResult aboutus()
+        {
+            return View();
+        }
+
     }
+<<<<<<< HEAD
 }
+=======
+    
+
+    }
+
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064

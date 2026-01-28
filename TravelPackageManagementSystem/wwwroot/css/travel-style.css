@@ -5,7 +5,10 @@
     --glass-border: rgba(255, 255, 255, 0.15);
     --text-white: #ffffff;
     --accent-color: #00d2ff; /* Default Accent - Blue */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
     --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
 }
 
@@ -44,7 +47,10 @@ body, html {
     }
 
 /* --- Package Cards Section --- */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .packages-section {
     display: flex;
     justify-content: center;
@@ -126,6 +132,7 @@ body, html {
     }
 
 /* --- Hot Tag --- */
+<<<<<<< HEAD
 
 .hot-tag {
     background: #e74c3c;
@@ -140,6 +147,20 @@ body, html {
 
 /* --- Auto-Scroll Gallery --- */
 
+=======
+.hot-tag {
+    background: #e74c3c;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+/* --- Auto-Scroll Gallery --- */
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .gallery-title {
     text-align: center;
     margin-top: 60px;
@@ -208,6 +229,7 @@ body, html {
     }
 
 /* Keyframes for continuous scroll */
+<<<<<<< HEAD
 
 @keyframes scroll-left {
 
@@ -215,6 +237,13 @@ body, html {
         transform: translateX(0);
     }
 
+=======
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
     100% {
         transform: translateX(-50%);
     }

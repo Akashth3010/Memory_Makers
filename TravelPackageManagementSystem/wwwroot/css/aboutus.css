@@ -1,0 +1,136 @@
+﻿/* Color Palette & Variables */
+:root {
+    --navy: #0b1d3a;
+    --bottle-green: #062c21;
+    --accent-green: #2ecc71;
+    --accent-blue: #1e90ff;
+}
+
+/* Hero Section */
+.about-hero-dynamic {
+    position: relative;
+    height: 60vh;
+    background: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8df0?auto=format&fit=crop&w=1400') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(11, 29, 58, 0.8), rgba(6, 44, 33, 0.9));
+}
+
+.hero-content-box {
+    position: relative;
+    z-index: 2;
+}
+
+.text-gradient {
+    background: linear-gradient(to right, var(--accent-green), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Feature Cards (Glow Effect) */
+.features-gradient-bg {
+    background: var(--navy);
+    padding: 80px 0;
+}
+
+.feature-glow-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px 20px;
+    color: white;
+    transition: all 0.4s ease;
+    height: 100%;
+}
+
+    .feature-glow-card i {
+        font-size: 2.5rem;
+        color: var(--accent-green);
+        text-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+    }
+
+    .feature-glow-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-green);
+        box-shadow: 0 10px 30px rgba(46, 204, 113, 0.2);
+    }
+
+/* Team Section */
+.team-card-premium {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.member-img-wrapper {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 15px;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 3px solid var(--accent-blue);
+}
+
+    .member-img-wrapper img {
+        width: 100%;
+    }
+
+.team-card-premium:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+/* CTA Banner */
+.cta-banner {
+    background: linear-gradient(135deg, var(--navy), var(--bottle-green));
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary-glow {
+    background: linear-gradient(45deg, var(--accent-green), var(--accent-blue));
+    border: none;
+    color: white;
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(30, 144, 255, 0.4);
+}
+
+    .btn-primary-glow:hover {
+        transform: scale(1.05);
+        color: white;
+        filter: brightness(1.1);
+    }
+
+/* Section Title decoration */
+.section-title {
+    color: var(--navy);
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 25px;
+}
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 50%;
+        height: 4px;
+        background: var(--accent-green);
+        border-radius: 2px;
+    }

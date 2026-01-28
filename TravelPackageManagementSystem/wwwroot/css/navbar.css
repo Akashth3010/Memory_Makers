@@ -1,9 +1,15 @@
 ﻿/* Slim Advanced Navbar */
+<<<<<<< HEAD
 
 .safar-navbar {
     background: linear-gradient(90deg, #000080 0%, #006a4e 100%);
     padding: 0.5rem 2rem; /* Reduced padding for slim look */
 
+=======
+.safar-navbar {
+    background: linear-gradient(90deg, #000080 0%, #006a4e 100%);
+    padding: 0.5rem 2rem; /* Reduced padding for slim look */
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     width: 100%;
 }
@@ -17,7 +23,10 @@
 }
 
 /* Force links into one row */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .navbar-nav-row {
     display: flex;
     list-style: none;
@@ -27,7 +36,10 @@
 }
 
 /* Logo Styling */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .nav-logo {
     color: white;
     text-decoration: none;
@@ -40,7 +52,10 @@
     }
 
 /* Link Styling & Hover */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .nav-link {
     color: white;
     text-decoration: none;
@@ -53,13 +68,19 @@
 
     .nav-link:hover {
         background: rgba(255, 255, 255, 0.15); /* Soft glow hover */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
         color: #2ecc71;
         transform: translateY(-1px);
     }
 
 /* Slim Button */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064
 .nav-btn-slim {
     background: #2ecc71;
     color: white;

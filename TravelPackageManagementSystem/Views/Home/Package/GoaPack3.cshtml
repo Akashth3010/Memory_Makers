@@ -7,6 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="~/css/pack-details.css" />
+
 </head>
 <body>
     <partial name="_Navbar" />
@@ -104,6 +105,10 @@
                     <form id="bookingForm">
                         <label for="travelDate">Travel Date</label>
                         <input type="date" id="travelDate" name="travelDate" required />
+<<<<<<< HEAD:TravelPackageManagementSystem/Views/Home/Package/GoaPack3.cshtml
+=======
+
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064:TravelPackageManagementSystem/Views/Home/GoaPack3.cshtml
                         <label>Guests</label>
                         <select id="guests">
                             <option value="1">1 person</option>
@@ -171,6 +176,7 @@
             });
 
         })();
+<<<<<<< HEAD:TravelPackageManagementSystem/Views/Home/Package/GoaPack3.cshtml
 
                 document.addEventListener("DOMContentLoaded", function () {
 
@@ -184,6 +190,16 @@
 
             document.getElementById('travelDate').setAttribute('min', today);
 
+=======
+                document.addEventListener("DOMContentLoaded", function () {
+            // ... your gallery & itinerary logic ...
+
+            // Get today's date in YYYY-MM-DD format
+            const today = new Date().toISOString().split('T')[0];
+
+            // Set the 'min' attribute on the input so past dates are disabled
+            document.getElementById('travelDate').setAttribute('min', today);
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064:TravelPackageManagementSystem/Views/Home/GoaPack3.cshtml
         });
 
     </script>

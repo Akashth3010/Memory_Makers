@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "About Us";
+}
+<link rel="stylesheet" href="~/css/aboutus.css" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div class="about-page">
+    <section class="about-hero-dynamic">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content-box">
+            <h1 class="display-3 fw-bold animate-fade-up">About <span class="text-gradient">TravelEase</span></h1>
+            <p class="lead">Your trusted partner in discovering, booking, and experiencing unforgettable travel packages worldwide.</p>
+        </div>
+    </section>
+
+    <section class="container my-5 py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4">
+                <div class="mission-card p-5">
+                    <h2 class="section-title">Who We Are</h2>
+                    <p>TravelEase is a comprehensive travel package booking system designed to simplify your journey planning. We combine cutting-edge technology with a passion for travel to make booking seamless, secure, and enjoyable.</p>
+                    <h2 class="section-title mt-4">Our Mission</h2>
+                    <p>We aim to empower travelers by offering transparent pricing, diverse options, and personalized recommendations. Making travel accessible, affordable, and inspiring for everyone.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="image-stack">
+                    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800" class="img-fluid rounded-4 shadow-lg" alt="Travel">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-gradient-bg py-5">
+        <div class="container text-center">
+            <h2 class="text-white mb-5">What We Offer</h2>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="feature-glow-card">
+                        <i class="fa-solid fa-plane-departure mb-3"></i>
+                        <h3>Flight Deals</h3>
+                        <p>Exclusive discounts and flexible booking options for everyone.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-glow-card">
+                        <i class="fa-solid fa-hotel mb-3"></i>
+                        <h3>Hotel Stays</h3>
+                        <p>Handpicked accommodations from budget to luxury resorts.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-glow-card">
+                        <i class="fa-solid fa-umbrella-beach mb-3"></i>
+                        <h3>Holiday Packages</h3>
+                        <p>Curated experiences including adventure and cultural tours.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-glow-card">
+                        <i class="fa-solid fa-headset mb-3"></i>
+                        <h3>24/7 Support</h3>
+                        <p>Dedicated customer service to assist you around the clock.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container py-5 text-center">
+        <h2 class="section-title mx-auto mb-5">Meet Our Team</h2>
+        <div class="row g-4 justify-content-center">
+            @{
+                var team = new[] {
+                        new { Name = "Akash Thakkar", Role = "Founder & CEO" },
+                        new { Name = "Lina Patil", Role = "Head of Operations" },
+                        new { Name = "Anvith", Role = "Lead Designer" },
+                        new { Name = "Veena", Role = "Tech Architect" },
+                        new { Name = "Janvi Govindrao", Role = "Tech Architect" }
+                        };
+            }
+            @foreach (var member in team)
+            {
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="team-card-premium">
+                        <div class="member-img-wrapper">
+                            <img src="https://i.pravatar.cc/150?u=@member.Name" alt="@member.Name">
+                        </div>
+                        <h5>@member.Name</h5>
+                        <p>@member.Role</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="cta-banner">
+        <div class="container text-center py-5">
+            <h2 class="display-5 fw-bold text-white">Ready to Explore the World?</h2>
+            <p class="text-white-50">Join thousands of travelers who trust TravelEase.</p>
+            <a href="/Home/Packages" class="btn btn-primary-glow btn-lg mt-3">Browse Packages</a>
+        </div>
+    </section>
+</div>

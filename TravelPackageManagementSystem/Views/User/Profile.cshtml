@@ -1,71 +1,131 @@
 ﻿@{
-    ViewData["Title"] = "My Profile";
+    ViewData["Title"] = "Easy Safar | Profile";
     Layout = "_Layout";
 }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="~/css/profile-style.css">
 
-<div class="container mt-5 pt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white p-4">
-                    <h3 class="mb-0">User Profile</h3>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card profile-main-card border-0 shadow-sm p-4 mb-4">
+                <div class="profile-avatar-container mb-3 text-center">
+                    <img id="displayAvatar" src="https://ui-avatars.com/api/?name=User&background=a2d2ff&color=fff"
+                         class="rounded-circle shadow-sm" alt="User Avatar" style="width: 100px;">
+                    <div class="status-badge"></div>
                 </div>
-                <div class="card-body p-4">
-                    <div class="text-center mb-4">
-                        <div class="display-1 text-primary">
-                            <i class="fa-solid fa-circle-user"></i>
-                        </div>
-                        <h2 id="profileName">Loading...</h2>
-                        <span class="badge bg-info text-dark">Travel Enthusiast</span>
-                    </div>
+                <h4 id="profileName" class="user-title text-center">Loading...</h4>
+                <p id="profilePhone" class="text-muted small text-center">9665372300</p>
+                <div class="divider-pastel my-3"></div>
+                <button onclick="logout()" class="btn btn-outline-danger w-100">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </button>
+            </div>
 
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <label class="text-muted small uppercase fw-bold">First Name</label>
-                            <p id="profileFirstName" class="fs-5 border-bottom pb-2">--</p>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-muted small uppercase fw-bold">Last Name</label>
-                            <p id="profileLastName" class="fs-5 border-bottom pb-2">--</p>
-                        </div>
-                        <div class="col-12">
-                            <label class="text-muted small uppercase fw-bold">Email Address</label>
-                            <p id="profileEmail" class="fs-5 border-bottom pb-2 text-break">--</p>
+            <div class="card profile-nav-card border-0 shadow-sm p-3">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
+                    <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#info-pane">
+                        <i class="fas fa-user-circle me-3"></i>My Information
+                    </button>
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#booked-pane">
+                        <i class="fas fa-suitcase me-3"></i>My Bookings
+                    </button>
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#wishlist-pane">
+                        <i class="fas fa-heart me-3"></i>Wishlist
+                    </button>
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#liked-pane">
+                        <i class="fas fa-thumbs-up me-3"></i>Liked Packages
+                    </button>
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#docs-pane">
+                        <i class="fas fa-file-invoice me-3"></i>Travel Documents
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="tab-content" id="v-pills-tabContent">
+
+                <div class="tab-pane fade show active" id="info-pane">
+                    <div class="card content-card p-4 border-0 shadow-sm">
+                        <h5 class="section-title mb-4 border-bottom pb-2">Account Details</h5>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="info-label fw-bold">First Name</label>
+                                <div id="profileFirstName" class="info-box p-2 bg-light rounded">...</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="info-label fw-bold">Last Name</label>
+                                <div id="profileLastName" class="info-box p-2 bg-light rounded">...</div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="info-label fw-bold">Email Address</label>
+                                <div id="profileEmail" class="info-box p-2 bg-light rounded">...</div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="mt-4">
-                        <h5>Travel Statistics</h5>
-                        <div class="row text-center mt-3">
-                            <div class="col-4">
-                                <div class="p-3 border rounded shadow-sm">
-                                    <div class="h4 mb-0">0</div>
-                                    <small class="text-muted">Bookings</small>
+                <div class="tab-pane fade" id="booked-pane">
+                    <div class="card content-card p-4 border-0 shadow-sm">
+                        <h5 class="section-title mb-4 border-bottom pb-2">My Bookings</h5>
+                        <div class="card mb-3 border-0 shadow-sm bg-light">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-md-3">
+                                    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=150" class="img-fluid rounded-start" alt="Paris">
+                                </div>
+                                <div class="col-md-6 p-3">
+                                    <h6 class="mb-1">Romantic Paris Getaway</h6>
+                                    <p class="text-muted small mb-0"><i class="far fa-calendar-alt me-2"></i>Oct 12 - Oct 18, 2026</p>
+                                    <span class="badge bg-success mt-2">Confirmed</span>
+                                </div>
+                                <div class="col-md-3 text-center">
+                                    <button class="btn btn-sm btn-primary">View Ticket</button>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <div class="p-3 border rounded shadow-sm">
-                                    <div class="h4 mb-0">0</div>
-                                    <small class="text-muted">Reviews</small>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="p-3 border rounded shadow-sm">
-                                    <div class="h4 mb-0">0</div>
-                                    <small class="text-muted">Wishlist</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="wishlist-pane">
+                    <div class="card content-card p-4 border-0 shadow-sm">
+                        <h5 class="section-title mb-4 border-bottom pb-2">My Wishlist</h5>
+                        <div class="row g-3" id="wishlist-container">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=300" class="card-img-top" alt="Maldives">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Maldives Luxury Resort</h6>
+                                        <button class="btn btn-sm btn-outline-primary mt-2">Book Now</button>
+                                        <button class="btn btn-sm btn-link text-danger mt-2"><i class="fas fa-trash"></i></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer bg-light p-3 text-end">
-                    <button class="btn btn-outline-primary" onclick="window.history.back()">Go Back</button>
-                    <button class="btn btn-primary">Edit Profile</button>
+
+                <div class="tab-pane fade" id="liked-pane">
+                    <div class="card content-card p-4 border-0 shadow-sm">
+                        <h5 class="section-title mb-4 border-bottom pb-2">Liked Packages</h5>
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                <div>
+                                    <i class="fas fa-thumbs-up text-primary me-2"></i>
+                                    Swiss Alps Adventure
+                                </div>
+                                <a href="/Packages/Swiss" class="btn btn-sm btn-light text-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 
 @* <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -110,3 +170,6 @@
         }
     });
 </script> *@
+=======
+<script src="~/js/profile.js"></script>
+>>>>>>> 7baa6a561f60262e6fb5fd1ae2161183d71bb064

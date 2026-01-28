@@ -36,7 +36,7 @@ html, body {
 .header-wrapper {
     width: 100%;
     min-height: 100vh;
-    background: url("/lib/images/des3.jpg") center/cover no-repeat;
+    background: url("/lib/Image/munnar1.jpg") center/cover no-repeat;
     position: relative;
     color: #fff;
     background-attachment: fixed;
@@ -61,23 +61,23 @@ html, body {
 @keyframes bgSlider {
 
     0% {
-        background-image: url(/lib/images/des1.jpg);
+        background-image: url(/lib/Image/coorg1.jpg);
     }
 
     25% {
-        background-image: url(/lib/images/des2.jpg);
+        background-image: url('/lib/Image/he1.jpg');
     }
 
     50% {
-        background-image: url(/lib/images/des4.jpg);
+        background-image: url(/lib/Image/he3.jpg);
     }
 
     75% {
-        background-image: url(/lib/images/des5.jpg);
+        background-image: url(/lib/Image/coorg4.jpg);
     }
 
     100% {
-        background-image: url(/lib/images/des4.jpg);
+        background-image: url(/lib/Image/darjiling4.jpg);
     }
 }
 
@@ -426,3 +426,5 @@ html, body {
     color: #666;
     font-size: 0.95rem;
 }
+}
+
