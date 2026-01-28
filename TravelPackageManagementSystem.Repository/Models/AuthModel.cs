@@ -12,6 +12,9 @@ namespace TravelPackageManagementSystem.Repository.Models
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Phone Number is Required")]
+        public string PhoneNumber { get; set; }
+
         [Required(ErrorMessage = "Password is Required")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

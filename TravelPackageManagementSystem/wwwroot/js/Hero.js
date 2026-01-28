@@ -1,28 +1,37 @@
-﻿    // 1. Lock the calendar to today
-    const dateInput = document.getElementById('departureDate');
-    const today = new Date().toISOString().split('T')[0];
-    dateInput.min = today;
-    dateInput.value = today;
+﻿// --- 1. Destination & Calendar Logic ---
+document.addEventListener("DOMContentLoaded", function () {
+    // Lock the calendar to today
+    const departureInput = document.getElementById('departureDate');
+    if (departureInput) {
+        const today = new Date().toISOString().split('T')[0];
+        departureInput.min = today;
+        departureInput.value = today;
+    }
 
-    // 2. Fetch Destination Options from Backend
-    document.getElementById('destinationSearch').addEventListener('input', function () {
-        var input = this.value;
-    if (input.length < 1) return; // Trigger after first character
+    // Fetch Destination Options from Backend
+    const destSearch = document.getElementById('destinationSearch');
+    if (destSearch) {
+        destSearch.addEventListener('input', function () {
+            var input = this.value;
+            if (input.length < 1) return;
 
-    fetch('/Home/GetSuggestions?term=' + encodeURIComponent(input))
-            .then(response => response.json())
-            .then(data => {
-                var dataList = document.getElementById('destinationOptions');
-    dataList.innerHTML = ''; // Clear old options
+            fetch('/Home/GetSuggestions?term=' + encodeURIComponent(input))
+                .then(response => response.json())
+                .then(data => {
+                    var dataList = document.getElementById('destinationOptions');
+                    dataList.innerHTML = '';
 
-    data.forEach(function (item) {
-                    var option = document.createElement('option');
-    option.value = item;
-    dataList.appendChild(option);
-                });
-            })
-            .catch(err => console.error('Error fetching destinations:', err));
-    });
+                    data.forEach(function (item) {
+                        var option = document.createElement('option');
+                        option.value = item;
+                        dataList.appendChild(option);
+                    });
+                })
+                .catch(err => console.error('Error fetching destinations:', err));
+        });
+    }
+});
+
 // --- 2. Auth Toggle Logic ---
 function handleAuthToggle() {
     const signupFields = document.querySelectorAll('.signup-only');
@@ -35,7 +44,7 @@ function handleAuthToggle() {
 
     const isCurrentlySignup = submitBtn.innerText.includes("Sign Up");
 
-    // IMPORTANT: Clear all error messages when switching
+    // Clear all error messages when switching
     document.querySelectorAll('.err-msg').forEach(el => el.innerText = "");
 
     if (isCurrentlySignup) {
@@ -43,7 +52,7 @@ function handleAuthToggle() {
         signupFields.forEach(f => f.style.setProperty('display', 'none', 'important'));
         modalTitle.innerText = "Welcome Back";
         emailLabel.innerText = "Username or Email";
-        emailInput.placeholder = "Enter your username or email"; // Login Placeholder
+        emailInput.placeholder = "Enter your username or email";
         submitBtn.innerText = "Login →";
         toggleText.innerText = "Don't have an account? ";
         toggleLink.innerText = "Sign Up";
@@ -52,30 +61,26 @@ function handleAuthToggle() {
         signupFields.forEach(f => f.style.setProperty('display', 'block', 'important'));
         modalTitle.innerText = "Create an Account";
         emailLabel.innerText = "Email Address";
-        emailInput.placeholder = "Enter your email"; // Register Placeholder
+        emailInput.placeholder = "Enter your email";
         submitBtn.innerText = "Sign Up →";
         toggleText.innerText = "Already have an account? ";
         toggleLink.innerText = "Login";
     }
 }
+
 // --- 3. Form Submission & Global Event Listeners ---
 document.addEventListener("DOMContentLoaded", function () {
-    // A. Setup Date Input
-    const dateInput = document.getElementById('dateInput');
-    if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.min = today;
-        dateInput.value = today;
-    }
-
-    // B. Handle Form Submission
     const authForm = document.getElementById('authForm');
+
     if (authForm) {
         authForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
+            // Re-identify submitBtn inside the event to get current state
+            const submitBtn = document.getElementById('submitBtn');
             const isLogin = submitBtn.innerText.includes("Login");
-            const sharedValue = document.getElementById('authEmail').value; // The input field
+
+            const sharedValue = document.getElementById('authEmail').value;
             const passwordValue = document.getElementById('authPassword').value;
 
             let payload = {};
@@ -83,21 +88,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (isLogin) {
                 payload = {
-                    Username: sharedValue, // Login uses 'Username' property
+                    Username: sharedValue,
                     Password: passwordValue
                 };
             } else {
-                // REGISTER: We need Username, Email, and Password
+                // REGISTER: Grab all fields including regPhone
                 const regUsername = document.getElementById('regUsername').value;
+                const regPhoneValue = document.getElementById('regPhone').value;
                 const confirmPassword = document.getElementById('authConfirmPassword').value;
 
                 payload = {
                     Username: regUsername,
-                    Email: sharedValue,    // Register uses 'Email' property
+                    Email: sharedValue,
+                    PhoneNumber: regPhoneValue, // Correctly mapped for C# ViewModel
                     Password: passwordValue,
                     ConfirmPassword: confirmPassword
                 };
             }
+
+            console.log("Attempting to send payload:", payload);
 
             try {
                 const response = await fetch(endpoint, {
@@ -111,18 +120,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.ok) {
                     window.location.href = "/";
                 } else {
-                    // This is the CRITICAL fix: 
-                    // If the server returns 400 (Validation Error), display them!
                     displayErrors(result);
                 }
             } catch (error) {
-                // Only alert if the fetch actually fails (network down)
                 console.error("Fetch error:", error);
             }
         });
     }
 
-    // C. Glow Effect Logic
+    // Glow Effect Logic
     document.addEventListener('mousemove', (e) => {
         const authModal = document.getElementById('authModal');
         if (!authModal || !authModal.classList.contains('show')) return;
@@ -144,17 +150,13 @@ function displayErrors(errors) {
     if (!errors) return;
 
     Object.keys(errors).forEach(key => {
-        // Try various ID formats used in your HTML
+        // Match span ID: err-PhoneNumber, err-Email, etc.
         const span = document.getElementById(`err-${key}`) || document.getElementById(`err-${key}-Reg`);
         if (span) {
-            //span.innerText = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
             const errorData = errors[key];
             span.innerText = Array.isArray(errorData) ? errorData[0] : errorData;
-
             span.style.display = "block";
-            Console.log(`Setting error for ${key}: ${message}`);
-        }
-        else {
+        } else {
             console.warn(`Could not find span with id: err-${key}`);
         }
     });
@@ -170,7 +172,6 @@ async function handleLogout() {
             }
         } catch (error) {
             console.error("Logout error:", error);
-            // Fallback: Force refresh
             window.location.reload();
         }
     }

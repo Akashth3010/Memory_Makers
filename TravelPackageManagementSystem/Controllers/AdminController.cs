@@ -19,7 +19,58 @@ namespace TravelPackageManagementSystem.Application.Controllers
         public IActionResult Approvals() => View();
         public IActionResult Packages() => View();
         public IActionResult Bookings() => View();
-        public IActionResult Users() => View();
+
+        // Users
+        public async Task<IActionResult> Users()
+        {
+            // 1. Fetch Customers
+            // We project into the User model so the View can read properties easily
+            var customers = await _context.Users
+                .Where(u => u.Role == UserRole.CUSTOMER)
+                .Select(u => new User // Map to the actual User class
+                {
+                    UserId = u.UserId,
+                    Username = u.Username,
+                    Email = u.Email,
+                    Role = u.Role,
+                    // If u.PhoneNumber is NULL (from old registrations), it tries to get it from bookings
+                    PhoneNumber = u.PhoneNumber ??
+                                  u.Bookings.OrderByDescending(b => b.BookingId)
+                                            .Select(b => b.ContactPhone)
+                                            .FirstOrDefault() ?? "N/A"
+                })
+                .ToListAsync();
+
+            // 2. Fetch Hosts
+            var hosts = await _context.HostContactDetails
+                .GroupBy(h => h.EmailAddress)
+                .Select(group => new
+                {
+                    HostAgencyName = group.First().HostAgencyName,
+                    EmailAddress = group.Key,
+                    PhoneNumber = group.First().PhoneNumber,
+                    PackageNames = _context.TravelPackages
+                        .Where(p => p.Host != null && p.Host.EmailAddress == group.Key)
+                        .Select(p => p.PackageName)
+                        .ToList()
+                })
+                .ToListAsync();
+
+            // 3. Assign to ViewBag
+            ViewBag.Customers = customers;
+            ViewBag.Hosts = hosts;
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _context.Users
+                .Select(static u => new { u.Username, u.Email, V = u.Role.ToString() })
+                .ToListAsync();
+            return Json(users);
+        }
 
         // ---------------- APPROVAL LOGIC ----------------
 
@@ -130,7 +181,8 @@ namespace TravelPackageManagementSystem.Application.Controllers
                 email = p.Host != null ? p.Host.EmailAddress : "N/A",
                 phone = p.Host != null ? p.Host.PhoneNumber : "N/A",
                 city = p.Host != null ? p.Host.CityCountry : "N/A",
-                itineraries = p.Itineraries.OrderBy(i => i.DayNumber).Select(i => new {
+                itineraries = p.Itineraries.OrderBy(i => i.DayNumber).Select(i => new
+                {
                     dayNumber = i.DayNumber,
                     title = i.ActivityTitle,
                     desc = i.ActivityDescription,

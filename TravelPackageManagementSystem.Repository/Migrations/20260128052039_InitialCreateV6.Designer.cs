@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260127115113_AddedContactEmail")]
-    partial class AddedContactEmail
+    [Migration("20260128052039_InitialCreateV6")]
+    partial class InitialCreateV6
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
