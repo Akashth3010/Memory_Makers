@@ -43,9 +43,12 @@
                     }
                 </div>
 
-                <span class="ms-4 text-white" style="cursor: pointer;" onclick="openAdminLogin()">
-                    Admin Login
-                </span>
+                @if (Context.Session.GetString("UserName") == null)
+                {
+                    <span class="ms-4 text-white" style="cursor: pointer;" onclick="openAdminLogin()">
+                        Admin Login
+                    </span>
+                }
             </div>
         </div>
     </div>
