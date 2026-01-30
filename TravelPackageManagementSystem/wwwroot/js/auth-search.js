@@ -152,7 +152,7 @@
             const wishlistBtn = document.getElementById('btn-go-wishlist');
             const logoutBtn = document.getElementById('logoutBtn');
 
-            // --- Toggle Menu Visibility ---
+            // --- Toggle Menu Visibility  ---
             toggle.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 menu.classList.toggle('show');
