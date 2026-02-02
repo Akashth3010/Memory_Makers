@@ -12,22 +12,55 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<div class="container py-5">
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .bg-success-subtle {
+        background-color: #e6fffa !important;
+        color: #008767 !important;
+    }
+
+    .bg-warning-subtle {
+        background-color: #fffaf0 !important;
+        color: #9c6d19 !important;
+    }
+
+    /* Filtering Button Styles */
+    .filter-btn.active {
+        background-color: #0d6efd !important;
+        color: white !important;
+        border-color: #0d6efd !important;
+    }
+
+    @@media print {
+        body {
+            background: white !important;
+        }
+
+        .no-print {
+            display: none !important;
+        }
+    }
+</style>
+
+<div class="container py-5 no-print">
     <div class="row mb-4 align-items-end">
         <div class="col-md-6">
             <h2 class="fw-bold text-dark">My Bookings</h2>
             <p class="text-muted">Manage your upcoming trips and view your travel history.</p>
         </div>
         <div class="col-md-6 text-md-end">
+            @* Integrated Functional Filters *@
             <div class="btn-group shadow-sm" role="group">
-                <button type="button" class="btn btn-primary">All</button>
-                <button type="button" class="btn btn-white border">Upcoming</button>
-                <button type="button" class="btn btn-white border">Completed</button>
+                <button type="button" class="btn btn-white border filter-btn active" data-filter="all">All</button>
+                <button type="button" class="btn btn-white border filter-btn" data-filter="upcoming">Upcoming</button>
+                <button type="button" class="btn btn-white border filter-btn" data-filter="completed">Completed</button>
             </div>
         </div>
     </div>
 
-    @* 2. Use the Model with safety checks *@
     @if (Model == null)
     {
         <div class="alert alert-danger shadow-sm border-0 rounded-3 text-center py-5">
@@ -53,7 +86,7 @@
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0" id="bookingsTable">
                         <thead class="bg-light">
                             <tr class="text-muted small text-uppercase">
                                 <th class="ps-4 py-3">Package</th>
@@ -67,7 +100,8 @@
                         <tbody>
                             @foreach (var booking in Model)
                             {
-                                <tr>
+                                @* Added Data Attributes for JavaScript Filtering *@
+                                <tr class="booking-row" data-status="@booking.Status.ToString().ToUpper()">
                                     <td class="ps-4">
                                         <div class="d-flex align-items-center">
                                             <div class="rounded-3 bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
@@ -80,16 +114,13 @@
                                         </div>
                                     </td>
                                     <td>
-                                        @* Show the actual Travel Date here *@
                                         <div class="small fw-semibold">@booking.TravelDate.ToString("MMM dd, yyyy")</div>
                                         <small class="text-muted">@booking.Guests Guests</small>
                                     </td>
                                     <td>
-                                        @* Show TotalAmount from database instead of just package price *@
                                         <div class="fw-bold text-primary">₹@booking.TotalAmount.ToString("N0")</div>
                                     </td>
                                     <td>
-                                        @* Dynamic Phone from Database *@
                                         <div class="small">@booking.ContactPhone</div>
                                     </td>
                                     <td>
@@ -100,6 +131,7 @@
                                                 "CONFIRMED" => "bg-success-subtle text-success border-success-subtle",
                                                 "PENDING" => "bg-warning-subtle text-warning border-warning-subtle",
                                                 "CANCELLED" => "bg-danger-subtle text-danger border-danger-subtle",
+                                                "COMPLETED" => "bg-info-subtle text-info border-info-subtle",
                                                 _ => "bg-light text-muted"
                                             };
                                         }
@@ -108,19 +140,18 @@
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        @* Changed icon to download and function to generatePDF *@
                                         <button class="btn btn-sm btn-outline-primary"
                                                 onclick="generatePDF({
-                                                    packageName: '@(booking.TravelPackage?.PackageName?.Replace("'", "\\'"))',
-                                                    userName: '@(booking.User?.Username ?? Context.Session.GetString("UserName") ?? "Guest")',
-                                                    ref: 'BK-@booking.BookingId',
-                                                    date: '@booking.TravelDate.ToString("dd MMM yyyy")',
-                                                    amount: '@booking.TotalAmount.ToString("N0")',
-                                                    phone: '@booking.ContactPhone',
-                                                    email: '@(string.IsNullOrEmpty(booking.ContactEmail) ? "missing-email@test.com" : booking.ContactEmail)',
-                                                    guests: '@booking.Guests',
-                                                    status: '@booking.Status'
-                                            })">
+                                                            packageName: '@(booking.TravelPackage?.PackageName?.Replace("'", "\\'"))',
+                                                            userName: '@(booking.User?.Username ?? "Guest")',
+                                                            ref: 'BK-@booking.BookingId',
+                                                            date: '@booking.TravelDate.ToString("dd MMM yyyy")',
+                                                            amount: '@booking.TotalAmount.ToString("N0")',
+                                                            phone: '@booking.ContactPhone',
+                                                            email: '@(string.IsNullOrEmpty(booking.ContactEmail) ? "N/A" : booking.ContactEmail)',
+                                                            guests: '@booking.Guests',
+                                                            status: '@booking.Status'
+                                                        })">
                                             <i class="fas fa-download me-1"></i> Receipt
                                         </button>
                                     </td>
@@ -133,6 +164,8 @@
         </div>
     }
 </div>
+
+@* Hidden Receipt Template *@
 <div id="receiptTemplate" style="display: none;">
     <div style="padding: 40px; font-family: sans-serif; border: 1px solid #eee;">
         <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #333; padding-bottom: 20px;">
@@ -145,7 +178,6 @@
                 <p id="pdfDate" style="margin: 5px 0;"></p>
             </div>
         </div>
-
         <div style="margin-top: 30px;">
             <p><strong>Package:</strong> <span id="pdfPackage"></span></p>
             <p><strong>Name:</strong> <span id="pdfName"></span></p>
@@ -154,7 +186,6 @@
             <p><strong>Total Guests:</strong> <span id="pdfGuests"></span></p>
             <p><strong>Status:</strong> <span id="pdfStatus" style="color: green; font-weight: bold;"></span></p>
         </div>
-
         <table style="width: 100%; margin-top: 30px; border-collapse: collapse;">
             <thead>
                 <tr style="background: #f8f9fa;">
@@ -169,7 +200,6 @@
                 </tr>
             </tbody>
         </table>
-
         <div style="margin-top: 50px; text-align: center; font-size: 12px; color: #777;">
             <p>Thank you for booking with easy Safar! Wish you a happy journey.</p>
             <p>This is a computer-generated receipt and does not require a signature.</p>
@@ -177,59 +207,45 @@
     </div>
 </div>
 
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-
-    .bg-success-subtle {
-        background-color: #e6fffa !important;
-        color: #008767 !important;
-    }
-
-    .bg-warning-subtle {
-        background-color: #fffaf0 !important;
-        color: #9c6d19 !important;
-    }
-
-    @@media print {
-        body {
-            background: white !important;
-        }
-
-        .no-print {
-            display: none !important;
-        }
-        /* Use this class to hide things on the PDF */
-    }
-</style>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-    let myModal;
-    document.addEventListener("DOMContentLoaded", function() {
-        myModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+    $(document).ready(function () {
+        // Tab Filtering Logic
+        $(".filter-btn").click(function () {
+            $(".filter-btn").removeClass("active");
+            $(this).addClass("active");
+
+            const filterValue = $(this).data("filter");
+
+            $(".booking-row").each(function () {
+                const status = $(this).data("status");
+
+                if (filterValue === "all") {
+                    $(this).show();
+                }
+                else if (filterValue === "upcoming") {
+                    // Show only PENDING or CONFIRMED for upcoming
+                    if (status === "PENDING" || status === "CONFIRMED") {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                }
+                else if (filterValue === "completed") {
+                    // Show only COMPLETED
+                    if (status === "COMPLETED") {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                }
+            });
+        });
     });
 
-        function showDetails(title, ref, date, amount, guests, phone, status) {
-        document.getElementById('modalTitle').innerText = title;
-        document.getElementById('modalRef').innerText = ref;
-        document.getElementById('modalDates').innerText = date;
-        document.getElementById('modalAmount').innerText = amount;
-        if(document.getElementById('modalPhone')) {
-            document.getElementById('modalPhone').innerText = phone;
-        }
-
-        // New dynamic fields
-        document.getElementById('modalGuests').innerText = guests + " Person(s)";
-        document.getElementById('modalPhone').innerText = phone;
-
-        myModal.show();
-    }
-
-        function generatePDF(data) {
-
-        // 1. Fill the hidden template with data
+    function generatePDF(data) {
         document.getElementById('pdfPackage').innerText = data.packageName;
         document.getElementById('pdfRef').innerText = data.ref;
         document.getElementById('pdfName').innerText = data.userName;
@@ -240,16 +256,12 @@
         document.getElementById('pdfGuests').innerText = data.guests;
         document.getElementById('pdfStatus').innerText = data.status;
 
-        // 2. Create a temporary print window
         const printContents = document.getElementById('receiptTemplate').innerHTML;
         const originalContents = document.body.innerHTML;
 
-        // 3. Switch body to receipt content and print
         document.body.innerHTML = printContents;
         window.print();
-
-        // 4. Restore original page UI
         document.body.innerHTML = originalContents;
-        window.location.reload(); // Reload to re-attach event listeners
+        window.location.reload();
     }
 </script>

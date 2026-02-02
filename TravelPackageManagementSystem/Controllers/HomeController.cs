@@ -193,16 +193,33 @@ namespace TravelPackageManagementSystem.Controllers
         //    }
         //    return RedirectToAction("MyBookings");
         //}
-
         public async Task<IActionResult> MyBookings()
         {
-            var bookings = await _context.Bookings
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                // CHANGE: "Auth" par jao, par saath mein batao ki wapas "MyBookings" aana hai
+                return RedirectToAction("Auth", "Home", new { returnUrl = "/Home/MyBookings" });
+            }
+
+            var myBookings = await _context.Bookings
                 .AsNoTracking()
                 .Include(b => b.TravelPackage)
+                .Where(b => b.UserId == userId)
+                .OrderByDescending(b => b.BookingDate)
                 .ToListAsync();
 
-            return View(bookings);
+            return View(myBookings);
         }
+
+        // Auth Action ko update karein taaki wo URL accept kar sake
+        public IActionResult Auth(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl; // URL ko View mein bhejna zaroori hai
+            return View();
+        }
+
 
         // ---------------- PACKAGE DETAILS & ITINERARY ----------------
         public async Task<IActionResult> MeghPack3(int id)
@@ -257,13 +274,20 @@ namespace TravelPackageManagementSystem.Controllers
         }
 
         public IActionResult Failure() => View("Trending/Failure");
-        public IActionResult Success() => View("Trending/Success");
+        // Inside HomeController.cs
+        public IActionResult Success(string txn, decimal amt, string pkg)
+        {
+            ViewBag.TransactionId = txn;
+            ViewBag.Amount = amt;
+            ViewBag.PackageName = pkg; // Ensure this is assigned!
+            return View("~/Views/Home/Trending/Success.cshtml");
+        }
         //public IActionResult aboutus() => View();
 
-        [HttpGet]
-        public IActionResult Auth()
-        {
-            return View();
-        }
+        //[HttpGet]
+        //public IActionResult Auth()
+        //{
+        //    return View();
+        //}
     }
 }

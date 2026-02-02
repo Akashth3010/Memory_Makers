@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container py-5">
+    <div class="profile-card" style="max-width: 800px; margin: auto;">
+        <div class="profile-header-banner" style="height: 120px;"></div>
+
+        <div class="p-5 mt-n5">
+            <h3 class="fw-bold mb-4">Edit Your Details</h3>
+
+            <form id="editProfileForm">
+                @* IMPORTANT: This generates the hidden token input needed for security *@
+                @Html.AntiForgeryToken()
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="info-label">First Name</label>
+                        <input type="text" id="editFirstName" class="form-control form-control-lg" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="info-label">Last Name</label>
+                        <input type="text" id="editLastName" class="form-control form-control-lg" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="info-label">Phone Number</label>
+                        <input type="tel" id="editPhone" class="form-control form-control-lg">
+                    </div>
+                    <div class="col-12">
+                        <label class="info-label">Email Address</label>
+                        <input type="email" id="editEmail" class="form-control form-control-lg bg-light" required>
+                    </div>
+                </div>
+
+                <div class="mt-5 d-flex gap-3">
+                    <button type="submit" class="btn btn-edit-profile px-5">Save Changes</button>
+                    <a href="/User/Profile" class="btn btn-outline-secondary px-5" style="border-radius:12px;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // 1. Fetch current data to fill the form
+        try {
+            const response = await fetch('/User/GetProfileData');
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('editFirstName').value = data.firstName;
+                document.getElementById('editLastName').value = data.lastName;
+                document.getElementById('editPhone').value = data.phone || '';
+                document.getElementById('editEmail').value = data.email;
+            }
+        } catch (error) {
+            console.error("Error loading data:", error);
+        }
+    });
+
+    // 2. Handle the Save
+    document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Get the Anti-Forgery Token value
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        const updatedData = {
+            FirstName: document.getElementById('editFirstName').value,
+            LastName: document.getElementById('editLastName').value,
+            Phone: document.getElementById('editPhone').value
+        };
+
+        try {
+            const saveResponse = await fetch('/User/UpdateProfile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // This header is required for security in ASP.NET Core POST requests
+                    'RequestVerificationToken': token
+                },
+                body: JSON.stringify(updatedData)
+            });
+
+            if (saveResponse.ok) {
+                alert("Profile updated successfully!");
+                window.location.href = '/User/Profile';
+            } else {
+                // Optional: Read error message from server if available
+                const errorData = await saveResponse.text(); // or .json() depending on your controller
+                console.error("Server Error:", errorData);
+                alert("Error saving profile. Please check console for details.");
+            }
+        } catch (error) {
+            console.error("Network Error:", error);
+            alert("A network error occurred.");
+        }
+    });
+</script>

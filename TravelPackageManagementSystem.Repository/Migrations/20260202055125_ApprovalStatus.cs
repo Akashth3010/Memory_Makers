@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateV6 : Migration
+    public partial class ApprovalStatus : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,6 +54,7 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -226,8 +227,8 @@ namespace TravelPackageManagementSystem.Repository.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "UserId", "Email", "Password", "Role", "Username" },
-                values: new object[] { 1, "admin@travel.com", "HashedPassword", 2, "Admin" });
+                columns: new[] { "UserId", "Email", "Password", "PhoneNumber", "Role", "Username" },
+                values: new object[] { 1, "admin@travel.com", "HashedPassword", null, 2, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "GalleryImages",
