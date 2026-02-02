@@ -233,7 +233,18 @@
                 });
 
                 if (response.ok) {
-                    window.location.href = "/";
+                    // --- REDIRECT LOGIC START ---
+                    // 1. Look for 'returnUrl' in the URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const returnUrl = urlParams.get('returnUrl');
+
+                    // 2. If it exists, go there. Otherwise, go to home.
+                    if (returnUrl) {
+                        window.location.href = decodeURIComponent(returnUrl);
+                    } else {
+                        window.location.href = "/";
+                    }
+                    // --- REDIRECT LOGIC END ---
                 } else {
                     const result = await response.json();
                     displayErrors(result);
@@ -241,6 +252,18 @@
             } catch (error) {
                 console.error("Error:", error);
             }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            const authModal = document.getElementById('authModal');
+            if (!authModal || !authModal.classList.contains('show')) return;
+
+            const containers = authModal.querySelectorAll('.input-glow-container');
+            containers.forEach(container => {
+                const rect = container.getBoundingClientRect();
+                container.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                container.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+            });
         });
 
         function displayErrors(errors) {
