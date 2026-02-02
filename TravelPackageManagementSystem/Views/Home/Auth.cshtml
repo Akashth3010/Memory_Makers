@@ -1,0 +1,259 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication | EasySafar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Base Setup */
+        body {
+            background-color: #000000;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden
+        }
+
+        .auth-page-wrapper {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center; /* Vertical center */
+            justify-content: center; /* Horizontal center */
+            background: #1a1a1a; /* Your preferred background color/image */
+        }
+
+        /* 3. The box containing your forms */
+        .auth-container {
+            width: 100%;
+            max-width: 450px; /* Limits width so it looks like a card */
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        /* Modal Sizing */
+        .modal-dialog {
+            max-width: 400px;
+        }
+
+        .modal-content {
+            background-color: #111111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Your Specific CSS Integrated */
+        #authModal .input-label {
+            display: block;
+            width: 100%;
+            text-align: left;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        #authModal .auth-input {
+            width: 100%;
+            background: #1a1a1a !important;
+            border: 1px solid #333 !important;
+            color: #fff !important;
+            padding: 10px 12px;
+            border-radius: 8px;
+        }
+
+        #authModal .footer-text {
+            color: rgba(255, 255, 255, 0.6) !important;
+            font-size: 0.9rem;
+        }
+
+        #authModal .footer-link {
+            color: #ffffff !important;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            #authModal .footer-link:hover {
+                color: #00d2ff !important;
+                text-decoration: underline;
+            }
+
+        /* Submit Button Style */
+        .submit-glow-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+            .submit-glow-btn:hover {
+                background: #00d2ff;
+                transform: translateY(-1px);
+            }
+
+        .signup-only {
+            display: block; /* Starting on Sign Up as per your requirement */
+        }
+
+        .err-msg {
+            font-size: 0.75rem;
+            color: #ff4d4d;
+            display: none;
+            text-align: left;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="modal show d-block" id="authModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <h2 id="modalTitle" class="fw-bold h4">Create an Account</h2>
+                        <p id="modalSubtitle" class="text-muted small">Join EasySafar to start your journey.</p>
+                    </div>
+
+                    <form id="authForm" novalidate>
+                        <div class="mb-3 signup-only">
+                            <label class="input-label">Username</label>
+                            <input type="text" id="regUsername" class="auth-input form-control" placeholder="johndoe">
+                            <span class="err-msg" id="err-Username"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label id="emailLabel" class="input-label">Email Address</label>
+                            <input type="text" id="authEmail" class="auth-input form-control" placeholder="Enter your email">
+                            <span class="err-msg" id="err-Email"></span>
+                        </div>
+
+                        <div class="mb-3 signup-only">
+                            <label class="input-label">Phone Number</label>
+                            <input type="text" id="regPhone" class="auth-input form-control" placeholder="+91 00000 00000">
+                            <span class="err-msg" id="err-PhoneNumber"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="input-label">Password</label>
+                            <input type="password" id="authPassword" class="auth-input form-control" placeholder="••••••••">
+                            <span class="err-msg" id="err-Password"></span>
+                        </div>
+
+                        <div class="signup-only mb-4">
+                            <label class="input-label">Confirm Password</label>
+                            <input type="password" id="authConfirmPassword" class="auth-input form-control" placeholder="••••••••">
+                            <span class="err-msg" id="err-ConfirmPassword"></span>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="submit-glow-btn">Sign Up →</button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="footer-text mb-0">
+                            <span id="toggleText">Already have an account? </span>
+                            <a href="javascript:void(0)" id="toggleAuth" class="footer-link" onclick="handleAuthToggle()">Login</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleAuthToggle() {
+            const signupFields = document.querySelectorAll('.signup-only');
+            const modalTitle = document.getElementById('modalTitle');
+            const submitBtn = document.getElementById('submitBtn');
+            const toggleText = document.getElementById('toggleText');
+            const toggleLink = document.getElementById('toggleAuth');
+            const emailLabel = document.getElementById('emailLabel');
+            const emailInput = document.getElementById('authEmail');
+
+            const isCurrentlySignup = submitBtn.innerText.includes("Sign Up");
+
+            if (isCurrentlySignup) {
+                signupFields.forEach(f => f.style.display = 'none');
+                modalTitle.innerText = "Welcome Back";
+                emailLabel.innerText = "Username or Email";
+                emailInput.placeholder = "Enter your username or email";
+                submitBtn.innerText = "Login →";
+                toggleText.innerText = "Don't have an account? ";
+                toggleLink.innerText = "Sign Up";
+            } else {
+                signupFields.forEach(f => f.style.display = 'block');
+                modalTitle.innerText = "Create an Account";
+                emailLabel.innerText = "Email Address";
+                emailInput.placeholder = "Enter your email";
+                submitBtn.innerText = "Sign Up →";
+                toggleText.innerText = "Already have an account? ";
+                toggleLink.innerText = "Login";
+            }
+        }
+
+        document.getElementById('authForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const isLogin = document.getElementById('submitBtn').innerText.includes("Login");
+
+            let payload = isLogin ? {
+                Username: document.getElementById('authEmail').value,
+                Password: document.getElementById('authPassword').value
+            } : {
+                Username: document.getElementById('regUsername').value,
+                Email: document.getElementById('authEmail').value,
+                PhoneNumber: document.getElementById('regPhone').value,
+                Password: document.getElementById('authPassword').value,
+                ConfirmPassword: document.getElementById('authConfirmPassword').value
+            };
+
+            try {
+                const response = await fetch(isLogin ? '/Account/Login' : '/Account/Register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    window.location.href = "/";
+                } else {
+                    const result = await response.json();
+                    displayErrors(result);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        });
+
+        function displayErrors(errors) {
+            document.querySelectorAll('.err-msg').forEach(el => el.style.display = 'none');
+            Object.keys(errors).forEach(key => {
+                const span = document.getElementById(`err-${key}`);
+                if (span) {
+                    span.innerText = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
+                    span.style.display = 'block';
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

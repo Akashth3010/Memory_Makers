@@ -258,6 +258,12 @@ namespace TravelPackageManagementSystem.Controllers
 
         public IActionResult Failure() => View("Trending/Failure");
         public IActionResult Success() => View("Trending/Success");
-        public IActionResult aboutus() => View();
+        //public IActionResult aboutus() => View();
+
+        [HttpGet]
+        public IActionResult Auth()
+        {
+            return View();
+        }
     }
 }
