@@ -3,94 +3,125 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+    /* 1. Kill the blue shiny border/overlay immediately */
+    .stats-grid .stat-card::before,
+    .stats-grid .stat-card::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    /* 2. Force background to stay white, even if parent is 'active' */
+    .stat-card {
+        background: #ffffff !important;
+        border: 1px solid rgba(0,0,0,0.08) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        z-index: 10;
+    }
+
+        /* 3. Classy Hover: Elevation lift + Grey shadow (No Blue!) */
+        .stat-card:hover {
+            transform: translateY(-8px) !important;
+            background: #ffffff !important;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+            border-color: #3498db !important;
+        }
+
+    /* 4. Icon Soft Tones */
+    .bg-blue {
+        background: #eef7ff !important;
+        color: #3498db !important;
+    }
+
+    .bg-orange {
+        background: #fff8f0 !important;
+        color: #f39c12 !important;
+    }
+
+    .bg-green {
+        background: #f0fff4 !important;
+        color: #2ecc71 !important;
+    }
+
+    .bg-purple {
+        background: #faf5ff !important;
+        color: #9b59b6 !important;
+    }
+
+    /* Kill old glow effects */
+    .active-glow {
+        box-shadow: none !important;
+    }
+</style>
+
 <div class="admin-page dashboard-page">
     <h2 class="page-heading">Admin Dashboard</h2>
     <p class="page-subtext">Overview of your travel platform performance ✨</p>
 
     <div class="stats-grid">
-        <div class="stat-card glow-card" id="cardTotalPackages">
+        <div class="stat-card" id="cardTotalPackages">
             <div class="stat-icon bg-blue"><i class="fa-solid fa-box-archive"></i></div>
             <div class="stat-info">
                 <h3 class="stat-number">0</h3>
-                <p>Total Packages</p>
+                <p class="text-muted mb-0 small fw-bold text-uppercase">Total Packages</p>
             </div>
         </div>
 
-        <div class="stat-card glow-card" id="cardPendingApprovals">
+        <div class="stat-card" id="cardPendingApprovals">
             <div class="stat-icon bg-orange"><i class="fa-solid fa-clock"></i></div>
             <div class="stat-info">
                 <h3 class="stat-number">0</h3>
-                <p>Pending Approvals</p>
+                <p class="text-muted mb-0 small fw-bold text-uppercase">Pending Approvals</p>
             </div>
         </div>
 
-        <div class="stat-card glow-card" id="cardTotalBookings">
+        <div class="stat-card" id="cardTotalBookings">
             <div class="stat-icon bg-green"><i class="fa-solid fa-calendar-check"></i></div>
             <div class="stat-info">
                 <h3 class="stat-number">0</h3>
-                <p>Total Bookings</p>
+                <p class="text-muted mb-0 small fw-bold text-uppercase">Total Bookings</p>
             </div>
         </div>
 
-        <div class="stat-card glow-card" id="cardRegisteredUsers">
+        <div class="stat-card" id="cardRegisteredUsers">
             <div class="stat-icon bg-purple"><i class="fa-solid fa-users"></i></div>
             <div class="stat-info">
                 <h3 class="stat-number">0</h3>
-                <p>Registered Users</p>
+                <p class="text-muted mb-0 small fw-bold text-uppercase">Registered Users</p>
             </div>
         </div>
     </div>
 
-    <div class="dashboard-message mt-4">
-        <h4>Welcome back, Admin 👋</h4>
-        <p id="welcomeMsg">Checking for new requests...</p>
+    <div class="dashboard-message mt-5 p-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #3498db, #1f6fae); color: white;">
+        <h4 class="fw-bold">Welcome back, Admin 👋</h4>
+        <p id="welcomeMsg" class="mb-0 opacity-75">Checking performance data...</p>
     </div>
 </div>
 
-
-
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Load live data on page entry
             fetchDashboardStats();
-
-            // Handle hover effects
-            $('.stat-card').hover(
-                function () { $(this).addClass('active-glow'); },
-                function () { $(this).removeClass('active-glow'); }
-            );
         });
 
         function fetchDashboardStats() {
             $.get("/Admin/GetDashboardStats", function (data) {
-                // Trigger counter animations with real SQL data
                 animateNumber($('#cardTotalPackages'), data.totalPackages);
                 animateNumber($('#cardPendingApprovals'), data.pendingApprovals);
                 animateNumber($('#cardTotalBookings'), data.totalBookings);
                 animateNumber($('#cardRegisteredUsers'), data.registeredUsers);
-
-                // Update the blue welcome banner
-                $("#welcomeMsg").html(`You have <b>${data.pendingApprovals} package requests</b> waiting for approval. Let’s keep the platform updated!`);
+                $("#welcomeMsg").html(`You have <b>${data.pendingApprovals} requests</b> waiting for approval.`);
             });
         }
 
         function animateNumber(cardEl, targetValue) {
             let numberDisplay = cardEl.find('.stat-number');
-            $({ count: 0 }).animate(
-                { count: targetValue },
-                {
-                    duration: 1500,
-                    easing: 'swing',
-                    step: function () {
-                        numberDisplay.text(Math.floor(this.count));
-                    },
-                    complete: function () {
-                        numberDisplay.text(targetValue);
-                    }
-                }
-            );
+            $({ count: 0 }).animate({ count: targetValue }, {
+                duration: 1500,
+                step: function () { numberDisplay.text(Math.floor(this.count)); },
+                complete: function () { numberDisplay.text(targetValue); }
+            });
         }
     </script>
 }

@@ -110,10 +110,14 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-bold">CARD NUMBER</label>
-                            <input type="text" id="cardNumber" class="form-control" placeholder="0000 0000 0000 0000" maxlength="16">
+                            <input type="text" id="cardNumber" class="form-control" placeholder="0000 0000 0000 0000" maxlength="20">
                             <div id="cardError" class="error-msg">Invalid card number.</div>
                         </div>
-                        <div class="col-6"><label class="form-label small fw-bold">EXPIRY</label><input type="text" class="form-control" placeholder="MM/YY" maxlength="5"></div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">EXPIRY</label>
+                            <input type="text" id="cardExpiry" class="form-control" placeholder="MM/YY" maxlength="5">
+                            <div id="expiryError" class="error-msg">Invalid or past date.</div>
+                        </div>
                         <div class="col-6"><label class="form-label small fw-bold">CVV</label><input type="password" class="form-control" placeholder="***" maxlength="3"></div>
                     </div>
                 </div>
@@ -174,21 +178,24 @@
     let activeMethod = 'Credit Card';
     let upiVerified = false;
 
-    // Load Data
+    // --- 1. LOAD DATA ON STARTUP ---
     document.addEventListener('DOMContentLoaded', () => {
         const rawPrice = localStorage.getItem('selectedPackagePrice') || "0";
+        // Attempt to get specific name, fallback to generic
         const savedName = localStorage.getItem('selectedPackageName') || "Travel Package";
 
         const totalAmount = parseFloat(rawPrice.replace(/[^0-9.]/g, ''));
         const base = totalAmount / 1.18;
         const gst = totalAmount - base;
 
+        // Set the package name on the UI
         document.getElementById('packageNameDisplay').innerText = savedName;
         document.getElementById('displayPrice').innerText = "₹" + totalAmount.toLocaleString('en-IN');
         document.getElementById('basePriceDisplay').innerText = "₹" + Math.round(base).toLocaleString('en-IN');
         document.getElementById('gstDisplay').innerText = "₹" + Math.round(gst).toLocaleString('en-IN');
     });
 
+    // --- 2. SWITCH TABS ---
     function switchTab(type) {
         activeMethod = type === 'card' ? 'Credit Card' : 'UPI';
         document.getElementById('cardSection').style.display = type === 'card' ? 'block' : 'none';
@@ -198,10 +205,42 @@
         upiVerified = (type === 'card');
     }
 
-    // FIX: Using Unicode \u0040 to prevent Razor syntax error
+    // --- 3. INPUT FORMATTING LOGIC ---
+    document.getElementById('cardNumber').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, ''); 
+        value = value.substring(0, 16); 
+        e.target.value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+    });
+
+    document.getElementById('cardExpiry').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, ''); 
+        value = value.substring(0, 4); 
+        if (value.length >= 3) {
+            value = value.substring(0, 2) + '/' + value.substring(2);
+        }
+        e.target.value = value;
+        document.getElementById('expiryError').style.display = 'none';
+    });
+
+    // --- 4. VALIDATION LOGIC ---
+    function validateExpiryDate(expiryValue) {
+        if (expiryValue.length !== 5) return false;
+        const [mm, yy] = expiryValue.split('/');
+        const month = parseInt(mm, 10);
+        const year = parseInt(yy, 10);
+        if (month < 1 || month > 12) return false;
+        const now = new Date();
+        const currentYear = parseInt(now.getFullYear().toString().substr(-2)); 
+        const currentMonth = now.getMonth() + 1; 
+        if (year < currentYear) return false;
+        if (year === currentYear && month < currentMonth) return false;
+        return true;
+    }
+
     function validateUPI() {
         const val = document.getElementById('upiId').value.trim().toLowerCase();
         const blocklist = ['gmail.com', 'yahoo.com', 'hotmail.com'];
+        // Fix for Razor  error
         const domain = val.split('\u0040')[1];
 
         if (val.includes('\u0040') && !blocklist.includes(domain)) {
@@ -215,7 +254,6 @@
         }
     }
 
-    // Luhn Logic for real card validation
     function luhnCheck(v) {
         let sum = 0;
         for (let i = 0; i < v.length; i++) {
@@ -226,19 +264,33 @@
         return (sum % 10) === 0;
     }
 
+    // --- 5. PROCESS PAYMENT (UPDATED TO PASS PACKAGE NAME) ---
     async function processPayment() {
-        if (activeMethod === 'UPI' && !upiVerified) { alert("Please verify your UPI ID first!"); return; }
+        if (activeMethod === 'UPI' && !upiVerified) { 
+            alert("Please verify your UPI ID first!"); return; 
+        }
 
         if (activeMethod === 'Credit Card') {
-            const v = document.getElementById('cardNumber').value.replace(/\s/g, '');
-            if (v.length !== 16 || /^(\d)\1+$/.test(v) || !luhnCheck(v)) {
+            const rawCard = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const expiryVal = document.getElementById('cardExpiry').value;
+
+            if (rawCard.length !== 16 || /^(\d)\1+$/.test(rawCard) || !luhnCheck(rawCard)) {
                 alert("Invalid Card Details!"); return;
+            }
+
+            if (!validateExpiryDate(expiryVal)) {
+                document.getElementById('expiryError').style.display = 'block';
+                alert("Card has expired or date is invalid!");
+                return;
             }
         }
 
         const btn = document.getElementById('payBtn');
         btn.disabled = true;
         btn.innerText = "Processing...";
+
+        // Retrieve the package name safely from local storage or UI
+        const currentPkgName = localStorage.getItem('selectedPackageName') || "Travel Package";
 
         const payload = {
             BookingId: parseInt(document.getElementById('bookingIdStore').value),
@@ -248,16 +300,24 @@
             Status: "Completed"
         };
 
-        const res = await fetch('/Payment/SavePayment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        try {
+            const res = await fetch('/Payment/SavePayment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
-        if (res.ok) {
-            window.location.href = `/Home/Success?txn=${payload.TransactionId}&amt=${payload.Amount}`;
-        } else {
-            window.location.href = "/Home/Failure?reason=Database Error";
+            if (res.ok) {
+                // FIX: Pass 'pkg' parameter in the URL
+                window.location.href = `/Home/Success?txn=${payload.TransactionId}&amt=${payload.Amount}&pkg=${encodeURIComponent(currentPkgName)}`;
+            } else {
+                window.location.href = "/Home/Failure?reason=Database Error";
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Connection Failed");
+            btn.disabled = false;
+            btn.innerText = "PAY NOW & CONFIRM";
         }
     }
 </script>
