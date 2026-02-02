@@ -14,7 +14,7 @@ namespace TravelPackageManagementSystem.Application.Controllers
             _context = context;
         }
 
-        // ---------------- PAGES ----------------
+        // ---------------- PAGES ----------------//
         public IActionResult Dashboard() => View();
         [HttpGet]
         public async Task<IActionResult> GetDashboardStats()

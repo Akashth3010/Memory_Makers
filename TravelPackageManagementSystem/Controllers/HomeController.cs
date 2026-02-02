@@ -98,7 +98,7 @@ namespace TravelPackageManagementSystem.Controllers
             return View(package);
         }
 
-        // ---------------- TEAMMATE'S INDEX & TRENDING ----------------
+        // ---------------- INDEX & TRENDING ----------------
         public async Task<IActionResult> Index()
         {
             var destinations = await _context.Destinations
