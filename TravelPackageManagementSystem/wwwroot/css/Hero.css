@@ -1,4 +1,4 @@
-﻿#authModal .input-label {
+﻿/*#authModal .input-label {
     display: block;
     width: 100%;
     text-align: left;
@@ -23,7 +23,7 @@
 
 #authModal .auth-input {
     width: 100%;
-}
+}*/
 
 /* Hide signup fields by default if you want to start on Login,
            or keep visible if starting on Register */

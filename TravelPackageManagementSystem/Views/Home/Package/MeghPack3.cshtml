@@ -1,37 +1,37 @@
 ﻿@model TravelPackageManagementSystem.Repository.Models.TravelPackage
 
 @{
-    ViewBag.Title = Model.PackageName;
-    Layout = "_Layout";
+	ViewBag.Title = Model.PackageName;
+	Layout = "_Layout";
 }
 <link rel="stylesheet" href="~/css/MeghPack.css" asp-append-version="true" />
 <style>
-    
-    .hero-section {
-        height: 180px; /* Changed from 350px to reduce the size */
-        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('@Model.ImageUrl');
-        background-size: cover;
-        background-position: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        margin-bottom: 30px;
-        border-radius: 0 0 20px 20px;
-    } 
-    /* Updated Hero Section with reduced height */
-    .hero-section {
-        height: 180px; /* Changed from 350px to reduce the size */
-        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('@Model.ImageUrl');
-        background-size: cover;
-        background-position: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        margin-bottom: 30px;
-        border-radius: 0 0 20px 20px;
-    }    
+
+	.hero-section {
+		height: 180px; /* Changed from 350px to reduce the size */
+		background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('@Model.ImageUrl');
+		background-size: cover;
+		background-position: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		margin-bottom: 30px;
+		border-radius: 0 0 20px 20px;
+	}
+	/* Updated Hero Section with reduced height */
+	.hero-section {
+		height: 180px; /* Changed from 350px to reduce the size */
+		background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('@Model.ImageUrl');
+		background-size: cover;
+		background-position: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		margin-bottom: 30px;
+		border-radius: 0 0 20px 20px;
+	}
 </style>
 
 @* <div class="hero-section shadow">
@@ -41,225 +41,251 @@
     </div>
 </div> *@
 <div class="hero-section shadow">
-    <div class="text-center">
-        @if (!string.IsNullOrEmpty(Model.PackageType))
-        {
-            <div class="mb-3">
-                <span class="badge rounded-pill bg-light text-primary px-3 py-2 shadow-sm"
-                      style="font-size: 0.85rem; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 700;">
-                    <i class="fas fa-tag me-1"></i> @Model.PackageType
-                </span>
-            </div>
-        }
+	<div class="text-center">
+		@if (!string.IsNullOrEmpty(Model.PackageType))
+		{
+			<div class="mb-3">
+				<span class="badge rounded-pill bg-light text-primary px-3 py-2 shadow-sm"
+					  style="font-size: 0.85rem; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 700;">
+					<i class="fas fa-tag me-1"></i> @Model.PackageType
+				</span>
+			</div>
+		}
 
-        <h2 class="display-6 fw-bold">@Model.PackageName</h2>
-        <p class="fs-5">@Model.Duration | @Model.Location</p>
-    </div>
+		<h2 class="display-6 fw-bold">@Model.PackageName</h2>
+		<p class="fs-5">@Model.Duration | @Model.Location</p>
+	</div>
 </div>
 
 <div class="container pb-5">
-    <div class="row g-4">
-        <div class="col-lg-8">
-            <div class="mb-4">
-                <img id="mainDisplay" src="@Model.ImageUrl" class="rounded-4 shadow-sm w-100" style="height: 400px; object-fit: cover;">
-            </div>
-           
+	<div class="row g-4">
+		<div class="col-lg-8">
+			<div class="mb-4">
+				<img id="mainDisplay" src="@Model.ImageUrl" class="rounded-4 shadow-sm w-100" style="height: 400px; object-fit: cover;">
+			</div>
 
-            <div class="d-flex gap-2 mb-4">
-                <img src="@Model.ImageUrl" class="thumb-nail active" onclick="swap(this)">
 
-                @if (!string.IsNullOrEmpty(Model.ThumbnailUrl1))
-                {
-                    <img src="@Model.ThumbnailUrl1" class="thumb-nail" onclick="swap(this)">
-                }
+			<div class="d-flex gap-2 mb-4">
+				<img src="@Model.ImageUrl" class="thumb-nail active" onclick="swap(this)">
 
-                @if (!string.IsNullOrEmpty(Model.ThumbnailUrl2))
-                {
-                    <img src="@Model.ThumbnailUrl2" class="thumb-nail" onclick="swap(this)">
-                }
-            </div>
-            <h4 class="fw-bold mb-3">Trip Itinerary</h4>
-            <div class="accordion border rounded-3 mb-4" id="itineraryAcc">
-                @if (Model.Itineraries != null)
-                {
-                    @foreach (var day in Model.Itineraries.OrderBy(d => d.DayNumber))
-                    {
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed py-2 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#day-@day.DayNumber">
-                                    Day @day.DayNumber — @day.ActivityTitle
-                                </button>
-                            </h2>
-                            <div id="day-@day.DayNumber" class="accordion-collapse collapse" data-bs-parent="#itineraryAcc">
-                                <div class="accordion-body text-muted small">@day.ActivityDescription</div>
-                            </div>
-                        </div>
-                    }
-                }
-            </div>
+				@if (!string.IsNullOrEmpty(Model.ThumbnailUrl1))
+				{
+					<img src="@Model.ThumbnailUrl1" class="thumb-nail" onclick="swap(this)">
+				}
 
-            @{
-                var fDay = Model.Itineraries?.OrderBy(d => d.DayNumber).FirstOrDefault();
-            }
-            <div class="row bg-light rounded-3 p-3 g-3">
-                <div class="col-md-6 border-end">
-                    <span class="fw-bold text-success small">✓ INCLUSIONS</span>
-                    <ul class="list-unstyled small mt-2 mb-0 text-muted">
-                        @if (fDay != null && !string.IsNullOrEmpty(fDay.Inclusions))
-                        {
-                            @foreach (var i in fDay.Inclusions.Split(';'))
-                            {
-                                <li>@i</li>
-                            }
-                        }
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <span class="fw-bold text-danger small">✕ EXCLUSIONS</span>
-                    <ul class="list-unstyled small mt-2 mb-0 text-muted">
-                        @if (fDay != null && !string.IsNullOrEmpty(fDay.Exclusions))
-                        {
-                            @foreach (var e in fDay.Exclusions.Split(';'))
-                            {
-                                <li>@e</li>
-                            }
-                        }
-                    </ul>
-                </div>
-            </div>
-            <div class="host-profile-card mb-5">
-                <div class="row align-items-center g-0">
-                    <div class="col-auto px-4 py-3 border-end">
-                        <div class="host-avatar">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                    </div>
-                    <div class="col ps-4">
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="host-label">Trusted Travel Partner</span>
-                            <span class="verified-tick"><i class="fas fa-check-circle"></i> Verified</span>
-                        </div>
-                        <h5 class="agency-name mb-0">
-                            @(Model.Host?.HostAgencyName ?? "Easy Safar Official")
-                        </h5>
-                        <p class="agency-location mb-0">
-                            <i class="fas fa-map-marker-alt"></i>
-                            @(Model.Host?.CityCountry ?? "Headquarters, India")
-                        </p>
-                    </div>
-                    <div class="col-auto pe-4">
-                        <a href="mailto:@(Model.Host?.EmailAddress ?? "support@easysafar.com")" class="contact-host-link">
-                            Ask a Question <i class="fas fa-chevron-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+				@if (!string.IsNullOrEmpty(Model.ThumbnailUrl2))
+				{
+					<img src="@Model.ThumbnailUrl2" class="thumb-nail" onclick="swap(this)">
+				}
+			</div>
+			<h4 class="fw-bold mb-3">Trip Itinerary</h4>
+			<div class="accordion border rounded-3 mb-4" id="itineraryAcc">
+				@if (Model.Itineraries != null)
+				{
+					@foreach (var day in Model.Itineraries.OrderBy(d => d.DayNumber))
+					{
+						<div class="accordion-item">
+							<h2 class="accordion-header">
+								<button class="accordion-button collapsed py-2 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#day-@day.DayNumber">
+									Day @day.DayNumber — @day.ActivityTitle
+								</button>
+							</h2>
+							<div id="day-@day.DayNumber" class="accordion-collapse collapse" data-bs-parent="#itineraryAcc">
+								<div class="accordion-body text-muted small">@day.ActivityDescription</div>
+							</div>
+						</div>
+					}
+				}
+			</div>
 
-        <div class="col-lg-4">
-            <div class="booking-sidebar-compact">
-                <h6 class="fw-bold mb-3">Book This Package</h6>
+			@{
+				var fDay = Model.Itineraries?.OrderBy(d => d.DayNumber).FirstOrDefault();
+			}
+			<div class="row bg-light rounded-3 p-3 g-3">
+				<div class="col-md-6 border-end">
+					<span class="fw-bold text-success small">✓ INCLUSIONS</span>
+					<ul class="list-unstyled small mt-2 mb-0 text-muted">
+						@if (fDay != null && !string.IsNullOrEmpty(fDay.Inclusions))
+						{
+							@foreach (var i in fDay.Inclusions.Split(';'))
+							{
+								<li>@i</li>
+							}
+						}
+					</ul>
+				</div>
+				<div class="col-md-6">
+					<span class="fw-bold text-danger small">✕ EXCLUSIONS</span>
+					<ul class="list-unstyled small mt-2 mb-0 text-muted">
+						@if (fDay != null && !string.IsNullOrEmpty(fDay.Exclusions))
+						{
+							@foreach (var e in fDay.Exclusions.Split(';'))
+							{
+								<li>@e</li>
+							}
+						}
+					</ul>
+				</div>
+			</div>
+			<div class="host-profile-card mb-5">
+				<div class="row align-items-center g-0">
+					<div class="col-auto px-4 py-3 border-end">
+						<div class="host-avatar">
+							<i class="fas fa-shield-alt"></i>
+						</div>
+					</div>
+					<div class="col ps-4">
+						<div class="d-flex align-items-center gap-2 mb-1">
+							<span class="host-label">Trusted Travel Partner</span>
+							<span class="verified-tick"><i class="fas fa-check-circle"></i> Verified</span>
+						</div>
+						<h5 class="agency-name mb-0">
+							@(Model.Host?.HostAgencyName ?? "Easy Safar Official")
+						</h5>
+						<p class="agency-location mb-0">
+							<i class="fas fa-map-marker-alt"></i>
+							@(Model.Host?.CityCountry ?? "Headquarters, India")
+						</p>
+					</div>
+					<div class="col-auto pe-4">
+						<a href="mailto:@(Model.Host?.EmailAddress ?? "support@easysafar.com")" class="contact-host-link">
+							Ask a Question <i class="fas fa-chevron-right ms-1"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
 
-                <form asp-action="Create" asp-controller="Bookings" method="post">
-                    <input type="hidden" name="PackageId" value="@Model.PackageId" />
+		<div class="col-lg-4">
+			<div class="booking-sidebar-compact">
+				<h6 class="fw-bold mb-3">Book This Package</h6>
 
-                    <span class="compact-label">Travel Date</span>
-                    <input type="date" id="tDate" name="TravelDate" class="form-control compact-input shadow-none" required>
+				<form asp-action="Create" asp-controller="Bookings" method="post">
+					<input type="hidden" name="PackageId" value="@Model.PackageId" />
 
-                    <span class="compact-label">Number of Guests</span>
-                    @* Numerical input allows for flexible group sizes *@
-                    <input type="number" id="gCount" name="Guests" class="form-control compact-input shadow-none"
-                           value="1" min="1" max="20" required>
+					<span class="compact-label">Travel Date</span>
+					<input type="date" id="tDate" name="TravelDate" class="form-control compact-input shadow-none" required>
 
-                    <span class="compact-label">Your Email</span>
-                    <input type="email" name="ContactEmail" class="form-control compact-input shadow-none" placeholder="mail@example.com" required>
+					<span class="compact-label">Number of Guests</span>
+					@* Numerical input allows for flexible group sizes *@
+					<input type="number" id="gCount" name="Guests" class="form-control compact-input shadow-none"
+						   value="1" min="1" max="20" required>
 
-                    <span class="compact-label">Phone Number</span>
-                    <input type="tel" name="ContactPhone" class="form-control compact-input shadow-none" placeholder="+91 00000 00000" required>
+					<span class="compact-label">Your Email</span>
+					<input type="email" name="ContactEmail" class="form-control compact-input shadow-none" placeholder="mail@example.com" required>
 
-                    <div class="price-box-ui">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="small text-muted fw-bold">Total Payable</span>
-                            <span class="h5 fw-bold text-primary mb-0" id="liveTotal">₹@Model.Price.ToString("N0")</span>
-                        </div>
-                    </div>
+					<span class="compact-label">Phone Number</span>
+					<input type="tel" name="ContactPhone" class="form-control compact-input shadow-none" placeholder="+91 00000 00000" required>
 
-                    <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow-sm" style="border-radius: 8px;">
-                        CONFIRM BOOKING
-                    </button>
-                </form>
+					<div class="price-box-ui">
+						<div class="d-flex justify-content-between align-items-center">
+							<span class="small text-muted fw-bold">Total Payable</span>
+							<span class="h5 fw-bold text-primary mb-0" id="liveTotal">₹@Model.Price.ToString("N0")</span>
+						</div>
+					</div>
 
-                <div class="text-center mt-2" style="font-size: 10px; color: #999;">
-                    <i class="fas fa-lock me-1"></i> SSL Secure Payment
-                </div>
-            </div>
-        </div>
-    </div>
+					<button type="button" onclick="validateBooking(event)" class="btn btn-primary w-100 fw-bold py-2 shadow-sm" style="border-radius: 8px;">
+						CONFIRM BOOKING
+					</button>
+				</form>
+
+				<div class="text-center mt-2" style="font-size: 10px; color: #999;">
+					<i class="fas fa-lock me-1"></i> SSL Secure Payment
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 @section Scripts {
-    <script>
-        // 1. GLOBAL FUNCTIONS (Accessible from HTML attributes like onclick)
-        function swap(el) {
-            const mainDisplay = document.getElementById('mainDisplay');
-            if (mainDisplay && el) {
-                mainDisplay.src = el.src;
-                // Update active state for thumbnails
-                document.querySelectorAll('.thumb-nail').forEach(t => t.classList.remove('active'));
-                el.classList.add('active');
-            }
-        }
+	<script>
+		// 1. GLOBAL FUNCTIONS (Accessible from HTML attributes like onclick)
+		function swap(el) {
+			const mainDisplay = document.getElementById('mainDisplay');
+			if (mainDisplay && el) {
+				mainDisplay.src = el.src;
+				// Update active state for thumbnails
+				document.querySelectorAll('.thumb-nail').forEach(t => t.classList.remove('active'));
+				el.classList.add('active');
+			}
+		}
 
-        // 2. INITIALIZATION (Runs once the page is ready)
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get data from C# Model
-            const basePrice = @(Model?.Price ?? 0);
+		// 2. INITIALIZATION (Runs once the page is ready)
+		document.addEventListener('DOMContentLoaded', function () {
+			// Get data from C# Model
+			const basePrice = @(Model?.Price ?? 0);
 
-            // Get HTML Elements
-            const guestInput = document.getElementById('gCount');
-            const totalDisplay = document.getElementById('liveTotal');
-            const travelDateInput = document.getElementById('tDate');
+			// Get HTML Elements
+			const guestInput = document.getElementById('gCount');
+			const totalDisplay = document.getElementById('liveTotal');
+			const travelDateInput = document.getElementById('tDate');
 
-            // --- DATE LOGIC ---
-            if (travelDateInput) {
-                const today = new Date().toISOString().split('T')[0];
-                travelDateInput.min = today; // Prevents booking in the past
-            }
+			// --- DATE LOGIC ---
+			if (travelDateInput) {
+				const today = new Date().toISOString().split('T')[0];
+				travelDateInput.min = today; // Prevents booking in the past
+			}
 
-            // --- PRICE CALCULATION LOGIC ---
-            function updatePrice() {
-                if (!guestInput || !totalDisplay) return;
+			// --- PRICE CALCULATION LOGIC ---
+			function updatePrice() {
+				if (!guestInput || !totalDisplay) return;
 
-                let count = parseInt(guestInput.value) || 1;
+				let count = parseInt(guestInput.value) || 1;
 
-                // Safety: Minimum 1 guest, Maximum 20
-                if (count < 1) { count = 1; guestInput.value = 1; }
-                if (count > 20) { count = 20; guestInput.value = 20; }
+				// Safety: Minimum 1 guest, Maximum 20
+				if (count < 1) { count = 1; guestInput.value = 1; }
+				if (count > 20) { count = 20; guestInput.value = 20; }
 
-                const total = basePrice * count;
-                totalDisplay.innerText = '₹' + total.toLocaleString('en-IN');
+				const total = basePrice * count;
+				totalDisplay.innerText = '₹' + total.toLocaleString('en-IN');
 
-                // Store data for the Payment Page
-                localStorage.setItem('selectedPackagePrice', totalDisplay.innerText);
-                localStorage.setItem('totalGuests', count);
-            }
+				// Store data for the Payment Page
+				localStorage.setItem('selectedPackagePrice', totalDisplay.innerText);
+				localStorage.setItem('totalGuests', count);
+			}
 
-            // --- EVENT LISTENERS ---
-            if (guestInput) {
-                // Listen for typing and arrow clicks
-                guestInput.addEventListener('input', updatePrice);
-                guestInput.addEventListener('change', updatePrice);
-            }
+			// --- EVENT LISTENERS ---
+			if (guestInput) {
+				// Listen for typing and arrow clicks
+				guestInput.addEventListener('input', updatePrice);
+				guestInput.addEventListener('change', updatePrice);
+			}
 
-            // --- PERSISTENCE FOR PAYMENT PAGE ---
-            const bookingForm = document.querySelector('form');
-            if (bookingForm) {
-                bookingForm.addEventListener('submit', function() {
-                    localStorage.setItem('selectedPackageName', "@Model.PackageName");
-                });
-            }
+			// --- PERSISTENCE FOR PAYMENT PAGE ---
+			const bookingForm = document.querySelector('form');
+			if (bookingForm) {
+				bookingForm.addEventListener('submit', function() {
+					localStorage.setItem('selectedPackageName', "@Model.PackageName");
+				});
+			}
 
-            // Initial run to show correct price immediately
-            updatePrice();
-        });
-    </script>
+			// Initial run to show correct price immediately
+			updatePrice();
+		});
+
+				// Add this inside your document.addEventListener('DOMContentLoaded', ...) or just below it
+				function validateBooking(event) {
+			// 1. Check login status
+			const isLoggedIn = '@(Context.Session.GetString("UserName") != null)' === 'True';
+
+			if (!isLoggedIn) {
+				// 2. Capture the current page path
+				const currentUrl = window.location.pathname;
+
+				alert("Please login or create an account to proceed with your booking.");
+
+				// 3. Redirect to Auth WITH the returnUrl parameter
+				// Make sure the path matches your Controller/Action (e.g., /Account/Auth or /Home/Auth)
+				window.location.href = '/Home/Auth?returnUrl=' + encodeURIComponent(currentUrl);
+				return;
+			}
+
+			// 4. If logged in, find the form and submit it
+			const form = event.target.closest('form');
+			if (form.checkValidity()) {
+				form.submit();
+			} else {
+				form.reportValidity();
+			}
+		}
+	</script>
 }
