@@ -64,11 +64,20 @@ namespace TravelPackageManagementSystem.Application.Controllers
             return Ok(new { success = true, username = user.Username });
         }
 
+        //[HttpPost]
+        //public IActionResult Logout()
+        //{
+        //    HttpContext.Session.Clear();
+        //    return Ok(new { message = "Logged out successfully" });
+        //}
         [HttpPost]
         public IActionResult Logout()
         {
+            // 1. Clear Session
             HttpContext.Session.Clear();
-            return Ok(new { message = "Logged out successfully" });
+
+            // 2. Redirect to Home Page (instead of returning JSON)
+            return RedirectToAction("Index", "Home");
         }
 
         // --- HELPER METHOD (FIXED) ---

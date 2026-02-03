@@ -1,24 +1,22 @@
-﻿@{
-    ViewData["Title"] = "Member Profile";
+﻿@model TravelPackageManagementSystem.Repository.Models.UserProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
     Layout = "_Layout";
 }
 
 <style>
     :root {
-        --mmt-blue: #008cff;
         --mmt-gradient: linear-gradient(90deg, #008cff 0%, #0054ff 100%);
-        --surface: #ffffff;
-        --text-main: #1a1a1a;
         --text-muted: #5e5e5e;
         --border-color: #e7e7e7;
     }
 
     body {
         background-color: #f2f2f2;
-        font-family: 'Lato', sans-serif;
     }
 
-    /* Modern Profile Header */
+    /* Hero & Card Styles */
     .profile-hero {
         background: var(--mmt-gradient);
         height: 180px;
@@ -27,7 +25,7 @@
     }
 
     .main-card {
-        background: var(--surface);
+        background: white;
         border-radius: 20px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         border: none;
@@ -56,9 +54,19 @@
         justify-content: center;
         font-size: 2.5rem;
         font-weight: 900;
+        text-transform: uppercase;
+    }
+    /* Add this to your style section */
+    .hover-effect {
+        transition: transform 0.2s;
     }
 
-    /* Table Styling like MMT */
+        .hover-effect:hover {
+            transform: scale(1.1); /* Slightly enlarges when hovered */
+            cursor: pointer;
+        }
+
+    /* Table Styles */
     .mmt-table {
         border: 1px solid var(--border-color);
         border-radius: 12px;
@@ -83,6 +91,7 @@
             vertical-align: middle;
         }
 
+    /* Status Badges */
     .status-badge {
         padding: 5px 12px;
         border-radius: 20px;
@@ -93,6 +102,16 @@
     .status-confirmed {
         background: #e7f6ed;
         color: #00a94b;
+    }
+
+    .status-pending {
+        background: #fff8e1;
+        color: #ff9800;
+    }
+
+    .status-cancelled {
+        background: #fee2e2;
+        color: #ef4444;
     }
 
     .stat-box {
@@ -112,7 +131,7 @@
     <div class="row">
         <div class="col-12 text-center text-md-start">
             <div class="avatar-wrapper ms-md-4">
-                <div class="avatar-initials" id="userInitials">--</div>
+                <div class="avatar-initials">@Model.Initials</div>
             </div>
         </div>
     </div>
@@ -122,41 +141,88 @@
             <div class="main-card mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h2 class="fw-bold mb-1" id="topName">Loading...</h2>
-                        <p class="text-muted mb-0"><i class="fa-solid fa-envelope me-2"></i><span id="smallEmail"></span></p>
+                        <h2 class="fw-bold mb-1">@Model.Username</h2>
+                        <p class="text-muted mb-0"><i class="fa-solid fa-envelope me-2"></i>@Model.Email</p>
                     </div>
-                    <a asp-controller="User" asp-action="Edit" class="btn btn-outline-primary rounded-pill px-4">Edit Profile</a>
                 </div>
 
                 <div class="row py-3 border-top border-bottom">
+
                     <div class="col-4 stat-box">
-                        <div class="h4 fw-bold mb-0 text-primary" id="statTrips">0</div>
-                        <div class="small text-muted">Bookings</div>
+                        <a href="/Home/MyBookings" class="text-decoration-none d-block">
+                            <div class="h4 fw-bold mb-0 text-primary">@Model.BookingsCount</div>
+                            <div class="small text-muted">Bookings</div>
+                        </a>
                     </div>
+
                     <div class="col-4 stat-box">
-                        <div class="h4 fw-bold mb-0 text-success" id="statReviews">0</div>
+                        <div class="h4 fw-bold mb-0 text-success">@Model.ReviewsCount</div>
                         <div class="small text-muted">Reviews</div>
                     </div>
+
                     <div class="col-4 stat-box">
-                        <div class="h4 fw-bold mb-0 text-danger" id="statWishlist">0</div>
-                        <div class="small text-muted">Wishlist</div>
+                        <a asp-controller="User" asp-action="Wishlist" class="text-decoration-none d-block hover-effect">
+                            <div class="h4 fw-bold mb-0 text-danger">
+                                <i class="fas fa-heart me-1" style="font-size: 0.8rem;"></i>@Model.WishlistCount
+                            </div>
+                            <div class="small text-muted">Wishlist</div>
+                        </a>
                     </div>
+
                 </div>
             </div>
 
             <div class="main-card">
                 <h5 class="fw-bold mb-4">Recent Bookings</h5>
                 <div class="table-responsive mmt-table">
-                    <table class="table mb-0" id="bookingsTable">
+                    <table class="table mb-0">
                         <thead>
                             <tr>
                                 <th>Booking Details</th>
                                 <th>Travel Date</th>
+                                <th>Amount</th>
                                 <th>Status</th>
-                                <th class="text-end">Manage</th>
+                                <th class="text-end">Action</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            @if (Model.RecentBookings != null && Model.RecentBookings.Any())
+                            {
+                                foreach (var booking in Model.RecentBookings)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold">@booking.PackageName</div>
+                                            <div class="text-muted small">ID: #@booking.BookingId</div>
+                                        </td>
+                                        <td class="small fw-bold">@booking.TravelDate.ToString("MMM dd, yyyy")</td>
+                                        <td class="small">₹@booking.Amount.ToString("N0")</td>
+                                        <td>
+                                            @{
+                                                // Dynamic Status Logic
+                                                var statusClass = "status-pending";
+                                                var statusText = booking.Status.ToUpper();
+                                                if (statusText == "CONFIRMED") { statusClass = "status-confirmed"; }
+                                                else if (statusText == "CANCELLED") { statusClass = "status-cancelled"; }
+                                            }
+                                            <span class="status-badge @statusClass">@booking.Status</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a href="/Home/MyBookings" class="btn btn-sm btn-link text-primary">Receipt</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        <i class="fas fa-suitcase-rolling mb-2"></i><br />
+                                        No bookings found. Start exploring!
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -167,51 +233,21 @@
                 <h6 class="fw-bold mb-3">Personal Details</h6>
                 <div class="mb-3">
                     <label class="small text-muted d-block">Phone Number</label>
-                    <span class="fw-bold" id="lblPhone">--</span>
+                    <span class="fw-bold">@Model.PhoneNumber</span>
                 </div>
                 <div class="mb-3">
                     <label class="small text-muted d-block">Identity Verification</label>
-                    <span class="badge bg-success-subtle text-success"><i class="fa-solid fa-circle-check me-1"></i> Verified</span>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+                        <i class="fa-solid fa-circle-check me-1"></i> Email Verified
+                    </span>
                 </div>
             </div>
 
-            <form asp-controller="User" asp-action="Logout" method="post" id="logoutForm">
-                <button type="button" class="btn btn-light w-100 py-3 rounded-3 fw-bold text-danger border" onclick="confirmLogout()">
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="btn btn-light w-100 py-3 rounded-3 fw-bold text-danger border">
                     <i class="fa-solid fa-power-off me-2"></i>Log Out
                 </button>
             </form>
         </div>
     </div>
 </div>
-
-<script>
-    async function loadProfile() {
-        try {
-            const response = await fetch('/User/GetProfileData');
-            const data = await response.json();
-
-            document.getElementById('topName').innerText = `${data.firstName} ${data.lastName}`;
-            document.getElementById('lblPhone').innerText = data.phone || 'Add phone number';
-            document.getElementById('smallEmail').innerText = data.email;
-            document.getElementById('userInitials').innerText = (data.firstName[0] + data.lastName[0]).toUpperCase();
-
-            document.getElementById('statTrips').innerText = data.bookingsCount || 0;
-            document.getElementById('statReviews').innerText = data.reviewsCount || 0;
-            document.getElementById('statWishlist').innerText = data.wishlistCount || 0;
-
-            const tbody = document.querySelector('#bookingsTable tbody');
-            tbody.innerHTML = data.recentBookings?.length ? data.recentBookings.map(b => `
-                <tr>
-                    <td>
-                        <div class="fw-bold">${b.destination}</div>
-                        <div class="text-muted x-small">ID: ${b.refNumber}</div>
-                    </td>
-                    <td class="small fw-bold">${b.dateRange || 'Pending'}</td>
-                    <td><span class="status-badge status-confirmed">${b.status}</span></td>
-                    <td class="text-end"><a href="#" class="btn btn-sm btn-link text-primary">Details</a></td>
-                </tr>
-            `).join('') : '<tr><td colspan="4" class="text-center py-4">No bookings yet. Start exploring!</td></tr>';
-        } catch (e) { console.error(e); }
-    }
-    document.addEventListener('DOMContentLoaded', loadProfile);
-</script>
