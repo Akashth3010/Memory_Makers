@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authentication | EasySafar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     <style>
         /* Base Setup */
@@ -126,6 +126,22 @@
             text-align: center;
             font-size: 0.9rem;
         }
+
+        /* Styling for the password toggle icon */
+        .input-group-text {
+            background: #1a1a1a !important;
+            border-color: #333 !important;
+            transition: 0.3s;
+        }
+
+            .input-group-text:hover i {
+                color: #fff !important;
+            }
+
+        /* Remove the blue focus border from the icon side */
+        .auth-input:focus + .input-group-text {
+            border-color: #333 !important;
+        }
     </style>
 </head>
 <body>
@@ -137,7 +153,7 @@
 
                     <div class="text-center mb-4">
                         <h2 id="modalTitle" class="fw-bold h4">Create an Account</h2>
-                        <p id="modalSubtitle" class="small">Join EasySafar to start your journey.</p>
+                        <p id="modalSubtitle" class="text-muted small">Join EasySafar to start your journey.</p>
                     </div>
 
                     <div id="globalError"></div>
@@ -151,7 +167,12 @@
                             </div>
                             <div class="mb-3">
                                 <label class="input-label">Password</label>
-                                <input type="password" id="loginPass" class="auth-input form-control" placeholder="••••••••">
+                                <div class="input-group">
+                                    <input type="password" id="loginPass" class="auth-input form-control border-end-0" placeholder="••••••••">
+                                    <span class="input-group-text bg-transparent border-start-0" style="border: 1px solid #333; cursor: pointer;" onclick="togglePass('loginPass', this)">
+                                        <i class="bi bi-eye text-white-50"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
@@ -173,18 +194,28 @@
                             </div>
                             <div class="mb-2">
                                 <label class="input-label">Password</label>
-                                <input type="password" id="regPass" class="auth-input form-control" placeholder="••••••••">
+                                <div class="input-group">
+                                    <input type="password" id="regPass" class="auth-input form-control border-end-0" placeholder="••••••••">
+                                    <span class="input-group-text bg-transparent border-start-0" style="border: 1px solid #333; cursor: pointer;" onclick="togglePass('regPass', this)">
+                                        <i class="bi bi-eye text-white-50"></i>
+                                    </span>
+                                </div>
                                 <span class="err-msg" id="err-Password"></span>
                             </div>
+
                             <div class="mb-2 full-width">
                                 <label class="input-label">Confirm Password</label>
-                                <input type="password" id="regConfirmPass" class="auth-input form-control" placeholder="••••••••">
+                                <div class="input-group">
+                                    <input type="password" id="regConfirmPass" class="auth-input form-control border-end-0" placeholder="••••••••">
+                                    <span class="input-group-text bg-transparent border-start-0" style="border: 1px solid #333; cursor: pointer;" onclick="togglePass('regConfirmPass', this)">
+                                        <i class="bi bi-eye text-white-50"></i>
+                                    </span>
+                                </div>
                                 <span class="err-msg" id="err-ConfirmPassword"></span>
                             </div>
                         </div>
 
-                        <button type="submit" id="submitBtn" class="btn btn-primary">Login →</button>
-                        <p><span id="toggleText">Don't have an account?</span> <a href="javascript:void(0)" onclick="handleAuthToggle()" id="toggleAuth">Sign Up</a></p>
+                        <button type="submit" id="submitBtn" class="submit-glow-btn">Sign Up →</button>
                     </form>
 
                     <div class="text-center mt-4">
@@ -319,28 +350,27 @@
             }
         });
 
+                function togglePass(inputId, iconEl) {
+            const input = document.getElementById(inputId);
+            const icon = iconEl.querySelector('i');
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.replace('bi-eye-slash', 'bi-eye');
+            }
+        }
+
         function displayErrors(errors) {
             Object.keys(errors).forEach(key => {
                 const span = document.getElementById(`err-${key}`);
                 if (span) {
-                    const errorData = errorSource[key];
-                    // Take the first error message if it's an array, otherwise take the string
-                    span.innerText = Array.isArray(errorData) ? errorData[0] : errorData;
+                    span.innerText = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
                     span.style.display = 'block';
                 }
             });
-        }
-
-            function togglePasswordVisibility(inputId, icon) {
-            const passwordInput = document.getElementById(inputId);
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.replace('bi-eye', 'bi-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.replace('bi-eye-slash', 'bi-eye');
-            }
         }
     </script>
 
