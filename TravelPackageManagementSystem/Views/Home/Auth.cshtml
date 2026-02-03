@@ -21,53 +21,21 @@
             justify-content: center;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden
+            overflow: hidden;
         }
 
-        .auth-page-wrapper {
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            align-items: center; /* Vertical center */
-            justify-content: center; /* Horizontal center */
-            background: #1a1a1a; /* Your preferred background color/image */
-        }
-
-        /* 3. The box containing your forms */
-        .auth-container {
-            width: 100%;
-            max-width: 450px; /* Limits width so it looks like a card */
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 10;
-        }
-
-        /* Modal Sizing */
-        .modal-dialog {
-            max-width: 450px;
-        }
-
+        /* Modal Styling */
         .modal-content {
             background-color: #111111;
             border: 1px solid #333;
             border-radius: 15px;
             color: white;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            margin: auto;
         }
 
-        /* Your Specific CSS Integrated */
-        #authModal .input-label {
-            display: block;
-            width: 100%;
-            text-align: left;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.85rem;
-            margin-bottom: 5px;
-        }
-
-        #authModal .auth-input {
+        .auth-input {
             width: 100%;
             background: #1a1a1a !important;
             border: 1px solid #333 !important;
@@ -76,62 +44,16 @@
             border-radius: 8px;
         }
 
-            #authModal .auth-input::placeholder {
-                color: rgba(255, 255, 255, 0.5) !important; /* Adjust 0.5 to 0.8 for more brightness */
-                opacity: 1; /* Overrides browser default opacity */
-            }
-
-            /* For Internet Explorer 10-11 */
-            #authModal .auth-input:-ms-input-placeholder {
-                color: rgba(255, 255, 255, 0.5) !important;
-            }
-
-            /* For Microsoft Edge */
-            #authModal .auth-input::-ms-input-placeholder {
-                color: rgba(255, 255, 255, 0.5) !important;
-            }
-
-        #authModal .footer-text {
-            color: rgba(255, 255, 255, 0.6) !important;
-            font-size: 0.9rem;
+        .input-label {
+            display: block;
+            width: 100%;
+            text-align: left;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
         }
 
-        #authModal .footer-link {
-            color: #ffffff !important;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-            #authModal .footer-link:hover {
-                color: #00d2ff !important;
-                text-decoration: underline;
-            }
-
-        .password-container {
-            position: relative;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.5);
-            z-index: 10;
-        }
-
-            .toggle-password:hover {
-                color: #00d2ff;
-            }
-
-        /* Ensure padding-right so text doesn't go under the eye */
-        .auth-input-pass {
-            padding-right: 40px !important;
-        }
-
-        /* Submit Button Style */
+        /* Submit Button */
         .submit-glow-btn {
             width: 100%;
             padding: 12px;
@@ -140,7 +62,7 @@
             border: none;
             border-radius: 8px;
             font-weight: 700;
-            margin-top: 10px;
+            margin-top: 15px;
             transition: 0.3s;
         }
 
@@ -149,9 +71,11 @@
                 transform: translateY(-1px);
             }
 
-        .signup-only {
-            display: block; /* Starting on Sign Up as per your requirement */
-        }
+            .submit-glow-btn:disabled {
+                background: #666;
+                cursor: not-allowed;
+                transform: none;
+            }
 
         .err-msg {
             font-size: 0.75rem;
@@ -159,6 +83,48 @@
             display: none;
             text-align: left;
             margin-top: 4px;
+        }
+
+        /* --- LAYOUTS --- */
+        /* Login is simple block */
+        #loginView {
+            display: none; /* Initially hidden */
+        }
+
+        /* Signup is Grid */
+        #signupView {
+            display: grid; /* Initially visible */
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        /* Footer Links */
+        .footer-link {
+            color: #ffffff;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+            .footer-link:hover {
+                color: #00d2ff;
+            }
+
+        /* Error Box */
+        #globalError {
+            display: none;
+            padding: 10px;
+            background: rgba(255, 77, 77, 0.1);
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -168,37 +134,53 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body p-4 p-md-5">
+
                     <div class="text-center mb-4">
                         <h2 id="modalTitle" class="fw-bold h4">Create an Account</h2>
                         <p id="modalSubtitle" class="small">Join EasySafar to start your journey.</p>
                     </div>
 
-                    <form id="authForm">
-                        <h2 id="modalTitle">Welcome Back</h2>
+                    <div id="globalError"></div>
 
-                        <div class="mb-3">
-                            <label id="emailLabel">Username or Email</label>
-                            <input type="text" id="authEmail" class="form-control">
-                            <span class="err-msg text-danger" id="err-Username" style="display:none"></span>
-                            <span class="err-msg text-danger" id="err-Email" style="display:none"></span>
+                    <form id="authForm" novalidate>
+
+                        <div id="loginView">
+                            <div class="mb-3">
+                                <label class="input-label">Username or Email</label>
+                                <input type="text" id="loginId" class="auth-input form-control" placeholder="Enter username or email">
+                            </div>
+                            <div class="mb-3">
+                                <label class="input-label">Password</label>
+                                <input type="password" id="loginPass" class="auth-input form-control" placeholder="••••••••">
+                            </div>
                         </div>
 
-                        <div class="mb-3 signup-only" style="display:none">
-                            <label>Phone Number</label>
-                            <input type="text" id="regPhone" class="form-control">
-                            <span class="err-msg text-danger" id="err-PhoneNumber" style="display:none"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label>Password</label>
-                            <input type="password" id="authPassword" class="form-control">
-                            <span class="err-msg text-danger" id="err-Password" style="display:none"></span>
-                        </div>
-
-                        <div class="mb-3 signup-only" style="display:none">
-                            <label>Confirm Password</label>
-                            <input type="password" id="authConfirmPassword" class="form-control">
-                            <span class="err-msg text-danger" id="err-ConfirmPassword" style="display:none"></span>
+                        <div id="signupView">
+                            <div class="mb-2">
+                                <label class="input-label">Username</label>
+                                <input type="text" id="regUsername" class="auth-input form-control" placeholder="johndoe">
+                                <span class="err-msg" id="err-Username"></span>
+                            </div>
+                            <div class="mb-2">
+                                <label class="input-label">Email</label>
+                                <input type="text" id="regEmail" class="auth-input form-control" placeholder="user@mail.com">
+                                <span class="err-msg" id="err-Email"></span>
+                            </div>
+                            <div class="mb-2">
+                                <label class="input-label">Phone</label>
+                                <input type="text" id="regPhone" class="auth-input form-control" placeholder="+91...">
+                                <span class="err-msg" id="err-PhoneNumber"></span>
+                            </div>
+                            <div class="mb-2">
+                                <label class="input-label">Password</label>
+                                <input type="password" id="regPass" class="auth-input form-control" placeholder="••••••••">
+                                <span class="err-msg" id="err-Password"></span>
+                            </div>
+                            <div class="mb-2 full-width">
+                                <label class="input-label">Confirm Password</label>
+                                <input type="password" id="regConfirmPass" class="auth-input form-control" placeholder="••••••••">
+                                <span class="err-msg" id="err-ConfirmPassword"></span>
+                            </div>
                         </div>
 
                         <button type="submit" id="submitBtn" class="btn btn-primary">Login →</button>
@@ -208,7 +190,7 @@
                     <div class="text-center mt-4">
                         <p class="footer-text mb-0">
                             <span id="toggleText">Already have an account? </span>
-                            <a href="javascript:void(0)" id="toggleAuth" class="footer-link" onclick="handleAuthToggle()">Login</a>
+                            <a class="footer-link" onclick="handleAuthToggle()">Login</a>
                         </p>
                     </div>
                 </div>
@@ -217,44 +199,40 @@
     </div>
 
     <script>
-            function handleAuthToggle() {
-            const signupFields = document.querySelectorAll('.signup-only');
+        // Start in Signup Mode by default
+        let isLoginMode = false;
+
+        function handleAuthToggle() {
+            // Switch Mode
+            isLoginMode = !isLoginMode;
+
+            // Get Elements
+            const loginView = document.getElementById('loginView');
+            const signupView = document.getElementById('signupView');
             const modalTitle = document.getElementById('modalTitle');
             const submitBtn = document.getElementById('submitBtn');
             const toggleText = document.getElementById('toggleText');
-            const toggleLink = document.getElementById('toggleAuth');
-            const emailLabel = document.getElementById('emailLabel');
-            const emailInput = document.getElementById('authEmail');
+            const toggleLink = document.querySelector('.footer-link');
 
-            // Select the column wrappers
-            const emailWrapper = document.getElementById('emailWrapper');
-            const passwordWrapper = document.getElementById('passwordWrapper');
+            // Clear any old errors
+            document.getElementById('globalError').style.display = 'none';
+            document.querySelectorAll('.err-msg').forEach(el => el.style.display = 'none');
 
-            const isCurrentlySignup = submitBtn.innerText.includes("Sign Up");
+            if (isLoginMode) {
+                // Show Login, Hide Signup
+                signupView.style.display = 'none';
+                loginView.style.display = 'block';
 
-            if (isCurrentlySignup) {
-                signupFields.forEach(f => f.style.setProperty('display', 'none', 'important'));
                 modalTitle.innerText = "Welcome Back";
-                emailLabel.innerText = "Username or Email";
-                emailInput.placeholder = "Enter your username or email";
-
-                // Make email and password full width for Login
-                emailWrapper.classList.replace('col-md-6', 'col-md-12');
-                passwordWrapper.classList.replace('col-md-6', 'col-md-12');
-
                 submitBtn.innerText = "Login →";
                 toggleText.innerText = "Don't have an account? ";
                 toggleLink.innerText = "Sign Up";
             } else {
-                signupFields.forEach(f => f.style.setProperty('display', 'block', 'important'));
+                // Show Signup (Grid), Hide Login
+                loginView.style.display = 'none';
+                signupView.style.display = 'grid'; // Restore grid layout
+
                 modalTitle.innerText = "Create an Account";
-                emailLabel.innerText = "Email Address";
-                emailInput.placeholder = "Enter your email";
-
-                // Return to side-by-side for Sign Up
-                emailWrapper.classList.replace('col-md-12', 'col-md-6');
-                passwordWrapper.classList.replace('col-md-12', 'col-md-6');
-
                 submitBtn.innerText = "Sign Up →";
                 toggleText.innerText = "Already have an account? ";
                 toggleLink.innerText = "Login";
@@ -263,73 +241,86 @@
 
         document.getElementById('authForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            const isLogin = document.getElementById('submitBtn').innerText.includes("Login");
 
-            let payload = isLogin ? {
-                Username: document.getElementById('authEmail').value,
-                Password: document.getElementById('authPassword').value
-            } : {
-                Username: document.getElementById('regUsername').value,
-                Email: document.getElementById('authEmail').value,
-                PhoneNumber: document.getElementById('regPhone').value,
-                Password: document.getElementById('authPassword').value,
-                ConfirmPassword: document.getElementById('authConfirmPassword').value
-            };
+            // 1. Lock Button to prevent double-click
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+
+            // Clear errors
+            const globalErr = document.getElementById('globalError');
+            globalErr.style.display = 'none';
+            document.querySelectorAll('.err-msg').forEach(el => el.style.display = 'none');
+
+            // 2. Prepare Data based on Mode
+            let payload = {};
+            let url = "";
+
+            if (isLoginMode) {
+                url = '/Account/Login';
+                // Grab values from LOGIN inputs
+                payload = {
+                    Username: document.getElementById('loginId').value,
+                    Password: document.getElementById('loginPass').value
+                };
+            } else {
+                url = '/Account/Register';
+                // Grab values from REGISTER inputs
+                payload = {
+                    Username: document.getElementById('regUsername').value,
+                    Email: document.getElementById('regEmail').value,
+                    PhoneNumber: document.getElementById('regPhone').value,
+                    Password: document.getElementById('regPass').value,
+                    ConfirmPassword: document.getElementById('regConfirmPass').value
+                };
+            }
 
             try {
-                const response = await fetch(isLogin ? '/Account/Login' : '/Account/Register', {
+                // 3. Send to Backend
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                if (response.ok) {
-                    // --- REDIRECT LOGIC START ---
-                    // 1. Look for 'returnUrl' in the URL parameters
+                // Check for Server Error (500)
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Server Error: " + response.statusText);
+                }
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // 4. Success -> Redirect
                     const urlParams = new URLSearchParams(window.location.search);
                     const returnUrl = urlParams.get('returnUrl');
-
-                    // 2. If it exists, go there. Otherwise, go to home.
-                    if (returnUrl) {
-                        window.location.href = decodeURIComponent(returnUrl);
-                    } else {
-                        window.location.href = "/";
-                    }
-                    // --- REDIRECT LOGIC END ---
+                    window.location.href = returnUrl ? decodeURIComponent(returnUrl) : "/";
                 } else {
-                    const result = await response.json();
-                    displayErrors(result);
+                    // 5. Logic Error (e.g. Wrong Password)
+                    if (result.errors) {
+                        displayErrors(result.errors);
+                    }
+                    if (result.message) {
+                        globalErr.innerText = result.message;
+                        globalErr.style.display = 'block';
+                    }
                 }
             } catch (error) {
-                console.error("Error:", error);
+                // 6. Network/Crash Error
+                console.error("Fetch Error:", error);
+                globalErr.innerText = "Connection failed. Please try again.";
+                globalErr.style.display = 'block';
+            } finally {
+                // 7. ALWAYS Unlock button
+                btn.disabled = false;
+                btn.innerText = originalText;
             }
         });
 
-        document.addEventListener('mousemove', (e) => {
-            const authModal = document.getElementById('authModal');
-            if (!authModal || !authModal.classList.contains('show')) return;
-
-            const containers = authModal.querySelectorAll('.input-glow-container');
-            containers.forEach(container => {
-                const rect = container.getBoundingClientRect();
-                container.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                container.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-            });
-        });
-
-                function displayErrors(result) {
-            // 1. Hide all previous errors
-            document.querySelectorAll('.err-msg').forEach(el => {
-                el.style.display = 'none';
-                el.innerText = '';
-            });
-
-            // 2. Determine if errors are in 'result.errors' (Standard ASP.NET) or 'result' (Custom)
-            const errorSource = result.errors || result;
-
-            // 3. Loop through keys (e.g., "Username", "Email")
-            Object.keys(errorSource).forEach(key => {
-                // Find the span that matches your naming convention: err-Username, err-Email, etc.
+        function displayErrors(errors) {
+            Object.keys(errors).forEach(key => {
                 const span = document.getElementById(`err-${key}`);
                 if (span) {
                     const errorData = errorSource[key];
