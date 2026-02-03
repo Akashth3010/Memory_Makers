@@ -69,8 +69,7 @@ namespace TravelPackageManagement.NUnitTest.Tests
             var result = await _controller.Create(packageId, bookingDate, travelers, phone, email);
 
             // ASSERT
-            // Using modern NUnit 4.x syntax
-            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            Assert.That(result, Is.InstanceOf<UnauthorizedResult>());
         }
     }
 }

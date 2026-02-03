@@ -12,7 +12,7 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260128122507_InitialCreate")]
+    [Migration("20260202115104_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
