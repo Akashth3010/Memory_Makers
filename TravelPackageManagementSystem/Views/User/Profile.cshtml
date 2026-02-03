@@ -5,254 +5,179 @@
 
 <style>
     :root {
-        --primary: #4f46e5;
-        --secondary: #06b6d4;
-        --bg-body: #f1f5f9;
-        --radius-lg: 24px;
-        --nav-height: 70px;
+        --mmt-blue: #008cff;
+        --mmt-gradient: linear-gradient(90deg, #008cff 0%, #0054ff 100%);
+        --surface: #ffffff;
+        --text-main: #1a1a1a;
+        --text-muted: #5e5e5e;
+        --border-color: #e7e7e7;
     }
 
-    /* --- STICKY PROFILE CARD --- */
-    .sticky-profile-card {
-        position: sticky;
-        top: var(--nav-height);
-        z-index: 1050;
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px);
-        border-radius: var(--radius-lg);
-        border: 1px solid white;
-        box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-        overflow: hidden;
-        margin: 1.5rem 0 2rem 0;
+    body {
+        background-color: #f2f2f2;
+        font-family: 'Lato', sans-serif;
     }
 
-    .banner-area-small {
+    /* Modern Profile Header */
+    .profile-hero {
+        background: var(--mmt-gradient);
+        height: 180px;
+        border-radius: 0 0 40px 40px;
+        margin-bottom: -60px;
+    }
+
+    .main-card {
+        background: var(--surface);
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: none;
+        padding: 30px;
+    }
+
+    .avatar-wrapper {
+        width: 120px;
         height: 120px;
-        background: linear-gradient(120deg, #4f46e5 0%, #06b6d4 100%);
-        position: relative;
-        display: flex;
-        align-items: center;
-        padding-left: 160px;
-    }
-
-    .banner-name {
-        color: white;
-        font-weight: 800;
-        font-size: 1.75rem;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        margin: 0;
-    }
-
-    .profile-header-sticky {
-        padding: 0 40px 15px 40px;
-        display: flex;
-        align-items: flex-end;
-        margin-top: -45px;
-        gap: 20px;
-    }
-
-    .avatar-box-sticky {
-        width: 100px;
-        height: 100px;
         background: white;
-        border-radius: 16px;
+        border-radius: 50%;
+        padding: 5px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        margin-top: -90px;
+        display: inline-block;
+    }
+
+    .avatar-initials {
+        width: 100%;
+        height: 100%;
+        background: #fdf0e0;
+        color: #eb7c01;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 2.5rem;
-        font-weight: 800;
-        color: var(--primary);
-        border: 4px solid white;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        font-weight: 900;
     }
 
-    /* --- TABLE STYLING --- */
-    .custom-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 8px;
+    /* Table Styling like MMT */
+    .mmt-table {
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow: hidden;
     }
 
-        .custom-table th {
-            color: #64748b;
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            padding: 10px 15px;
-            border: none;
+        .mmt-table thead {
+            background: #f9f9f9;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .custom-table td {
-            background-color: #f8fafc;
+        .mmt-table th {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
             padding: 15px;
-            border: none;
+        }
+
+        .mmt-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #f2f2f2;
             vertical-align: middle;
         }
 
-            .custom-table td:first-child {
-                border-radius: 12px 0 0 12px;
-            }
-
-            .custom-table td:last-child {
-                border-radius: 0 12px 12px 0;
-            }
-
-    .section-title {
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
         font-weight: 700;
-        color: #1e293b;
-        display: flex;
-        align-items: center;
-        gap: 10px;
     }
 
-    .profile-container {
-        max-width: 1200px;
-        margin: 0 auto;
+    .status-confirmed {
+        background: #e7f6ed;
+        color: #00a94b;
     }
 
-    .glass-card {
-        background: white;
-        border-radius: var(--radius-lg);
-        border: 1px solid white;
-        box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-        overflow: hidden;
-        margin-bottom: 2rem;
-    }
-
-    .stat-widget {
-        background: white;
+    .stat-box {
+        text-align: center;
         padding: 20px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        border: 1px solid #e2e8f0;
-        margin-bottom: 1rem;
+        border-right: 1px solid #eee;
     }
+
+        .stat-box:last-child {
+            border-right: none;
+        }
 </style>
 
-<div class="container profile-container pb-5">
+<div class="profile-hero"></div>
 
-    <div class="sticky-profile-card">
-        <div class="banner-area-small">
-            <h2 class="banner-name" id="topName">User Profile</h2>
-        </div>
-
-        <div class="profile-header-sticky">
-            <div class="position-relative">
-                <div class="avatar-box-sticky" id="userInitials">--</div>
-                <div style="position: absolute; bottom: 5px; right: -5px; background: #10b981; color: white; border: 2px solid white; border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; font-size: 12px;">
-                    <i class="fa-solid fa-check"></i>
-                </div>
-            </div>
-
-            <div class="flex-grow-1 pb-2">
-                <div class="d-flex align-items-center gap-2 text-muted small">
-                    <i class="fa-solid fa-envelope"></i><span id="smallEmail">--</span>
-                    <span class="text-success fw-bold">• Verified Member</span>
-                </div>
-            </div>
-
-            <div class="pb-2">
-                <a asp-controller="User" asp-action="Edit" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm">
-                    <i class="fa-solid fa-pen-to-square me-2"></i>Edit Profile
-                </a>
+<div class="container pb-5" style="position: relative; z-index: 2;">
+    <div class="row">
+        <div class="col-12 text-center text-md-start">
+            <div class="avatar-wrapper ms-md-4">
+                <div class="avatar-initials" id="userInitials">--</div>
             </div>
         </div>
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4 mt-2">
         <div class="col-lg-8">
-            <div class="glass-card p-4">
-                <h5 class="fw-bold mb-4"><i class="fa-regular fa-id-card text-info me-2"></i>Account Information</h5>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="p-3 bg-light rounded-4">
-                            <small class="text-muted d-block fw-bold">FULL NAME</small>
-                            <span class="fw-bold" id="lblFullName">--</span>
-                        </div>
+            <div class="main-card mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1" id="topName">Loading...</h2>
+                        <p class="text-muted mb-0"><i class="fa-solid fa-envelope me-2"></i><span id="smallEmail"></span></p>
                     </div>
-                    <div class="col-md-6">
-                        <div class="p-3 bg-light rounded-4">
-                            <small class="text-muted d-block fw-bold">MOBILE NUMBER</small>
-                            <span class="fw-bold" id="lblPhone">--</span>
-                        </div>
+                    <a asp-controller="User" asp-action="Edit" class="btn btn-outline-primary rounded-pill px-4">Edit Profile</a>
+                </div>
+
+                <div class="row py-3 border-top border-bottom">
+                    <div class="col-4 stat-box">
+                        <div class="h4 fw-bold mb-0 text-primary" id="statTrips">0</div>
+                        <div class="small text-muted">Bookings</div>
                     </div>
-                    <div class="col-12">
-                        <div class="p-3 bg-light rounded-4">
-                            <small class="text-muted d-block fw-bold">EMAIL ADDRESS</small>
-                            <span class="fw-bold" id="lblEmail">--</span>
-                        </div>
+                    <div class="col-4 stat-box">
+                        <div class="h4 fw-bold mb-0 text-success" id="statReviews">0</div>
+                        <div class="small text-muted">Reviews</div>
+                    </div>
+                    <div class="col-4 stat-box">
+                        <div class="h4 fw-bold mb-0 text-danger" id="statWishlist">0</div>
+                        <div class="small text-muted">Wishlist</div>
                     </div>
                 </div>
             </div>
 
-            <div class="glass-card p-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="section-title mb-0">
-                        <i class="fa-solid fa-plane-departure text-info"></i> Recent Bookings
-                    </div>
-                    <a href="/Home/MyBookings" class="text-primary fw-bold text-decoration-none small">
-                        View Full History <i class="fa-solid fa-arrow-right ms-1"></i>
-                    </a>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="custom-table" id="bookingsTable">
+            <div class="main-card">
+                <h5 class="fw-bold mb-4">Recent Bookings</h5>
+                <div class="table-responsive mmt-table">
+                    <table class="table mb-0" id="bookingsTable">
                         <thead>
                             <tr>
-                                <th>Destination</th>
-                                <th>Dates</th>
+                                <th>Booking Details</th>
+                                <th>Travel Date</th>
                                 <th>Status</th>
-                                <th class="text-end">Action</th>
+                                <th class="text-end">Manage</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-4">
-            <div class="stat-widget">
-                <div style="background: #eff6ff; color: #3b82f6; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fa-solid fa-suitcase-rolling"></i>
+            <div class="main-card mb-4">
+                <h6 class="fw-bold mb-3">Personal Details</h6>
+                <div class="mb-3">
+                    <label class="small text-muted d-block">Phone Number</label>
+                    <span class="fw-bold" id="lblPhone">--</span>
                 </div>
-                <div>
-                    <div class="h5 fw-800 m-0" id="statTrips">0</div>
-                    <div class="small text-muted fw-bold">Trips Completed</div>
-                </div>
-            </div>
-
-            <div class="stat-widget">
-                <div style="background: #f5f3ff; color: #8b5cf6; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fa-solid fa-star"></i>
-                </div>
-                <div>
-                    <div class="h5 fw-800 m-0" id="statReviews">0</div>
-                    <div class="small text-muted fw-bold">Reviews Given</div>
+                <div class="mb-3">
+                    <label class="small text-muted d-block">Identity Verification</label>
+                    <span class="badge bg-success-subtle text-success"><i class="fa-solid fa-circle-check me-1"></i> Verified</span>
                 </div>
             </div>
 
-            <a href="/User/Wishlist" class="text-decoration-none text-dark">
-                <div class="stat-widget stat-widget-clickable">
-                    <div style="background: #fff1f2; color: #f43f5e; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-heart"></i>
-                    </div>
-                    <div>
-                        <div class="h5 fw-800 m-0" id="statWishlist">0</div>
-                        <div class="small text-muted fw-bold">My Wishlist</div>
-                    </div>
-                    <div class="ms-auto text-muted small">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </div>
-                </div>
-            </a>
-
-            <form asp-controller="User" asp-action="Logout" method="post" id="logoutForm" class="mt-3">
-                <button type="button" class="btn btn-white border w-100 py-3 rounded-4 fw-bold text-danger" onclick="confirmLogout()">
-                    <i class="fa-solid fa-power-off me-2"></i>Sign Out
+            <form asp-controller="User" asp-action="Logout" method="post" id="logoutForm">
+                <button type="button" class="btn btn-light w-100 py-3 rounded-3 fw-bold text-danger border" onclick="confirmLogout()">
+                    <i class="fa-solid fa-power-off me-2"></i>Log Out
                 </button>
             </form>
         </div>
@@ -263,65 +188,30 @@
     async function loadProfile() {
         try {
             const response = await fetch('/User/GetProfileData');
-            if (!response.ok) throw new Error("Unauthorized");
             const data = await response.json();
 
-            // Set Profile Names
-            const fullName = `${data.firstName} ${data.lastName}`;
-            document.getElementById('topName').innerText = fullName;
-            document.getElementById('lblFullName').innerText = fullName;
-            document.getElementById('lblEmail').innerText = data.email;
+            document.getElementById('topName').innerText = `${data.firstName} ${data.lastName}`;
+            document.getElementById('lblPhone').innerText = data.phone || 'Add phone number';
             document.getElementById('smallEmail').innerText = data.email;
-            document.getElementById('lblPhone').innerText = data.phone || 'Not set';
+            document.getElementById('userInitials').innerText = (data.firstName[0] + data.lastName[0]).toUpperCase();
 
-            // Set Initials for Avatar
-            if(data.firstName && data.lastName) {
-                document.getElementById('userInitials').innerText = (data.firstName[0] + data.lastName[0]).toUpperCase();
-            }
-
-            // Set Sidebar Statistics
             document.getElementById('statTrips').innerText = data.bookingsCount || 0;
             document.getElementById('statReviews').innerText = data.reviewsCount || 0;
             document.getElementById('statWishlist').innerText = data.wishlistCount || 0;
 
-            // Load Recent Bookings Table
             const tbody = document.querySelector('#bookingsTable tbody');
-            tbody.innerHTML = '';
-
-            if (data.recentBookings && data.recentBookings.length > 0) {
-                data.recentBookings.forEach(b => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>
-                                <div class="fw-bold">${b.destination}</div>
-                                <small class="text-muted">ID: ${b.refNumber || 'N/A'}</small>
-                            </td>
-                            <td class="small fw-bold text-muted">${b.dateRange || 'TBD'}</td>
-                            <td>
-                                <span class="badge bg-success-subtle text-success rounded-pill px-3">${b.status}</span>
-                            </td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-white border rounded-circle">
-                                    <i class="fa-solid fa-ellipsis"></i>
-                                </button>
-                            </td>
-                        </tr>`;
-                });
-            } else {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">No recent bookings found.</td></tr>';
-            }
-
-        } catch (e) {
-            console.error("Error loading profile:", e);
-        }
+            tbody.innerHTML = data.recentBookings?.length ? data.recentBookings.map(b => `
+                <tr>
+                    <td>
+                        <div class="fw-bold">${b.destination}</div>
+                        <div class="text-muted x-small">ID: ${b.refNumber}</div>
+                    </td>
+                    <td class="small fw-bold">${b.dateRange || 'Pending'}</td>
+                    <td><span class="status-badge status-confirmed">${b.status}</span></td>
+                    <td class="text-end"><a href="#" class="btn btn-sm btn-link text-primary">Details</a></td>
+                </tr>
+            `).join('') : '<tr><td colspan="4" class="text-center py-4">No bookings yet. Start exploring!</td></tr>';
+        } catch (e) { console.error(e); }
     }
-
-    function confirmLogout() {
-        if (confirm("Sign out of EasySafar?")) {
-            localStorage.clear();
-            document.getElementById('logoutForm').submit();
-        }
-    }
-
     document.addEventListener('DOMContentLoaded', loadProfile);
 </script>

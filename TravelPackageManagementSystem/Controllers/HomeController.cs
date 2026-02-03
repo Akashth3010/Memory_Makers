@@ -193,19 +193,38 @@ namespace TravelPackageManagementSystem.Controllers
         //    }
         //    return RedirectToAction("MyBookings");
         //}
+        //public async Task<IActionResult> MyBookings()
+        //{
+        //    var userId = HttpContext.Session.GetInt32("UserId");
+
+        //    if (userId == null)
+        //    {
+        //        // CHANGE: "Auth" par jao, par saath mein batao ki wapas "MyBookings" aana hai
+        //        return RedirectToAction("Auth", "Home", new { returnUrl = "/Home/MyBookings" });
+        //    }
+
+        //    var myBookings = await _context.Bookings
+        //        .AsNoTracking()
+        //        .Include(b => b.TravelPackage)
+        //        .Where(b => b.UserId == userId)
+        //        .OrderByDescending(b => b.BookingDate)
+        //        .ToListAsync();
+
+        //    return View(myBookings);
+        //}
         public async Task<IActionResult> MyBookings()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
 
             if (userId == null)
             {
-                // CHANGE: "Auth" par jao, par saath mein batao ki wapas "MyBookings" aana hai
                 return RedirectToAction("Auth", "Home", new { returnUrl = "/Home/MyBookings" });
             }
 
             var myBookings = await _context.Bookings
                 .AsNoTracking()
-                .Include(b => b.TravelPackage)
+                .Include(b => b.TravelPackage) // Fetches Package Name
+                .Include(b => b.User)          // <--- THIS LINE IS MISSING! (Fetches Username)
                 .Where(b => b.UserId == userId)
                 .OrderByDescending(b => b.BookingDate)
                 .ToListAsync();
