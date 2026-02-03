@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authentication | EasySafar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
         /* Base Setup */
@@ -136,7 +137,7 @@
 
                     <div class="text-center mb-4">
                         <h2 id="modalTitle" class="fw-bold h4">Create an Account</h2>
-                        <p id="modalSubtitle" class="text-muted small">Join EasySafar to start your journey.</p>
+                        <p id="modalSubtitle" class="small">Join EasySafar to start your journey.</p>
                     </div>
 
                     <div id="globalError"></div>
@@ -182,7 +183,8 @@
                             </div>
                         </div>
 
-                        <button type="submit" id="submitBtn" class="submit-glow-btn">Sign Up →</button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary">Login →</button>
+                        <p><span id="toggleText">Don't have an account?</span> <a href="javascript:void(0)" onclick="handleAuthToggle()" id="toggleAuth">Sign Up</a></p>
                     </form>
 
                     <div class="text-center mt-4">
@@ -321,10 +323,24 @@
             Object.keys(errors).forEach(key => {
                 const span = document.getElementById(`err-${key}`);
                 if (span) {
-                    span.innerText = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
+                    const errorData = errorSource[key];
+                    // Take the first error message if it's an array, otherwise take the string
+                    span.innerText = Array.isArray(errorData) ? errorData[0] : errorData;
                     span.style.display = 'block';
                 }
             });
+        }
+
+            function togglePasswordVisibility(inputId, icon) {
+            const passwordInput = document.getElementById(inputId);
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.replace('bi-eye-slash', 'bi-eye');
+            }
         }
     </script>
 
