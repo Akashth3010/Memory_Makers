@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Compile Remove="Implementation\**" />
     <Compile Remove="Interface\**" />
     <EmbeddedResource Remove="Implementation\**" />

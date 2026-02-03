@@ -116,6 +116,14 @@ namespace TravelPackageManagementSystem.Controllers
             ViewBag.TrendingPackages = trendingPackages;
 
             return View(destinations);
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId != null)
+            {
+                ViewBag.UserWishlistIds = _context.Wishlists
+                    .Where(w => w.UserId == userId)
+                    .Select(w => w.PackageId)
+                    .ToList();
+            }
         }
 
         public IActionResult Privacy() => View();
