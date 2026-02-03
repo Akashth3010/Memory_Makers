@@ -87,11 +87,14 @@
         document.getElementById("adminError").style.display = "none";
     }
 
-    function adminLogin() {
+        function adminLogin() {
         const email = document.getElementById("adminEmail").value;
         const password = document.getElementById("adminPassword").value;
 
         if (email === "easysafar@gmail.com" && password === "MemoryMakers@123456") {
+            // 1. Set a flag that the user is authenticated
+            localStorage.setItem("isAdmin", "true");
+            // 2. Redirect
             window.location.href = "/Admin/Dashboard";
         } else {
             document.getElementById("adminError").style.display = "block";
