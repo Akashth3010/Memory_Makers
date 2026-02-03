@@ -4,6 +4,8 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using TravelPackageManagementSystem.Repository.Data;
 using TravelPackageManagementSystem.Repository.Models;
+using System.Security.Cryptography; // Added for Hashing
+using System.Text; // Added for Hashing
 
 namespace TravelPackageManagementSystem.Controllers
 {
@@ -18,7 +20,7 @@ namespace TravelPackageManagementSystem.Controllers
 
         public IActionResult Host() => View();
 
-        // ---------------- HOST PACKAGE SUBMISSION (FIXED & MERGED) ----------------
+        // ---------------- HOST PACKAGE SUBMISSION (FIXED WITH SMART CHECK) ----------------
         [HttpPost]
         public async Task<IActionResult> SubmitPackage([FromBody] HostSubmissionViewModel model)
         {
@@ -26,19 +28,36 @@ namespace TravelPackageManagementSystem.Controllers
             {
                 if (model == null) return Json(new { success = false, message = "Invalid data" });
 
-                // 1. Create Host Detail
-                var host = new HostContactDetail
+                int hostIdForPackage;
+
+                // 1. CHECK IF HOST IS ALREADY LOGGED IN
+                int? loggedInHostId = HttpContext.Session.GetInt32("HostId");
+
+                if (loggedInHostId.HasValue)
                 {
-                    HostAgencyName = model.HostAgencyName,
-                    EmailAddress = model.EmailAddress,
-                    PhoneNumber = model.PhoneNumber,
-                    CityCountry = model.CityCountry
-                };
+                    // CASE A: Host is logged in -> Use their existing ID
+                    hostIdForPackage = loggedInHostId.Value;
+                }
+                else
+                {
+                    // CASE B: Guest User -> Create new Host Contact Detail
+                    var host = new HostContactDetail
+                    {
+                        HostAgencyName = model.HostAgencyName,
+                        EmailAddress = model.EmailAddress,
+                        PhoneNumber = model.PhoneNumber,
+                        CityCountry = model.CityCountry,
+                        // Hash the default password so DB doesn't reject it
+                        Password = HashPassword("DefaultPassword123")
+                    };
 
-                _context.HostContactDetails.Add(host);
-                await _context.SaveChangesAsync(); // Generates host.Id
+                    _context.HostContactDetails.Add(host);
+                    await _context.SaveChangesAsync(); // Generates host.Id
 
-                // 2. Create Package Detail linked to Host
+                    hostIdForPackage = host.Id; // Use this new ID
+                }
+
+                // 2. Create Package Detail linked to the determined HostId
                 var package = new TravelPackage
                 {
                     PackageName = model.PackageName,
@@ -53,7 +72,7 @@ namespace TravelPackageManagementSystem.Controllers
                     ThumbnailUrl1 = model.ThumbnailUrl1 ?? "",
                     ThumbnailUrl2 = model.ThumbnailUrl2 ?? "",
                     ThumbnailUrl3 = model.ThumbnailUrl3 ?? "",
-                    HostId = host.Id,
+                    HostId = hostIdForPackage, // ✅ Links to either existing or new Host
                     AvailabilityStatus = PackageStatus.AVAILABLE,
                     ApprovalStatus = ApprovalStatus.Pending // ✅ Set to Pending (0)
                 };
@@ -86,6 +105,7 @@ namespace TravelPackageManagementSystem.Controllers
                 return Json(new { success = false, message = "Error: " + ex.Message });
             }
         }
+
         public async Task<IActionResult> Details(int id)
         {
             var package = await _context.TravelPackages
@@ -158,41 +178,7 @@ namespace TravelPackageManagementSystem.Controllers
         // ---------------- BOOKING & PAYMENT ----------------
         //[HttpPost]
         //public async Task<IActionResult> CreateBooking(int PackageId, DateTime TravelDate, int Guests, string ContactPhone)
-        //{
-        //    var package = await _context.TravelPackages.FindAsync(PackageId);
-        //    if (package == null) return NotFound();
-
-        //    var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name) ?? await _context.Users.FirstOrDefaultAsync();
-        //    if (user == null) return Unauthorized();
-
-        //    var booking = new Booking
-        //    {
-        //        PackageId = PackageId,
-        //        UserId = user.UserId,
-        //        BookingDate = DateTime.Now,
-        //        TravelDate = TravelDate,
-        //        Guests = Guests,
-        //        ContactPhone = ContactPhone,
-        //        TotalAmount = package.Price * Guests,
-        //        Status = BookingStatus.PENDING
-        //    };
-
-        //    _context.Bookings.Add(booking);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction("PaymentPage", new { bookingId = booking.BookingId });
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> ConfirmPayment(int bookingId)
-        //{
-        //    var booking = await _context.Bookings.FindAsync(bookingId);
-        //    if (booking != null)
-        //    {
-        //        booking.Status = BookingStatus.CONFIRMED;
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    return RedirectToAction("MyBookings");
-        //}
+        //{ ... }
 
         public async Task<IActionResult> MyBookings()
         {
@@ -265,5 +251,87 @@ namespace TravelPackageManagementSystem.Controllers
         {
             return View();
         }
+
+        // ===========================================================
+        // NEW: HOST ACCOUNT & PROFILE LOGIC (SECURED)
+        // ===========================================================
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterHost([FromBody] HostContactDetail model)
+        {
+            try
+            {
+                if (_context.HostContactDetails.Any(h => h.EmailAddress == model.EmailAddress))
+                    return Json(new { success = false, message = "This email is already registered." });
+
+                // SECURE: Hash the password before saving
+                model.Password = HashPassword(model.Password);
+
+                _context.HostContactDetails.Add(model);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Account created successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LoginHost([FromBody] LoginModel model)
+        {
+            // SECURE: Hash the input password to compare with database
+            var hashedPassword = HashPassword(model.Password);
+
+            var host = await _context.HostContactDetails
+                .FirstOrDefaultAsync(h => h.EmailAddress == model.Email && h.Password == hashedPassword);
+
+            if (host != null)
+            {
+                HttpContext.Session.SetInt32("HostId", host.Id);
+                HttpContext.Session.SetString("HostName", host.HostAgencyName);
+                return Json(new { success = true, message = "Welcome back, " + host.HostAgencyName });
+            }
+            return Json(new { success = false, message = "Invalid email or password." });
+        }
+
+        public async Task<IActionResult> HostProfile()
+        {
+            int? hostId = HttpContext.Session.GetInt32("HostId");
+            if (hostId == null) return RedirectToAction("Host");
+
+            var host = await _context.HostContactDetails
+                .Include(h => h.TravelPackages)
+                .FirstOrDefaultAsync(h => h.Id == hostId);
+
+            return View(host);
+        }
+
+        public IActionResult LogoutHost()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Host");
+        }
+
+        // --- SECURITY HELPER ---
+        private string HashPassword(string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                var builder = new StringBuilder();
+                foreach (var b in bytes)
+                {
+                    builder.Append(b.ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+    }
+
+    public class LoginModel
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

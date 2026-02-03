@@ -25,7 +25,10 @@ namespace TravelPackageManagementSystem.Repository.Models
         [Required]
         public string CityCountry { get; set; } = string.Empty;
 
-        // Navigation property to see all packages submitted by this host
+        // ✅ ADDED FOR LOGIN
+        [Required]
+        public string Password { get; set; } = string.Empty;
+
         public virtual ICollection<TravelPackage> TravelPackages { get; set; } = new List<TravelPackage>();
     }
 }
