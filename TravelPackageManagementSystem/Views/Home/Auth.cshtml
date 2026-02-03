@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authentication | EasySafar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
         /* Base Setup */
@@ -45,7 +46,7 @@
 
         /* Modal Sizing */
         .modal-dialog {
-            max-width: 400px;
+            max-width: 450px;
         }
 
         .modal-content {
@@ -75,6 +76,21 @@
             border-radius: 8px;
         }
 
+            #authModal .auth-input::placeholder {
+                color: rgba(255, 255, 255, 0.5) !important; /* Adjust 0.5 to 0.8 for more brightness */
+                opacity: 1; /* Overrides browser default opacity */
+            }
+
+            /* For Internet Explorer 10-11 */
+            #authModal .auth-input:-ms-input-placeholder {
+                color: rgba(255, 255, 255, 0.5) !important;
+            }
+
+            /* For Microsoft Edge */
+            #authModal .auth-input::-ms-input-placeholder {
+                color: rgba(255, 255, 255, 0.5) !important;
+            }
+
         #authModal .footer-text {
             color: rgba(255, 255, 255, 0.6) !important;
             font-size: 0.9rem;
@@ -91,6 +107,29 @@
                 color: #00d2ff !important;
                 text-decoration: underline;
             }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.5);
+            z-index: 10;
+        }
+
+            .toggle-password:hover {
+                color: #00d2ff;
+            }
+
+        /* Ensure padding-right so text doesn't go under the eye */
+        .auth-input-pass {
+            padding-right: 40px !important;
+        }
 
         /* Submit Button Style */
         .submit-glow-btn {
@@ -131,41 +170,39 @@
                 <div class="modal-body p-4 p-md-5">
                     <div class="text-center mb-4">
                         <h2 id="modalTitle" class="fw-bold h4">Create an Account</h2>
-                        <p id="modalSubtitle" class="text-muted small">Join EasySafar to start your journey.</p>
+                        <p id="modalSubtitle" class="small">Join EasySafar to start your journey.</p>
                     </div>
 
-                    <form id="authForm" novalidate>
-                        <div class="mb-3 signup-only">
-                            <label class="input-label">Username</label>
-                            <input type="text" id="regUsername" class="auth-input form-control" placeholder="johndoe">
-                            <span class="err-msg" id="err-Username"></span>
+                    <form id="authForm">
+                        <h2 id="modalTitle">Welcome Back</h2>
+
+                        <div class="mb-3">
+                            <label id="emailLabel">Username or Email</label>
+                            <input type="text" id="authEmail" class="form-control">
+                            <span class="err-msg text-danger" id="err-Username" style="display:none"></span>
+                            <span class="err-msg text-danger" id="err-Email" style="display:none"></span>
+                        </div>
+
+                        <div class="mb-3 signup-only" style="display:none">
+                            <label>Phone Number</label>
+                            <input type="text" id="regPhone" class="form-control">
+                            <span class="err-msg text-danger" id="err-PhoneNumber" style="display:none"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label id="emailLabel" class="input-label">Email Address</label>
-                            <input type="text" id="authEmail" class="auth-input form-control" placeholder="Enter your email">
-                            <span class="err-msg" id="err-Email"></span>
+                            <label>Password</label>
+                            <input type="password" id="authPassword" class="form-control">
+                            <span class="err-msg text-danger" id="err-Password" style="display:none"></span>
                         </div>
 
-                        <div class="mb-3 signup-only">
-                            <label class="input-label">Phone Number</label>
-                            <input type="text" id="regPhone" class="auth-input form-control" placeholder="+91 00000 00000">
-                            <span class="err-msg" id="err-PhoneNumber"></span>
+                        <div class="mb-3 signup-only" style="display:none">
+                            <label>Confirm Password</label>
+                            <input type="password" id="authConfirmPassword" class="form-control">
+                            <span class="err-msg text-danger" id="err-ConfirmPassword" style="display:none"></span>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="input-label">Password</label>
-                            <input type="password" id="authPassword" class="auth-input form-control" placeholder="••••••••">
-                            <span class="err-msg" id="err-Password"></span>
-                        </div>
-
-                        <div class="signup-only mb-4">
-                            <label class="input-label">Confirm Password</label>
-                            <input type="password" id="authConfirmPassword" class="auth-input form-control" placeholder="••••••••">
-                            <span class="err-msg" id="err-ConfirmPassword"></span>
-                        </div>
-
-                        <button type="submit" id="submitBtn" class="submit-glow-btn">Sign Up →</button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary">Login →</button>
+                        <p><span id="toggleText">Don't have an account?</span> <a href="javascript:void(0)" onclick="handleAuthToggle()" id="toggleAuth">Sign Up</a></p>
                     </form>
 
                     <div class="text-center mt-4">
@@ -180,7 +217,7 @@
     </div>
 
     <script>
-        function handleAuthToggle() {
+            function handleAuthToggle() {
             const signupFields = document.querySelectorAll('.signup-only');
             const modalTitle = document.getElementById('modalTitle');
             const submitBtn = document.getElementById('submitBtn');
@@ -189,21 +226,35 @@
             const emailLabel = document.getElementById('emailLabel');
             const emailInput = document.getElementById('authEmail');
 
+            // Select the column wrappers
+            const emailWrapper = document.getElementById('emailWrapper');
+            const passwordWrapper = document.getElementById('passwordWrapper');
+
             const isCurrentlySignup = submitBtn.innerText.includes("Sign Up");
 
             if (isCurrentlySignup) {
-                signupFields.forEach(f => f.style.display = 'none');
+                signupFields.forEach(f => f.style.setProperty('display', 'none', 'important'));
                 modalTitle.innerText = "Welcome Back";
                 emailLabel.innerText = "Username or Email";
                 emailInput.placeholder = "Enter your username or email";
+
+                // Make email and password full width for Login
+                emailWrapper.classList.replace('col-md-6', 'col-md-12');
+                passwordWrapper.classList.replace('col-md-6', 'col-md-12');
+
                 submitBtn.innerText = "Login →";
                 toggleText.innerText = "Don't have an account? ";
                 toggleLink.innerText = "Sign Up";
             } else {
-                signupFields.forEach(f => f.style.display = 'block');
+                signupFields.forEach(f => f.style.setProperty('display', 'block', 'important'));
                 modalTitle.innerText = "Create an Account";
                 emailLabel.innerText = "Email Address";
                 emailInput.placeholder = "Enter your email";
+
+                // Return to side-by-side for Sign Up
+                emailWrapper.classList.replace('col-md-12', 'col-md-6');
+                passwordWrapper.classList.replace('col-md-12', 'col-md-6');
+
                 submitBtn.innerText = "Sign Up →";
                 toggleText.innerText = "Already have an account? ";
                 toggleLink.innerText = "Login";
@@ -266,15 +317,39 @@
             });
         });
 
-        function displayErrors(errors) {
-            document.querySelectorAll('.err-msg').forEach(el => el.style.display = 'none');
-            Object.keys(errors).forEach(key => {
+                function displayErrors(result) {
+            // 1. Hide all previous errors
+            document.querySelectorAll('.err-msg').forEach(el => {
+                el.style.display = 'none';
+                el.innerText = '';
+            });
+
+            // 2. Determine if errors are in 'result.errors' (Standard ASP.NET) or 'result' (Custom)
+            const errorSource = result.errors || result;
+
+            // 3. Loop through keys (e.g., "Username", "Email")
+            Object.keys(errorSource).forEach(key => {
+                // Find the span that matches your naming convention: err-Username, err-Email, etc.
                 const span = document.getElementById(`err-${key}`);
                 if (span) {
-                    span.innerText = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
+                    const errorData = errorSource[key];
+                    // Take the first error message if it's an array, otherwise take the string
+                    span.innerText = Array.isArray(errorData) ? errorData[0] : errorData;
                     span.style.display = 'block';
                 }
             });
+        }
+
+            function togglePasswordVisibility(inputId, icon) {
+            const passwordInput = document.getElementById(inputId);
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.replace('bi-eye-slash', 'bi-eye');
+            }
         }
     </script>
 
