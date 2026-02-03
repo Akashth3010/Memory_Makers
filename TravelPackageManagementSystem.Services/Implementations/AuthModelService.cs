@@ -31,6 +31,7 @@ namespace TravelPackageManagementSystem.Services.Implementations
             {
                 Username = model.Username,
                 Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
                 Role = UserRole.CUSTOMER
             };
 
@@ -50,3 +51,7 @@ namespace TravelPackageManagementSystem.Services.Implementations
         }
     }
 }
+
+// NUnit project
+// add test cases 
+// Mock testing for BookingService class and others

@@ -6,9 +6,9 @@ namespace TravelPackageManagementSystem.Repository.Models
 {
     public enum UserRole
     {
-        ADMIN,
-        TRAVEL_AGENT,
-        CUSTOMER
+        ADMIN, // 0
+        TRAVEL_AGENT, //1
+        CUSTOMER //2
     }
 
     public class User
@@ -34,6 +34,8 @@ namespace TravelPackageManagementSystem.Repository.Models
         [StringLength(100)]
         // Fix: Initialize with string.Empty
         public string Email { get; set; } = string.Empty;
+
+        public string? PhoneNumber { get; set; }
 
         [Required]
         public UserRole Role { get; set; } = UserRole.CUSTOMER;

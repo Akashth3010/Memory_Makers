@@ -14,12 +14,137 @@ namespace TravelPackageManagementSystem.Application.Controllers
             _context = context;
         }
 
-        // ---------------- PAGES ----------------
+        // ---------------- PAGES ----------------//
         public IActionResult Dashboard() => View();
+        [HttpGet]
+        public async Task<IActionResult> GetDashboardStats()
+        {
+            // Fetch counts directly from the database
+            var totalPackages = await _context.TravelPackages.CountAsync();
+            var pendingApprovals = await _context.TravelPackages
+                .CountAsync(p => p.ApprovalStatus == ApprovalStatus.Pending);
+            var totalBookings = await _context.Bookings.CountAsync();
+            var registeredUsers = await _context.Users.CountAsync();
+
+            return Json(new
+            {
+                totalPackages,
+                pendingApprovals,
+                totalBookings,
+                registeredUsers
+            });
+        }
         public IActionResult Approvals() => View();
         public IActionResult Packages() => View();
         public IActionResult Bookings() => View();
-        public IActionResult Users() => View();
+        [HttpGet]
+        public async Task<IActionResult> GetAllBookings()
+        {
+            // 1. Fetch all bookings with related data
+            var bookings = await _context.Bookings
+                .Include(b => b.TravelPackage)
+                .Include(b => b.User)
+                .OrderByDescending(b => b.BookingDate)
+                .ToListAsync();
+
+            // 2. Map data to the exact property names and status strings expected by JS
+            var result = bookings.Select(b => new
+            {
+                id = "BK-" + b.BookingId, // Matches b.id
+                dbId = b.BookingId,       // Actual ID for updates
+                                          // Mapping Enum to UI strings so the JS filter works
+                status = b.Status switch
+                {
+                    BookingStatus.PENDING => "Pending Confirmation",
+                    BookingStatus.CONFIRMED => "Confirmed",
+                    _ => b.Status.ToString()
+                },
+                customer = b.User?.Username ?? "Guest",
+                phone = b.ContactPhone,
+                pkg = b.TravelPackage?.PackageName ?? "Deleted",
+                dest = b.TravelPackage?.Location ?? "N/A",
+                duration = b.TravelPackage?.Duration ?? "N/A",
+                amount = b.TotalAmount,
+                people = b.Guests
+            });
+
+            return Json(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateBookingStatus(string bookingId, string status)
+        {
+            // Fix: Remove "BK-" prefix to get the numeric ID
+            if (string.IsNullOrEmpty(bookingId)) return Json(new { success = false });
+
+            int id = int.Parse(bookingId.Replace("BK-", ""));
+
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking == null) return Json(new { success = false, message = "Not found" });
+
+            // Handle mapping from JS string back to Enum
+            if (status == "Pending Confirmation") booking.Status = BookingStatus.PENDING;
+            else if (status == "Confirmed") booking.Status = BookingStatus.CONFIRMED;
+            else if (Enum.TryParse(typeof(BookingStatus), status.ToUpper(), out var result))
+            {
+                booking.Status = (BookingStatus)result;
+            }
+
+            await _context.SaveChangesAsync();
+            return Json(new { success = true });
+        }
+
+
+        // Users
+        public async Task<IActionResult> Users()
+        {
+            // 1. Fetch Customers
+            // We project into the User model so the View can read properties easily
+            var customers = await _context.Users
+                .Where(u => u.Role == UserRole.CUSTOMER)
+                .Select(u => new User // Map to the actual User class
+                {
+                    UserId = u.UserId,
+                    Username = u.Username,
+                    Email = u.Email,
+                    Role = u.Role,
+                    // If u.PhoneNumber is NULL (from old registrations), it tries to get it from bookings
+                    PhoneNumber = u.PhoneNumber ??
+                                  u.Bookings.OrderByDescending(b => b.BookingId)
+                                            .Select(b => b.ContactPhone)
+                                            .FirstOrDefault() ?? "N/A"
+                })
+                .ToListAsync();
+
+            // 2. Fetch Hosts
+            var hosts = await _context.HostContactDetails
+                .GroupBy(h => h.EmailAddress)
+                .Select(group => new
+                {
+                    HostAgencyName = group.First().HostAgencyName,
+                    EmailAddress = group.Key,
+                    PhoneNumber = group.First().PhoneNumber,
+                    PackageNames = _context.TravelPackages
+                        .Where(p => p.Host != null && p.Host.EmailAddress == group.Key)
+                        .Select(p => p.PackageName)
+                        .ToList()
+                })
+                .ToListAsync();
+
+            // 3. Assign to ViewBag
+            ViewBag.Customers = customers;
+            ViewBag.Hosts = hosts;
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _context.Users
+                .Select(static u => new { u.Username, u.Email, V = u.Role.ToString() })
+                .ToListAsync();
+            return Json(users);
+        }
 
         // ---------------- APPROVAL LOGIC ----------------
 
@@ -130,7 +255,8 @@ namespace TravelPackageManagementSystem.Application.Controllers
                 email = p.Host != null ? p.Host.EmailAddress : "N/A",
                 phone = p.Host != null ? p.Host.PhoneNumber : "N/A",
                 city = p.Host != null ? p.Host.CityCountry : "N/A",
-                itineraries = p.Itineraries.OrderBy(i => i.DayNumber).Select(i => new {
+                itineraries = p.Itineraries.OrderBy(i => i.DayNumber).Select(i => new
+                {
                     dayNumber = i.DayNumber,
                     title = i.ActivityTitle,
                     desc = i.ActivityDescription,
@@ -271,6 +397,7 @@ namespace TravelPackageManagementSystem.Application.Controllers
             await _context.SaveChangesAsync();
             return Json(new { success = true });
         }
+
 
         [HttpPost]
         public async Task<IActionResult> DeletePackage(int id, string password)

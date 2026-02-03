@@ -1,4 +1,4 @@
-﻿#authModal .input-label {
+﻿/*#authModal .input-label {
     display: block;
     width: 100%;
     text-align: left;
@@ -23,10 +23,21 @@
 
 #authModal .auth-input {
     width: 100%;
-}
+}*/
 
 /* Hide signup fields by default if you want to start on Login,
            or keep visible if starting on Register */
 .signup-only {
     display: block;
 }
+.profile-link {
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+    .profile-link:hover {
+        color: #ff7b54 !important; /* Matches your primary orange theme */
+        transform: translateY(-1px);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
