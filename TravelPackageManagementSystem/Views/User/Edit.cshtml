@@ -1,0 +1,63 @@
+﻿<style>
+    .edit-card {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .form-floating > .form-control:focus {
+        border-color: #008cff;
+        box-shadow: 0 0 0 0.25rem rgba(0,140,255,0.1);
+    }
+
+    .btn-save {
+        background: var(--mmt-gradient);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 30px;
+        font-weight: 700;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="card edit-card mx-auto" style="max-width: 700px;">
+        <div class="p-5">
+            <h3 class="fw-bold mb-4">Edit Profile</h3>
+            <form id="editProfileForm">
+                @Html.AntiForgeryToken()
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" id="editFirstName" class="form-control" placeholder="First Name" required>
+                            <label>First Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" id="editLastName" class="form-control" placeholder="Last Name" required>
+                            <label>Last Name</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input type="tel" id="editPhone" class="form-control" placeholder="Phone">
+                            <label>Phone Number</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input type="email" id="editEmail" class="form-control bg-light" readonly>
+                            <label>Email Address (Cannot be changed)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 d-flex align-items-center gap-3">
+                    <button type="submit" class="btn btn-save shadow">Save Details</button>
+                    <a href="/User/Profile" class="text-decoration-none text-muted fw-bold">Discard Changes</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

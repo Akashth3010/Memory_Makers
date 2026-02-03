@@ -30,3 +30,14 @@
 .signup-only {
     display: block;
 }
+.profile-link {
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+    .profile-link:hover {
+        color: #ff7b54 !important; /* Matches your primary orange theme */
+        transform: translateY(-1px);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }

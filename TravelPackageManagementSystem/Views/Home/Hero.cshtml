@@ -3,7 +3,7 @@
 	Layout = null;
 }
 
-<link rel="stylesheet" href="~/css//Hero.css" />
+<link rel="stylesheet" href="~/css/Hero.css" />
 
 <header class="header-wrapper">
 	<div class="overlay"></div>
@@ -28,16 +28,17 @@
 				<div id="authSection" class="d-inline-block ms-4">
 					@if (Context.Session.GetString("UserName") != null)
 					{
-						<span class="text-white fw-bold me-3">
+						@* CHANGED: Span replaced with an anchor tag linking to the Profile page *@
+						<a asp-controller="User" asp-action="Profile" class="text-white fw-bold me-3 text-decoration-none profile-link">
 							<i class="fa-solid fa-user-circle me-1"></i>Hi, @Context.Session.GetString("UserName")
-						</span>
+						</a>
+
 						<button onclick="handleLogout()" class="btn btn-sm btn-outline-light" style="border-radius: 20px; font-size: 0.8rem;">
 							Logout <i class="fa-solid fa-right-from-bracket ms-1"></i>
 						</button>
 					}
 					else
 					{
-						@* CHANGED: Removed modal attributes, added href to your Auth page *@
 						<a asp-controller="Home" asp-action="Auth" class="text-white text-decoration-none">
 							Sign in / Sign up
 						</a>

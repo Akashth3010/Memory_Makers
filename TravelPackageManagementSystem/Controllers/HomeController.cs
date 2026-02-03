@@ -136,6 +136,14 @@ namespace TravelPackageManagementSystem.Controllers
             ViewBag.TrendingPackages = trendingPackages;
 
             return View(destinations);
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId != null)
+            {
+                ViewBag.UserWishlistIds = _context.Wishlists
+                    .Where(w => w.UserId == userId)
+                    .Select(w => w.PackageId)
+                    .ToList();
+            }
         }
 
         public IActionResult Privacy() => View();
@@ -180,15 +188,35 @@ namespace TravelPackageManagementSystem.Controllers
         //public async Task<IActionResult> CreateBooking(int PackageId, DateTime TravelDate, int Guests, string ContactPhone)
         //{ ... }
 
+        //    return View(myBookings);
+        //}
         public async Task<IActionResult> MyBookings()
         {
-            var bookings = await _context.Bookings
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Auth", "Home", new { returnUrl = "/Home/MyBookings" });
+            }
+
+            var myBookings = await _context.Bookings
                 .AsNoTracking()
-                .Include(b => b.TravelPackage)
+                .Include(b => b.TravelPackage) // Fetches Package Name
+                .Include(b => b.User)          // <--- THIS LINE IS MISSING! (Fetches Username)
+                .Where(b => b.UserId == userId)
+                .OrderByDescending(b => b.BookingDate)
                 .ToListAsync();
 
-            return View(bookings);
+            return View(myBookings);
         }
+
+        // Auth Action ko update karein taaki wo URL accept kar sake
+        public IActionResult Auth(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl; // URL ko View mein bhejna zaroori hai
+            return View();
+        }
+
 
         // ---------------- PACKAGE DETAILS & ITINERARY ----------------
         public async Task<IActionResult> MeghPack3(int id)
@@ -243,13 +271,13 @@ namespace TravelPackageManagementSystem.Controllers
         }
 
         public IActionResult Failure() => View("Trending/Failure");
-        public IActionResult Success() => View("Trending/Success");
-        //public IActionResult aboutus() => View();
-
-        [HttpGet]
-        public IActionResult Auth()
+        // Inside HomeController.cs
+        public IActionResult Success(string txn, decimal amt, string pkg)
         {
-            return View();
+            ViewBag.TransactionId = txn;
+            ViewBag.Amount = amt;
+            ViewBag.PackageName = pkg; // Ensure this is assigned!
+            return View("~/Views/Home/Trending/Success.cshtml");
         }
 
         // ===========================================================
