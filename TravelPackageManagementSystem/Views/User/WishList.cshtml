@@ -1,166 +1,76 @@
-﻿@{
-    ViewData["Title"] = "My Wishlist";
-    Layout = "_Layout";
-}
+﻿<style>
+    .wish-card {
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        transition: 0.3s;
+        height: 100%;
+    }
+
+        .wish-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+
+    .wish-img {
+        height: 160px;
+        object-fit: cover;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .wish-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1a1a1a;
+    }
+</style>
 
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <div>
-                        <h5 class="mb-0">Wishlist</h5>
-                        <small class="text-muted">Saved favorites — hotels, packages and experiences</small>
-                    </div>
-                    <div>
-                        <button id="clearAllBtn" class="btn btn-sm btn-outline-danger">Clear All</button>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    <div id="wishlistEmpty" class="text-center py-5 text-muted" style="display:none;">
-                        <i class="fa-regular fa-heart fa-2x mb-3"></i>
-                        <div>No items in your wishlist yet.</div>
-                        <div class="mt-2"><a href="/" class="btn btn-sm btn-primary">Browse packages</a></div>
-                    </div>
-
-                    <ul id="wishlistList" class="list-group list-group-flush"></ul>
-                </div>
-            </div>
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <h2 class="fw-bold mb-0">My Wishlist</h2>
+            <p class="text-muted">Packages and experiences you’ve saved for later</p>
         </div>
+        <button id="clearAllBtn" class="btn btn-outline-danger btn-sm rounded-pill px-3">Remove All</button>
     </div>
+
+    <div id="wishlistEmpty" class="text-center py-5 bg-white rounded-4 shadow-sm" style="display:none;">
+        <img src="https://promos.makemytrip.com/store/Holidays_Wishlist.png" width="150" class="mb-3">
+        <h4>Your wishlist is empty!</h4>
+        <p class="text-muted">Seems like you haven't liked anything yet.</p>
+        <a href="/" class="btn btn-primary rounded-pill px-4 mt-2">Start Exploring</a>
+    </div>
+
+    <div class="row g-4" id="wishlistContainer"></div>
 </div>
 
 <script>
-    // Wishlist item shape expected: { id: string|number, title: string, subtitle?: string, href?: string, img?: string }
-    (function () {
-        const STORAGE_KEY = 'wishlist';
+    function render() {
+        const items = JSON.parse(localStorage.getItem('wishlist') || '[]');
+        const container = document.getElementById('wishlistContainer');
+        const emptyEl = document.getElementById('wishlistEmpty');
 
-        function loadWishlist() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                return raw ? JSON.parse(raw) : [];
-            } catch (e) {
-                console.error('Failed to parse wishlist', e);
-                return [];
-            }
+        container.innerHTML = '';
+        if (items.length === 0) {
+            emptyEl.style.display = 'block';
+            return;
         }
+        emptyEl.style.display = 'none';
 
-        function saveWishlist(items) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-        }
-
-        function render() {
-            const items = loadWishlist();
-            const listEl = document.getElementById('wishlistList');
-            const emptyEl = document.getElementById('wishlistEmpty');
-
-            listEl.innerHTML = '';
-
-            if (!items || items.length === 0) {
-                emptyEl.style.display = '';
-                return;
-            } else {
-                emptyEl.style.display = 'none';
-            }
-
-            items.forEach((it, idx) => {
-                const li = document.createElement('li');
-                li.className = 'list-group-item d-flex align-items-start gap-3';
-
-                // thumbnail (optional)
-                const thumb = document.createElement('div');
-                thumb.style.width = '64px';
-                thumb.style.height = '64px';
-                thumb.style.flex = '0 0 64px';
-                thumb.style.borderRadius = '6px';
-                thumb.style.background = '#f5f7fb';
-                thumb.style.display = 'flex';
-                thumb.style.alignItems = 'center';
-                thumb.style.justifyContent = 'center';
-                if (it.img) {
-                    const img = document.createElement('img');
-                    img.src = it.img;
-                    img.alt = it.title || 'item';
-                    img.style.maxWidth = '100%';
-                    img.style.maxHeight = '100%';
-                    img.style.borderRadius = '6px';
-                    thumb.appendChild(img);
-                } else {
-                    thumb.innerHTML = '<i class="fa-regular fa-heart" style="color:#ef4444;"></i>';
-                }
-
-                const content = document.createElement('div');
-                content.style.flex = '1';
-
-                const title = document.createElement('div');
-                title.className = 'fw-bold';
-                title.textContent = it.title || 'Untitled';
-
-                const subtitle = document.createElement('div');
-                subtitle.className = 'text-muted small';
-                subtitle.textContent = it.subtitle || '';
-
-                content.appendChild(title);
-                if (it.subtitle) content.appendChild(subtitle);
-
-                const actions = document.createElement('div');
-                actions.style.marginLeft = '12px';
-                actions.style.display = 'flex';
-                actions.style.flexDirection = 'column';
-                actions.style.gap = '6px';
-
-                const viewBtn = document.createElement('a');
-                viewBtn.className = 'btn btn-sm btn-outline-primary';
-                viewBtn.textContent = 'View';
-                viewBtn.href = it.href || '#';
-                viewBtn.onclick = function (e) {
-                    if (!it.href) e.preventDefault();
-                };
-
-                const removeBtn = document.createElement('button');
-                removeBtn.className = 'btn btn-sm btn-outline-danger';
-                removeBtn.textContent = 'Remove';
-                removeBtn.addEventListener('click', function () {
-                    removeAt(idx);
-                });
-
-                actions.appendChild(viewBtn);
-                actions.appendChild(removeBtn);
-
-                li.appendChild(thumb);
-                li.appendChild(content);
-                li.appendChild(actions);
-
-                listEl.appendChild(li);
-            });
-        }
-
-        function removeAt(index) {
-            const items = loadWishlist();
-            if (index < 0 || index >= items.length) return;
-            items.splice(index, 1);
-            saveWishlist(items);
-            render();
-        }
-
-        function clearAll() {
-            if (!confirm('Clear all wishlist items?')) return;
-            localStorage.removeItem(STORAGE_KEY);
-            render();
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('clearAllBtn').addEventListener('click', clearAll);
-            render();
+        items.forEach((it, idx) => {
+            container.innerHTML += `
+                <div class="col-md-4 col-lg-3">
+                    <div class="card wish-card">
+                        <img src="${it.img || '/images/default-pkg.jpg'}" class="wish-img">
+                        <div class="card-body p-3">
+                            <div class="wish-title mb-1">${it.title}</div>
+                            <div class="text-muted small mb-3">${it.subtitle || ''}</div>
+                            <div class="d-flex gap-2">
+                                <a href="${it.href}" class="btn btn-sm btn-primary w-100 rounded-pill">View</a>
+                                <button onclick="removeAt(${idx})" class="btn btn-sm btn-outline-danger rounded-circle"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
         });
-
-        // expose for quick testing in console (optional)
-        window.__wishlist = {
-            load: loadWishlist,
-            save: saveWishlist,
-            render: render,
-            add: function (item) { const a = loadWishlist(); a.push(item); saveWishlist(a); render(); }
-        };
-    })();
+    }
 </script>

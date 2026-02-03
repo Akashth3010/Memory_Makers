@@ -1,23 +1,20 @@
 ﻿@{
     ViewData["Title"] = "Checkout";
     Layout = "_Layout";
-
-    // 1. SAFE BACKEND LOGIC: Konstruksi URL di C# blok mencegah Error CS1501
     int safeId = ViewBag.BookingId != null ? (int)ViewBag.BookingId : 0;
     string qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TravelBooking_" + safeId;
 }
+
 <style>
     :root {
         --primary-orange: #ff7b54;
         --secondary-yellow: #ffd56b;
-        --dark-bg: #2d3436;
     }
 
     body {
         background-color: #f4f7f9;
     }
 
-    /* Glassmorphism Card Effect */
     .payment-card {
         background: white;
         border-radius: 20px;
@@ -37,7 +34,6 @@
             background: #fff9f7;
         }
 
-    /* Dark Summary Card as per your Target UI */
     .summary-box {
         background: #1a1a1a;
         color: white;
@@ -62,10 +58,6 @@
             transform: scale(1.02);
             color: black;
         }
-
-    .is-invalid {
-        border-color: #dc3545 !important;
-    }
 
     .error-msg {
         color: #dc3545;
@@ -110,7 +102,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-bold">CARD NUMBER</label>
-                            <input type="text" id="cardNumber" class="form-control" placeholder="0000 0000 0000 0000" maxlength="20">
+                            <input type="text" id="cardNumber" class="form-control" placeholder="0000 0000 0000 0000" maxlength="19">
                             <div id="cardError" class="error-msg">Invalid card number.</div>
                         </div>
                         <div class="col-6">
@@ -118,7 +110,10 @@
                             <input type="text" id="cardExpiry" class="form-control" placeholder="MM/YY" maxlength="5">
                             <div id="expiryError" class="error-msg">Invalid or past date.</div>
                         </div>
-                        <div class="col-6"><label class="form-label small fw-bold">CVV</label><input type="password" class="form-control" placeholder="***" maxlength="3"></div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">CVV</label>
+                            <input type="password" id="cardCvv" class="form-control" placeholder="***" maxlength="3">
+                        </div>
                     </div>
                 </div>
 
@@ -126,13 +121,11 @@
                     <div class="p-4 border rounded bg-light">
                         <h6 class="fw-bold mb-3">Scan QR Code</h6>
                         <img src="@qrUrl" class="img-fluid mb-3 shadow p-2 bg-white" style="width:150px">
-
-                        <p class="text-muted small">Enter UPI ID to verify</p>
                         <div class="input-group mb-2 mx-auto" style="max-width:300px">
                             <input type="text" id="upiId" class="form-control text-center" placeholder="user@upi">
                             <button class="btn btn-outline-primary" type="button" onclick="validateUPI()">Verify</button>
                         </div>
-                        <div id="upiError" class="error-msg">Invalid UPI ID. (Gmail/Email not allowed)</div>
+                        <div id="upiError" class="error-msg">Invalid UPI ID.</div>
                         <div id="upiSuccess" class="text-success small fw-bold" style="display:none;">Verified!</div>
                     </div>
                 </div>
@@ -143,32 +136,15 @@
             <div class="summary-box shadow-lg">
                 <h5 class="fw-bold mb-4" style="color: var(--secondary-yellow);">Order Summary</h5>
                 <p id="packageNameDisplay" class="small mb-3 text-white-50">Loading Package...</p>
-
-                <div class="d-flex justify-content-between mb-2">
-                    <span class="text-secondary small">Booking ID</span>
-                    <span class="fw-bold">#@safeId</span>
-                </div>
-
-                <div class="d-flex justify-content-between mb-2">
-                    <span class="text-secondary small">Base Price</span>
-                    <span id="basePriceDisplay">₹0</span>
-                </div>
-
-                <div class="d-flex justify-content-between mb-4">
-                    <span class="text-secondary small">GST (18%)</span>
-                    <span id="gstDisplay">₹0</span>
-                </div>
-
+                <div class="d-flex justify-content-between mb-2"><span class="text-secondary small">Booking ID</span><span class="fw-bold">#@safeId</span></div>
+                <div class="d-flex justify-content-between mb-2"><span class="text-secondary small">Base Price</span><span id="basePriceDisplay">₹0</span></div>
+                <div class="d-flex justify-content-between mb-4"><span class="text-secondary small">GST (18%)</span><span id="gstDisplay">₹0</span></div>
                 <hr style="border-top: 1px dashed #555;">
-
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <span class="h5 mb-0">Total</span>
                     <span id="displayPrice" class="h3 mb-0 fw-bold" style="color: var(--primary-orange);">₹0</span>
                 </div>
-
-                <button type="button" class="btn-checkout" id="payBtn" onclick="processPayment()">
-                    PAY NOW & CONFIRM
-                </button>
+                <button type="button" class="btn-checkout" id="payBtn" onclick="processPayment()">PAY NOW & CONFIRM</button>
             </div>
         </div>
     </div>
@@ -178,109 +154,85 @@
     let activeMethod = 'Credit Card';
     let upiVerified = false;
 
-    // --- 1. LOAD DATA ON STARTUP ---
     document.addEventListener('DOMContentLoaded', () => {
         const rawPrice = localStorage.getItem('selectedPackagePrice') || "0";
-        // Attempt to get specific name, fallback to generic
-        const savedName = localStorage.getItem('selectedPackageName') || "Travel Package";
-
+        const savedName = localStorage.getItem('selectedPackageName');
         const totalAmount = parseFloat(rawPrice.replace(/[^0-9.]/g, ''));
         const base = totalAmount / 1.18;
         const gst = totalAmount - base;
 
-        // Set the package name on the UI
-        document.getElementById('packageNameDisplay').innerText = savedName;
+        document.getElementById('packageNameDisplay').innerText = savedName || "Travel Package";
         document.getElementById('displayPrice').innerText = "₹" + totalAmount.toLocaleString('en-IN');
         document.getElementById('basePriceDisplay').innerText = "₹" + Math.round(base).toLocaleString('en-IN');
         document.getElementById('gstDisplay').innerText = "₹" + Math.round(gst).toLocaleString('en-IN');
     });
 
-    // --- 2. SWITCH TABS ---
+    // --- 1. CARD NUMBER SPACING (4-4-4-4) ---
+    document.getElementById('cardNumber').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        let formattedValue = value.match(/.{1,4}/g)?.join(' ') || "";
+        e.target.value = formattedValue.substring(0, 19);
+    });
+
+    // --- 2. EXPIRY SLASH (MM/YY) ---
+    document.getElementById('cardExpiry').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length >= 2) {
+            e.target.value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        } else {
+            e.target.value = value;
+        }
+        document.getElementById('expiryError').style.display = 'none';
+    });
+
+    // --- 3. TAB SWITCHING & RADIO SYNC ---
     function switchTab(type) {
         activeMethod = type === 'card' ? 'Credit Card' : 'UPI';
         document.getElementById('cardSection').style.display = type === 'card' ? 'block' : 'none';
         document.getElementById('upiSection').style.display = type === 'upi' ? 'block' : 'none';
         document.getElementById('tab-card').classList.toggle('selected', type === 'card');
         document.getElementById('tab-upi').classList.toggle('selected', type === 'upi');
+
+        // Fix for the blue circle update
+        document.getElementById(type + 'Radio').checked = true;
         upiVerified = (type === 'card');
     }
 
-    // --- 3. INPUT FORMATTING LOGIC ---
-    document.getElementById('cardNumber').addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, ''); 
-        value = value.substring(0, 16); 
-        e.target.value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
-    });
-
-    document.getElementById('cardExpiry').addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, ''); 
-        value = value.substring(0, 4); 
-        if (value.length >= 3) {
-            value = value.substring(0, 2) + '/' + value.substring(2);
-        }
-        e.target.value = value;
-        document.getElementById('expiryError').style.display = 'none';
-    });
-
-    // --- 4. VALIDATION LOGIC ---
+    // --- 4. EXPIRY DATE VALIDATION (Past Date Block) ---
     function validateExpiryDate(expiryValue) {
         if (expiryValue.length !== 5) return false;
         const [mm, yy] = expiryValue.split('/');
         const month = parseInt(mm, 10);
-        const year = parseInt(yy, 10);
+        const year = parseInt("20" + yy, 10);
         if (month < 1 || month > 12) return false;
+
         const now = new Date();
-        const currentYear = parseInt(now.getFullYear().toString().substr(-2)); 
-        const currentMonth = now.getMonth() + 1; 
-        if (year < currentYear) return false;
-        if (year === currentYear && month < currentMonth) return false;
-        return true;
+        const expiryDate = new Date(year, month - 1, 1);
+        const currentMonthDate = new Date(now.getFullYear(), now.getMonth(), 1);
+
+        return expiryDate >= currentMonthDate;
     }
 
     function validateUPI() {
         const val = document.getElementById('upiId').value.trim().toLowerCase();
-        const blocklist = ['gmail.com', 'yahoo.com', 'hotmail.com'];
-        // Fix for Razor  error
-        const domain = val.split('\u0040')[1];
-
-        if (val.includes('\u0040') && !blocklist.includes(domain)) {
+        if (val.includes('@@')) {
             document.getElementById('upiSuccess').style.display = 'block';
             document.getElementById('upiError').style.display = 'none';
             upiVerified = true;
         } else {
             document.getElementById('upiError').style.display = 'block';
-            document.getElementById('upiSuccess').style.display = 'none';
             upiVerified = false;
         }
     }
 
-    function luhnCheck(v) {
-        let sum = 0;
-        for (let i = 0; i < v.length; i++) {
-            let n = parseInt(v.substr(i, 1));
-            if (i % 2 === 0) { n *= 2; if (n > 9) n -= 9; }
-            sum += n;
-        }
-        return (sum % 10) === 0;
-    }
-
-    // --- 5. PROCESS PAYMENT (UPDATED TO PASS PACKAGE NAME) ---
     async function processPayment() {
-        if (activeMethod === 'UPI' && !upiVerified) { 
-            alert("Please verify your UPI ID first!"); return; 
-        }
+        if (activeMethod === 'UPI' && !upiVerified) { alert("Please verify your UPI ID first!"); return; }
 
         if (activeMethod === 'Credit Card') {
-            const rawCard = document.getElementById('cardNumber').value.replace(/\s/g, '');
             const expiryVal = document.getElementById('cardExpiry').value;
-
-            if (rawCard.length !== 16 || /^(\d)\1+$/.test(rawCard) || !luhnCheck(rawCard)) {
-                alert("Invalid Card Details!"); return;
-            }
-
             if (!validateExpiryDate(expiryVal)) {
                 document.getElementById('expiryError').style.display = 'block';
-                alert("Card has expired or date is invalid!");
+                alert("Expiry date is invalid or in the past!");
                 return;
             }
         }
@@ -289,9 +241,7 @@
         btn.disabled = true;
         btn.innerText = "Processing...";
 
-        // Retrieve the package name safely from local storage or UI
         const currentPkgName = localStorage.getItem('selectedPackageName') || "Travel Package";
-
         const payload = {
             BookingId: parseInt(document.getElementById('bookingIdStore').value),
             Amount: parseFloat(document.getElementById('displayPrice').innerText.replace(/[^0-9.]/g, '')),
@@ -308,13 +258,11 @@
             });
 
             if (res.ok) {
-                // FIX: Pass 'pkg' parameter in the URL
                 window.location.href = `/Home/Success?txn=${payload.TransactionId}&amt=${payload.Amount}&pkg=${encodeURIComponent(currentPkgName)}`;
             } else {
                 window.location.href = "/Home/Failure?reason=Database Error";
             }
         } catch (error) {
-            console.error(error);
             alert("Connection Failed");
             btn.disabled = false;
             btn.innerText = "PAY NOW & CONFIRM";

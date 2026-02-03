@@ -143,7 +143,7 @@
                                         <button class="btn btn-sm btn-outline-primary"
                                                 onclick="generatePDF({
                                                             packageName: '@(booking.TravelPackage?.PackageName?.Replace("'", "\\'"))',
-                                                            userName: '@(booking.User?.Username ?? "Guest")',
+                                                            userName: '@(booking.User?.Username ?? Context.Session.GetString("UserName") ?? "Valued Customer")',
                                                             ref: 'BK-@booking.BookingId',
                                                             date: '@booking.TravelDate.ToString("dd MMM yyyy")',
                                                             amount: '@booking.TotalAmount.ToString("N0")',

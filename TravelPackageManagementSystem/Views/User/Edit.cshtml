@@ -1,99 +1,63 @@
-﻿@{
-    ViewData["Title"] = "Edit Profile";
-}
+﻿<style>
+    .edit-card {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .form-floating > .form-control:focus {
+        border-color: #008cff;
+        box-shadow: 0 0 0 0.25rem rgba(0,140,255,0.1);
+    }
+
+    .btn-save {
+        background: var(--mmt-gradient);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 30px;
+        font-weight: 700;
+    }
+</style>
 
 <div class="container py-5">
-    <div class="profile-card" style="max-width: 800px; margin: auto;">
-        <div class="profile-header-banner" style="height: 120px;"></div>
-
-        <div class="p-5 mt-n5">
-            <h3 class="fw-bold mb-4">Edit Your Details</h3>
-
+    <div class="card edit-card mx-auto" style="max-width: 700px;">
+        <div class="p-5">
+            <h3 class="fw-bold mb-4">Edit Profile</h3>
             <form id="editProfileForm">
-                @* IMPORTANT: This generates the hidden token input needed for security *@
                 @Html.AntiForgeryToken()
-
-                <div class="row g-3">
+                <div class="row g-4">
                     <div class="col-md-6">
-                        <label class="info-label">First Name</label>
-                        <input type="text" id="editFirstName" class="form-control form-control-lg" required>
+                        <div class="form-floating">
+                            <input type="text" id="editFirstName" class="form-control" placeholder="First Name" required>
+                            <label>First Name</label>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="info-label">Last Name</label>
-                        <input type="text" id="editLastName" class="form-control form-control-lg" required>
+                        <div class="form-floating">
+                            <input type="text" id="editLastName" class="form-control" placeholder="Last Name" required>
+                            <label>Last Name</label>
+                        </div>
                     </div>
                     <div class="col-12">
-                        <label class="info-label">Phone Number</label>
-                        <input type="tel" id="editPhone" class="form-control form-control-lg">
+                        <div class="form-floating">
+                            <input type="tel" id="editPhone" class="form-control" placeholder="Phone">
+                            <label>Phone Number</label>
+                        </div>
                     </div>
                     <div class="col-12">
-                        <label class="info-label">Email Address</label>
-                        <input type="email" id="editEmail" class="form-control form-control-lg bg-light" required>
+                        <div class="form-floating">
+                            <input type="email" id="editEmail" class="form-control bg-light" readonly>
+                            <label>Email Address (Cannot be changed)</label>
+                        </div>
                     </div>
                 </div>
-
-                <div class="mt-5 d-flex gap-3">
-                    <button type="submit" class="btn btn-edit-profile px-5">Save Changes</button>
-                    <a href="/User/Profile" class="btn btn-outline-secondary px-5" style="border-radius:12px;">Cancel</a>
+                <div class="mt-5 d-flex align-items-center gap-3">
+                    <button type="submit" class="btn btn-save shadow">Save Details</button>
+                    <a href="/User/Profile" class="text-decoration-none text-muted fw-bold">Discard Changes</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        // 1. Fetch current data to fill the form
-        try {
-            const response = await fetch('/User/GetProfileData');
-            if (response.ok) {
-                const data = await response.json();
-                document.getElementById('editFirstName').value = data.firstName;
-                document.getElementById('editLastName').value = data.lastName;
-                document.getElementById('editPhone').value = data.phone || '';
-                document.getElementById('editEmail').value = data.email;
-            }
-        } catch (error) {
-            console.error("Error loading data:", error);
-        }
-    });
-
-    // 2. Handle the Save
-    document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        // Get the Anti-Forgery Token value
-        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-
-        const updatedData = {
-            FirstName: document.getElementById('editFirstName').value,
-            LastName: document.getElementById('editLastName').value,
-            Phone: document.getElementById('editPhone').value
-        };
-
-        try {
-            const saveResponse = await fetch('/User/UpdateProfile', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // This header is required for security in ASP.NET Core POST requests
-                    'RequestVerificationToken': token
-                },
-                body: JSON.stringify(updatedData)
-            });
-
-            if (saveResponse.ok) {
-                alert("Profile updated successfully!");
-                window.location.href = '/User/Profile';
-            } else {
-                // Optional: Read error message from server if available
-                const errorData = await saveResponse.text(); // or .json() depending on your controller
-                console.error("Server Error:", errorData);
-                alert("Error saving profile. Please check console for details.");
-            }
-        } catch (error) {
-            console.error("Network Error:", error);
-            alert("A network error occurred.");
-        }
-    });
-</script>
