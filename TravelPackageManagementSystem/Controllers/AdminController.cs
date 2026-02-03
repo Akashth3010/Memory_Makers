@@ -48,7 +48,8 @@ namespace TravelPackageManagementSystem.Application.Controllers
                 .ToListAsync();
 
             // 2. Map data to the exact property names and status strings expected by JS
-            var result = bookings.Select(b => new {
+            var result = bookings.Select(b => new
+            {
                 id = "BK-" + b.BookingId, // Matches b.id
                 dbId = b.BookingId,       // Actual ID for updates
                                           // Mapping Enum to UI strings so the JS filter works
