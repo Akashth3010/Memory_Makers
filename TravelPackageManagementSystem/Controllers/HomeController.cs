@@ -258,6 +258,11 @@ namespace TravelPackageManagementSystem.Controllers
 
         public IActionResult Failure() => View("Trending/Failure");
         public IActionResult Success() => View("Trending/Success");
-        public IActionResult aboutus() => View();
+        public IActionResult AboutUs()
+        {
+            // You can pass data here later if you want to make the team members dynamic
+            return View();
+        }
+
     }
 }
