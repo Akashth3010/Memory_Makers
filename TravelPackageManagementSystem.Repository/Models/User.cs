@@ -6,9 +6,9 @@ namespace TravelPackageManagementSystem.Repository.Models
 {
     public enum UserRole
     {
-        ADMIN,
-        TRAVEL_AGENT,
-        CUSTOMER
+        ADMIN, // 0
+        TRAVEL_AGENT, //1
+        CUSTOMER //2
     }
 
     public class User

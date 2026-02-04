@@ -163,10 +163,15 @@
                 foreach (var item in (List<TravelPackage>)ViewBag.TrendingPackages)
                 {
                     <div class="trending-card" onclick="location.href='@Url.Action("MeghPack3", "Home", new { id = item.PackageId })'">
+                        @{
+                            var wishlistIds = ViewBag.UserWishlistIds as List<int> ?? new List<int>();
+                            var isInWishlist = wishlistIds.Contains(item.PackageId);
+                        }
+                        <div class="trending-media">                            
+                            <div class="wishlist-heart" onclick="toggleWishlist(@item.PackageId, event)"
+                                 style="@(isInWishlist ? "color: #ff4d4d;" : "")">
 
-                        <div class="trending-media">
-                            <div class="wishlist-heart" onclick="toggleWishlist(@item.PackageId, event)">
-                                <i class="fa-regular fa-heart"></i>
+                                <i class="@(isInWishlist ? "fa-solid" : "fa-regular") fa-heart"></i>
                             </div>
 
                             <div class="badge-float">
@@ -205,17 +210,46 @@
         </div>
     </div>
 </section>
-
 <script>
-    function toggleWishlist(id, event) {
+      async function toggleWishlist(packageId, event) {
+        // Prevent clicking the card itself
         event.stopPropagation();
-        const heart = event.currentTarget.querySelector('i');
-        if (heart.classList.contains('fa-regular')) {
-            heart.classList.replace('fa-regular', 'fa-solid');
-            heart.style.color = '#ff4d4d';
-        } else {
-            heart.classList.replace('fa-solid', 'fa-regular');
-            heart.style.color = '';
+
+        const heartContainer = event.currentTarget;
+        const heartIcon = heartContainer.querySelector('i');
+
+        try {
+            const response = await fetch('/User/ToggleWishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `packageId=${packageId}`
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                if (result.isAdded) {
+                    // Item Added -> Turn RED
+                    heartIcon.classList.remove('fa-regular');
+                    heartIcon.classList.add('fa-solid');
+                    heartContainer.style.color = '#ff4d4d';
+                } else {
+                    // Item Removed -> Turn Back to DEFAULT (Remove Red)
+                    heartIcon.classList.remove('fa-solid');
+                    heartIcon.classList.add('fa-regular');
+                    heartContainer.style.color = ''; // <--- Reset Color Here
+                }
+            } else {
+                // Not Logged In Logic...
+                 if(confirm("You need to login to use the wishlist. Go to login page?")) {
+                    const returnUrl = encodeURIComponent(window.location.pathname);
+                    window.location.href = `/Home/Auth?returnUrl=${returnUrl}`;
+                }
+            }
+        } catch (error) {
+            console.error("Error toggling wishlist:", error);
         }
     }
 </script>

@@ -1,112 +1,253 @@
-﻿@{
+﻿@model TravelPackageManagementSystem.Repository.Models.UserProfileViewModel
+
+@{
     ViewData["Title"] = "My Profile";
     Layout = "_Layout";
 }
 
-<div class="container mt-5 pt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white p-4">
-                    <h3 class="mb-0">User Profile</h3>
-                </div>
-                <div class="card-body p-4">
-                    <div class="text-center mb-4">
-                        <div class="display-1 text-primary">
-                            <i class="fa-solid fa-circle-user"></i>
-                        </div>
-                        <h2 id="profileName">Loading...</h2>
-                        <span class="badge bg-info text-dark">Travel Enthusiast</span>
-                    </div>
+<style>
+    :root {
+        --mmt-gradient: linear-gradient(90deg, #008cff 0%, #0054ff 100%);
+        --text-muted: #5e5e5e;
+        --border-color: #e7e7e7;
+    }
 
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <label class="text-muted small uppercase fw-bold">First Name</label>
-                            <p id="profileFirstName" class="fs-5 border-bottom pb-2">--</p>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-muted small uppercase fw-bold">Last Name</label>
-                            <p id="profileLastName" class="fs-5 border-bottom pb-2">--</p>
-                        </div>
-                        <div class="col-12">
-                            <label class="text-muted small uppercase fw-bold">Email Address</label>
-                            <p id="profileEmail" class="fs-5 border-bottom pb-2 text-break">--</p>
-                        </div>
-                    </div>
+    body {
+        background-color: #f2f2f2;
+    }
 
-                    <div class="mt-4">
-                        <h5>Travel Statistics</h5>
-                        <div class="row text-center mt-3">
-                            <div class="col-4">
-                                <div class="p-3 border rounded shadow-sm">
-                                    <div class="h4 mb-0">0</div>
-                                    <small class="text-muted">Bookings</small>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="p-3 border rounded shadow-sm">
-                                    <div class="h4 mb-0">0</div>
-                                    <small class="text-muted">Reviews</small>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="p-3 border rounded shadow-sm">
-                                    <div class="h4 mb-0">0</div>
-                                    <small class="text-muted">Wishlist</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer bg-light p-3 text-end">
-                    <button class="btn btn-outline-primary" onclick="window.history.back()">Go Back</button>
-                    <button class="btn btn-primary">Edit Profile</button>
-                </div>
+    /* Hero & Card Styles */
+    .profile-hero {
+        background: var(--mmt-gradient);
+        height: 180px;
+        border-radius: 0 0 40px 40px;
+        margin-bottom: -60px;
+    }
+
+    .main-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: none;
+        padding: 30px;
+    }
+
+    .avatar-wrapper {
+        width: 120px;
+        height: 120px;
+        background: white;
+        border-radius: 50%;
+        padding: 5px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        margin-top: -90px;
+        display: inline-block;
+    }
+
+    .avatar-initials {
+        width: 100%;
+        height: 100%;
+        background: #fdf0e0;
+        color: #eb7c01;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    /* Add this to your style section */
+    .hover-effect {
+        transition: transform 0.2s;
+    }
+
+        .hover-effect:hover {
+            transform: scale(1.1); /* Slightly enlarges when hovered */
+            cursor: pointer;
+        }
+
+    /* Table Styles */
+    .mmt-table {
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        .mmt-table thead {
+            background: #f9f9f9;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mmt-table th {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            padding: 15px;
+        }
+
+        .mmt-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #f2f2f2;
+            vertical-align: middle;
+        }
+
+    /* Status Badges */
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .status-confirmed {
+        background: #e7f6ed;
+        color: #00a94b;
+    }
+
+    .status-pending {
+        background: #fff8e1;
+        color: #ff9800;
+    }
+
+    .status-cancelled {
+        background: #fee2e2;
+        color: #ef4444;
+    }
+
+    .stat-box {
+        text-align: center;
+        padding: 20px;
+        border-right: 1px solid #eee;
+    }
+
+        .stat-box:last-child {
+            border-right: none;
+        }
+</style>
+
+<div class="profile-hero"></div>
+
+<div class="container pb-5" style="position: relative; z-index: 2;">
+    <div class="row">
+        <div class="col-12 text-center text-md-start">
+            <div class="avatar-wrapper ms-md-4">
+                <div class="avatar-initials">@Model.Initials</div>
             </div>
         </div>
     </div>
+
+    <div class="row g-4 mt-2">
+        <div class="col-lg-8">
+            <div class="main-card mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1">@Model.Username</h2>
+                        <p class="text-muted mb-0"><i class="fa-solid fa-envelope me-2"></i>@Model.Email</p>
+                    </div>
+                </div>
+
+                <div class="row py-3 border-top border-bottom">
+
+                    <div class="col-4 stat-box">
+                        <a href="/Home/MyBookings" class="text-decoration-none d-block">
+                            <div class="h4 fw-bold mb-0 text-primary">@Model.BookingsCount</div>
+                            <div class="small text-muted">Bookings</div>
+                        </a>
+                    </div>
+
+                    <div class="col-4 stat-box">
+                        <div class="h4 fw-bold mb-0 text-success">@Model.ReviewsCount</div>
+                        <div class="small text-muted">Reviews</div>
+                    </div>
+
+                    <div class="col-4 stat-box">
+                        <a asp-controller="User" asp-action="Wishlist" class="text-decoration-none d-block hover-effect">
+                            <div class="h4 fw-bold mb-0 text-danger">
+                                <i class="fas fa-heart me-1" style="font-size: 0.8rem;"></i>@Model.WishlistCount
+                            </div>
+                            <div class="small text-muted">Wishlist</div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="main-card">
+                <h5 class="fw-bold mb-4">Recent Bookings</h5>
+                <div class="table-responsive mmt-table">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Booking Details</th>
+                                <th>Travel Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.RecentBookings != null && Model.RecentBookings.Any())
+                            {
+                                foreach (var booking in Model.RecentBookings)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold">@booking.PackageName</div>
+                                            <div class="text-muted small">ID: #@booking.BookingId</div>
+                                        </td>
+                                        <td class="small fw-bold">@booking.TravelDate.ToString("MMM dd, yyyy")</td>
+                                        <td class="small">₹@booking.Amount.ToString("N0")</td>
+                                        <td>
+                                            @{
+                                                // Dynamic Status Logic
+                                                var statusClass = "status-pending";
+                                                var statusText = booking.Status.ToUpper();
+                                                if (statusText == "CONFIRMED") { statusClass = "status-confirmed"; }
+                                                else if (statusText == "CANCELLED") { statusClass = "status-cancelled"; }
+                                            }
+                                            <span class="status-badge @statusClass">@booking.Status</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a href="/Home/MyBookings" class="btn btn-sm btn-link text-primary">Receipt</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        <i class="fas fa-suitcase-rolling mb-2"></i><br />
+                                        No bookings found. Start exploring!
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="main-card mb-4">
+                <h6 class="fw-bold mb-3">Personal Details</h6>
+                <div class="mb-3">
+                    <label class="small text-muted d-block">Phone Number</label>
+                    <span class="fw-bold">@Model.PhoneNumber</span>
+                </div>
+                <div class="mb-3">
+                    <label class="small text-muted d-block">Identity Verification</label>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+                        <i class="fa-solid fa-circle-check me-1"></i> Email Verified
+                    </span>
+                </div>
+            </div>
+
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="btn btn-light w-100 py-3 rounded-3 fw-bold text-danger border">
+                    <i class="fa-solid fa-power-off me-2"></i>Log Out
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
-
-@* <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const userJson = localStorage.getItem('user');
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-
-        if (!userJson || isLoggedIn !== 'true') {
-            window.location.href = '/';
-            return;
-        }
-
-        try {
-            const user = JSON.parse(userJson);
-
-            // DEBUG: This will show you exactly what keys exist (e.g. lastName vs LastName)
-            console.log("LocalStorage User Object:", user);
-
-            // Mapping with fallbacks for Case-Sensitivity
-            const fName = user.firstName || user.FirstName || "N/A";
-            const lName = user.lastName || user.LastName || "--";
-            const email = user.email || user.Email || "N/A";
-
-            // Update UI elements safely
-            const elements = {
-                'profileName': (fName + " " + (lName !== "--" ? lName : "")).trim(),
-                'profileFirstName': fName,
-                'profileLastName': lName,
-                'profileEmail': email
-            };
-
-            for (const [id, value] of Object.entries(elements)) {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.innerText = value;
-                } else {
-                    console.error("Could not find HTML element with ID:", id);
-                }
-            }
-
-        } catch (error) {
-            console.error("Error parsing user data:", error);
-        }
-    });
-</script> *@

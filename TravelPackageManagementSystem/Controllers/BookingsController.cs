@@ -23,7 +23,7 @@ namespace TravelPackageManagementSystem.Controllers
             // IF SESSION IS EXPIRED, REDIRECT TO LOGIN INSTEAD OF JUST CRASHING
             if (string.IsNullOrEmpty(sessionUserName))
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Auth", "Home");
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == sessionUserName);

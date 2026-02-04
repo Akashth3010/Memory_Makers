@@ -7,6 +7,14 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        // ✅ Check if the admin is logged in via localStorage
+        if (localStorage.getItem("isAdmin") !== "true") {
+            // If not logged in, boot them to the Home page immediately
+            window.location.replace("/");
+        }
+    </script>
     <link href="~/css/admin.css" rel="stylesheet" />
 
     <style>
@@ -148,6 +156,9 @@
         }
 
         function confirmLogout() {
+        // ✅ Clear the admin flag so they can't just type the URL to get back in
+            localStorage.removeItem("isAdmin");
+
             alert("Session logged out successfully");
             window.location.href = '/Home/Index';
         }

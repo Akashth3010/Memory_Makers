@@ -1,0 +1,378 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication | EasySafar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <style>
+        /* Base Setup */
+        body {
+            background-color: #000000;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            background-color: #111111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .auth-input {
+            width: 100%;
+            background: #1a1a1a !important;
+            border: 1px solid #333 !important;
+            color: #fff !important;
+            padding: 10px 12px;
+            border-radius: 8px;
+        }
+
+        .input-label {
+            display: block;
+            width: 100%;
+            text-align: left;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        /* Submit Button */
+        .submit-glow-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+            .submit-glow-btn:hover {
+                background: #00d2ff;
+                transform: translateY(-1px);
+            }
+
+            .submit-glow-btn:disabled {
+                background: #666;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .err-msg {
+            font-size: 0.75rem;
+            color: #ff4d4d;
+            display: none;
+            text-align: left;
+            margin-top: 4px;
+        }
+
+        /* --- LAYOUTS --- */
+        /* Login is simple block */
+        #loginView {
+            display: none; /* Initially hidden */
+        }
+
+        /* Signup is Grid */
+        #signupView {
+            display: grid; /* Initially visible */
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        /* Footer Links */
+        .footer-link {
+            color: #ffffff;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+            .footer-link:hover {
+                color: #00d2ff;
+            }
+
+        /* Error Box */
+        #globalError {
+            display: none;
+            padding: 10px;
+            background: rgba(255, 77, 77, 0.1);
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* Styling for the password toggle icon */
+        .input-group-text {
+            background: #1a1a1a !important;
+            border-color: #333 !important;
+            transition: 0.3s;
+        }
+
+            .input-group-text:hover i {
+                color: #fff !important;
+            }
+
+        /* Remove the blue focus border from the icon side */
+        .auth-input:focus + .input-group-text {
+            border-color: #333 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="modal show d-block" id="authModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-4 p-md-5">
+
+                    <div class="text-center mb-4">
+                        <h2 id="modalTitle" class="fw-bold h4">Create an Account</h2>
+                        <p id="modalSubtitle" class="text-muted small">Join EasySafar to start your journey.</p>
+                    </div>
+
+                    <div id="globalError"></div>
+
+                    <form id="authForm" novalidate>
+
+                        <div id="loginView">
+                            <div class="mb-3">
+                                <label class="input-label">Username or Email</label>
+                                <input type="text" id="loginId" class="auth-input form-control" placeholder="Enter username or email">
+                            </div>
+                            <div class="mb-3">
+                                <label class="input-label">Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="loginPass" class="auth-input form-control border-end-0" placeholder="••••••••">
+                                    <span class="input-group-text bg-transparent border-start-0" style="border: 1px solid #333; cursor: pointer;" onclick="togglePass('loginPass', this)">
+                                        <i class="bi bi-eye text-white-50"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="signupView">
+                            <div class="mb-2">
+                                <label class="input-label">Username</label>
+                                <input type="text" id="regUsername" class="auth-input form-control" placeholder="johndoe">
+                                <span class="err-msg" id="err-Username"></span>
+                            </div>
+                            <div class="mb-2">
+                                <label class="input-label">Email</label>
+                                <input type="text" id="regEmail" class="auth-input form-control" placeholder="user@mail.com">
+                                <span class="err-msg" id="err-Email"></span>
+                            </div>
+                            <div class="mb-2">
+                                <label class="input-label">Phone</label>
+                                <input type="text" id="regPhone" class="auth-input form-control" placeholder="+91...">
+                                <span class="err-msg" id="err-PhoneNumber"></span>
+                            </div>
+                            <div class="mb-2">
+                                <label class="input-label">Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="regPass" class="auth-input form-control border-end-0" placeholder="••••••••">
+                                    <span class="input-group-text bg-transparent border-start-0" style="border: 1px solid #333; cursor: pointer;" onclick="togglePass('regPass', this)">
+                                        <i class="bi bi-eye text-white-50"></i>
+                                    </span>
+                                </div>
+                                <span class="err-msg" id="err-Password"></span>
+                            </div>
+
+                            <div class="mb-2 full-width">
+                                <label class="input-label">Confirm Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="regConfirmPass" class="auth-input form-control border-end-0" placeholder="••••••••">
+                                    <span class="input-group-text bg-transparent border-start-0" style="border: 1px solid #333; cursor: pointer;" onclick="togglePass('regConfirmPass', this)">
+                                        <i class="bi bi-eye text-white-50"></i>
+                                    </span>
+                                </div>
+                                <span class="err-msg" id="err-ConfirmPassword"></span>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="submit-glow-btn">Sign Up →</button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="footer-text mb-0">
+                            <span id="toggleText">Already have an account? </span>
+                            <a class="footer-link" onclick="handleAuthToggle()">Login</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Start in Signup Mode by default
+        let isLoginMode = false;
+
+        function handleAuthToggle() {
+            // Switch Mode
+            isLoginMode = !isLoginMode;
+
+            // Get Elements
+            const loginView = document.getElementById('loginView');
+            const signupView = document.getElementById('signupView');
+            const modalTitle = document.getElementById('modalTitle');
+            const submitBtn = document.getElementById('submitBtn');
+            const toggleText = document.getElementById('toggleText');
+            const toggleLink = document.querySelector('.footer-link');
+
+            // Clear any old errors
+            document.getElementById('globalError').style.display = 'none';
+            document.querySelectorAll('.err-msg').forEach(el => el.style.display = 'none');
+
+            if (isLoginMode) {
+                // Show Login, Hide Signup
+                signupView.style.display = 'none';
+                loginView.style.display = 'block';
+
+                modalTitle.innerText = "Welcome Back";
+                submitBtn.innerText = "Login →";
+                toggleText.innerText = "Don't have an account? ";
+                toggleLink.innerText = "Sign Up";
+            } else {
+                // Show Signup (Grid), Hide Login
+                loginView.style.display = 'none';
+                signupView.style.display = 'grid'; // Restore grid layout
+
+                modalTitle.innerText = "Create an Account";
+                submitBtn.innerText = "Sign Up →";
+                toggleText.innerText = "Already have an account? ";
+                toggleLink.innerText = "Login";
+            }
+        }
+
+        document.getElementById('authForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // 1. Lock Button to prevent double-click
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+
+            // Clear errors
+            const globalErr = document.getElementById('globalError');
+            globalErr.style.display = 'none';
+            document.querySelectorAll('.err-msg').forEach(el => el.style.display = 'none');
+
+            // 2. Prepare Data based on Mode
+            let payload = {};
+            let url = "";
+
+            if (isLoginMode) {
+                url = '/Account/Login';
+                // Grab values from LOGIN inputs
+                payload = {
+                    Username: document.getElementById('loginId').value,
+                    Password: document.getElementById('loginPass').value
+                };
+            } else {
+                url = '/Account/Register';
+                // Grab values from REGISTER inputs
+                payload = {
+                    Username: document.getElementById('regUsername').value,
+                    Email: document.getElementById('regEmail').value,
+                    PhoneNumber: document.getElementById('regPhone').value,
+                    Password: document.getElementById('regPass').value,
+                    ConfirmPassword: document.getElementById('regConfirmPass').value
+                };
+            }
+
+            try {
+                // 3. Send to Backend
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // Check for Server Error (500)
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Server Error: " + response.statusText);
+                }
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // 4. Success -> Redirect
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const returnUrl = urlParams.get('returnUrl');
+                    window.location.href = returnUrl ? decodeURIComponent(returnUrl) : "/";
+                } else {
+                    // 5. Logic Error (e.g. Wrong Password)
+                    if (result.errors) {
+                        displayErrors(result.errors);
+                    }
+                    if (result.message) {
+                        globalErr.innerText = result.message;
+                        globalErr.style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                // 6. Network/Crash Error
+                console.error("Fetch Error:", error);
+                globalErr.innerText = "Connection failed. Please try again.";
+                globalErr.style.display = 'block';
+            } finally {
+                // 7. ALWAYS Unlock button
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        });
+
+                function togglePass(inputId, iconEl) {
+            const input = document.getElementById(inputId);
+            const icon = iconEl.querySelector('i');
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.replace('bi-eye-slash', 'bi-eye');
+            }
+        }
+
+        function displayErrors(errors) {
+            Object.keys(errors).forEach(key => {
+                const span = document.getElementById(`err-${key}`);
+                if (span) {
+                    span.innerText = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
+                    span.style.display = 'block';
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -10,7 +10,6 @@
         Review, confirm and manage all customer bookings
     </p>
 
-    <!-- ================= STATUS TABS ================= -->
     <div class="booking-tabs">
         <div class="btab active" data-status="Pending Confirmation">Pending Confirmation</div>
         <div class="btab" data-status="Confirmed">Confirmed</div>
@@ -18,81 +17,81 @@
         <div class="btab" data-status="Cancelled">Cancelled</div>
     </div>
 
-    <!-- ================= FILTER ================= -->
     <div class="booking-filters">
         <input type="text" id="searchBox" placeholder="Search by Booking ID / Customer / Package" />
     </div>
 
-    <!-- ================= GRID ================= -->
-    <div id="bookingGrid" class="booking-grid"></div>
+    <div id="bookingGrid" class="booking-grid">
+    </div>
 
-    <!-- ================= DETAILS MODAL ================= -->
     <div class="custom-modal" id="bookingModal">
         <div class="modal-box large-modal">
-
             <h4>Booking Details</h4>
-
             <div class="details-grid">
                 <div><b>Booking ID:</b> <span id="bId"></span></div>
                 <div><b>Status:</b> <span id="bStatus"></span></div>
-
                 <div><b>Customer:</b> <span id="bCustomer"></span></div>
                 <div><b>Phone:</b> <span id="bPhone"></span></div>
-
                 <div><b>Package:</b> <span id="bPackage"></span></div>
                 <div><b>Destination:</b> <span id="bDest"></span></div>
-
                 <div><b>Duration:</b> <span id="bDuration"></span></div>
                 <div><b>Travelers:</b> <span id="bPeople"></span></div>
-
                 <div><b>Amount Paid:</b> ₹<span id="bAmount"></span></div>
                 <div><b>Payment:</b> <span class="paid-text">Paid</span></div>
             </div>
 
             <div class="modal-actions">
+                <button class="btn-confirm-booking" id="completeBtn" style="display:none;">Mark as Completed</button>
+
                 <button class="btn-confirm-booking" id="confirmBtn">Confirm Booking</button>
                 <button class="btn-reject" id="cancelBtn">Cancel & Refund</button>
                 <button class="btn-cancel" onclick="closeModal()">Close</button>
             </div>
-
         </div>
     </div>
-
 </div>
 
-<!-- ================= jQuery ================= -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    let bookings = [
-        { id:"BK2001", customer:"Riya Sharma", phone:"9876543210", pkg:"Goa Delight", dest:"Goa", duration:"5 Days", people:2, amount:14999, status:"Pending Confirmation" },
-        { id:"BK2002", customer:"Aman Verma", phone:"9988776655", pkg:"Manali Escape", dest:"Manali", duration:"6 Days", people:4, amount:18999, status:"Confirmed" },
-        { id:"BK2003", customer:"Neha Gupta", phone:"9123456780", pkg:"Kerala Calm", dest:"Kerala", duration:"5 Days", people:3, amount:17999, status:"Completed" },
-        { id:"BK2004", customer:"Rahul Jain", phone:"9012345678", pkg:"Rajasthan Royal", dest:"Jaipur", duration:"7 Days", people:5, amount:21999, status:"Cancelled" },
-        { id:"BK2005", customer:"Sneha Kapoor", phone:"8899776655", pkg:"Ladakh Adventure", dest:"Ladakh", duration:"8 Days", people:1, amount:25999, status:"Pending Confirmation" },
-        { id:"BK2006", customer:"Kunal Mehta", phone:"9345678901", pkg:"Andaman Bliss", dest:"Andaman", duration:"6 Days", people:2, amount:29999, status:"Confirmed" },
-        { id:"BK2007", customer:"Pooja Nair", phone:"9001122334", pkg:"Munnar Escape", dest:"Munnar", duration:"4 Days", people:2, amount:13999, status:"Pending Confirmation" },
-        { id:"BK2008", customer:"Arjun Singh", phone:"9011223344", pkg:"Shimla Snow", dest:"Shimla", duration:"5 Days", people:3, amount:16999, status:"Completed" },
-        { id:"BK2009", customer:"Megha Shah", phone:"9811223344", pkg:"Udaipur Royal", dest:"Udaipur", duration:"3 Days", people:2, amount:12999, status:"Confirmed" },
-        { id:"BK2010", customer:"Yash Patel", phone:"9822334455", pkg:"Rishikesh Trip", dest:"Rishikesh", duration:"3 Days", people:4, amount:9999, status:"Cancelled" },
-        { id:"BK2011", customer:"Anjali Das", phone:"9833445566", pkg:"Darjeeling Calm", dest:"Darjeeling", duration:"5 Days", people:2, amount:18999, status:"Pending Confirmation" },
-        { id:"BK2012", customer:"Rohan Malhotra", phone:"9877665544", pkg:"Kashmir Heaven", dest:"Kashmir", duration:"7 Days", people:2, amount:27999, status:"Confirmed" }
-    ];
-
+    let bookings = [];
     let currentStatus = "Pending Confirmation";
     let selectedBooking = null;
 
+    // --- 1. FETCH DATA ---
+    function fetchBookings() {
+        $("#bookingGrid").html('<p class="loading-text">Loading bookings...</p>');
+
+        $.ajax({
+            url: '/Admin/GetAllBookings',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                bookings = data;
+                renderBookings();
+            },
+            error: function (xhr, status, error) {
+                console.error("Fetch Error:", error);
+                $("#bookingGrid").html('<p class="error-text">Failed to load bookings from server.</p>');
+            }
+        });
+    }
+
+    // --- 2. RENDER THE GRID ---
     function renderBookings() {
         let grid = $("#bookingGrid").html("");
         let search = $("#searchBox").val()?.toLowerCase();
 
         let filtered = bookings.filter(b =>
             b.status === currentStatus &&
-            (!search || b.customer.toLowerCase().includes(search) || b.pkg.toLowerCase().includes(search) || b.id.toLowerCase().includes(search))
+            (!search ||
+             b.customer.toLowerCase().includes(search) ||
+             b.pkg.toLowerCase().includes(search) ||
+             b.id.toLowerCase().includes(search))
         );
 
         if (filtered.length === 0) {
-            grid.html(`<p class="empty-text">No bookings found</p>`);
+            grid.html(`<p class="empty-text">No ${currentStatus} bookings found</p>`);
             return;
         }
 
@@ -101,25 +100,24 @@
                 <div class="booking-card glow-card">
                     <div class="booking-top">
                         <span class="booking-id">${b.id}</span>
-                        <span class="status-badge ${b.status.replace(" ","-").toLowerCase()}">${b.status}</span>
+                        <span class="status-badge ${b.status.replace(/\s+/g, '-').toLowerCase()}">${b.status}</span>
                     </div>
-
                     <h4>${b.customer}</h4>
                     <p>${b.pkg} • ${b.dest}</p>
-
                     <div class="booking-info">
-                        <span>₹${b.amount}</span>
+                        <span>₹${b.amount.toLocaleString()}</span>
                         <span>${b.people} Travelers</span>
                     </div>
-
-                    <button onclick="viewBooking('${b.id}')">View & Take Action</button>
+                    <button class="btn-action" onclick="viewBooking('${b.id}')">View & Take Action</button>
                 </div>
             `);
         });
     }
 
+    // --- 3. MODAL ACTIONS ---
     function viewBooking(id) {
         selectedBooking = bookings.find(b => b.id === id);
+        if(!selectedBooking) return;
 
         $("#bId").text(selectedBooking.id);
         $("#bStatus").text(selectedBooking.status);
@@ -129,10 +127,17 @@
         $("#bDest").text(selectedBooking.dest);
         $("#bDuration").text(selectedBooking.duration);
         $("#bPeople").text(selectedBooking.people);
-        $("#bAmount").text(selectedBooking.amount);
+        $("#bAmount").text(selectedBooking.amount.toLocaleString());
 
+        // --- BUTTON VISIBILITY ---
+        // Confirm: PENDING ONLY
         $("#confirmBtn").toggle(selectedBooking.status === "Pending Confirmation");
-        $("#cancelBtn").toggle(selectedBooking.status !== "Cancelled");
+
+        // Complete: CONFIRMED ONLY
+        $("#completeBtn").toggle(selectedBooking.status === "Confirmed");
+
+        // Cancel: PENDING OR CONFIRMED
+        $("#cancelBtn").toggle(selectedBooking.status !== "Cancelled" && selectedBooking.status !== "Completed");
 
         $("#bookingModal").addClass("show");
     }
@@ -141,22 +146,32 @@
         $("#bookingModal").removeClass("show");
     }
 
-    $("#confirmBtn").click(function () {
-        selectedBooking.status = "Confirmed";
-        closeModal();
-        renderBookings();
-        alert("Booking confirmed successfully");
-    });
+    // --- 4. UPDATE STATUS ---
+    function updateStatus(newStatus, successMessage) {
+        if (!selectedBooking) return;
 
-    $("#cancelBtn").click(function () {
-        selectedBooking.status = "Cancelled";
-        closeModal();
-        renderBookings();
-        alert("Booking cancelled. Refund will be initiated.");
-    });
+        $.ajax({
+            url: '/Admin/UpdateBookingStatus',
+            type: 'POST',
+            data: {
+                bookingId: selectedBooking.id,
+                status: newStatus
+            },
+            success: function (response) {
+                selectedBooking.status = newStatus;
+                closeModal();
+                renderBookings();
+                alert(successMessage);
+            },
+            error: function () {
+                alert("Error: Could not update the booking status on the server.");
+            }
+        });
+    }
 
+    // --- 5. INITIALIZATION ---
     $(document).ready(function () {
-        renderBookings();
+        fetchBookings();
 
         $(".btab").click(function () {
             $(".btab").removeClass("active");
@@ -166,5 +181,19 @@
         });
 
         $("#searchBox").on("input", renderBookings);
+
+        $("#confirmBtn").click(function () {
+            updateStatus("Confirmed", "Booking confirmed successfully!");
+        });
+
+        $("#completeBtn").click(function () {
+            updateStatus("Completed", "Trip marked as Completed!");
+        });
+
+        $("#cancelBtn").click(function () {
+            if(confirm("Are you sure you want to cancel this booking?")) {
+                updateStatus("Cancelled", "Booking has been cancelled.");
+            }
+        });
     });
 </script>

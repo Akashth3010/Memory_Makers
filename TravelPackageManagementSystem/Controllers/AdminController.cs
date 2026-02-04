@@ -14,7 +14,7 @@ namespace TravelPackageManagementSystem.Application.Controllers
             _context = context;
         }
 
-        // ---------------- PAGES ----------------
+        // ---------------- PAGES ----------------//
         public IActionResult Dashboard() => View();
         [HttpGet]
         public async Task<IActionResult> GetDashboardStats()
@@ -37,6 +37,62 @@ namespace TravelPackageManagementSystem.Application.Controllers
         public IActionResult Approvals() => View();
         public IActionResult Packages() => View();
         public IActionResult Bookings() => View();
+        [HttpGet]
+        public async Task<IActionResult> GetAllBookings()
+        {
+            // 1. Fetch all bookings with related data
+            var bookings = await _context.Bookings
+                .Include(b => b.TravelPackage)
+                .Include(b => b.User)
+                .OrderByDescending(b => b.BookingDate)
+                .ToListAsync();
+
+            // 2. Map data to the exact property names and status strings expected by JS
+            var result = bookings.Select(b => new
+            {
+                id = "BK-" + b.BookingId, // Matches b.id
+                dbId = b.BookingId,       // Actual ID for updates
+                                          // Mapping Enum to UI strings so the JS filter works
+                status = b.Status switch
+                {
+                    BookingStatus.PENDING => "Pending Confirmation",
+                    BookingStatus.CONFIRMED => "Confirmed",
+                    _ => b.Status.ToString()
+                },
+                customer = b.User?.Username ?? "Guest",
+                phone = b.ContactPhone,
+                pkg = b.TravelPackage?.PackageName ?? "Deleted",
+                dest = b.TravelPackage?.Location ?? "N/A",
+                duration = b.TravelPackage?.Duration ?? "N/A",
+                amount = b.TotalAmount,
+                people = b.Guests
+            });
+
+            return Json(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateBookingStatus(string bookingId, string status)
+        {
+            // Fix: Remove "BK-" prefix to get the numeric ID
+            if (string.IsNullOrEmpty(bookingId)) return Json(new { success = false });
+
+            int id = int.Parse(bookingId.Replace("BK-", ""));
+
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking == null) return Json(new { success = false, message = "Not found" });
+
+            // Handle mapping from JS string back to Enum
+            if (status == "Pending Confirmation") booking.Status = BookingStatus.PENDING;
+            else if (status == "Confirmed") booking.Status = BookingStatus.CONFIRMED;
+            else if (Enum.TryParse(typeof(BookingStatus), status.ToUpper(), out var result))
+            {
+                booking.Status = (BookingStatus)result;
+            }
+
+            await _context.SaveChangesAsync();
+            return Json(new { success = true });
+        }
+
 
         // Users
         public async Task<IActionResult> Users()
@@ -341,6 +397,7 @@ namespace TravelPackageManagementSystem.Application.Controllers
             await _context.SaveChangesAsync();
             return Json(new { success = true });
         }
+
 
         [HttpPost]
         public async Task<IActionResult> DeletePackage(int id, string password)

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelPackageManagementSystem.Repository.Models;
-using TravelPackageManagementSystem.Services.Interfaces; 
+using TravelPackageManagementSystem.Services.Interfaces;
 
 namespace TravelPackageManagementSystem.Application.Controllers
 {
@@ -8,7 +8,6 @@ namespace TravelPackageManagementSystem.Application.Controllers
     {
         private readonly IAuthModelService _authService;
 
-        // Inject the Service, not the DbContext
         public AccountController(IAuthModelService authService)
         {
             _authService = authService;
@@ -17,34 +16,46 @@ namespace TravelPackageManagementSystem.Application.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            // 1. Validation Logic
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+                // Returns JSON so frontend stops loading
+                return BadRequest(new { success = false, message = "Validation Failed", errors = errors });
+            }
 
-            // Logic is moved to Service. RegisterUserAsync should return a result object.
+            // 2. Call Service
             var result = await _authService.RegisterUserAsync(model);
 
             if (!result.Success)
             {
-                // result.Message would contain "Username or Email already taken"
-                return BadRequest(new { Username = result.Message });
+                // Returns JSON error if user already exists
+                return BadRequest(new { success = false, message = result.Message });
             }
 
-            // Set Session using the User object returned from the service
+            // 3. Set Session & Return Success
             SetUserSession(result.User);
-
             return Ok(new { success = true });
         }
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { success = false, message = "Please fill all fields." });
+            }
 
-            // Pass the username/password to the service to verify
+            // Call Service
             var user = await _authService.AuthenticateUserAsync(model.Username, model.Password);
 
             if (user == null)
             {
-                return BadRequest(new { Password = "Invalid Username or Password" });
+                // Returns JSON error for invalid password
+                return BadRequest(new { success = false, message = "Invalid Username or Password" });
             }
 
             // Set Session
@@ -53,19 +64,33 @@ namespace TravelPackageManagementSystem.Application.Controllers
             return Ok(new { success = true, username = user.Username });
         }
 
+        //[HttpPost]
+        //public IActionResult Logout()
+        //{
+        //    HttpContext.Session.Clear();
+        //    return Ok(new { message = "Logged out successfully" });
+        //}
         [HttpPost]
         public IActionResult Logout()
         {
+            // 1. Clear Session
             HttpContext.Session.Clear();
-            return Ok(new { message = "Logged out successfully" });
+
+            // 2. Redirect to Home Page (instead of returning JSON)
+            return RedirectToAction("Index", "Home");
         }
 
-        // Helper method to keep Session keys consistent
+        // --- HELPER METHOD (FIXED) ---
         private void SetUserSession(User user)
         {
-            HttpContext.Session.SetString("UserName", user.Username);
-            HttpContext.Session.SetInt32("UserId", user.UserId);
-            HttpContext.Session.SetString("UserRole", user.Role.ToString());
+            if (user != null)
+            {
+                HttpContext.Session.SetString("UserName", user.Username ?? "");
+                HttpContext.Session.SetInt32("UserId", user.UserId);
+
+                // FIXED LINE: Convert Enum to String
+                HttpContext.Session.SetString("UserRole", user.Role.ToString());
+            }
         }
     }
 }

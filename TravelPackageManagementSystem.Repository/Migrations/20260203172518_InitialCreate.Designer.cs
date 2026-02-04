@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260128052039_InitialCreateV6")]
-    partial class InitialCreateV6
+    [Migration("20260203172518_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,6 +262,10 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -664,6 +668,9 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
@@ -685,6 +692,29 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                             Role = 2,
                             Username = "Admin"
                         });
+                });
+
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Wishlist", b =>
+                {
+                    b.Property<int>("WishlistId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WishlistId"));
+
+                    b.Property<int>("PackageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WishlistId");
+
+                    b.HasIndex("PackageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Wishlists");
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Booking", b =>
@@ -757,6 +787,25 @@ namespace TravelPackageManagementSystem.Repository.Migrations
                     b.Navigation("Host");
 
                     b.Navigation("ParentDestination");
+                });
+
+            modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Wishlist", b =>
+                {
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.TravelPackage", "TravelPackage")
+                        .WithMany()
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TravelPackageManagementSystem.Repository.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TravelPackage");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TravelPackageManagementSystem.Repository.Models.Booking", b =>
