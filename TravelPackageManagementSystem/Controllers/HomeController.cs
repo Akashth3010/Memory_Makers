@@ -271,6 +271,15 @@ namespace TravelPackageManagementSystem.Controllers
         }
 
         public IActionResult Failure() => View("Trending/Failure");
+<<<<<<< lina-patil
+        public IActionResult Success() => View("Trending/Success");
+        public IActionResult AboutUs()
+        {
+            // You can pass data here later if you want to make the team members dynamic
+            return View();
+        }
+
+=======
         // Inside HomeController.cs
         public IActionResult Success(string txn, decimal amt, string pkg)
         {
@@ -361,5 +370,6 @@ namespace TravelPackageManagementSystem.Controllers
     {
         public string Email { get; set; }
         public string Password { get; set; }
+>>>>>>> main
     }
 }

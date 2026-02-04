@@ -7,213 +7,339 @@
     :root {
         --primary-orange: #ff7b54;
         --secondary-yellow: #ffd56b;
+        --dark-overlay: rgba(0, 0, 0, 0.6);
     }
 
-    /* Hero Section with Parallax-like feel */
+    /* Hero Section Overhaul */
     .guide-hero {
-        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1524492717547-2249978a62d9?auto=format&fit=crop&w=1600&q=80');
+        background: linear-gradient(var(--dark-overlay), var(--dark-overlay)), url('https://images.unsplash.com/photo-1524492717547-2249978a62d9?auto=format&fit=crop&w=1600&q=80');
         background-size: cover;
         background-position: center;
-        height: 50vh;
+        height: 60vh; /* Increased height for impact */
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         text-align: center;
-        border-radius: 0 0 50px 50px;
+        border-radius: 0 0 40px 40px;
+        margin-bottom: -50px;
     }
 
-    /* Search Bar Overlay */
+    /* Floating Search Bar */
+    .guide-search-wrapper {
+        position: relative;
+        z-index: 10;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
     .guide-search {
-        max-width: 600px;
-        margin: -30px auto 50px;
         background: white;
-        padding: 10px;
-        border-radius: 50px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 8px;
+        border-radius: 100px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         display: flex;
     }
 
         .guide-search input {
             border: none;
-            padding: 10px 25px;
-            width: 100%;
+            padding: 15px 30px;
+            flex-grow: 1;
             outline: none;
-            border-radius: 50px;
+            border-radius: 100px;
+            font-size: 1.1rem;
         }
 
         .guide-search button {
             background: var(--primary-orange);
             border: none;
             color: white;
-            padding: 10px 30px;
-            border-radius: 50px;
+            padding: 0 40px;
+            border-radius: 100px;
             transition: 0.3s;
+            font-weight: bold;
         }
 
-    /* Category Cards */
-    .category-card {
-        border: none;
-        border-radius: 20px;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-        cursor: pointer;
+            .guide-search button:hover {
+                background: #e66a46;
+                transform: scale(1.02);
+            }
+
+    /* Interest Cards: Uniform Aspect Ratio */
+    .interest-card {
         position: relative;
-        height: 250px;
+        border-radius: 25px;
+        overflow: hidden;
+        height: 350px; /* Uniform Height */
+        border: none;
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
 
-        .category-card:hover {
-            transform: translateY(-10px);
+        .interest-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-    .category-overlay {
+    .interest-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* This forces the image to fill the box without stretching */
+        transition: 0.5s;
+    }
+
+    .interest-card:hover .interest-img {
+        transform: scale(1.1);
+    }
+
+    .interest-overlay {
         position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(transparent, rgba(0,0,0,0.8));
-        padding: 20px;
+        inset: 0;
+        background: linear-gradient(transparent 40%, rgba(0,0,0,0.85));
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 25px;
         color: white;
     }
 
-    /* Tip Section */
-    .tip-box {
-        background: #fff9f7;
-        border-left: 5px solid var(--primary-orange);
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 20px;
+    /* Article Card: Modern Style */
+    .article-card {
+        border: none;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: 0.3s;
+        height: 100%; /* Ensures all cards in a row match height */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
 
-    .icon-circle {
-        width: 50px;
-        height: 50px;
-        background: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        margin-bottom: 15px;
-        color: var(--primary-orange);
-        font-size: 1.2rem;
+        .article-card:hover {
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+        }
+
+    .article-img-container {
+        height: 200px; /* Fixed height for article thumbnails */
+        overflow: hidden;
     }
+
+        .article-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    /* Tip Box refinements */
+    .tip-box {
+        background: white;
+        border-left: 6px solid var(--primary-orange);
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.02);
+    }
+
 </style>
 
 <section class="guide-hero">
     <div class="container">
-        <h1 class="display-3 fw-bold">Explore the Heart of India</h1>
-        <p class="lead">Your ultimate companion for an unforgettable journey.</p>
+        <h1 class="display-2 fw-bold mb-3">Explore the Heart of India</h1>
+        <p class="fs-4 opacity-90">Your companion for a soul-stirring journey across the subcontinent.</p>
     </div>
 </section>
 
-<div class="container">
-    <div class="guide-search">
-        <input type="text" placeholder="Search for cities, food, or culture tips...">
-        <button>Explore</button>
+<div class="container mb-5">
+    <div class="guide-search-wrapper">
+        <div class="guide-search">
+            <input type="text" placeholder="Search for cities, food, or festivals...">
+            <button>Search</button>
+        </div>
     </div>
 </div>
 
 <div class="container py-5">
-    <div class="row mb-5 text-center">
-        <h2 class="fw-bold">Discover by Interest</h2>
-        <p class="text-muted">Whatever your vibe, we have a guide for it.</p>
+    <div class="text-center mb-5">
+        <span class="badge rounded-pill bg-light text-orange mb-2 px-3 py-2 border text-uppercase" style="color: var(--primary-orange)">Categories</span>
+        <h2 class="fw-bold display-5">What is your vibe?</h2>
     </div>
 
     <div class="row g-4 mb-5">
         <div class="col-md-4">
-            <div class="category-card" style="background: url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=80') center/cover;">
-                <div class="category-overlay">
-                    <h4>Culture & Heritage</h4>
-                    <small>15 Articles</small>
+            <div class="interest-card">
+                <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=80" class="interest-img" alt="Culture">
+                <div class="interest-overlay">
+                    <h3 class="fw-bold">Culture & Heritage</h3>
+                    <p class="mb-0 small">Temples, forts, and ancient traditions</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="category-card" style="background: url('https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80') center/cover;">
-                <div class="category-overlay">
-                    <h4>Cuisine & Street Food</h4>
-                    <small>22 Articles</small>
+            <div class="interest-card">
+                <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80" class="interest-img" alt="Food">
+                <div class="interest-overlay">
+                    <h3 class="fw-bold">Cuisine & Street Food</h3>
+                    <p class="mb-0 small">A journey of spices and flavors</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="category-card" style="background: url('https://images.unsplash.com/photo-1544735745-b89b18555f67?auto=format&fit=crop&w=600&q=80') center/cover;">
-                <div class="category-overlay">
-                    <h4>Nature & Adventure</h4>
-                    <small>10 Articles</small>
+            <div class="interest-card">
+                <img src="~/lib/Image/coorg1.jpg" class="interest-img" alt="Nature">
+                <div class="interest-overlay">
+                    <h3 class="fw-bold">Nature & Adventure</h3>
+                    <p class="mb-0 small">Mountains, backwaters, and beaches</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row mt-5 pt-5">
-        <div class="col-lg-6">
-            <h2 class="fw-bold mb-4">Essential Travel Tips</h2>
+    <div class="row mt-5 pt-5 align-items-start">
+        <div class="col-lg-7">
+            <h2 class="fw-bold display-6 mb-5">Essential Travel Tips</h2>
 
             <div class="tip-box">
-                <div class="icon-circle"><i class="fa-solid fa-language"></i></div>
-                <h5>Language Basics</h5>
-                <p class="text-muted mb-0">While English is widely spoken, learning a few Hindi phrases like "Namaste" (Hello) and "Shukriya" (Thank you) goes a long way.</p>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-circle me-3 mb-0 text-white" style="background: var(--primary-orange); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                        <i class="fa-solid fa-language"></i>
+                    </div>
+                    <h5 class="mb-0 fw-bold">Language Basics</h5>
+                </div>
+                <p class="text-muted">While English is widely spoken, learning a few Hindi phrases like "Namaste" (Hello) and "Shukriya" (Thank you) goes a long way in connecting with locals.</p>
             </div>
 
             <div class="tip-box">
-                <div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>
-                <h5>Currency & Payments</h5>
-                <p class="text-muted mb-0">Cash is king in local markets. Always keep small denominations (₹10, ₹20, ₹50) for local transport and snacks.</p>
-            </div>
-
-            <div class="tip-box">
-                <div class="icon-circle"><i class="fa-solid fa-train"></i></div>
-                <h5>Getting Around</h5>
-                <p class="text-muted mb-0">Indian Railways is an experience in itself. Book "AC 2-Tier" or "3-Tier" for a balance of comfort and budget.</p>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-circle me-3 mb-0 text-white" style="background: var(--primary-orange); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <h5 class="mb-0 fw-bold">Currency & Payments</h5>
+                </div>
+                <p class="text-muted">Digital payments (UPI) are everywhere, but keep small cash denominations for rickshaws and street food stalls.</p>
             </div>
         </div>
 
-        <div class="col-lg-5 offset-lg-1">
-            <div class="card p-4 shadow-sm border-0 sticky-top" style="top: 100px; border-radius: 20px; background: linear-gradient(135deg, #111, #333); color: white;">
-                <h4 class="fw-bold mb-3">Weather Check</h4>
-                <p class="small opacity-75">Planning your visit? Here is the best time to go:</p>
-                <ul class="list-unstyled">
-                    <li class="mb-3 d-flex align-items-center">
-                        <span class="badge bg-light text-dark me-3 p-2">Oct - Mar</span>
-                        <span>Best time for most of India (Cooler weather)</span>
-                    </li>
-                    <li class="mb-3 d-flex align-items-center">
-                        <span class="badge bg-warning text-dark me-3 p-2">Apr - Jun</span>
-                        <span>Summer Season (Great for Himalayas)</span>
-                    </li>
-                    <li class="d-flex align-items-center">
-                        <span class="badge bg-info text-dark me-3 p-2">Jul - Sep</span>
-                        <span>Monsoon Magic (Kerala & Goa)</span>
-                    </li>
-                </ul>
-                <hr>
-                <button class="btn w-100 fw-bold" style="background: var(--primary-orange); color: white;">Download PDF Guide</button>
+        <div class="col-lg-5 ps-lg-5">
+            <div class="card p-4 shadow border-0 sticky-top" style="top: 100px; border-radius: 30px; background: #1a1a1a; color: white;">
+                <h4 class="fw-bold mb-4">Best Time to Visit</h4>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Winter (Peak)</span>
+                        <span class="text-warning">Oct - Mar</span>
+                    </div>
+                    <div class="progress" style="height: 8px; background: #333;">
+                        <div class="progress-bar bg-warning" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Summer (Hill Stations)</span>
+                        <span class="text-info">Apr - Jun</span>
+                    </div>
+                    <div class="progress" style="height: 8px; background: #333;">
+                        <div class="progress-bar bg-info" style="width: 60%"></div>
+                    </div>
+                </div>
+                <button class="btn btn-lg w-100 fw-bold mt-3 py-3" style="background: var(--primary-orange); color: white; border-radius: 15px;">Get Full Itinerary</button>
             </div>
         </div>
     </div>
 </div>
 
-<section class="py-5 bg-white">
+<section class="py-5 bg-light mt-5">
     <div class="container">
-        <h3 class="fw-bold mb-4 text-center">Must-Read Articles</h3>
-        <div class="row">
-            <div class="col-md-3 mb-4">
-                <img src="https://images.unsplash.com/photo-1548013146-72479768bbfd?auto=format&fit=crop&w=400&q=80" class="img-fluid rounded-3 mb-2" alt="Taj Mahal">
-                <h6 class="fw-bold">10 Secret Spots in Jaipur</h6>
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                
+                <h3 class="fw-bold display-6">Must-Read Articles</h3>
+                <p class="text-muted mb-0">Expert advice for your next big trip.</p>
             </div>
-            <div class="col-md-3 mb-4">
-                <img src="https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=400&q=80" class="img-fluid rounded-3 mb-2" alt="Temple">
-                <h6 class="fw-bold">How to survive the crowds in Delhi</h6>
+            <button class="btn btn-outline-dark px-4 rounded-pill">View All</button>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="article-card shadow-sm">
+                    <div class="article-img-container">
+                        <img src="~/lib/Image/jaipur1.jpg" alt="Jaipur">
+                    </div>
+                    <div class="p-3">
+                        <span class="text-uppercase small text-primary fw-bold">Rajasthan</span>
+                        <h6 class="fw-bold mt-1">10 Secret Spots in Jaipur</h6>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-3 mb-4">
-                <img src="https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=400&q=80" class="img-fluid rounded-3 mb-2" alt="Tea">
-                <h6 class="fw-bold">A Guide to the Tea Estates of Munnar</h6>
+            <div class="col-md-3">
+                <div class="article-card shadow-sm">
+                    <div class="article-img-container">
+                        <img src="~/lib/Image/city.jpeg" alt="Delhi">
+                    </div>
+                    <div class="p-3">
+                        <span class="text-uppercase small text-primary fw-bold">Survival</span>
+                        <h6 class="fw-bold mt-1">Survive the crowds in Mumbai</h6>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-3 mb-4">
-                <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=400&q=80" class="img-fluid rounded-3 mb-2" alt="Goa">
-                <h6 class="fw-bold">Beyond the Beaches: South Goa Culture</h6>
+            <div class="col-md-3">
+                <div class="article-card shadow-sm">
+                    <div class="article-img-container">
+                        <img src="~/lib/Image/munnar1.jpg" alt="Munnar">
+                    </div>
+                    <div class="p-3">
+                        <span class="text-uppercase small text-primary fw-bold">Nature</span>
+                        <h6 class="fw-bold mt-1">Tea Estates of Munnar</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="article-card shadow-sm">
+                    <div class="article-img-container">
+                        <img src="~/lib/Image/goa3.jpg" alt="Goa">
+                    </div>
+                    <div class="p-3">
+                        <span class="text-uppercase small text-primary fw-bold">Culture</span>
+                        <h6 class="fw-bold mt-1">Beyond Beaches: South Goa</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid p-0">
+        <section class="guide-hero" style="background-image: url('https://images.unsplash.com/photo-1524492717547-2249978a62d9?w=1600');">
+            <div class="container py-5 text-center text-white">
+                <h1 class="display-2 fw-bold">India Awaits.</h1>
+                <p class="lead">Discover hidden gems across the subcontinent.</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="container mt-n5">
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow border-0 rounded-4 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600" class="card-img-top" style="height:250px; object-fit:cover;">
+                    <div class="card-body">
+                        <h5 class="fw-bold">Heritage Sites</h5>
+                        <p class="text-muted small">Explore 5,000 years of history.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow border-0 rounded-4 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600" class="card-img-top" style="height:250px; object-fit:cover;">
+                    <div class="card-body">
+                        <h5 class="fw-bold">Local Flavors</h5>
+                        <p class="text-muted small">The ultimate street food guide.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow border-0 rounded-4 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1544735745-b89b18555f67?w=600" class="card-img-top" style="height:250px; object-fit:cover;">
+                    <div class="card-body">
+                        <h5 class="fw-bold">Nature Trails</h5>
+                        <p class="text-muted small">Escape to the Himalayas.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
