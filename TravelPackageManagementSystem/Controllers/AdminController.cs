@@ -160,6 +160,7 @@ namespace TravelPackageManagementSystem.Application.Controllers
 
             var data = await _context.TravelPackages
                 .Include(p => p.Host)
+                .Include(p => p.Itineraries) // Ensure Itineraries are included in the query
                 .Where(p => p.ApprovalStatus == filterStatus)
                 .Select(p => new
                 {
@@ -173,7 +174,16 @@ namespace TravelPackageManagementSystem.Application.Controllers
                     type = p.PackageType,
                     duration = p.Duration,
                     price = p.Price,
-                    desc = p.Description
+                    desc = p.Description,
+                    // FIX: Map the Itineraries here so they appear in the Admin Panel
+                    itineraries = p.Itineraries.OrderBy(i => i.DayNumber).Select(i => new
+                    {
+                        dayNumber = i.DayNumber,
+                        title = i.ActivityTitle,
+                        desc = i.ActivityDescription,
+                        inclusions = i.Inclusions,
+                        exclusions = i.Exclusions
+                    }).ToList()
                 })
                 .ToListAsync();
 

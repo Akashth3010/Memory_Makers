@@ -33,7 +33,7 @@
             position: relative; /* Context for the close button */
         }
 
-        /* --- NEW: Close Button Style --- */
+        /* --- Close Button Style --- */
         .modal-close-icon {
             position: absolute;
             top: 20px;
@@ -48,7 +48,7 @@
 
             .modal-close-icon:hover {
                 opacity: 1;
-                transform: scale(1.1) rotate(90deg); /* Nice hover effect */
+                transform: scale(1.1) rotate(90deg);
             }
 
         .login-header {
@@ -584,10 +584,38 @@
             });
         });
 
+        /* --- UPDATED ADD DAY FUNCTION (FIXED) --- */
         function addDay() {
             const container = document.getElementById("itineraryContainer");
             const dayCount = container.getElementsByClassName("itinerary-item").length + 1;
-            const dayHtml = `<div class="itinerary-item mt-3">...Day ${dayCount}...</div>`;
+
+            const dayHtml = `
+                <div class="itinerary-item mt-3" style="border-top: 2px dashed #e2e8f0; padding-top: 20px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="day-badge">Day ${dayCount}</div>
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="this.closest('.itinerary-item').remove()">
+                            <i class="fa fa-trash"></i> Remove
+                        </button>
+                    </div>
+
+                    <label class="field-label">Activity Title *</label>
+                    <input type="text" class="it-title" placeholder="What happens on Day ${dayCount}?" required />
+
+                    <label class="field-label">Activity Description *</label>
+                    <textarea class="it-desc" placeholder="Describe the day's events" required></textarea>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="field-label">Inclusions</label>
+                            <input type="text" class="it-inc" placeholder="e.g. Dinner; Camping" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="field-label">Exclusions</label>
+                            <input type="text" class="it-exc" placeholder="e.g. Alcohol; Camera Fees" />
+                        </div>
+                    </div>
+                </div>`;
+
             container.insertAdjacentHTML('beforeend', dayHtml);
         }
 
@@ -650,7 +678,19 @@
                     if (response.success) {
                         document.getElementById("successPopup").style.display = "flex";
                         document.getElementById("hostForm").reset();
-                        // Optional: Reset itineraries
+                        // Reset itinerary to just Day 1
+                        document.getElementById("itineraryContainer").innerHTML = `
+                            <div class="itinerary-item">
+                                <div class="day-badge">Day 1</div>
+                                <label class="field-label">Activity Title *</label>
+                                <input type="text" class="it-title" placeholder="e.g. Arrival & Hotel Check-in" required />
+                                <label class="field-label">Activity Description *</label>
+                                <textarea class="it-desc" placeholder="Describe the day's events" required></textarea>
+                                <div class="row">
+                                    <div class="col-md-6"><label class="field-label">Inclusions</label><input type="text" class="it-inc" placeholder="Breakfast; SUV; Guide" /></div>
+                                    <div class="col-md-6"><label class="field-label">Exclusions</label><input type="text" class="it-exc" placeholder="Lunch; Personal Tips" /></div>
+                                </div>
+                            </div>`;
                     } else {
                         alert("Submission Failed: " + response.message);
                     }
