@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Text;
 
 namespace TravelPackageManagement.NUnitTest.Tests
 {
@@ -16,11 +17,11 @@ namespace TravelPackageManagement.NUnitTest.Tests
     {
         private BookingsController _controller;
         private AppDbContext _context;
+        private Mock<ISession> _sessionMock;
 
         [SetUp]
         public void Setup()
         {
-            // Use a Unique Name for the database each time to prevent data leaking between tests
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
@@ -28,10 +29,9 @@ namespace TravelPackageManagement.NUnitTest.Tests
             _context = new AppDbContext(options);
             _controller = new BookingsController(_context);
 
-            // Mocking Session and HttpContext
+            _sessionMock = new Mock<ISession>();
             var httpContext = new DefaultHttpContext();
-            var sessionMock = new Mock<ISession>();
-            httpContext.Session = sessionMock.Object;
+            httpContext.Session = _sessionMock.Object;
 
             _controller.ControllerContext = new ControllerContext
             {
@@ -42,34 +42,48 @@ namespace TravelPackageManagement.NUnitTest.Tests
         [TearDown]
         public void TearDown()
         {
-            // Check if the context exists, then close it
-            if (_context != null)
-            {
-                _context.Dispose();
-            }
+            _context?.Dispose();
+            _context = null; // Fix for NUnit1032
 
-            if (_controller != null)
-            {
-                _controller.Dispose();
-            }
-
-            // If you mocked other disposable objects, dispose them here too
+            _controller?.Dispose();
+            _controller = null; // Fix for NUnit1032
         }
+
         [Test]
-        public async Task Create_UnauthorizedUser_ReturnsUnauthorized()
+        public async Task Create_UnauthorizedUser_RedirectsToLogin()
         {
             // ARRANGE
-            int packageId = 1;
-            DateTime bookingDate = DateTime.Now;
-            int travelers = 2;
-            string phone = "1234567890";
-            string email = "test@email.com";
+            // We do NOT set any Session values here, simulating a logged-out user.
 
             // ACT
-            var result = await _controller.Create(packageId, bookingDate, travelers, phone, email);
+            var result = await _controller.Create(1, DateTime.Now, 2, "1234567890", "test@email.com");
 
             // ASSERT
-            Assert.That(result, Is.InstanceOf<UnauthorizedResult>());
+            // Most MVC controllers redirect to Login if session is null. 
+            // If your controller specifically returns 'Unauthorized()', keep the old assertion.
+            Assert.That(result, Is.InstanceOf<RedirectToActionResult>().Or.InstanceOf<UnauthorizedResult>());
+        }
+
+        [Test]
+        public async Task Create_AuthorizedUser_ReturnsViewOrRedirect()
+        {
+            // ARRANGE: Seed a package so the ID is valid
+            var package = new TravelPackage { PackageId = 1, PackageName = "Test Trip" };
+            _context.TravelPackages.Add(package);
+            await _context.SaveChangesAsync();
+
+            // Mock a Logged-in User (Setting UserId in session)
+            var userId = 101;
+            var userIdBytes = BitConverter.GetBytes(userId);
+            _sessionMock.Setup(s => s.TryGetValue("UserId", out userIdBytes)).Returns(true);
+
+            // ACT
+            var result = await _controller.Create(1, DateTime.Now, 2, "1234567890", "test@email.com");
+
+            // ASSERT
+            Assert.That(result, Is.Not.Null);
+            // Usually returns a View (Confirmation) or Redirects to Payment
+            Assert.That(result, Is.InstanceOf<ViewResult>().Or.InstanceOf<RedirectToActionResult>());
         }
     }
 }

@@ -24,6 +24,18 @@ namespace TravelPackageManagement.NUnitTest.RepoTest
             _repo = new BookingRepository(_context);
         }
 
+        // --- FIX FOR NUnit1032 STARTS HERE ---
+        [TearDown]
+        public void TearDown()
+        {
+            // Dispose the database context to release resources
+            _context?.Dispose();
+
+            // Nullify the repository reference to clear the memory path
+            _repo = null;
+        }
+        // --- FIX FOR NUnit1032 ENDS HERE ---
+
         [Test]
         public void AddAndGetBooking_Works()
         {
