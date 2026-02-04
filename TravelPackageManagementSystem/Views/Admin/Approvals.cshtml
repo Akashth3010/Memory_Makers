@@ -172,6 +172,27 @@
             if(data.thumb1) thumbs += `<img src="${data.thumb1}" class="admin-preview-img">`;
             $("#dThumbnails").html(thumbs || "No photos provided.");
 
+            // --- ADDED: Itinerary Logic ---
+            let itinHtml = "";
+            if (data.itineraries && data.itineraries.length > 0) {
+                data.itineraries.forEach(item => {
+                    itinHtml += `
+                        <div style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                            <h6 style="font-weight:700; color:#2c3e50; margin-bottom:5px;">Day ${item.dayNumber}: ${item.title}</h6>
+                            <p style="font-size:14px; color:#555; margin-bottom:5px;">${item.desc}</p>
+                            <div style="font-size:13px;">
+                                <span style="color:green; margin-right:15px;"><i class="fa fa-check"></i> ${item.inclusions || 'N/A'}</span>
+                                <span style="color:red;"><i class="fa fa-times"></i> ${item.exclusions || 'N/A'}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                itinHtml = "<p class='text-muted'>No itinerary details provided by the host.</p>";
+            }
+            $("#dItinerary").html(itinHtml);
+            // ---------------------------------
+
             $("#approvalModal").addClass("show");
         });
     }
