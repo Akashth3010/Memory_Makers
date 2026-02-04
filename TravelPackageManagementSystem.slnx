@@ -38,6 +38,7 @@
     <File Path="TravelPackageManagementSystem/wwwroot/lib/TopDestination/Vilamendhoo Island Resort and Spa.jpg" />
     <File Path="TravelPackageManagementSystem/wwwroot/lib/TopDestination/water villas.jpg" />
   </Folder>
+  <Project Path="TravelPackageManagement.NUnitTest/TravelPackageManagement.NUnitTest.csproj" />
   <Project Path="TravelPackageManagementSystem.Repository/TravelPackageManagementSystem.Repository.csproj" />
   <Project Path="TravelPackageManagementSystem.Services/TravelPackageManagementSystem.Services.csproj" />
   <Project Path="TravelPackageManagementSystem/TravelPackageManagementSystem.Application.csproj" />
