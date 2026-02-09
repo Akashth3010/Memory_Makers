@@ -228,14 +228,24 @@
     async function processPayment() {
         if (activeMethod === 'UPI' && !upiVerified) { alert("Please verify your UPI ID first!"); return; }
 
-        if (activeMethod === 'Credit Card') {
-            const expiryVal = document.getElementById('cardExpiry').value;
-            if (!validateExpiryDate(expiryVal)) {
-                document.getElementById('expiryError').style.display = 'block';
-                alert("Expiry date is invalid or in the past!");
-                return;
-            }
+            if (activeMethod === 'Credit Card') {
+        const cardNumberRaw = document.getElementById('cardNumber').value.replace(/\s+/g, '');
+
+        // --- NEW: SAME NUMBER VALIDATION ---
+        // Checks if every digit is the same (e.g., 1111..., 0000...)
+        const isAllSame = cardNumberRaw.split('').every(char => char === cardNumberRaw[0]);
+
+        if (isAllSame && cardNumberRaw.length > 0) {
+            window.location.href = "/Home/Failure?reason=" + encodeURIComponent("Payment Failed: Card number cannot consist of the same repeating digits.");
+            return;
         }
+        const expiryVal = document.getElementById('cardExpiry').value;
+        if (!validateExpiryDate(expiryVal)) {
+            document.getElementById('expiryError').style.display = 'block';
+            alert("Expiry date is invalid or in the past!");
+            return;
+        }
+    }
 
         const btn = document.getElementById('payBtn');
         btn.disabled = true;
