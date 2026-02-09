@@ -162,7 +162,7 @@
             {
                 foreach (var item in (List<TravelPackage>)ViewBag.TrendingPackages)
                 {
-                    <div class="trending-card" onclick="location.href='@Url.Action("MeghPack3", "Home", new { id = item.PackageId })'">
+                    <div class="trending-card" onclick="location.href='@Url.Action("PackageDetails", "Home", new { id = item.PackageId })'">
                         @{
                             var wishlistIds = ViewBag.UserWishlistIds as List<int> ?? new List<int>();
                             var isInWishlist = wishlistIds.Contains(item.PackageId);
@@ -199,7 +199,7 @@
 
                             <div class="trending-footer">
                                 <div class="trending-price">₹@item.Price.ToString("N0")</div>
-                                <a href="@Url.Action("MeghPack3", "Home", new { id = item.PackageId })" class="btn-view-details">
+                                <a href="@Url.Action("PackageDetails", "Home", new { id = item.PackageId })" class="btn-view-details">
                                     View Details
                                 </a>
                             </div>
