@@ -12,8 +12,8 @@ using TravelPackageManagementSystem.Repository.Data;
 namespace TravelPackageManagementSystem.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260203172518_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260209060435_UpdatedFolderStructure")]
+    partial class UpdatedFolderStructure
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
