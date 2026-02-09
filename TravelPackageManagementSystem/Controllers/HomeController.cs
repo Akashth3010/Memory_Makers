@@ -219,11 +219,11 @@ namespace TravelPackageManagementSystem.Controllers
 
 
         // ---------------- PACKAGE DETAILS & ITINERARY ----------------
-        public async Task<IActionResult> MeghPack3(int id)
+        public async Task<IActionResult> PackageDetails(int id)
         {
             var package = await _context.TravelPackages.Include(p => p.Itineraries).FirstOrDefaultAsync(p => p.PackageId == id);
             if (package == null) return NotFound();
-            return View("Package/MeghPack3", package);
+            return View("Package/PackageDetails", package);
         }
 
         [HttpGet]
