@@ -36,6 +36,7 @@ namespace TravelPackageManagementSystem.Repository.Models
         public string Email { get; set; } = string.Empty;
 
         public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
 
         [Required]
         public UserRole Role { get; set; } = UserRole.CUSTOMER;
